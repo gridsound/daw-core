@@ -67,13 +67,10 @@ DAWCore.Composition = class {
 		}
 	}
 	save() {
-		const act = this.daw.history.getCurrentAction();
-
-		if ( act !== this._actionSavedOn ) {
+		if ( !this._saved ) {
 			this._saved = true;
-			this._actionSavedOn = act;
+			this._actionSavedOn = this.daw.history.getCurrentAction();
 			this.cmp.savedAt = Math.floor( Date.now() / 1000 );
-			this.daw._call( "compositionSaved", this.cmp, true );
 			return true;
 		}
 	}
