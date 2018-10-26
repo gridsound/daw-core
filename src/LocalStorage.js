@@ -10,6 +10,9 @@ DAWCore.LocalStorage = Object.freeze( {
 	delete( id ) {
 		localStorage.removeItem( id );
 	},
+	has( id ) {
+		return localStorage.hasOwnProperty( id );
+	},
 	get( id ) {
 		try {
 			const cmp = JSON.parse( localStorage.getItem( id ) );
