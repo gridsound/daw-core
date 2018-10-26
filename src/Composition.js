@@ -17,7 +17,6 @@ DAWCore.Composition = class {
 		sch.currentTime = () => this.ctx.currentTime;
 		sch.ondatastart = this._onstartBlock.bind( this );
 		sch.ondatastop = this._onstopBlock.bind( this );
-		sch.onended = this._onendedBlocks.bind( this );
 	}
 
 	// un/load, change, save
@@ -26,7 +25,7 @@ DAWCore.Composition = class {
 		this.ctx = ctx;
 		this._synths.forEach( syn => {
 			syn.setContext( ctx );
-			syn.connect( this.get.destination() );
+			syn.connect( this.daw.get.destination() );
 		} );
 	}
 	load( cmpOri ) {
@@ -118,15 +117,15 @@ DAWCore.Composition = class {
 	_start( offset ) {
 		const sch = this._sched;
 
-		// if ( wa.render.isOn ) {
-		// 	sch.clearLoop();
-		// 	sch.enableStreaming( false );
-		// 	sch.startBeat( 0 );
-		// } else {
+		if ( this.ctx instanceof OfflineAudioContext ) {
+			sch.clearLoop();
+			sch.enableStreaming( false );
+			sch.startBeat( 0 );
+		} else {
 			this._setLoop( this.cmp.loopA, this.cmp.loopB );
 			sch.enableStreaming( true );
 			sch.startBeat( 0, offset );
-		// }
+		}
 	}
 
 	// ........................................................................
@@ -160,9 +159,9 @@ DAWCore.Composition = class {
 			sch.ondatastop = this._onstopKey.bind( this, pat.synth );
 			sch.setBPM( cmp.bpm );
 			Object.assign( sch.data, cmp.keys[ pat.keys ] );
-			// if ( wa.render.isOn ) {
-			// 	sch.enableStreaming( false );
-			// }
+			if ( this.ctx instanceof OfflineAudioContext ) {
+				sch.enableStreaming( false );
+			}
 			sch.start( when, off, dur );
 		}
 	}
@@ -173,9 +172,6 @@ DAWCore.Composition = class {
 			sch.stop();
 			this._startedSched.delete( startedId );
 		}
-	}
-	_onendedBlocks( data ) {
-		// gs.controls.stop();
 	}
 	_onstartKey( synthId, startedId, blc, when, off, dur ) {
 		this._startedKeys.set( startedId,
