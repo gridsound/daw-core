@@ -3,6 +3,7 @@
 DAWCore.Destination = class {
 	constructor( daw ) {
 		this.daw = daw;
+		this._gain = this.daw.env.def_appGain;
 		this.empty();
 	}
 
@@ -10,6 +11,7 @@ DAWCore.Destination = class {
 		return this._inputNode;
 	}
 	gain( v ) {
+		this._gain = v;
 		this._gainNode.gain.value = v * v;
 	}
 	empty() {
@@ -30,7 +32,7 @@ DAWCore.Destination = class {
 		this._gainNode = ctx.createGain();
 		this._gainNode.connect( ctx.destination );
 		this._inputNode.connect( this._gainNode );
-		this.gain( offline ? 1 : this.daw.env.def_appGain );
+		this.gain( offline ? 1 : this._gain );
 		this.toggleAnalyser( !offline && this.daw.env.analyserEnable );
 	}
 	analyserFillData() {
