@@ -38,7 +38,7 @@ DAWCore.Destination = class {
 	analyserFillData() {
 		if ( this._analyserNode ) {
 			this._analyserNode.getByteFrequencyData( this._analyserData );
-			this.daw._call( "analyserFilled", this._analyserData );
+			return this._analyserData;
 		}
 	}
 	toggleAnalyser( b ) {

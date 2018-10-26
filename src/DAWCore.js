@@ -89,7 +89,11 @@ class DAWCore {
 		cancelAnimationFrame( this._frameId );
 	}
 	_loop() {
-		this.destination.analyserFillData();
+		const anData = this.destination.analyserFillData();
+
+		if ( anData ) {
+			this._call( "analyserFilled", anData );
+		}
 		if ( this.isPlaying() ) {
 			const beat = this._focusedObj().getCurrentTime();
 
