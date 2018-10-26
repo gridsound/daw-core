@@ -47,8 +47,9 @@ DAWCore.Composition = class {
 				patterns: {},
 				blocks: {},
 			} );
-			this._saved = true;
-			this.daw._call( "compositionSaved", cmp, true );
+			this._saved = DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
+			this._actionSavedOn = this._saved ? null : false;
+			this.daw._call( "compositionSaved", cmp, this._saved );
 			return cmp;
 		} );
 	}
