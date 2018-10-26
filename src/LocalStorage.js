@@ -5,14 +5,14 @@ DAWCore.LocalStorage = Object.freeze( {
 		const cpy = DAWCore.objectDeepCopy( cmp );
 
 		DAWCore.Composition.epure( cpy );
-		localStorage[ id ] = JSON.stringify( cpy );
+		localStorage.setItem( id, JSON.stringify( cpy ) );
 	},
 	delete( id ) {
 		localStorage.removeItem( id );
 	},
 	get( id ) {
 		try {
-			const cmp = JSON.parse( localStorage[ id ] );
+			const cmp = JSON.parse( localStorage.getItem( id ) );
 
 			return id === cmp.id ? cmp : null;
 		} catch ( e ) {
