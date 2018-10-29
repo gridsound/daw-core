@@ -55,11 +55,10 @@ DAWCore.Pianoroll = class {
 	}
 
 	// ........................................................................
-	_startKey( startedId, blc, when, off, dur ) {
-		this._keysStarted[ startedId ] =
-			this._synth.startKey( blc.key, when, off, dur, blc.gain, blc.pan );
+	_startKey( startedId, blcs, when, off, dur ) {
+		this._keysStarted[ startedId ] = this._synth.startKey( blcs, when, off, dur );
 	}
-	_stopKey( startedId, blc ) {
+	_stopKey( startedId ) {
 		this._synth.stopKey( this._keysStarted[ startedId ] );
 		delete this._keysStarted[ startedId ];
 	}
@@ -89,8 +88,11 @@ DAWCore.Pianoroll = class {
 	}
 	liveKeydown( midi ) {
 		if ( !( midi in this._keysStartedLive ) ) {
-			this._keysStartedLive[ midi ] = this._synth.startKey(
-				midi, this._waSched.currentTime(), 0, Infinity, .8, 0 );
+			this._keysStartedLive[ midi ] = this._synth.startKey( [ [ null, {
+				key: midi,
+				gain: .8,
+				pan: 0,
+			} ] ], this._waSched.currentTime(), 0, Infinity );
 		}
 	}
 	liveKeyup( midi ) {

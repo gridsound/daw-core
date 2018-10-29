@@ -166,7 +166,7 @@ DAWCore.Composition = class {
 			sch.start( when, off, dur );
 		}
 	}
-	_onstopBlock( startedId, blc ) {
+	_onstopBlock( startedId ) {
 		const sch = this._startedSched.get( startedId );
 
 		if ( sch ) {
@@ -181,7 +181,7 @@ DAWCore.Composition = class {
 				blc.gain,
 				blc.pan ) );
 	}
-	_onstopKey( synthId, startedId, blc ) {
+	_onstopKey( synthId, startedId ) {
 		this._synths.get( synthId ).stopKey( this._startedKeys.get( startedId ) );
 		this._startedKeys.delete( startedId );
 	}
