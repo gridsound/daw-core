@@ -48,15 +48,8 @@ DAWCore.Composition.format = function( cmp ) {
 		blc.selected = !!blc.selected;
 		blc.durationEdited = !!blc.durationEdited;
 	} );
-	Object.entries( cmp.keys ).forEach( ( [ id, keys ] ) => {
-		const keysEntries = Object.entries( keys ),
-			keysObj = {};
-		let keyId = 0;
-
-		cmp.keys[ id ] = keysObj;
-		keysEntries.sort( sortWhen );
-		keysEntries.forEach( ( [ id, k ] ) => {
-			keysObj[ keyId++ ] = k;
+	Object.values( cmp.keys ).forEach( keys => {
+		Object.values( keys ).forEach( k => {
 			k.pan = +DAWCore.castToNumber( -1, 1, 0, k.pan ).toFixed( 2 );
 			k.gain = +DAWCore.castToNumber( 0, 1, .8, k.gain ).toFixed( 2 );
 			k.selected = !!k.selected;
@@ -71,7 +64,7 @@ DAWCore.Composition.format = function( cmp ) {
 					return false;
 				}
 			}
-		} )
+		} );
 	} );
 	return true;
 };
