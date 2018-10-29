@@ -147,10 +147,12 @@ DAWCore.Composition = class {
 	}
 
 	// ........................................................................
-	_onstartBlock( startedId, blc, when, off, dur ) {
-		if ( this.cmp.tracks[ blc.track ].toggle ) {
-			const cmp = this.cmp,
-				pat = cmp.patterns[ blc.pattern ],
+	_onstartBlock( startedId, blcs, when, off, dur ) {
+		const cmp = this.cmp,
+			blc = blcs[ 0 ][ 1 ];
+
+		if ( cmp.tracks[ blc.track ].toggle ) {
+			const pat = cmp.patterns[ blc.pattern ],
 				sch = new gswaScheduler();
 
 			this._startedSched.set( startedId, sch );
@@ -174,12 +176,9 @@ DAWCore.Composition = class {
 			this._startedSched.delete( startedId );
 		}
 	}
-	_onstartKey( synthId, startedId, blc, when, off, dur ) {
+	_onstartKey( synthId, startedId, blcs, when, off, dur ) {
 		this._startedKeys.set( startedId,
-			this._synths.get( synthId ).startKey(
-				blc.key, when, off, dur,
-				blc.gain,
-				blc.pan ) );
+			this._synths.get( synthId ).startKey( blcs, when, off, dur ) );
 	}
 	_onstopKey( synthId, startedId ) {
 		this._synths.get( synthId ).stopKey( this._startedKeys.get( startedId ) );
