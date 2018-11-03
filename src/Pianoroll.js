@@ -23,7 +23,7 @@ DAWCore.Pianoroll = class {
 
 	change( patObj, keysObj ) {
 		DAWCore.objectDeepAssign( this._waSched.data, keysObj );
-		if ( "duration" in patObj ) {
+		if ( patObj && "duration" in patObj ) {
 			this.duration = patObj.duration;
 			if ( !this.looping && this.playing ) {
 				this._waSched.setLoopBeat( 0, this.duration );
