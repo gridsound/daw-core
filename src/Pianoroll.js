@@ -70,6 +70,8 @@ DAWCore.Pianoroll = class {
 	}
 	setCurrentTime( t ) {
 		this._waSched.setCurrentOffsetBeat( t );
+		this.daw._call( "currentTime", this.getCurrentTime(), "pianoroll" );
+		this.daw._clockUpdate();
 	}
 	setBPM( bpm ) {
 		this._waSched.setBPM( bpm );
