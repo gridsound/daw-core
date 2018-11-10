@@ -1,6 +1,10 @@
 "use strict";
 
 DAWCore.Composition.epure = function( cmp ) {
+	if ( cmp.loopA == null || cmp.loopB == null ) {
+		delete cmp.loopA;
+		delete cmp.loopB;
+	}
 	Object.values( cmp.tracks ).forEach( tr => {
 		if ( !tr.name ) { delete tr.name; }
 		if ( tr.toggle ) { delete tr.toggle; }

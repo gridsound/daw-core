@@ -13,11 +13,16 @@ DAWCore.Composition.format = function( cmp ) {
 
 	// loopA/B
 	// ..........................................
-	cmp.loopA = Number.isFinite( cmp.loopA ) ? Math.max( 0, cmp.loopA ) : false;
-	cmp.loopB = Number.isFinite( cmp.loopB ) ? Math.max( 0, cmp.loopB ) : false;
-	if ( cmp.loopA === cmp.loopB ) {
+	if ( Number.isFinite( cmp.loopA ) && Number.isFinite( cmp.loopB ) ) {
+		cmp.loopA = Math.max( 0, cmp.loopA );
+		cmp.loopB = Math.max( 0, cmp.loopB );
+		if ( cmp.loopA === cmp.loopB ) {
+			cmp.loopA =
+			cmp.loopB = null;
+		}
+	} else {
 		cmp.loopA =
-		cmp.loopB = false;
+		cmp.loopB = null;
 	}
 
 	// ..........................................
