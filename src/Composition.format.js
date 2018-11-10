@@ -36,8 +36,8 @@ DAWCore.Composition.format = function( cmp ) {
 	} );
 	Object.values( cmp.tracks ).reduce( ( order, tr ) => {
 		tr.name = typeof tr.name === "string" ? tr.name : "";
-		tr.toggle = typeof tr.toggle === "boolean" ? tr.toggle : true;
 		tr.order = typeof tr.order === "number" ? tr.order : order;
+		tr.toggle = typeof tr.toggle === "boolean" ? tr.toggle : true;
 		return tr.order + 1;
 	}, 0 );
 	cmp.blocks = blcsObj;
@@ -53,8 +53,8 @@ DAWCore.Composition.format = function( cmp ) {
 			k.pan = +DAWCore.castToNumber( -1, 1, 0, k.pan ).toFixed( 2 );
 			k.gain = +DAWCore.castToNumber( 0, 1, .8, k.gain ).toFixed( 2 );
 			k.selected = !!k.selected;
-			k.prev = k.prev || false;
-			k.next = k.next || false;
+			if ( k.prev == null ) { k.prev = null; }
+			if ( k.next == null ) { k.next = null; }
 			delete k.durationEdited;
 			if ( typeof k.key === "string" ) {
 				if ( window.gsuiKeys ) {

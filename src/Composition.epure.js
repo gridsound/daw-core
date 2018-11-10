@@ -12,10 +12,10 @@ DAWCore.Composition.epure = function( cmp ) {
 	} );
 	Object.values( cmp.keys ).forEach( keys => (
 		Object.values( keys ).forEach( key => {
-			if ( !key.prev ) { delete key.prev; }
-			if ( !key.next ) { delete key.next; }
 			if ( !key.offset ) { delete key.offset; }
 			if ( !key.selected ) { delete key.selected; }
+			if ( key.prev == null ) { delete key.prev; }
+			if ( key.next == null ) { delete key.next; }
 		} )
 	) );
 	return cmp;
