@@ -5,6 +5,7 @@ DAWCore.prototype.closeComposition = function() {
 		const cmp = this.get.composition();
 
 		this.stop();
+		this.pianoroll.clearLoop();
 		this.pianoroll.setCurrentTime( 0 );
 		this.composition.setCurrentTime( 0 );
 		this._stopLoop();
