@@ -30,6 +30,21 @@ DAWCore.Pianoroll = class {
 			}
 		}
 	}
+	setSynth( id ) {
+		const daw = this.daw,
+			syn = id ? daw.composition.getSynth( id ) : null,
+			wasPlaying = this.playing;
+
+		if ( syn !== this._synth ) {
+			if ( wasPlaying ) {
+				this.pause();
+			}
+			this._synth = syn;
+			if ( wasPlaying ) {
+				this.play();
+			}
+		}
+	}
 	openPattern( id ) {
 		const daw = this.daw,
 			wasPlaying = this.playing;
@@ -44,13 +59,13 @@ DAWCore.Pianoroll = class {
 		if ( id ) {
 			const pat = daw.get.pattern( id );
 
-			this._synth = daw.composition.getSynth( pat.synth );
+			this.setSynth( pat.synth );
 			this.change( pat, daw.get.keys( pat.keys ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}
 		} else {
-			this._synth = null;
+			this.setSynth( null );
 		}
 	}
 

@@ -75,7 +75,10 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} );
 		} );
 	} ],
-	[ "patternOpened", function( { patternOpened } ) {
-		this.daw.pianoroll.openPattern( patternOpened );
+	[ "patternOpened", function( obj ) {
+		this.daw.pianoroll.openPattern( obj.patternOpened );
+	} ],
+	[ "synthOpened", function( obj ) {
+		this.daw.pianoroll.setSynth( obj.synthOpened );
 	} ],
 ] );
