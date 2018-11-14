@@ -14,7 +14,7 @@ DAWCore.uniqueName = ( nameOri, arr ) => {
 				return res ? Math.max( nb, +res[ 1 ] ) : nb;
 			}, 1 );
 
-		return `${ name }-${ nb + 1 }`;
+		return `${ name2 }-${ nb + 1 }`;
 	}
 	return name;
 };
