@@ -16,6 +16,7 @@ class DAWCore {
 		} );
 		this.pianoroll = null;
 		this.compositionFocused = true;
+		this.compositionsOptions = new Map();
 		this.compositions = new Map();
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
