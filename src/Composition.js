@@ -39,6 +39,8 @@ DAWCore.Composition = class {
 				rej();
 			}
 		} ).then( cmp => {
+			const opts = this.daw.compositionsOptions.get( cmp.id );
+
 			this.cmp = cmp;
 			this.loaded = true;
 			this.change( cmp, {
@@ -47,9 +49,9 @@ DAWCore.Composition = class {
 				patterns: {},
 				blocks: {},
 			} );
-			this._saved = DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
-			this._actionSavedOn = this._saved ? null : false;
-			this.daw._call( "compositionSaved", cmp, this._saved );
+			this._actionSavedOn = null;
+			this._saved = !opts.localSaving || DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
+			this.daw._call( "compositionSavedStatus", cmp, this._saved );
 			return cmp;
 		} );
 	}
@@ -62,7 +64,7 @@ DAWCore.Composition = class {
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
 			this._saved = true;
-			this.daw._call( "compositionSaved", this.cmp, true );
+			this.daw._call( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
 		}
 	}
