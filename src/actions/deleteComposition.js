@@ -1,19 +1,20 @@
 "use strict";
 
-DAWCore.prototype.deleteComposition = function( id ) {
+DAWCore.prototype.deleteComposition = function( saveMode, id ) {
 	if ( id === this.get.id() ) {
 		this.closeComposition();
 	}
-	this._deleteComposition( id );
+	this._deleteComposition( this.cmps[ saveMode ].get( id ) );
 };
 
-DAWCore.prototype._deleteComposition = function( id ) {
-	const cmp = this.compositions.get( id );
-
+DAWCore.prototype._deleteComposition = function( cmp ) {
 	if ( cmp ) {
-		this.compositions.delete( id );
-		this.compositionsOptions.delete( id );
-		DAWCore.LocalStorage.delete( id );
+		const saveMode = cmp.options.saveMode;
+
+		this.cmps[ saveMode ].delete( cmp.id );
+		if ( saveMode === "local" ) {
+			DAWCore.LocalStorage.delete( cmp.id );
+		}
 		this._call( "compositionDeleted", cmp );
 	}
 };

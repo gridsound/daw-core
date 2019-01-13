@@ -20,10 +20,11 @@ Object.assign( DAWCore.prototype, {
 
 		this.get = obj;
 		this._getList = getList;
-		obj.composition = id => (
-			!id || id === obj.id()
+		obj.composition = ( saveMode, id ) => (
+			!id || ( id === obj.id()
+			&& saveMode === obj.saveMode() )
 				? cmp()
-				: this.compositions.get( id )
+				: this.cmps[ saveMode ].get( id )
 		);
 		obj.id = () => cmp() && cmp().id;
 		obj.bpm = () => cmp() && cmp().bpm;
@@ -35,6 +36,7 @@ Object.assign( DAWCore.prototype, {
 		obj.patternOpened = () => cmp() && cmp().patternOpened;
 		obj.beatsPerMeasure = () => cmp() && cmp().beatsPerMeasure;
 		obj.stepsPerBeat = () => cmp() && cmp().stepsPerBeat;
+		obj.saveMode = () => cmp() && cmp().options.saveMode;
 		obj.ctx = () => this.ctx;
 		obj.currentTime = () => this.composition.currentTime;
 		obj.destination = () => this.destination.getDestination();

@@ -1,16 +1,18 @@
 "use strict";
 
-DAWCore.prototype.openComposition = function( id ) {
-	const cmp = this.compositions.get( id );
+DAWCore.prototype.openComposition = function( saveMode, id ) {
+	const cmp = this.get.composition( saveMode, id );
 
 	if ( cmp ) {
 		if ( this.composition.loaded ) {
 			this.closeComposition();
 		}
-		return this.composition.load( cmp )
+		return ( this.get.composition( saveMode, id )
+		? Promise.resolve( cmp )
+		: this.addNewComposition( { saveMode } ) )
+			.then( cmp => this.composition.load( cmp ) )
 			.then( cmp => this._compositionOpened( cmp ) );
 	}
-	return Promise.reject( `DAWCore: no composition with the id "${ id }".` );
 };
 
 DAWCore.prototype._compositionOpened = function( cmp ) {

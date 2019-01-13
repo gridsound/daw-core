@@ -1,6 +1,7 @@
 "use strict";
 
 DAWCore.Composition.epure = function( cmp ) {
+	delete cmp.options;
 	if ( cmp.loopA == null || cmp.loopB == null ) {
 		delete cmp.loopA;
 		delete cmp.loopB;

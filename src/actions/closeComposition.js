@@ -13,7 +13,7 @@ DAWCore.prototype.closeComposition = function() {
 		this.composition.unload();
 		this.history.empty();
 		if ( !cmp.savedAt ) {
-			this._deleteComposition( cmp.id );
+			this._deleteComposition( cmp );
 		}
 	}
 };

@@ -5,11 +5,11 @@ DAWCore.prototype.saveComposition = function() {
 
 	if ( this.composition.save() ) {
 		const cmp = this.get.composition(),
-			id = this.get.id(),
-			opt = this.compositionsOptions.get( id );
+			saveMode = this.get.saveMode(),
+			id = this.get.id();
 
-		this.compositions.set( id, cmp );
-		if ( opt.localSaving ) {
+		this.cmps[ saveMode ].set( id, cmp );
+		if ( saveMode === "local" ) {
 			DAWCore.LocalStorage.put( id, cmp );
 			this._call( "compositionSavedStatus", cmp, true );
 		} else {

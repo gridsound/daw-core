@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.prototype.exportCompositionToJSON = function( id ) {
-	const cmp = this.get.composition( id );
+DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
+	const cmp = this.get.composition( saveMode, id );
 
 	if ( cmp ) {
 		return {

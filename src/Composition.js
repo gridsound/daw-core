@@ -39,8 +39,6 @@ DAWCore.Composition = class {
 				rej();
 			}
 		} ).then( cmp => {
-			const opts = this.daw.compositionsOptions.get( cmp.id );
-
 			this.cmp = cmp;
 			this.loaded = true;
 			this.change( cmp, {
@@ -50,7 +48,7 @@ DAWCore.Composition = class {
 				blocks: {},
 			} );
 			this._actionSavedOn = null;
-			this._saved = !opts.localSaving || DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
+			this._saved = cmp.options.saveMode === "cloud" || DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
 			this.daw._call( "compositionSavedStatus", cmp, this._saved );
 			return cmp;
 		} );
