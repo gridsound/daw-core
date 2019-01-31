@@ -1,10 +1,12 @@
 "use strict";
 
 DAWCore.prototype.addComposition = function( cmp, opt = {} ) {
-	cmp.options = Object.freeze( Object.assign( {
+	const cpy = DAWCore.objectDeepCopy( cmp );
+
+	cpy.options = Object.freeze( Object.assign( {
 			saveMode: "local",
 		}, opt ) );
-	this.cmps[ cmp.options.saveMode ].set( cmp.id, cmp );
-	this._call( "compositionAdded", cmp );
-	return Promise.resolve( cmp );
+	this.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
+	this._call( "compositionAdded", cpy );
+	return Promise.resolve( cpy );
 };
