@@ -10,6 +10,7 @@ DAWCore.History.prototype.nameAction = function( act ) {
 	if ( "loopA" in r ) { return { i: "loop", t: `Loop: ${ r.loopA } -> ${ r.loopB }` }; }
 	if ( r.beatsPerMeasure || r.stepsPerBeat ) { return { i: "clock", t: `Time signature: ${ cmp.beatsPerMeasure }/${ cmp.stepsPerBeat }` }; }
 	return (
+		DAWCore.History._nameAction_mixer( cmp, r, u ) ||
 		DAWCore.History._nameAction_synth( cmp, r, u ) ||
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
@@ -19,6 +20,34 @@ DAWCore.History.prototype.nameAction = function( act ) {
 	);
 };
 
+DAWCore.History._nameAction_mixer = function( cmp, r, u ) {
+	if ( r.mixer ) {
+		const chanId = Object.keys( r.mixer )[ 0 ],
+			rChan = r.mixer[ chanId ],
+			uChan = u.mixer[ chanId ],
+			currChan = cmp.mixer[ chanId ],
+			currName = currChan && currChan.name;
+
+		if ( !rChan || !uChan ) {
+			return rChan
+				? { i: "add", t: `New channel "${ rChan.name }"` }
+				: { i: "remove", t: `Remove channel "${ uChan.name }"` };
+		}
+		if ( "toggle" in rChan ) {
+			const t = rChan.toggle;
+
+			return {
+				i: t ? "unmute" : "mute",
+				t: `${ t ? "Unmute" : "Mute" } "${ currName }" channel`,
+			};
+		}
+		if ( "name" in rChan ) { return { i: "name", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
+		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
+		if ( "pan" in rChan ) { return { i: "param", t: `${ currName }: pan "${ rChan.pan }"` }; }
+		if ( rChan.effects ) {
+		}
+	}
+}
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 	if ( r.synths ) {
 		const synthId = Object.keys( r.synths )[ 0 ],
@@ -47,15 +76,6 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 			}
 			param = Object.entries( rOsc )[ 0 ];
 			return { i: "param", t: msg + `set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
-		}
-		if ( rSyn.envelopes ) {
-			const [ envName, env ] = Object.entries( rSyn.envelopes )[ 0 ],
-				attRel = Object.keys( env )[ 0 ];
-
-			return {
-				i: "envelope",
-				t: cmp.synths[ synthId ].name + `: change ${ envName } ${ attRel } envelope`,
-			};
 		}
 	}
 }
