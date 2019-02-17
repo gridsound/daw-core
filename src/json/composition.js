@@ -1,16 +1,8 @@
 "use strict";
 
 DAWCore.json.composition = ( env, id ) => {
-	const tracks = {},
-		mixer = {
-			"main": DAWCore.json.channel( "main" ),
-			"1": DAWCore.json.channel( "chan#1" ),
-			"2": DAWCore.json.channel( "chan#2" ),
-			"3": DAWCore.json.channel( "chan#3" ),
-			"4": DAWCore.json.channel( "chan#4" ),
-		};
+	const tracks = {};
 
-	delete mixer.main.dest;
 	for ( let i = 0; i < env.def_nbTracks; ++i ) {
 		tracks[ i ] = {};
 	}
@@ -34,7 +26,7 @@ DAWCore.json.composition = ( env, id ) => {
 				duration: env.def_beatsPerMeasure,
 			},
 		},
-		mixer,
+		mixer: DAWCore.json.mixer(),
 		tracks,
 		blocks: {},
 		synths: { "0": DAWCore.json.synth( "synth" ) },

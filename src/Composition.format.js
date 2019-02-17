@@ -25,6 +25,12 @@ DAWCore.Composition.format = function( cmp ) {
 		cmp.loopB = null;
 	}
 
+	// mixer
+	// ..........................................
+	if ( !cmp.mixer ) {
+		cmp.mixer = DAWCore.json.mixer();
+	}
+
 	// ..........................................
 	if ( !cmp.synths ) {
 		const synthId = 0;

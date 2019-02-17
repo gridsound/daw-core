@@ -6,5 +6,4 @@ DAWCore.json.channel = name => ( {
 	gain: .8,
 	dest: "main",
 	toggle: true,
-	effects: {},
 } );
