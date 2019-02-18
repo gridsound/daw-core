@@ -29,18 +29,14 @@ DAWCore.Composition.format = function( cmp ) {
 	// ..........................................
 	if ( !cmp.mixer ) {
 		cmp.mixer = DAWCore.json.mixer();
+		Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 	}
 
 	// ..........................................
 	if ( !cmp.synths ) {
-		const synthId = 0;
-
-		Object.values( cmp.patterns ).forEach( pat => pat.synth = 0 );
-		cmp.synthOpened = 0;
-		cmp.synths = { 0: {
-			name: "synth",
-			oscillators: { 0: { type: "sine", detune: 0, pan: 0, gain: 1 } },
-		} };
+		Object.values( cmp.patterns ).forEach( pat => pat.synth = "0" );
+		cmp.synthOpened = "0";
+		cmp.synths = { "0": DAWCore.json.synth( "synth" ) };
 	}
 	Object.values( cmp.synths ).forEach( syn => {
 		delete syn.envelopes;
