@@ -8,7 +8,12 @@ DAWCore.History.prototype.nameAction = function( act ) {
 	if ( "bpm" in r ) { return { i: "clock", t: `BPM: ${ r.bpm }` }; }
 	if ( "name" in r ) { return { i: "name", t: `Name: "${ r.name }"` }; }
 	if ( "loopA" in r ) { return { i: "loop", t: `Loop: ${ r.loopA } -> ${ r.loopB }` }; }
-	if ( r.beatsPerMeasure || r.stepsPerBeat ) { return { i: "clock", t: `Time signature: ${ cmp.beatsPerMeasure }/${ cmp.stepsPerBeat }` }; }
+	if ( r.beatsPerMeasure || r.stepsPerBeat ) {
+		return {
+			i: "clock",
+			t: `Time signature: ${ cmp.beatsPerMeasure }/${ cmp.stepsPerBeat }`,
+		};
+	}
 	return (
 		DAWCore.History._nameAction_mixer( cmp, r, u ) ||
 		DAWCore.History._nameAction_synth( cmp, r, u ) ||
@@ -42,10 +47,9 @@ DAWCore.History._nameAction_mixer = function( cmp, r, u ) {
 			};
 		}
 		if ( "name" in rChan ) { return { i: "name", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
-		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
 		if ( "pan" in rChan ) { return { i: "param", t: `${ currName }: pan "${ rChan.pan }"` }; }
-		if ( rChan.effects ) {
-		}
+		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
+		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirect to "${ cmp.mixer[ rChan.dest ].name }"` }; }
 	}
 }
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {
