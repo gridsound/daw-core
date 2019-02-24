@@ -49,12 +49,13 @@ DAWCore.History._nameAction_channels = function( cmp, r, u ) {
 		if ( "name" in rChan ) { return { i: "name", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
 		if ( "pan" in rChan ) { return { i: "param", t: `${ currName }: pan "${ rChan.pan }"` }; }
 		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
-		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirect to "${ cmp.channels[ rChan.dest ].name }"` }; }
+		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirects to "${ cmp.channels[ rChan.dest ].name }"` }; }
 	}
 }
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 	if ( r.synths ) {
 		const synthId = Object.keys( r.synths )[ 0 ],
+			syn = cmp.synths[ synthId ],
 			rSyn = r.synths[ synthId ],
 			uSyn = u.synths[ synthId ];
 
@@ -66,11 +67,14 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 		if ( "name" in rSyn ) {
 			return { i: "name", t: `${ uSyn.name }: rename to "${ rSyn.name }"` };
 		}
+		if ( "dest" in rSyn ) {
+			return { i: "redirect", t: `${ syn.name }: redirects to "${ cmp.channels[ rSyn.dest ].name }"` };
+		}
 		if ( rSyn.oscillators ) {
 			const idOsc = Object.keys( rSyn.oscillators )[ 0 ],
 				rOsc = rSyn.oscillators[ idOsc ],
 				uOsc = uSyn.oscillators[ idOsc ],
-				msg = cmp.synths[ synthId ].name + ": ";
+				msg = syn.name + ": ";
 			let param;
 
 			if ( !rOsc || !uOsc ) {
