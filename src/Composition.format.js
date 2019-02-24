@@ -25,10 +25,10 @@ DAWCore.Composition.format = function( cmp ) {
 		cmp.loopB = null;
 	}
 
-	// mixer
+	// channels
 	// ..........................................
-	if ( !cmp.mixer ) {
-		cmp.mixer = DAWCore.json.mixer();
+	if ( !cmp.channels ) {
+		cmp.channels = DAWCore.json.channels();
 		Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 	}
 

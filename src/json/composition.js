@@ -26,7 +26,7 @@ DAWCore.json.composition = ( env, id ) => {
 				duration: env.def_beatsPerMeasure,
 			},
 		},
-		mixer: DAWCore.json.mixer(),
+		channels: DAWCore.json.channels(),
 		tracks,
 		blocks: {},
 		synths: { "0": DAWCore.json.synth( "synth" ) },

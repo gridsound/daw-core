@@ -15,7 +15,7 @@ DAWCore.History.prototype.nameAction = function( act ) {
 		};
 	}
 	return (
-		DAWCore.History._nameAction_mixer( cmp, r, u ) ||
+		DAWCore.History._nameAction_channels( cmp, r, u ) ||
 		DAWCore.History._nameAction_synth( cmp, r, u ) ||
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
@@ -25,12 +25,12 @@ DAWCore.History.prototype.nameAction = function( act ) {
 	);
 };
 
-DAWCore.History._nameAction_mixer = function( cmp, r, u ) {
-	if ( r.mixer ) {
-		const chanId = Object.keys( r.mixer )[ 0 ],
-			rChan = r.mixer[ chanId ],
-			uChan = u.mixer[ chanId ],
-			currChan = cmp.mixer[ chanId ],
+DAWCore.History._nameAction_channels = function( cmp, r, u ) {
+	if ( r.channels ) {
+		const chanId = Object.keys( r.channels )[ 0 ],
+			rChan = r.channels[ chanId ],
+			uChan = u.channels[ chanId ],
+			currChan = cmp.channels[ chanId ],
 			currName = currChan && currChan.name;
 
 		if ( !rChan || !uChan ) {
@@ -49,7 +49,7 @@ DAWCore.History._nameAction_mixer = function( cmp, r, u ) {
 		if ( "name" in rChan ) { return { i: "name", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
 		if ( "pan" in rChan ) { return { i: "param", t: `${ currName }: pan "${ rChan.pan }"` }; }
 		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
-		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirect to "${ cmp.mixer[ rChan.dest ].name }"` }; }
+		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirect to "${ cmp.channels[ rChan.dest ].name }"` }; }
 	}
 }
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {
