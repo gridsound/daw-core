@@ -2,7 +2,8 @@
 
 DAWCore.Composition = class {
 	constructor( daw ) {
-		const sch = new gswaScheduler();
+		const sch = new gswaScheduler(),
+			mixer = new gswaMixer();
 
 		this.daw = daw;
 		this.cmp = null;
@@ -10,9 +11,10 @@ DAWCore.Composition = class {
 		this.playing = false;
 		this._saved = true;
 		this._sched = sch;
+		this._mixer = mixer;
 		this._synths = new Map();
-		this._startedSched = new Map();
 		this._startedKeys = new Map();
+		this._startedSched = new Map();
 		this._actionSavedOn = null;
 		sch.currentTime = () => this.ctx.currentTime;
 		sch.ondatastart = this._onstartBlock.bind( this );
@@ -22,10 +24,14 @@ DAWCore.Composition = class {
 	// un/load, change, save
 	// ........................................................................
 	setCtx( ctx ) {
+		const mix = this._mixer;
+
 		this.ctx = ctx;
-		this._synths.forEach( syn => {
+		mix.setContext( ctx );
+		mix.connect( this.daw.get.destination() );
+		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
-			syn.connect( this.daw.get.destination() );
+			syn.connect( this._mixer.getChanInput( this.cmp.synths[ synId ].dest ) );
 		} );
 	}
 	load( cmpOri ) {

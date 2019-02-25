@@ -30,6 +30,9 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
+	[ "channels", function( { channels } ) {
+		DAWCore.objectDeepAssign( this._mixer.data, channels );
+	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
 			const get = this.daw.get;
@@ -52,11 +55,17 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 
 				syn.setContext( this.daw.get.ctx() );
 				syn.setBPM( this.daw.get.bpm() );
-				syn.connect( this.daw.get.destination() );
+				syn.connect( this._mixer.getChanInput( synthObj.dest ) );
 				DAWCore.objectDeepAssign( syn.data, synthObj );
 				this._synths.set( id, syn );
 			} else {
-				DAWCore.objectDeepAssign( this._synths.get( id ).data, synthObj );
+				const syn = this._synths.get( id );
+
+				DAWCore.objectDeepAssign( syn.data, synthObj );
+				if ( "dest" in synthObj ) {
+					syn.disconnect();
+					syn.connect( this._mixer.getChanInput( synthObj.dest ) );
+				}
 			}
 		} );
 	} ],

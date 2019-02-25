@@ -20,7 +20,6 @@ class DAWCore {
 		};
 		this.pianoroll = null;
 		this.compositionFocused = true;
-		this.mixer = new DAWCore.Mixer( this );
 		this.history = new DAWCore.History( this );
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
@@ -33,7 +32,6 @@ class DAWCore {
 		this.ctx = ctx;
 		this.destination.setCtx( ctx );
 		this.composition.setCtx( ctx );
-		this.mixer.setCtx( ctx );
 	}
 	initPianoroll() {
 		this.pianoroll = new DAWCore.Pianoroll( this );
