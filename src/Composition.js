@@ -80,6 +80,15 @@ DAWCore.Composition = class {
 			return true;
 		}
 	}
+	updateChanAudioData() {
+		const mix = this._mixer,
+			fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
+
+		Object.keys( mix.data ).forEach( chanId => {
+			mix.fillAudioData( chanId );
+			fn( chanId, mix.audioDataL, mix.audioDataR );
+		} );
+	}
 
 	// controls
 	// ........................................................................

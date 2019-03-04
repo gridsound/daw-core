@@ -95,6 +95,7 @@ class DAWCore {
 		const anData = this.destination.analyserFillData();
 
 		if ( anData ) {
+			this.composition.updateChanAudioData();
 			this._call( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
