@@ -43,7 +43,8 @@ class DAWCore {
 		}
 	}
 	compositionChange( obj ) {
-		this.history.stackChange( obj );
+		this.history.stackChange(
+			this.composition.beforeChange( obj ) );
 	}
 	compositionNeedSave() {
 		return !this.composition._saved;
