@@ -2,8 +2,7 @@
 
 DAWCore.Composition = class {
 	constructor( daw ) {
-		const sch = new gswaScheduler(),
-			mixer = new gswaMixer();
+		const sch = new gswaScheduler();
 
 		this.daw = daw;
 		this.cmp = null;
@@ -11,7 +10,7 @@ DAWCore.Composition = class {
 		this.playing = false;
 		this._saved = true;
 		this._sched = sch;
-		this._mixer = mixer;
+		this._mixer = new gswaMixer();
 		this._synths = new Map();
 		this._startedKeys = new Map();
 		this._startedSched = new Map();
@@ -64,6 +63,7 @@ DAWCore.Composition = class {
 			const d = this._sched.data;
 
 			this.loaded = false;
+			this._mixer.clear();
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
