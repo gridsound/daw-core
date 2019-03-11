@@ -10,7 +10,10 @@ DAWCore.Destination = class {
 	getDestination() {
 		return this._inputNode;
 	}
-	gain( v ) {
+	getGain() {
+		return this._gain;
+	}
+	setGain( v ) {
 		this._gain = v;
 		this._gainNode.gain.value = v * v;
 	}
@@ -32,7 +35,6 @@ DAWCore.Destination = class {
 		this._gainNode = ctx.createGain();
 		this._gainNode.connect( ctx.destination );
 		this._inputNode.connect( this._gainNode );
-		this.gain( offline ? 1 : this._gain );
 		this.toggleAnalyser( !offline && this.daw.env.analyserEnable );
 	}
 	analyserFillData() {
