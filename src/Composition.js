@@ -21,13 +21,11 @@ DAWCore.Composition = class {
 	}
 
 	// un/load, change, save
-	// ........................................................................
+	// .........................................................................
 	setCtx( ctx ) {
-		const mix = this._mixer;
-
 		this.ctx = ctx;
-		mix.setContext( ctx );
-		mix.connect( this.daw.get.destination() );
+		this._mixer.setContext( ctx );
+		this._mixer.connect( this.daw.get.destination() );
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.connect( this._mixer.getChanInput( this.cmp.synths[ synId ].dest ) );
@@ -53,7 +51,8 @@ DAWCore.Composition = class {
 				blocks: {},
 			} );
 			this._actionSavedOn = null;
-			this._saved = cmp.options.saveMode === "cloud" || DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
+			this._saved = cmp.options.saveMode === "cloud" ||
+				DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
 			this.daw._call( "compositionSavedStatus", cmp, this._saved );
 			return cmp;
 		} );
@@ -91,7 +90,7 @@ DAWCore.Composition = class {
 	}
 
 	// controls
-	// ........................................................................
+	// .........................................................................
 	getSynth( id ) {
 		return this._synths.get( id );
 	}
@@ -124,12 +123,12 @@ DAWCore.Composition = class {
 		}
 	}
 
-	// ........................................................................
+	// .........................................................................
 	_setLoop( a, b ) {
-		if ( !Number.isFinite( a ) ) {
-			this._sched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
-		} else {
+		if ( Number.isFinite( a ) ) {
 			this._sched.setLoopBeat( a, b );
+		} else {
+			this._sched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
 		}
 	}
 	_start( offset ) {
@@ -146,7 +145,7 @@ DAWCore.Composition = class {
 		}
 	}
 
-	// ........................................................................
+	// .........................................................................
 	assignBlocksChange( data ) {
 		const cmp = this.cmp;
 
@@ -163,7 +162,7 @@ DAWCore.Composition = class {
 		} );
 	}
 
-	// ........................................................................
+	// .........................................................................
 	_onstartBlock( startedId, blcs, when, off, dur ) {
 		const cmp = this.cmp,
 			blc = blcs[ 0 ][ 1 ];
