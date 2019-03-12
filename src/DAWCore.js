@@ -26,6 +26,7 @@ class DAWCore {
 		this._loop = this._loop.bind( this );
 		this._getInit();
 		this.setCtx( new AudioContext() );
+		this.destination.setGain( this.env.def_appGain );
 	}
 
 	setCtx( ctx ) {

@@ -3,7 +3,7 @@
 DAWCore.Destination = class {
 	constructor( daw ) {
 		this.daw = daw;
-		this._gain = this.daw.env.def_appGain;
+		this._gain = 1;
 		this.empty();
 	}
 
