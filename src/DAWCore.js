@@ -109,24 +109,7 @@ class DAWCore {
 		this._frameId = requestAnimationFrame( this._loop );
 	}
 	_clockUpdate() {
-		const t = DAWCore.time,
-			beat = this._focusedObj().getCurrentTime();
-
-		if ( this.env.clockSteps ) {
-			const sPB = this.get.stepsPerBeat();
-
-			this._call( "clockUpdate",
-				t.beatToBeat( beat ),
-				t.beatToStep( beat, sPB ),
-				t.beatToMStep( beat, sPB ) );
-		} else {
-			const sec = beat * 60 / this.get.bpm();
-
-			this._call( "clockUpdate",
-				t.secToMin( sec ),
-				t.secToSec( sec ),
-				t.secToMs( sec ) );
-		}
+		this._call( "clockUpdate", this._focusedObj().getCurrentTime() );
 	}
 	_focused() {
 		return this.compositionFocused ? "composition" : "pianoroll";
