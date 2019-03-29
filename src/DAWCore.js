@@ -9,7 +9,7 @@ class DAWCore {
 			def_nbTracks: 21,
 			def_stepsPerBeat: 4,
 			def_beatsPerMeasure: 4,
-			analyserFFTsize: 1024,
+			analyserFFTsize: 512,
 			analyserEnable: true,
 			sampleRate: 44100,
 			clockSteps: false,
