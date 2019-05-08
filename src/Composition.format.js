@@ -1,15 +1,7 @@
 "use strict";
 
 DAWCore.Composition.format = function( cmp ) {
-	const blcsEntries = Object.entries( cmp.blocks ),
-		blcsObj = {},
-		sortWhen = ( a, b ) => {
-			const c = a[ 1 ].when,
-				d = b[ 1 ].when;
-
-			return c < d ? -1 : c > d ? 1 : 0;
-		};
-	let blcId = 0;
+	const blcsValues = Object.values( cmp.blocks );
 
 	// loopA/B
 	// ..........................................
@@ -47,14 +39,14 @@ DAWCore.Composition.format = function( cmp ) {
 		tr.toggle = typeof tr.toggle === "boolean" ? tr.toggle : true;
 		return tr.order + 1;
 	}, 0 );
-	cmp.blocks = blcsObj;
-	blcsEntries.sort( sortWhen );
-	blcsEntries.forEach( ( [ id, blc ] ) => {
-		blcsObj[ blcId++ ] = blc;
+	blcsValues.sort( DAWCore.Composition.format_sortWhen );
+	cmp.blocks = blcsValues.reduce( ( obj, blc, i ) => {
 		blc.offset = blc.offset || 0;
 		blc.selected = !!blc.selected;
 		blc.durationEdited = !!blc.durationEdited;
-	} );
+		obj[ i ] = blc;
+		return obj;
+	}, {} );
 	Object.values( cmp.keys ).forEach( keys => {
 		Object.values( keys ).forEach( k => {
 			k.pan = +DAWCore.castToNumber( -1, 1, 0, k.pan ).toFixed( 2 );
@@ -74,4 +66,8 @@ DAWCore.Composition.format = function( cmp ) {
 		} );
 	} );
 	return true;
+};
+
+DAWCore.Composition.format_sortWhen = function( a, b ) {
+	return a.when < b.when ? -1 : a.when > b.when ? 1 : 0;
 };
