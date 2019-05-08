@@ -35,7 +35,7 @@ DAWCore.prototype._removeSynth = function( synthId ) {
 		}
 	}
 	if ( synthId === this.get.synthOpened() ) {
-		if ( !Object.entries( this.get.synths() ).some( ( [ k, v ] ) => {
+		if ( !Object.keys( this.get.synths() ).some( k => {
 			if ( k !== synthId ) {
 				obj.synthOpened = k;
 				if ( !cmpPatterns.some( ( [ patId, pat ] ) => {

@@ -137,9 +137,10 @@ class DAWCore {
 			: `DAWCore.${ fnName }: cmp.${ collection }[${ id }] is not defined`;
 	}
 	_getNextIdOf( obj ) {
-		return Object.keys( obj ).reduce( ( max, id ) => (
-			Math.max( max, parseInt( id ) || 0 )
-		), 0 ) + 1 + "";
+		const ids = Object.keys( obj ),
+			id = ids.reduce( ( max, id ) => Math.max( max, parseInt( id ) || 0 ), 0 );
+
+		return `${ id + 1 }`;
 	}
 	_createUniqueName( collection, name ) {
 		return DAWCore.uniqueName( name, Object.values(

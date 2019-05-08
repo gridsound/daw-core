@@ -51,7 +51,8 @@ DAWCore.History._nameAction_channels = function( cmp, r, u ) {
 		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
 		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirects to "${ cmp.channels[ rChan.dest ].name }"` }; }
 	}
-}
+};
+
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 	if ( r.synths ) {
 		const synthId = Object.keys( r.synths )[ 0 ],
@@ -74,19 +75,19 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 			const idOsc = Object.keys( rSyn.oscillators )[ 0 ],
 				rOsc = rSyn.oscillators[ idOsc ],
 				uOsc = uSyn.oscillators[ idOsc ],
-				msg = syn.name + ": ";
-			let param;
+				msg = syn.name + ": ",
+				param = rOsc && Object.entries( rOsc )[ 0 ];
 
 			if ( !rOsc || !uOsc ) {
 				return rOsc
 					? { i: "add", t: msg + "New oscillator" }
 					: { i: "remove", t: msg + "Remove oscillator" };
 			}
-			param = Object.entries( rOsc )[ 0 ];
 			return { i: "param", t: msg + `set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
 		}
 	}
-}
+};
+
 DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
 	const rBlcs = r.blocks;
 
@@ -99,12 +100,14 @@ DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
 		if ( !u.blocks[ id ] )    { return { i: "paint", t: "Add" + msg }; }
 		if ( "duration" in rBlc ) { return { i: "crop", t: "Crop" + msg }; }
 		if ( "when" in rBlc || "track" in rBlc ) { return { i: "move", t: "Move" + msg }; }
-		if ( "selected" in rBlc ) { return rBlc.selected
-			? { i: "selection ico--plus", t: "Select" + msg }
-			: { i: "selection ico--minus", t: "Unselect" + msg };
+		if ( "selected" in rBlc ) {
+			return rBlc.selected
+				? { i: "selection ico--plus", t: "Select" + msg }
+				: { i: "selection ico--minus", t: "Unselect" + msg };
 		}
 	}
-}
+};
+
 DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 	const o = r.tracks;
 
@@ -113,7 +116,7 @@ DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 
 		for ( a in o ) {
 			if ( o[ a ].name ) {
-				return { i: "name", t: `Name track: "${ u.tracks[ a ].name }" -> "${ o[ a ].name }"` }
+				return { i: "name", t: `Name track: "${ u.tracks[ a ].name }" -> "${ o[ a ].name }"` };
 			}
 			if ( i++ ) {
 				break;
@@ -122,9 +125,10 @@ DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 		return i > 1
 			? { i: "unmute", t: `Un/mute several tracks` }
 			: { i: o[ a ].toggle ? "unmute" : "mute",
-				t: ( o[ a ].toggle ? "Unmute" : "Mute" ) + ` "${ cmp.tracks[ a ].name }" track` }
+				t: ( o[ a ].toggle ? "Unmute" : "Mute" ) + ` "${ cmp.tracks[ a ].name }" track` };
 	}
-}
+};
+
 DAWCore.History._nameAction_pattern = function( cmp, r, u ) {
 	for ( const id in r.patterns ) {
 		const pat = cmp.patterns[ id ],
@@ -143,7 +147,8 @@ DAWCore.History._nameAction_pattern = function( cmp, r, u ) {
 			return { i: "name", t: `${ upat.name }: rename to "${ rpat.name }"` };
 		}
 	}
-}
+};
+
 DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 	for ( const a in r.keys ) {
 		const o = r.keys[ a ];
@@ -168,4 +173,4 @@ DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 			);
 		}
 	}
-}
+};

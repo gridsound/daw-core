@@ -1,13 +1,13 @@
 "use strict";
 
 DAWCore.prototype.changePatternKeys = function( patId, keysObj ) {
-	const pat = this.get.pattern( patId ),
-		keys = pat && this.get.keys( pat.keys );
+	const pat = this.get.pattern( patId );
 
-	     if ( !keys ) { this._error( "changePatternKeys", "keys", pat.keys ); }
-	else if ( !pat ) { this._error( "changePatternKeys", "pattern", patId ); }
-	else {
-		const dur = this._changePatternKeysCalcDuration( pat, keys, keysObj ),
+	if ( !pat ) {
+		this._error( "changePatternKeys", "pattern", patId );
+	} else {
+		const keys = this.get.keys( pat.keys ),
+			dur = this._changePatternKeysCalcDuration( pat, keys, keysObj ),
 			obj = this._changePatternKeys( patId, keysObj, pat, dur );
 
 		this.compositionChange( obj );

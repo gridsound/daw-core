@@ -23,7 +23,7 @@ DAWCore.prototype._compositionOpened = function( cmp ) {
 };
 
 /*
-1.	Why don't we use `cmp` instead of recalling .get.composition() ?
-	Because the `cmp` could have been delete in .closeComposition()
-	if the composition was a new untitled composition.
+1. Why don't we use `cmp` instead of recalling .get.composition() ?
+   Because the `cmp` could have been delete in .closeComposition()
+   if the composition was a new untitled composition.
 */

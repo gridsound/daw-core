@@ -11,7 +11,7 @@ DAWCore.LocalStorage = Object.freeze( {
 		localStorage.removeItem( id );
 	},
 	has( id ) {
-		return localStorage.hasOwnProperty( id );
+		return id in localStorage;
 	},
 	get( id ) {
 		try {

@@ -13,8 +13,8 @@ DAWCore.prototype.openSynth = function( id ) {
 };
 
 DAWCore.prototype._openSynth_find = function( id ) {
-	const pat = Object.entries( this.get.patterns() )
-			.find( ( [ patId, pat ] ) => pat.synth === id );
+	const pat = Object.values( this.get.patterns() )
+			.find( pat => pat.synth === id );
 
 	return pat ? pat[ 0 ] : null;
 };
