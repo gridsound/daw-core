@@ -15,13 +15,13 @@ DAWCore.Composition.epure = function( cmp ) {
 		if ( !blc.selected ) { delete blc.selected; }
 		if ( !blc.durationEdited ) { delete blc.durationEdited; }
 	} );
-	Object.values( cmp.keys ).forEach( keys => (
+	Object.values( cmp.keys ).forEach( keys => {
 		Object.values( keys ).forEach( key => {
 			if ( !key.offset ) { delete key.offset; }
 			if ( !key.selected ) { delete key.selected; }
 			if ( key.prev == null ) { delete key.prev; }
 			if ( key.next == null ) { delete key.next; }
-		} )
-	) );
+		} );
+	} );
 	return cmp;
 };
