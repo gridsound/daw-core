@@ -5,7 +5,7 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 
 	if ( cmp ) {
 		return {
-			name: ( cmp.name || "untitled" ) + ".gs",
+			name: `${ cmp.name || "untitled" }.gs`,
 			url: this._exportCompositionToJSON(
 				DAWCore.Composition.epure(
 				DAWCore.objectDeepCopy( cmp ) ) )

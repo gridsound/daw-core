@@ -10,7 +10,7 @@ Object.assign( DAWCore.prototype, {
 				if ( w.endsWith( "s" ) ) {
 					obj[ w ] = this._getListOrObj.bind( this, w );
 				} else {
-					const list = w + "s";
+					const list = `${ w }s`;
 
 					obj[ w ] = getObject.bind( this, list );
 					obj[ list ] = getList.bind( this, list );

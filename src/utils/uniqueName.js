@@ -7,7 +7,7 @@ DAWCore.uniqueName = ( nameOri, arr ) => {
 		const name2 = /-\d+$/.test( name )
 				? name.substr( 0, name.lastIndexOf( "-" ) ).trim()
 				: name,
-			reg = new RegExp( "^" + name2 + "-(\\d+)$" ),
+			reg = new RegExp( `^${ name2 }-(\\d+)$` ),
 			nb = arr.reduce( ( nb, str ) => {
 				const res = reg.exec( str );
 

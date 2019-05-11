@@ -24,7 +24,7 @@ DAWCore.prototype.exportCompositionToWAV = function() {
 		DAWCore._URLToRevoke = url;
 		return {
 			url,
-			name: ( this.get.name() || "untitled" ) + ".wav",
+			name: `${ this.get.name() || "untitled" }.wav`,
 		};
 	} );
 };

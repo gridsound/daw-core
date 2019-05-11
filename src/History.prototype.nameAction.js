@@ -75,15 +75,14 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 			const idOsc = Object.keys( rSyn.oscillators )[ 0 ],
 				rOsc = rSyn.oscillators[ idOsc ],
 				uOsc = uSyn.oscillators[ idOsc ],
-				msg = syn.name + ": ",
 				param = rOsc && Object.entries( rOsc )[ 0 ];
 
 			if ( !rOsc || !uOsc ) {
 				return rOsc
-					? { i: "add", t: msg + "New oscillator" }
-					: { i: "remove", t: msg + "Remove oscillator" };
+					? { i: "add",    t: `${ syn.name }: New oscillator` }
+					: { i: "remove", t: `${ syn.name }: Remove oscillator` };
 			}
-			return { i: "param", t: msg + `set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
+			return { i: "param", t: `${ syn.name }: set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
 		}
 	}
 };
@@ -93,17 +92,17 @@ DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
 
 	for ( const id in rBlcs ) {
 		const arrK = Object.keys( rBlcs ),
-			msg = " " + arrK.length + " block" + ( arrK.length > 1 ? "s" : "" ),
-			rBlc = rBlcs[ id ];
+			rBlc = rBlcs[ id ],
+			msg = `${ arrK.length } block${ arrK.length > 1 ? "s" : "" }`;
 
-		if ( !rBlc )              { return { i: "erase", t: "Remove" + msg }; }
-		if ( !u.blocks[ id ] )    { return { i: "paint", t: "Add" + msg }; }
-		if ( "duration" in rBlc ) { return { i: "crop", t: "Crop" + msg }; }
-		if ( "when" in rBlc || "track" in rBlc ) { return { i: "move", t: "Move" + msg }; }
+		if ( !rBlc )                             { return { i: "erase", t: `Remove ${ msg }` }; }
+		if ( !u.blocks[ id ] )                   { return { i: "paint", t: `Add ${ msg }` }; }
+		if ( "duration" in rBlc )                { return { i: "crop",  t: `Crop ${ msg }` }; }
+		if ( "when" in rBlc || "track" in rBlc ) { return { i: "move",  t: `Move ${ msg }` }; }
 		if ( "selected" in rBlc ) {
 			return rBlc.selected
-				? { i: "selection ico--plus", t: "Select" + msg }
-				: { i: "selection ico--minus", t: "Unselect" + msg };
+				? { i: "selection ico--plus",  t: `Select ${ msg }` }
+				: { i: "selection ico--minus", t: `Unselect ${ msg }` };
 		}
 	}
 };
@@ -123,9 +122,11 @@ DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 			}
 		}
 		return i > 1
-			? { i: "unmute", t: `Un/mute several tracks` }
-			: { i: o[ a ].toggle ? "unmute" : "mute",
-				t: ( o[ a ].toggle ? "Unmute" : "Mute" ) + ` "${ cmp.tracks[ a ].name }" track` };
+			? { i: "unmute", t: "Un/mute several tracks" }
+			: {
+				i: o[ a ].toggle ? "unmute" : "mute",
+				t: `${ o[ a ].toggle ? "Unmute" : "Mute" } "${ cmp.tracks[ a ].name }" track`
+			};
 	}
 };
 
@@ -155,20 +156,20 @@ DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 
 		for ( const b in o ) {
 			const arrK = Object.keys( o ),
-				msgPat = cmp.patterns[ cmp.patternOpened ].name + ": ",
-				msgSmp = " " + arrK.length + " key" + ( arrK.length > 1 ? "s" : "" ),
+				msgPat = cmp.patterns[ cmp.patternOpened ].name,
+				msgSmp = `${ arrK.length } key${ arrK.length > 1 ? "s" : "" }`,
 				oB = o[ b ];
 
 			return (
-				( !oB && { i: "erase", t: msgPat + "remove" + msgSmp } ) ||
-				( !u.keys[ a ][ b ] && { i: "paint", t: msgPat + "add" + msgSmp } ) ||
-				( "duration" in oB && { i: "crop", t: msgPat + "crop" + msgSmp } ) ||
-				( "gain" in oB && { i: "param", t: msgPat + "edit gain of" + msgSmp } ) ||
-				( "pan" in oB && { i: "param", t: msgPat + "edit pan of" + msgSmp } ) ||
-				( ( "when" in oB || "key" in oB ) && { i: "move", t: msgPat + "move" + msgSmp } ) ||
+				( !oB                             && { i: "erase", t: `${ msgPat }: remove ${       msgSmp }` } ) ||
+				( !u.keys[ a ][ b ]               && { i: "paint", t: `${ msgPat }: add ${          msgSmp }` } ) ||
+				( "duration" in oB                && { i: "crop",  t: `${ msgPat }: crop ${         msgSmp }` } ) ||
+				( "gain" in oB                    && { i: "param", t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
+				( "pan" in oB                     && { i: "param", t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
+				( ( "when" in oB || "key" in oB ) && { i: "move",  t: `${ msgPat }: move ${         msgSmp }` } ) ||
 				( "selected" in oB && ( oB.selected
-					? { i: "selection ico--plus",  t: msgPat + "select" + msgSmp }
-					: { i: "selection ico--minus", t: msgPat + "unselect" + msgSmp }
+					? { i: "selection ico--plus",  t: `${ msgPat }: select ${ msgSmp }` }
+					: { i: "selection ico--minus", t: `${ msgPat }: unselect ${ msgSmp }` }
 				) )
 			);
 		}
