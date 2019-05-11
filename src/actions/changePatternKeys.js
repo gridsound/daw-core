@@ -31,11 +31,11 @@ DAWCore.prototype._changePatternKeysCalcDuration = function( pat, keys, keysObj 
 			}
 			return dur;
 		}, 0 ),
-		dur2 = Object.entries( keysObj ).reduce( ( dur, [ keyId, key ] ) => (
-			keyId in keys
+		dur2 = Object.entries( keysObj ).reduce( ( dur, [ keyId, key ] ) => {
+			return keyId in keys
 				? dur
-				: Math.max( dur, key.when + key.duration )
-		), dur );
+				: Math.max( dur, key.when + key.duration );
+		}, dur );
 
 	return Math.max( 1, Math.ceil( dur2 / bPM ) ) * bPM;
 };
