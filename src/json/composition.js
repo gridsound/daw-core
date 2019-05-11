@@ -18,7 +18,7 @@ DAWCore.json.composition = ( env, id ) => {
 		synthOpened: "0",
 		patternOpened: "0",
 		patterns: {
-			"0": {
+			0: {
 				name: "pat",
 				type: "keys",
 				keys: "0",
@@ -29,7 +29,7 @@ DAWCore.json.composition = ( env, id ) => {
 		channels: DAWCore.json.channels(),
 		tracks,
 		blocks: {},
-		synths: { "0": DAWCore.json.synth( "synth" ) },
-		keys: { "0": {} },
+		synths: { 0: DAWCore.json.synth( "synth" ) },
+		keys: { 0: {} },
 	};
 };

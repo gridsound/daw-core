@@ -28,7 +28,7 @@ DAWCore.Composition.format = function( cmp ) {
 	if ( !cmp.synths ) {
 		Object.values( cmp.patterns ).forEach( pat => pat.synth = "0" );
 		cmp.synthOpened = "0";
-		cmp.synths = { "0": DAWCore.json.synth( "synth" ) };
+		cmp.synths = { 0: DAWCore.json.synth( "synth" ) };
 	}
 	Object.values( cmp.synths ).forEach( syn => {
 		delete syn.envelopes;
