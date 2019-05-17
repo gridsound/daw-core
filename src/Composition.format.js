@@ -49,8 +49,8 @@ DAWCore.Composition.format = function( cmp ) {
 	}, {} );
 	Object.values( cmp.keys ).forEach( keys => {
 		Object.values( keys ).forEach( k => {
-			k.pan = +DAWCore.castToNumber( -1, 1, 0, k.pan ).toFixed( 2 );
-			k.gain = +DAWCore.castToNumber( 0, 1, .8, k.gain ).toFixed( 2 );
+			k.pan = DAWCore.castToNumber( k.pan, 0, -1, 1, 2 );
+			k.gain = DAWCore.castToNumber( k.gain, .8, 0, 1, 2 );
 			k.selected = !!k.selected;
 			if ( k.prev == null ) { k.prev = null; }
 			if ( k.next == null ) { k.next = null; }
