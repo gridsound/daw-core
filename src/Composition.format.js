@@ -51,6 +51,8 @@ DAWCore.Composition.format = function( cmp ) {
 		Object.values( keys ).forEach( k => {
 			k.pan = DAWCore.castToNumber( k.pan, 0, -1, 1, 2 );
 			k.gain = DAWCore.castToNumber( k.gain, .8, 0, 1, 2 );
+			k.lowpass = DAWCore.castToNumber( k.lowpass, 1, 0, 1, 2 );
+			k.highpass = DAWCore.castToNumber( k.highpass, 1, 0, 1, 2 );
 			k.selected = !!k.selected;
 			if ( k.prev == null ) { k.prev = null; }
 			if ( k.next == null ) { k.next = null; }

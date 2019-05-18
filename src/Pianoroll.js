@@ -107,8 +107,10 @@ DAWCore.Pianoroll = class {
 		if ( !( midi in this._keysStartedLive ) ) {
 			this._keysStartedLive[ midi ] = this._synth.startKey( [ [ null, {
 				key: midi,
-				gain: .8,
 				pan: 0,
+				gain: .8,
+				lowpass: 1,
+				highpass: 1,
 			} ] ], this._waSched.currentTime(), 0, Infinity );
 		}
 	}
