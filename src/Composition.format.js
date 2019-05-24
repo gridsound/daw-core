@@ -54,8 +54,10 @@ DAWCore.Composition.format = function( cmp ) {
 			k.lowpass = DAWCore.castToNumber( k.lowpass, 1, 0, 1, 2 );
 			k.highpass = DAWCore.castToNumber( k.highpass, 1, 0, 1, 2 );
 			k.selected = !!k.selected;
-			if ( k.prev == null ) { k.prev = null; }
-			if ( k.next == null ) { k.next = null; }
+			if ( typeof k.prev === "number" ) { k.prev += ""; }
+			if ( typeof k.next === "number" ) { k.next += ""; }
+			k.prev = k.prev || null;
+			k.next = k.next || null;
 			delete k.durationEdited;
 			if ( typeof k.key === "string" ) {
 				if ( window.gsuiKeys ) {
