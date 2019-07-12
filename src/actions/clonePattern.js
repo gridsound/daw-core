@@ -10,15 +10,19 @@ DAWCore.prototype.clonePattern = function( id ) {
 
 DAWCore.prototype._clonePattern = function( patId, pat ) {
 	const newPat = Object.assign( {}, pat ),
-		newKeys = DAWCore.objectDeepAssign( {}, this.get.keys( pat.keys ) ),
 		newPatId = this._getNextIdOf( this.get.patterns() ),
-		newKeysId = this._getNextIdOf( this.get.keys() );
+		obj = {
+			patterns: { [ newPatId ]: newPat },
+		};
 
-	newPat.keys = newKeysId;
+	if ( pat.type === "keys" ) {
+		const newKeys = DAWCore.objectDeepAssign( {}, this.get.keys( pat.keys ) ),
+			newKeysId = this._getNextIdOf( this.get.keys() );
+
+		newPat.keys = newKeysId;
+		obj.keys = { [ newKeysId ]: newKeys };
+		obj.patternKeysOpened = newPatId;
+	}
 	newPat.name = this._createUniqueName( "patterns", pat.name );
-	return {
-		keys: { [ newKeysId ]: newKeys },
-		patterns: { [ newPatId ]: newPat },
-		patternOpened: newPatId,
-	};
+	return obj;
 };

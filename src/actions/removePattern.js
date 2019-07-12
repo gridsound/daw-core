@@ -23,14 +23,14 @@ DAWCore.prototype._removePattern = function( patId, pat ) {
 	if ( !DAWCore.objectIsEmpty( blocks ) ) {
 		obj.blocks = blocks;
 	}
-	if ( patId === this.get.patternOpened() ) {
+	if ( patId === this.get.patternKeysOpened() ) {
 		if ( !Object.entries( this.get.patterns() ).some( ( [ k, v ] ) => {
 			if ( k !== patId && v.synth === pat.synth ) {
-				obj.patternOpened = k;
+				obj.patternKeysOpened = k;
 				return true;
 			}
 		} ) ) {
-			obj.patternOpened = null;
+			obj.patternKeysOpened = null;
 		}
 	}
 	return obj;

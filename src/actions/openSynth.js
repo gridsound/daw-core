@@ -5,8 +5,8 @@ DAWCore.prototype.openSynth = function( id ) {
 		const patId = this._openSynth_find( id ),
 			obj = { synthOpened: id };
 
-		if ( patId !== this.get.patternOpened() ) {
-			obj.patternOpened = patId;
+		if ( patId !== this.get.patternKeysOpened() ) {
+			obj.patternKeysOpened = patId;
 		}
 		this.composition.change( obj, DAWCore.composeUndo( this.get.composition(), obj ) );
 	}

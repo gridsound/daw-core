@@ -8,7 +8,7 @@ DAWCore.prototype.changePatternSynth = function( id, synth ) {
 	} else if ( pat.synth !== synth ) {
 		const obj = { patterns: { [ id ]: { synth } } };
 
-		if ( id === this.get.patternOpened() ) {
+		if ( id === this.get.patternKeysOpened() ) {
 			obj.synthOpened = synth;
 		}
 		this.compositionChange( obj );

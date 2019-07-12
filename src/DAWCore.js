@@ -56,7 +56,7 @@ class DAWCore {
 		}
 	}
 	pianorollFocus( force ) {
-		if ( this.compositionFocused && this.pianoroll && this.get.patternOpened() ) {
+		if ( this.compositionFocused && this.pianoroll && this.get.patternKeysOpened() ) {
 			this._focusOn( false, force );
 		}
 	}

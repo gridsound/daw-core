@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.prototype.openPattern = function( id ) {
-	if ( id !== this.get.patternOpened() ) {
+	if ( id !== this.get.patternKeysOpened() ) {
 		const synId = this.get.pattern( id ).synth,
-			obj = { patternOpened: id };
+			obj = { patternKeysOpened: id };
 
 		if ( synId !== this.get.synthOpened() ) {
 			obj.synthOpened = synId;

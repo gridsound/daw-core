@@ -71,7 +71,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	} ],
 	[ "keys", function( { keys, patterns } ) {
 		const pats = Object.entries( this.cmp.patterns ),
-			patOpened = this.cmp.patternOpened;
+			patOpened = this.cmp.patternKeysOpened;
 
 		Object.entries( keys ).forEach( ( [ keysId, keysObj ] ) => {
 			pats.some( ( [ patId, patObj ] ) => {
@@ -85,8 +85,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} );
 		} );
 	} ],
-	[ "patternOpened", function( obj ) {
-		this.daw.pianoroll.openPattern( obj.patternOpened );
+	[ "patternKeysOpened", function( obj ) {
+		this.daw.pianoroll.openPattern( obj.patternKeysOpened );
 	} ],
 	[ "synthOpened", function( obj ) {
 		this.daw.pianoroll.setSynth( obj.synthOpened );

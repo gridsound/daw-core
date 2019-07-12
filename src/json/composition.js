@@ -16,7 +16,9 @@ DAWCore.json.composition = ( env, id ) => {
 		loopA: false,
 		loopB: false,
 		synthOpened: "0",
-		patternOpened: "0",
+		patternKeysOpened: "0",
+		patternBufferOpened: null,
+		buffers: {},
 		patterns: {
 			0: {
 				name: "pat",

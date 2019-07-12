@@ -21,6 +21,6 @@ DAWCore.prototype._newPattern = function( synthId ) {
 			synth: synthId,
 			duration: this.get.beatsPerMeasure(),
 		} },
-		patternOpened: patId,
+		patternKeysOpened: patId,
 	};
 };

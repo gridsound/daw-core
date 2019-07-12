@@ -17,6 +17,17 @@ DAWCore.Composition.format = function( cmp ) {
 		cmp.loopB = null;
 	}
 
+	// ***Opened
+	// ..........................................
+	cmp.synthOpened = `${ cmp.synthOpened || 0 }`;
+	cmp.patternKeysOpened = `${ cmp.patternKeysOpened || cmp.patternOpened || 0 }`;
+	cmp.patternBufferOpened = cmp.patternBufferOpened ? `${ cmp.patternBufferOpened }` : null;
+	delete cmp.patternOpened;
+
+	// buffers
+	// ..........................................
+	cmp.buffers = cmp.buffers || {};
+
 	// channels
 	// ..........................................
 	if ( !cmp.channels ) {
@@ -27,7 +38,6 @@ DAWCore.Composition.format = function( cmp ) {
 	// ..........................................
 	if ( !cmp.synths ) {
 		Object.values( cmp.patterns ).forEach( pat => pat.synth = "0" );
-		cmp.synthOpened = "0";
 		cmp.synths = { 0: DAWCore.json.synth( "synth" ) };
 	}
 	Object.values( cmp.synths ).forEach( syn => {

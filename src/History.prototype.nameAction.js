@@ -156,7 +156,7 @@ DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 
 		for ( const b in o ) {
 			const arrK = Object.keys( o ),
-				msgPat = cmp.patterns[ cmp.patternOpened ].name,
+				msgPat = cmp.patterns[ cmp.patternKeysOpened ].name,
 				msgSmp = `${ arrK.length } key${ arrK.length > 1 ? "s" : "" }`,
 				oB = o[ b ];
 

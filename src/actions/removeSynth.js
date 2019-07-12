@@ -40,11 +40,11 @@ DAWCore.prototype._removeSynth = function( synthId ) {
 				obj.synthOpened = k;
 				if ( !cmpPatterns.some( ( [ patId, pat ] ) => {
 					if ( pat.synth === k ) {
-						obj.patternOpened = patId;
+						obj.patternKeysOpened = patId;
 						return true;
 					}
 				} ) ) {
-					obj.patternOpened = null;
+					obj.patternKeysOpened = null;
 				}
 				return true;
 			}

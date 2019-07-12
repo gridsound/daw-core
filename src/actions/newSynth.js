@@ -12,8 +12,8 @@ DAWCore.prototype._newSynth = function() {
 			synthOpened: id,
 		};
 
-	if ( this.get.patternOpened() != null ) {
-		obj.patternOpened = null;
+	if ( this.get.patternKeysOpened() != null ) {
+		obj.patternKeysOpened = null;
 	}
 	return obj;
 };
