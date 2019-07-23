@@ -20,6 +20,7 @@ class DAWCore {
 		};
 		this.pianoroll = null;
 		this.compositionFocused = true;
+		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );

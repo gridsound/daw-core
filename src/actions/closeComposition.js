@@ -12,6 +12,7 @@ DAWCore.prototype.closeComposition = function() {
 		this._call( "compositionClosed", cmp );
 		this.composition.unload();
 		this.history.empty();
+		this.buffers.empty();
 		if ( !cmp.savedAt ) {
 			this._deleteComposition( cmp );
 		}

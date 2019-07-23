@@ -44,11 +44,16 @@ DAWCore.Composition = class {
 		} ).then( cmp => {
 			this.cmp = cmp;
 			this.loaded = true;
+			Object.values( cmp.buffers ).forEach( buf => {
+				this.daw.buffers.setBuffer( buf );
+			} );
 			this.change( cmp, {
 				keys: {},
 				synths: {},
-				patterns: {},
 				blocks: {},
+				buffers: {},
+				channels: {},
+				patterns: {},
 			} );
 			this._actionSavedOn = null;
 			this._saved = cmp.options.saveMode === "cloud" ||

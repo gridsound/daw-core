@@ -18,6 +18,8 @@ DAWCore._exportJSONTabs = {
 	synths: 5,
 	tracks: 3,
 	blocks: 3,
+	buffers: 3,
+	channels: 3,
 	patterns: 3,
 };
 
