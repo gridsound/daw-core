@@ -14,6 +14,9 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 				obj.buffers = {};
 				obj.patterns = {};
 				newBuffers.forEach( ( buf, i ) => {
+					const dotind = buf.name.lastIndexOf( "." ),
+						patname = dotind > -1 ? buf.name.substr( 0, dotind ) : buf.name;
+
 					obj.buffers[ bufNextId + i ] = {
 						type: buf.type,
 						name: buf.name,
@@ -22,7 +25,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 					};
 					obj.patterns[ patNextId + i ] = {
 						type: "buffer",
-						name: buf.name,
+						name: patname,
 						buffer: `${ bufNextId + i }`,
 						duration: Math.ceil( buf.duration * ( this.get.bpm() / 60 ) ),
 					};
