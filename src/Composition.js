@@ -14,6 +14,7 @@ DAWCore.Composition = class {
 		this._synths = new Map();
 		this._startedKeys = new Map();
 		this._startedSched = new Map();
+		this._startedBuffers = new Map();
 		this._actionSavedOn = null;
 		sch.currentTime = () => this.ctx.currentTime;
 		sch.ondatastart = this._onstartBlock.bind( this );
@@ -173,28 +174,44 @@ DAWCore.Composition = class {
 			blc = blcs[ 0 ][ 1 ];
 
 		if ( cmp.tracks[ blc.track ].toggle ) {
-			const pat = cmp.patterns[ blc.pattern ],
-				sch = new gswaScheduler();
+			const pat = cmp.patterns[ blc.pattern ];
 
-			this._startedSched.set( startedId, sch );
-			sch.pattern = pat;
-			sch.currentTime = this._sched.currentTime;
-			sch.ondatastart = this._onstartKey.bind( this, pat.synth );
-			sch.ondatastop = this._onstopKey.bind( this, pat.synth );
-			sch.setBPM( cmp.bpm );
-			Object.assign( sch.data, cmp.keys[ pat.keys ] );
-			if ( this.ctx instanceof OfflineAudioContext ) {
-				sch.enableStreaming( false );
+			switch ( pat.type ) {
+				case "buffer": {
+					const absn = this.ctx.createBufferSource();
+
+					this._startedBuffers.set( startedId, absn );
+					absn.buffer = this.daw.buffers.getBuffer( cmp.buffers[ pat.buffer ] ).buffer;
+					absn.connect( this.daw.get.destination() );
+					absn.start( when, off, dur );
+				} break;
+				case "keys": {
+					const sch = new gswaScheduler();
+
+					this._startedSched.set( startedId, sch );
+					sch.pattern = pat;
+					sch.currentTime = this._sched.currentTime;
+					sch.ondatastart = this._onstartKey.bind( this, pat.synth );
+					sch.ondatastop = this._onstopKey.bind( this, pat.synth );
+					sch.setBPM( cmp.bpm );
+					Object.assign( sch.data, cmp.keys[ pat.keys ] );
+					if ( this.ctx instanceof OfflineAudioContext ) {
+						sch.enableStreaming( false );
+					}
+					sch.start( when, off, dur );
+				} break;
 			}
-			sch.start( when, off, dur );
 		}
 	}
 	_onstopBlock( startedId ) {
-		const sch = this._startedSched.get( startedId );
+		const objStarted =
+				this._startedSched.get( startedId ) ||
+				this._startedBuffers.get( startedId );
 
-		if ( sch ) {
-			sch.stop();
+		if ( objStarted ) {
+			objStarted.stop();
 			this._startedSched.delete( startedId );
+			this._startedBuffers.delete( startedId );
 		}
 	}
 	_onstartKey( synthId, startedId, blcs, when, off, dur ) {
