@@ -96,8 +96,8 @@ DAWCore.Composition = class {
 	}
 	getNewDuration( newPatDurations ) {
 		const bPM = this.cmp.beatsPerMeasure,
-			dur = Object.entries( this.cmp.blocks )
-				.reduce( ( max, [ id, blc ] ) => {
+			dur = Object.values( this.cmp.blocks )
+				.reduce( ( max, blc ) => {
 					const pat = newPatDurations[ blc.pattern ],
 						dur = ( pat && !blc.durationEdited ? pat : blc ).duration;
 
