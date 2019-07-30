@@ -41,24 +41,20 @@ DAWCore.prototype._changePatternKeysCalcDuration = function( pat, keys, keysObj 
 };
 
 DAWCore.prototype._changePatternKeys = function( patId, keysObj, pat, duration ) {
-	const bPM = this.get.beatsPerMeasure(),
-		obj = { keys: { [ pat.keys ]: keysObj } };
+	const obj = { keys: { [ pat.keys ]: keysObj } };
 
 	if ( duration !== pat.duration ) {
-		const objBlocks = {},
-			cmpRealDur = Object.entries( this.get.blocks() )
-				.reduce( ( dur, [ id, blc ] ) => {
-					if ( blc.pattern !== patId ) {
-						return Math.max( dur, blc.when + blc.duration );
-					} else if ( !blc.durationEdited ) {
-						objBlocks[ id ] = { duration };
-						return Math.max( dur, blc.when + duration );
+		const objPatterns = { [ patId ]: { duration } },
+			cmpDur = this.composition.getNewDuration( objPatterns ),
+			objBlocks = Object.entries( this.get.blocks() )
+				.reduce( ( obj, [ id, blc ] ) => {
+					if ( blc.pattern === patId && !blc.durationEdited ) {
+						obj[ id ] = { duration };
 					}
-					return dur;
-				}, 0 ),
-			cmpDur = Math.ceil( cmpRealDur / bPM ) * bPM;
+					return obj;
+				}, {} );
 
-		obj.patterns = { [ patId ]: { duration } };
+		obj.patterns = objPatterns;
 		if ( !DAWCore.objectIsEmpty( objBlocks ) ) {
 			obj.blocks = objBlocks;
 		}

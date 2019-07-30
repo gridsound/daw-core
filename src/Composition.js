@@ -94,6 +94,18 @@ DAWCore.Composition = class {
 			fn( chanId, mix.audioDataL, mix.audioDataR );
 		} );
 	}
+	getNewDuration( newPatDurations ) {
+		const bPM = this.cmp.beatsPerMeasure,
+			dur = Object.entries( this.cmp.blocks )
+				.reduce( ( max, [ id, blc ] ) => {
+					const pat = newPatDurations[ blc.pattern ],
+						dur = ( pat && !blc.durationEdited ? pat : blc ).duration;
+
+					return Math.max( max, blc.when + dur );
+				}, 0 );
+
+		return Math.ceil( dur / bPM ) * bPM;
+	}
 
 	// controls
 	// .........................................................................
