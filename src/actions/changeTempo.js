@@ -14,8 +14,7 @@ DAWCore.prototype.changeTempo = function( bpm, beatsPerMeasure, stepsPerBeat ) {
 			obj.stepsPerBeat = stepsPerBeat;
 		}
 		if ( bpmChanged ) {
-			const patterns = {};
-			let diff;
+			const objPatterns = {};
 
 			obj.bpm = bpm;
 			Object.entries( this.get.patterns() ).forEach( ( [ id, pat ] ) => {
@@ -24,26 +23,28 @@ DAWCore.prototype.changeTempo = function( bpm, beatsPerMeasure, stepsPerBeat ) {
 						duration = Math.ceil( buf.duration * ( bpm / 60 ) );
 
 					if ( duration !== pat.duration ) {
-						patterns[ id ] = { duration };
-						diff = true;
+						objPatterns[ id ] = { duration };
 					}
 				}
 			} );
-			if ( diff ) {
-				const blocks = {};
+			if ( !DAWCore.objectIsEmpty( objPatterns ) ) {
+				const objBlocks = {};
 
-				diff = false;
-				obj.patterns = patterns;
+				obj.patterns = objPatterns;
 				Object.entries( this.get.blocks() ).forEach( ( [ id, blc ] ) => {
-					const pat = patterns[ blc.pattern ];
+					const pat = objPatterns[ blc.pattern ];
 
 					if ( pat && !blc.durationEdited ) {
-						blocks[ id ] = { duration: pat.duration };
-						diff = true;
+						objBlocks[ id ] = { duration: pat.duration };
 					}
 				} );
-				if ( diff ) {
-					obj.blocks = blocks;
+				if ( !DAWCore.objectIsEmpty( objBlocks ) ) {
+					const cmpDur = this.composition.getNewDuration( objPatterns );
+
+					obj.blocks = objBlocks;
+					if ( Math.abs( cmpDur - this.get.duration() ) > .001 ) {
+						obj.duration = cmpDur;
+					}
 				}
 			}
 		}
