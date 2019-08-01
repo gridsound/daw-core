@@ -9,14 +9,11 @@ DAWCore.Buffers = class {
 	empty() {
 		this._files.clear();
 	}
-	getBufferKey( buf ) {
-		return `${ buf.type }:${ buf.length }:${ buf.duration }:${ buf.name }`;
-	}
 	getBuffer( buf ) {
-		return this._files.get( this.getBufferKey( buf ) );
+		return this._files.get( buf.hash );
 	}
 	setBuffer( buf ) {
-		this._files.set( this.getBufferKey( buf ), Object.assign( {}, buf ) );
+		this._files.set( buf.hash, Object.assign( {}, buf ) );
 	}
 	loadFiles( files ) {
 		return new Promise( res => {
@@ -27,13 +24,13 @@ DAWCore.Buffers = class {
 
 			Array.from( files ).forEach( file => {
 				this._getBufferFromFile( file )
-					.then( buffer => {
+					.then( ( [ hash, buffer ] ) => {
 						const buf = {
+								hash,
 								buffer,
 								type: file.type,
 								name: file.name,
-								length: buffer.length,
-								duration: buffer.duration.toFixed( 4 ),
+								duration: +buffer.duration.toFixed( 4 ),
 							},
 							old = this.getBuffer( buf );
 
@@ -65,9 +62,38 @@ DAWCore.Buffers = class {
 			const reader = new FileReader();
 
 			reader.onload = e => {
-				this.daw.ctx.decodeAudioData( e.target.result ).then( res, rej );
+				const buf = e.target.result,
+					hash = this._hashBuffer_v1( new Uint8Array( buf ) ); // 1.
+
+				this.daw.ctx.decodeAudioData( buf ).then( audiobuf => {
+					res( [ hash, audiobuf ] );
+				}, rej );
 			};
 			reader.readAsArrayBuffer( file );
 		} );
 	}
+	_hashBuffer_v1( u8buf ) {
+		const hash = new Uint8Array( 19 ),
+			len = `${ u8buf.length }`.padStart( 9, "0" );
+		let i = 0,
+			ind = 0;
+
+		for ( const u8 of u8buf ) {
+			hash[ ind ] += u8;
+			if ( ++ind >= 19 ) {
+				ind = 0;
+			}
+			if ( ++i >= 1000000 ) {
+				break;
+			}
+		}
+		return `1-${ len }-${ Array.from( hash )
+			.map( u8 => u8.toString( 16 ).padStart( 2, "0" ) )
+			.join( "" ) }`;
+	}
 };
+
+/*
+1. the hash is calculed before the data decoded
+   to bypass the "neutered ArrayBuffer" error.
+*/
