@@ -190,12 +190,16 @@ DAWCore.Composition = class {
 
 			switch ( pat.type ) {
 				case "buffer": {
-					const absn = this.ctx.createBufferSource();
+					const buf = this.daw.buffers.getBuffer( cmp.buffers[ pat.buffer ] ).buffer;
 
-					this._startedBuffers.set( startedId, absn );
-					absn.buffer = this.daw.buffers.getBuffer( cmp.buffers[ pat.buffer ] ).buffer;
-					absn.connect( this.daw.get.destination() );
-					absn.start( when, off, dur );
+					if ( buf ) {
+						const absn = this.ctx.createBufferSource();
+
+						absn.buffer = buf;
+						absn.connect( this.daw.get.destination() );
+						absn.start( when, off, dur );
+						this._startedBuffers.set( startedId, absn );
+					}
 				} break;
 				case "keys": {
 					const sch = new gswaScheduler();
