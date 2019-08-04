@@ -25,6 +25,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 					};
 					obj.patterns[ patNextId + i ] = {
 						type: "buffer",
+						dest: "main",
 						buffer: `${ bufId }`,
 						duration: Math.ceil( buf.duration * ( this.get.bpm() / 60 ) ),
 						name: patname,

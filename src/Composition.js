@@ -196,7 +196,7 @@ DAWCore.Composition = class {
 						const absn = this.ctx.createBufferSource();
 
 						absn.buffer = buf;
-						absn.connect( this.daw.get.destination() );
+						absn.connect( this._mixer.getChanInput( pat.dest ) );
 						absn.start( when, off, dur );
 						this._startedBuffers.set( startedId, absn );
 					}
