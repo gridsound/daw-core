@@ -12,9 +12,9 @@ DAWCore.prototype.openSynth = function( id ) {
 	}
 };
 
-DAWCore.prototype._openSynth_find = function( id ) {
-	const pat = Object.values( this.get.patterns() )
-			.find( pat => pat.synth === id );
+DAWCore.prototype._openSynth_find = function( synthId ) {
+	const pats = Object.entries( this.get.patterns() ),
+		pat = pats.find( kv => kv[ 1 ].synth === synthId );
 
 	return pat ? pat[ 0 ] : null;
 };
