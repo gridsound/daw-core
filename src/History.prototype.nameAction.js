@@ -6,7 +6,7 @@ DAWCore.History.prototype.nameAction = function( act ) {
 		u = act.undo;
 
 	if ( "bpm" in r ) { return { i: "clock", t: `BPM: ${ r.bpm }` }; }
-	if ( "name" in r ) { return { i: "name", t: `Name: "${ r.name }"` }; }
+	if ( "name" in r ) { return { i: "pen", t: `Name: "${ r.name }"` }; }
 	if ( "loopA" in r ) { return { i: "loop", t: `Loop: ${ r.loopA } -> ${ r.loopB }` }; }
 	if ( r.beatsPerMeasure || r.stepsPerBeat ) {
 		return {
@@ -35,8 +35,8 @@ DAWCore.History._nameAction_channels = function( cmp, r, u ) {
 
 		if ( !rChan || !uChan ) {
 			return rChan
-				? { i: "add", t: `New channel "${ rChan.name }"` }
-				: { i: "remove", t: `Remove channel "${ uChan.name }"` };
+				? { i: "mixer", t: `New channel "${ rChan.name }"` }
+				: { i: "minus", t: `Remove channel "${ uChan.name }"` };
 		}
 		if ( "toggle" in rChan ) {
 			const t = rChan.toggle;
@@ -46,9 +46,9 @@ DAWCore.History._nameAction_channels = function( cmp, r, u ) {
 				t: `${ t ? "Unmute" : "Mute" } "${ currName }" channel`,
 			};
 		}
-		if ( "name" in rChan ) { return { i: "name", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
-		if ( "pan" in rChan ) { return { i: "param", t: `${ currName }: pan "${ rChan.pan }"` }; }
-		if ( "gain" in rChan ) { return { i: "param", t: `${ currName }: gain "${ rChan.gain }"` }; }
+		if ( "name" in rChan ) { return { i: "pen", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
+		if ( "pan" in rChan ) { return { i: "mixer", t: `${ currName }: pan "${ rChan.pan }"` }; }
+		if ( "gain" in rChan ) { return { i: "mixer", t: `${ currName }: gain "${ rChan.gain }"` }; }
 		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirects to "${ cmp.channels[ rChan.dest ].name }"` }; }
 	}
 };
@@ -62,11 +62,11 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 
 		if ( !rSyn || !uSyn ) {
 			return rSyn
-				? { i: "add", t: `New synthesizer "${ rSyn.name }"` }
-				: { i: "remove", t: `Remove synthesizer "${ uSyn.name }"` };
+				? { i: "oscillator", t: `New synthesizer "${ rSyn.name }"` }
+				: { i: "minus", t: `Remove synthesizer "${ uSyn.name }"` };
 		}
 		if ( "name" in rSyn ) {
-			return { i: "name", t: `${ uSyn.name }: rename to "${ rSyn.name }"` };
+			return { i: "pen", t: `${ uSyn.name }: rename to "${ rSyn.name }"` };
 		}
 		if ( "dest" in rSyn ) {
 			return { i: "redirect", t: `${ syn.name }: redirects to "${ cmp.channels[ rSyn.dest ].name }"` };
@@ -79,10 +79,10 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 
 			if ( !rOsc || !uOsc ) {
 				return rOsc
-					? { i: "add",    t: `${ syn.name }: New oscillator` }
-					: { i: "remove", t: `${ syn.name }: Remove oscillator` };
+					? { i: "oscillator", t: `${ syn.name }: New oscillator` }
+					: { i: "minus", t: `${ syn.name }: Remove oscillator` };
 			}
-			return { i: "param", t: `${ syn.name }: set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
+			return { i: "oscillator", t: `${ syn.name }: set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
 		}
 	}
 };
@@ -95,14 +95,14 @@ DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
 			rBlc = rBlcs[ id ],
 			msg = `${ arrK.length } block${ arrK.length > 1 ? "s" : "" }`;
 
-		if ( !rBlc )                             { return { i: "erase", t: `Remove ${ msg }` }; }
-		if ( !u.blocks[ id ] )                   { return { i: "paint", t: `Add ${ msg }` }; }
-		if ( "duration" in rBlc )                { return { i: "crop",  t: `Crop ${ msg }` }; }
-		if ( "when" in rBlc || "track" in rBlc ) { return { i: "move",  t: `Move ${ msg }` }; }
+		if ( !rBlc )                             { return { i: "erase",  t: `Remove ${ msg }` }; }
+		if ( !u.blocks[ id ] )                   { return { i: "music",  t: `Add ${ msg }` }; }
+		if ( "duration" in rBlc )                { return { i: "crop",   t: `Crop ${ msg }` }; }
+		if ( "when" in rBlc || "track" in rBlc ) { return { i: "arrows", t: `Move ${ msg }` }; }
 		if ( "selected" in rBlc ) {
 			return rBlc.selected
-				? { i: "selection ico--plus",  t: `Select ${ msg }` }
-				: { i: "selection ico--minus", t: `Unselect ${ msg }` };
+				? { i: "mouse", t: `Select ${ msg }` }
+				: { i: "mouse", t: `Unselect ${ msg }` };
 		}
 	}
 };
@@ -115,7 +115,7 @@ DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 
 		for ( a in o ) {
 			if ( o[ a ].name ) {
-				return { i: "name", t: `Name track: "${ u.tracks[ a ].name }" -> "${ o[ a ].name }"` };
+				return { i: "pen", t: `Name track: "${ u.tracks[ a ].name }" -> "${ o[ a ].name }"` };
 			}
 			if ( i++ ) {
 				break;
@@ -138,14 +138,14 @@ DAWCore.History._nameAction_pattern = function( cmp, r, u ) {
 
 		if ( !rpat || !upat ) {
 			return rpat
-				? { i: "add", t: `New pattern "${ rpat.name }"` }
-				: { i: "remove", t: `Remove pattern "${ upat.name }"` };
+				? { i: "plus", t: `New pattern "${ rpat.name }"` }
+				: { i: "minus", t: `Remove pattern "${ upat.name }"` };
 		}
 		if ( rpat.synth ) {
-			return { i: "param", t: `${ pat.name }: change its synthesizer` };
+			return { i: "redirect", t: `${ pat.name }: change its synthesizer` };
 		}
 		if ( "name" in rpat ) {
-			return { i: "name", t: `${ upat.name }: rename to "${ rpat.name }"` };
+			return { i: "pen", t: `${ upat.name }: rename to "${ rpat.name }"` };
 		}
 	}
 };
@@ -161,15 +161,15 @@ DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 				oB = o[ b ];
 
 			return (
-				( !oB                             && { i: "erase", t: `${ msgPat }: remove ${       msgSmp }` } ) ||
-				( !u.keys[ a ][ b ]               && { i: "paint", t: `${ msgPat }: add ${          msgSmp }` } ) ||
-				( "duration" in oB                && { i: "crop",  t: `${ msgPat }: crop ${         msgSmp }` } ) ||
-				( "gain" in oB                    && { i: "param", t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
-				( "pan" in oB                     && { i: "param", t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
-				( ( "when" in oB || "key" in oB ) && { i: "move",  t: `${ msgPat }: move ${         msgSmp }` } ) ||
+				( !oB                             && { i: "erase",  t: `${ msgPat }: remove ${       msgSmp }` } ) ||
+				( !u.keys[ a ][ b ]               && { i: "music",  t: `${ msgPat }: add ${          msgSmp }` } ) ||
+				( "duration" in oB                && { i: "crop",   t: `${ msgPat }: crop ${         msgSmp }` } ) ||
+				( "gain" in oB                    && { i: "music",  t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
+				( "pan" in oB                     && { i: "music",  t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
+				( ( "when" in oB || "key" in oB ) && { i: "arrows", t: `${ msgPat }: move ${         msgSmp }` } ) ||
 				( "selected" in oB && ( oB.selected
-					? { i: "selection ico--plus",  t: `${ msgPat }: select ${ msgSmp }` }
-					: { i: "selection ico--minus", t: `${ msgPat }: unselect ${ msgSmp }` }
+					? { i: "mouse", t: `${ msgPat }: select ${ msgSmp }` }
+					: { i: "mouse", t: `${ msgPat }: unselect ${ msgSmp }` }
 				) )
 			);
 		}
