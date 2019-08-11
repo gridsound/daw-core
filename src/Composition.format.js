@@ -2,6 +2,7 @@
 
 DAWCore.Composition.format = function( cmp ) {
 	const blcsValues = Object.values( cmp.blocks );
+	let buffPatternsOrder = 0;
 
 	// loopA/B
 	// ..........................................
@@ -35,14 +36,26 @@ DAWCore.Composition.format = function( cmp ) {
 		Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 	}
 
+	// patterns
+	// ..........................................
+	Object.values( cmp.patterns ).forEach( pat => {
+		pat.synth = pat.synth || "0";
+		if ( pat.type === "buffer" ) {
+			pat.order = "order" in pat ? pat.order : buffPatternsOrder;
+			++buffPatternsOrder;
+		}
+	} );
+
+	// synths
 	// ..........................................
 	if ( !cmp.synths ) {
-		Object.values( cmp.patterns ).forEach( pat => pat.synth = "0" );
 		cmp.synths = { 0: DAWCore.json.synth( "synth" ) };
 	}
 	Object.values( cmp.synths ).forEach( syn => {
 		delete syn.envelopes;
 	} );
+
+	// ..........................................
 	Object.values( cmp.tracks ).reduce( ( order, tr ) => {
 		tr.name = typeof tr.name === "string" ? tr.name : "";
 		tr.order = typeof tr.order === "number" ? tr.order : order;
