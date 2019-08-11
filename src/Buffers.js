@@ -12,6 +12,9 @@ DAWCore.Buffers = class {
 	getBuffer( buf ) {
 		return this._files.get( buf.hash );
 	}
+	getSize() {
+		return this._files.size;
+	}
 	setBuffer( buf ) {
 		this._files.set( buf.hash, Object.assign( {}, buf ) );
 	}
