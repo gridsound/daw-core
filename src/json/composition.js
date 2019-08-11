@@ -21,6 +21,7 @@ DAWCore.json.composition = ( env, id ) => {
 		buffers: {},
 		patterns: {
 			0: {
+				order: 0,
 				name: "pat",
 				type: "keys",
 				keys: "0",

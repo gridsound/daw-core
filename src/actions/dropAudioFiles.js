@@ -1,6 +1,8 @@
 "use strict";
 
 DAWCore.prototype.dropAudioFiles = function( files ) {
+	const order = this.buffers.getSize();
+
 	this.buffers.loadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
 		if ( newBuffers.length || knownBuffers.length ) {
 			const cmpBuffers = this.get.buffers(),
@@ -29,6 +31,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 						buffer: `${ bufId }`,
 						duration: Math.ceil( buf.duration * ( this.get.bpm() / 60 ) ),
 						name: patname,
+						order: order + i,
 					};
 					buffersLoaded[ bufId ] = this.buffers.getBuffer( buf );
 				} );
