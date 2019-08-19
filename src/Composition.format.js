@@ -62,7 +62,7 @@ DAWCore.Composition.format = function( cmp ) {
 		tr.toggle = typeof tr.toggle === "boolean" ? tr.toggle : true;
 		return tr.order + 1;
 	}, 0 );
-	blcsValues.sort( DAWCore.Composition.format_sortWhen );
+	blcsValues.sort( ( a, b ) => a.when - b.when );
 	cmp.blocks = blcsValues.reduce( ( obj, blc, i ) => {
 		blc.offset = blc.offset || 0;
 		blc.selected = !!blc.selected;
@@ -95,8 +95,4 @@ DAWCore.Composition.format = function( cmp ) {
 		} );
 	} );
 	return true;
-};
-
-DAWCore.Composition.format_sortWhen = function( a, b ) {
-	return a.when < b.when ? -1 : a.when > b.when ? 1 : 0;
 };
