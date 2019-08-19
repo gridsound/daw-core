@@ -2,7 +2,7 @@
 
 DAWCore.Composition.format = function( cmp ) {
 	const blcsValues = Object.values( cmp.blocks );
-	let buffPatternsOrder = 0;
+	let orderDefault = 0;
 
 	// loopA/B
 	// ..........................................
@@ -39,10 +39,12 @@ DAWCore.Composition.format = function( cmp ) {
 	// patterns
 	// ..........................................
 	Object.values( cmp.patterns ).forEach( pat => {
-		pat.synth = pat.synth || "0";
-		if ( pat.type === "buffer" ) {
-			pat.order = "order" in pat ? pat.order : buffPatternsOrder;
-			++buffPatternsOrder;
+		if ( !( "order" in pat ) ) {
+			pat.order = orderDefault;
+		}
+		orderDefault = Math.max( pat.order, orderDefault ) + 1;
+		if ( pat.type === "keys" ) {
+			pat.synth = pat.synth || "0";
 		}
 	} );
 
