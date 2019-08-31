@@ -35,6 +35,7 @@ DAWCore.Composition.format = function( cmp ) {
 		cmp.channels = DAWCore.json.channels();
 		Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 	}
+	delete cmp.channels.main.order;
 
 	// patterns
 	// ..........................................
