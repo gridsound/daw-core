@@ -1,6 +1,32 @@
 "use strict";
 
-DAWCore.History.prototype.nameAction = function( act ) {
+DAWCore.History.prototype.nameAction = function( act, msg ) {
+	if ( !msg ) {
+		return this._nameAction( act );
+	} else {
+		const [ part, actionName, ...args ] = msg,
+			fns = DAWCore.History.actionsToText[ part ],
+			fn = fns && fns[ actionName ],
+			actObj = fn && fn( ...args );
+
+		return actObj
+			? { i: actObj[ 0 ], t: actObj[ 1 ] }
+			: { i: "", t: "" };
+	}
+};
+
+DAWCore.History.actionsToText = {
+	mixer: {
+		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
+		removeChan: chan => [ "minus", `mixer: delete "${ chan }"`, ],
+		reorderChan: chan => [ "sort", `mixer: reorder "${ chan }"`, ],
+		toggleChan: ( chan, b ) => [ b ? "unmute" : "mute", `mixer: ${ b ? "unmute" : "mute" } "${ chan }"`, ],
+		updateChanProp: ( chan, prop, val ) => [ "mixer", `mixer: "${ chan }" ${ prop }: ${ val }`, ],
+		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: "${ chan }" -> "${ chanDest }"`, ],
+	},
+};
+
+DAWCore.History.prototype._nameAction = function( act ) {
 	const cmp = this.daw.get.composition(),
 		r = act.redo,
 		u = act.undo;
@@ -15,7 +41,6 @@ DAWCore.History.prototype.nameAction = function( act ) {
 		};
 	}
 	return (
-		DAWCore.History._nameAction_channels( cmp, r, u ) ||
 		DAWCore.History._nameAction_synth( cmp, r, u ) ||
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
@@ -23,34 +48,6 @@ DAWCore.History.prototype.nameAction = function( act ) {
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
 		{ i: "", t: "" }
 	);
-};
-
-DAWCore.History._nameAction_channels = function( cmp, r, u ) {
-	if ( r.channels ) {
-		const chanId = Object.keys( r.channels )[ 0 ],
-			rChan = r.channels[ chanId ],
-			uChan = u.channels[ chanId ],
-			currChan = cmp.channels[ chanId ],
-			currName = currChan && currChan.name;
-
-		if ( !rChan || !uChan ) {
-			return rChan
-				? { i: "mixer", t: `New channel "${ rChan.name }"` }
-				: { i: "minus", t: `Remove channel "${ uChan.name }"` };
-		}
-		if ( "toggle" in rChan ) {
-			const t = rChan.toggle;
-
-			return {
-				i: t ? "unmute" : "mute",
-				t: `${ t ? "Unmute" : "Mute" } "${ currName }" channel`,
-			};
-		}
-		if ( "name" in rChan ) { return { i: "pen", t: `${ uChan.name }: rename to "${ rChan.name }"` }; }
-		if ( "pan" in rChan ) { return { i: "mixer", t: `${ currName }: pan "${ rChan.pan }"` }; }
-		if ( "gain" in rChan ) { return { i: "mixer", t: `${ currName }: gain "${ rChan.gain }"` }; }
-		if ( "dest" in rChan ) { return { i: "redirect", t: `${ currName } redirects to "${ cmp.channels[ rChan.dest ].name }"` }; }
-	}
 };
 
 DAWCore.History._nameAction_synth = function( cmp, r, u ) {

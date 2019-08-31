@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.prototype.changeChannels = function( objChannels ) {
+DAWCore.prototype.changeChannels = function( objChannels, actionMsg ) {
 	const synths = Object.entries( this.get.synths() ),
 		objSynths = {},
 		obj = { channels: objChannels };
@@ -17,5 +17,5 @@ DAWCore.prototype.changeChannels = function( objChannels ) {
 	if ( !DAWCore.objectIsEmpty( objSynths ) ) {
 		obj.synths = objSynths;
 	}
-	this.compositionChange( obj );
+	this.compositionChange( obj, actionMsg );
 };

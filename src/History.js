@@ -16,13 +16,13 @@ DAWCore.History = class {
 		}
 		this._stackInd = 0;
 	}
-	stackChange( obj ) {
+	stackChange( obj, msg ) {
 		const stack = this._stack,
 			act = {
 				redo: obj,
 				undo: DAWCore.composeUndo( this.daw.composition.cmp, obj ),
 			},
-			desc = this.nameAction( act );
+			desc = this.nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
