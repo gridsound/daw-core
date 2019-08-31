@@ -89,7 +89,7 @@ DAWCore.Composition = class {
 		const mix = this._mixer,
 			fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
 
-		Object.keys( mix.data ).forEach( chanId => {
+		Object.keys( mix.gsdata.data ).forEach( chanId => {
 			mix.fillAudioData( chanId );
 			fn( chanId, mix.audioDataL, mix.audioDataR );
 		} );

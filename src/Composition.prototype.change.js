@@ -31,7 +31,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "channels", function( { channels } ) {
-		DAWCore.objectDeepAssign( this._mixer.data, channels );
+		this._mixer.change( channels );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
