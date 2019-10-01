@@ -3,8 +3,8 @@
 DAWCore.History.prototype.nameAction = function( act, msg ) {
 	if ( msg ) {
 		const [ part, actionName, ...args ] = msg,
-			get = this.daw.get,
-			[ i, t ] = DAWCore.History.actionsToText[ part ][ actionName ]( ...args, get );
+			fn = DAWCore.History.actionsToText[ part ][ actionName ],
+			[ i, t ] = fn( ...args, this.daw.get );
 
 		return { i, t };
 	}
@@ -16,9 +16,13 @@ DAWCore.History.actionsToText = {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
 		removeChan: chan => [ "minus", `mixer: delete "${ chan }"`, ],
 		reorderChan: chan => [ "sort", `mixer: reorder "${ chan }"`, ],
+		renameChan: ( chan, prev ) => [ "pen", `mixer: rename "${ prev }" -> "${ chan }"` ],
 		toggleChan: ( chan, b ) => [ b ? "unmute" : "mute", `mixer: ${ b ? "unmute" : "mute" } "${ chan }"`, ],
 		updateChanProp: ( chan, prop, val ) => [ "mixer", `mixer: "${ chan }" ${ prop }: ${ val }`, ],
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
+	},
+	effects: {
+		addFx: ( type, dest, get ) => [ "effects", `effects: new ${ type } fx on ${ get.channel( dest ).name }`, ],
 	},
 };
 
