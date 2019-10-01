@@ -159,10 +159,10 @@ DAWCore.History._nameAction_keys = function( cmp, r, u ) {
 
 			return (
 				( !oB                             && { i: "erase",  t: `${ msgPat }: remove ${       msgSmp }` } ) ||
-				( !u.keys[ a ][ b ]               && { i: "music",  t: `${ msgPat }: add ${          msgSmp }` } ) ||
+				( !u.keys[ a ][ b ]               && { i: "keys",   t: `${ msgPat }: add ${          msgSmp }` } ) ||
 				( "duration" in oB                && { i: "crop",   t: `${ msgPat }: crop ${         msgSmp }` } ) ||
-				( "gain" in oB                    && { i: "music",  t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
-				( "pan" in oB                     && { i: "music",  t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
+				( "gain" in oB                    && { i: "keys",   t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
+				( "pan" in oB                     && { i: "keys",   t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
 				( ( "when" in oB || "key" in oB ) && { i: "arrows", t: `${ msgPat }: move ${         msgSmp }` } ) ||
 				( "selected" in oB && ( oB.selected
 					? { i: "mouse", t: `${ msgPat }: select ${ msgSmp }` }
