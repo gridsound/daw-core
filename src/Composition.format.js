@@ -37,6 +37,10 @@ DAWCore.Composition.format = function( cmp ) {
 	}
 	delete cmp.channels.main.order;
 
+	// effects
+	// ..........................................
+	cmp.effects = cmp.effects || {};
+
 	// patterns
 	// ..........................................
 	Object.values( cmp.patterns ).forEach( pat => {
