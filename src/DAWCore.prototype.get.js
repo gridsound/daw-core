@@ -2,7 +2,7 @@
 
 Object.assign( DAWCore.prototype, {
 	_getInit() {
-		const listnames = [ "channel", "synth", "buffer", "pattern", "block", "track", "keys" ],
+		const listnames = "channel effect synth buffer pattern block track keys".split( " " ),
 			cmp = () => this.composition.cmp,
 			getList = list => cmp() && cmp()[ list ],
 			getObject = ( list, id ) => cmp() && cmp()[ list ][ id ],
