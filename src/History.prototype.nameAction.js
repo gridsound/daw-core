@@ -1,18 +1,14 @@
 "use strict";
 
 DAWCore.History.prototype.nameAction = function( act, msg ) {
-	if ( !msg ) {
-		return this._nameAction( act );
-	} else {
+	if ( msg ) {
 		const [ part, actionName, ...args ] = msg,
-			fns = DAWCore.History.actionsToText[ part ],
-			fn = fns && fns[ actionName ],
-			actObj = fn && fn( ...args );
+			get = this.daw.get,
+			[ i, t ] = DAWCore.History.actionsToText[ part ][ actionName ]( ...args, get );
 
-		return actObj
-			? { i: actObj[ 0 ], t: actObj[ 1 ] }
-			: { i: "", t: "" };
+		return { i, t };
 	}
+	return this._nameAction( act );
 };
 
 DAWCore.History.actionsToText = {
@@ -22,7 +18,7 @@ DAWCore.History.actionsToText = {
 		reorderChan: chan => [ "sort", `mixer: reorder "${ chan }"`, ],
 		toggleChan: ( chan, b ) => [ b ? "unmute" : "mute", `mixer: ${ b ? "unmute" : "mute" } "${ chan }"`, ],
 		updateChanProp: ( chan, prop, val ) => [ "mixer", `mixer: "${ chan }" ${ prop }: ${ val }`, ],
-		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: "${ chan }" -> "${ chanDest }"`, ],
+		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 };
 
