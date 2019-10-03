@@ -22,7 +22,9 @@ DAWCore.History.actionsToText = {
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 	effects: {
-		addFx: ( type, dest, get ) => [ "effects", `effects: new ${ type } fx on ${ get.channel( dest ).name }`, ],
+		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
+		toggleFx: ( type, b, dest, get ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } fx of ${ get.channel( dest ).name }`, ],
+		removeFx: ( type, dest, get ) => [ "minus", `fx: remove ${ type } fx of ${ get.channel( dest ).name }`, ],
 	},
 };
 
