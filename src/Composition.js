@@ -34,7 +34,7 @@ DAWCore.Composition = class {
 	}
 	load( cmpOri ) {
 		return new Promise( ( res, rej ) => {
-			const cmp = DAWCore.objectDeepCopy( cmpOri );
+			const cmp = GSData.deepCopy( cmpOri );
 
 			if ( DAWCore.Composition.format( cmp ) ) {
 				this.unload();
