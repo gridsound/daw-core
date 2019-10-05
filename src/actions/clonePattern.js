@@ -16,7 +16,7 @@ DAWCore.prototype._clonePattern = function( patId, pat ) {
 		};
 
 	if ( pat.type === "keys" ) {
-		const newKeys = DAWCore.objectDeepAssign( {}, this.get.keys( pat.keys ) ),
+		const newKeys = GSData.deepCopy( this.get.keys( pat.keys ) ),
 			newKeysId = this._getNextIdOf( this.get.keys() );
 
 		newPat.keys = newKeysId;

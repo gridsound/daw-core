@@ -5,7 +5,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		act = this.daw.history.getCurrentAction(),
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
-	DAWCore.objectDeepAssign( cmp, obj );
+	GSData.deepAssign( cmp, obj );
 	this.change.fn.forEach( ( fn, attr ) => {
 		if ( typeof attr === "string" ) {
 			if ( attr in obj ) {
@@ -56,12 +56,14 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 				syn.setContext( this.daw.get.ctx() );
 				syn.setBPM( this.daw.get.bpm() );
 				syn.connect( this._mixer.getChanInput( synthObj.dest ) );
-				DAWCore.objectDeepAssign( syn.data, synthObj );
+				GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
 				this._synths.set( id, syn );
 			} else {
 				const syn = this._synths.get( id );
 
-				DAWCore.objectDeepAssign( syn.data, synthObj );
+				if ( "oscillators" in synthObj ) {
+					GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
+				}
 				if ( "dest" in synthObj ) {
 					syn.disconnect();
 					syn.connect( this._mixer.getChanInput( synthObj.dest ) );

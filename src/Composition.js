@@ -167,7 +167,7 @@ DAWCore.Composition = class {
 	assignBlocksChange( data ) {
 		const cmp = this.cmp;
 
-		DAWCore.objectDeepAssign( this._sched.data, data );
+		GSData.deepAssign( this._sched.data, data );
 		if ( cmp.loopA === false ) {
 			this._sched.setLoopBeat( 0, cmp.duration || cmp.beatsPerMeasure );
 		}
@@ -175,7 +175,7 @@ DAWCore.Composition = class {
 	assignPatternChange( pat, keys ) {
 		this._startedSched.forEach( sch => {
 			if ( sch.pattern === pat ) {
-				DAWCore.objectDeepAssign( sch.data, keys );
+				GSData.deepAssign( sch.data, keys );
 			}
 		} );
 	}

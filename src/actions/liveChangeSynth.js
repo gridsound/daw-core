@@ -5,5 +5,5 @@ DAWCore.prototype.liveChangeSynth = function( id, obj ) {
 
 	!syn
 		? this._error( "liveChangeSynth", "synths", id )
-		: DAWCore.objectDeepAssign( syn.data, obj );
+		: GSData.deepAssign( syn.data, obj );
 };
