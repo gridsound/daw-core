@@ -16,12 +16,10 @@ DAWCore.History = class {
 		}
 		this._stackInd = 0;
 	}
-	stackChange( obj, msg ) {
+	stackChange( redo, msg ) {
 		const stack = this._stack,
-			act = {
-				redo: obj,
-				undo: DAWCore.composeUndo( this.daw.composition.cmp, obj ),
-			},
+			undo = DAWCore.composeUndo( this.daw.composition.cmp, redo ),
+			act = { redo, undo },
 			desc = this.nameAction( act, msg );
 
 		act.desc = desc.t;
@@ -31,7 +29,7 @@ DAWCore.History = class {
 		}
 		++this._stackInd;
 		act.index = stack.push( act );
-		this._change( act, "redo", "historyAddAction" );
+		this._change( GSData.deepFreeze( act ), "redo", "historyAddAction" );
 	}
 	getCurrentAction() {
 		return this._stack[ this._stackInd - 1 ] || null;
