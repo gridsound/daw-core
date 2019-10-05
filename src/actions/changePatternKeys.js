@@ -55,7 +55,7 @@ DAWCore.prototype._changePatternKeys = function( patId, keysObj, pat, duration )
 				}, {} );
 
 		obj.patterns = objPatterns;
-		if ( !DAWCore.objectIsEmpty( objBlocks ) ) {
+		if ( GSData.isntEmpty( objBlocks ) ) {
 			obj.blocks = objBlocks;
 		}
 		if ( Math.abs( cmpDur - this.get.duration() ) > .001 ) {

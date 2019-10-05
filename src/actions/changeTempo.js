@@ -27,7 +27,7 @@ DAWCore.prototype.changeTempo = function( bpm, beatsPerMeasure, stepsPerBeat ) {
 					}
 				}
 			} );
-			if ( !DAWCore.objectIsEmpty( objPatterns ) ) {
+			if ( GSData.isntEmpty( objPatterns ) ) {
 				const objBlocks = {};
 
 				obj.patterns = objPatterns;
@@ -38,7 +38,7 @@ DAWCore.prototype.changeTempo = function( bpm, beatsPerMeasure, stepsPerBeat ) {
 						objBlocks[ id ] = { duration: pat.duration };
 					}
 				} );
-				if ( !DAWCore.objectIsEmpty( objBlocks ) ) {
+				if ( GSData.isntEmpty( objBlocks ) ) {
 					const cmpDur = this.composition.getNewDuration( objPatterns );
 
 					obj.blocks = objBlocks;

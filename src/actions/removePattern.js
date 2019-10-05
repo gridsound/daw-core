@@ -20,7 +20,7 @@ DAWCore.prototype._removePattern = function( patId, pat ) {
 			return blocks;
 		}, {} );
 
-	if ( !DAWCore.objectIsEmpty( blocks ) ) {
+	if ( GSData.isntEmpty( blocks ) ) {
 		obj.blocks = blocks;
 	}
 	if ( patId === this.get.patternKeysOpened() ) {

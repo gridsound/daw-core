@@ -14,7 +14,7 @@ DAWCore.prototype.changeChannels = function( objChannels, actionMsg ) {
 			} );
 		}
 	} );
-	if ( !DAWCore.objectIsEmpty( objSynths ) ) {
+	if ( GSData.isntEmpty( objSynths ) ) {
 		obj.synths = objSynths;
 	}
 	this.compositionChange( obj, actionMsg );

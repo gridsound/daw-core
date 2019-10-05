@@ -27,10 +27,10 @@ DAWCore.prototype._removeSynth = function( synthId ) {
 			} );
 		}
 	} );
-	if ( !DAWCore.objectIsEmpty( keys ) ) {
+	if ( GSData.isntEmpty( keys ) ) {
 		obj.keys = keys;
 		obj.patterns = patterns;
-		if ( !DAWCore.objectIsEmpty( blocks ) ) {
+		if ( GSData.isntEmpty( blocks ) ) {
 			obj.blocks = blocks;
 		}
 	}
