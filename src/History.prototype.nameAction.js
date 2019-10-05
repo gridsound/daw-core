@@ -23,8 +23,9 @@ DAWCore.History.actionsToText = {
 	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
-		toggleFx: ( type, b, dest, get ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } fx of ${ get.channel( dest ).name }`, ],
-		removeFx: ( type, dest, get ) => [ "minus", `fx: remove ${ type } fx of ${ get.channel( dest ).name }`, ],
+		toggleFx: ( type, b, dest, get ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } of ${ get.channel( dest ).name }`, ],
+		removeFx: ( type, dest, get ) => [ "minus", `fx: remove ${ type } of ${ get.channel( dest ).name }`, ],
+		changeFxData: ( type, dest, _act, get ) => [ "effects", `fx: change ${ type } of ${ get.channel( dest ).name }` ],
 	},
 };
 
