@@ -2,7 +2,8 @@
 
 DAWCore.Composition = class {
 	constructor( daw ) {
-		const sch = new gswaScheduler();
+		const sch = new gswaScheduler(),
+			wamix = new gswaMixer();
 
 		this.daw = daw;
 		this.cmp = null;
@@ -10,7 +11,7 @@ DAWCore.Composition = class {
 		this.playing = false;
 		this._saved = true;
 		this._sched = sch;
-		this._mixer = new gswaMixer();
+		this._wamixer = wamix;
 		this._synths = new Map();
 		this._startedKeys = new Map();
 		this._startedSched = new Map();
@@ -25,11 +26,11 @@ DAWCore.Composition = class {
 	// .........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
-		this._mixer.setContext( ctx );
-		this._mixer.connect( this.daw.get.destination() );
+		this._wamixer.setContext( ctx );
+		this._wamixer.connect( this.daw.get.destination() );
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
-			syn.connect( this._mixer.getChanInput( this.cmp.synths[ synId ].dest ) );
+			syn.connect( this._wamixer.getChanInput( this.cmp.synths[ synId ].dest ) );
 		} );
 	}
 	load( cmpOri ) {
@@ -68,7 +69,7 @@ DAWCore.Composition = class {
 			const d = this._sched.data;
 
 			this.loaded = false;
-			this._mixer.clear();
+			this._wamixer.clear();
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
@@ -86,7 +87,7 @@ DAWCore.Composition = class {
 		}
 	}
 	updateChanAudioData() {
-		const mix = this._mixer,
+		const mix = this._wamixer,
 			fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
 
 		Object.keys( mix.gsdata.data ).forEach( chanId => {
@@ -196,7 +197,7 @@ DAWCore.Composition = class {
 						const absn = this.ctx.createBufferSource();
 
 						absn.buffer = buf;
-						absn.connect( this._mixer.getChanInput( pat.dest ) );
+						absn.connect( this._wamixer.getChanInput( pat.dest ) );
 						absn.start( when, off, dur );
 						this._startedBuffers.set( startedId, absn );
 					}

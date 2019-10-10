@@ -31,7 +31,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "channels", function( { channels } ) {
-		this._mixer.change( channels );
+		this._wamixer.change( channels );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
@@ -55,7 +55,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 
 				syn.setContext( this.daw.get.ctx() );
 				syn.setBPM( this.daw.get.bpm() );
-				syn.connect( this._mixer.getChanInput( synthObj.dest ) );
+				syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
 				this._synths.set( id, syn );
 			} else {
@@ -66,7 +66,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 				}
 				if ( "dest" in synthObj ) {
 					syn.disconnect();
-					syn.connect( this._mixer.getChanInput( synthObj.dest ) );
+					syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				}
 			}
 		} );
