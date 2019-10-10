@@ -3,7 +3,11 @@
 DAWCore.Composition = class {
 	constructor( daw ) {
 		const sch = new gswaScheduler(),
-			wamix = new gswaMixer();
+			wamix = new gswaMixer(),
+			wafxs = new gswaEffects( {
+				getChanInput: wamix.getChanInput.bind( wamix ),
+				getChanOutput: wamix.getChanOutput.bind( wamix ),
+			} );
 
 		this.daw = daw;
 		this.cmp = null;
@@ -12,6 +16,7 @@ DAWCore.Composition = class {
 		this._saved = true;
 		this._sched = sch;
 		this._wamixer = wamix;
+		this._waeffects = wafxs;
 		this._synths = new Map();
 		this._startedKeys = new Map();
 		this._startedSched = new Map();
@@ -28,6 +33,7 @@ DAWCore.Composition = class {
 		this.ctx = ctx;
 		this._wamixer.setContext( ctx );
 		this._wamixer.connect( this.daw.get.destination() );
+		this._waeffects.setContext( ctx ); // 1.
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.connect( this._wamixer.getChanInput( this.cmp.synths[ synId ].dest ) );
@@ -70,6 +76,7 @@ DAWCore.Composition = class {
 
 			this.loaded = false;
 			this._wamixer.clear();
+			this._waeffects.clear();
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
@@ -240,3 +247,7 @@ DAWCore.Composition = class {
 		this._startedKeys.delete( startedId );
 	}
 };
+
+/*
+1. It's important to set the mixer's context before the effects' one.
+*/

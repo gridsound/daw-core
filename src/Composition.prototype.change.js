@@ -28,10 +28,14 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	[ "bpm", function( { bpm } ) {
 		this._sched.setBPM( bpm );
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
+		this._waeffects.setBPM( bpm );
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "channels", function( { channels } ) {
 		this._wamixer.change( channels );
+	} ],
+	[ "effects", function( { effects } ) {
+		this._waeffects.change( effects );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
