@@ -40,6 +40,7 @@ Object.assign( DAWCore.prototype, {
 		obj.ctx = () => this.ctx;
 		obj.currentTime = () => this.composition.currentTime;
 		obj.destination = () => this.destination.getDestination();
+		obj.waeffect = id => this.composition._waeffects._wafxs.get( id );
 	},
 	_getListOrObj( listname, id ) {
 		const list = this._getList( listname );
