@@ -25,7 +25,9 @@ class DAWCore {
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
 		this._loop = this._loop.bind( this );
+		this._loopMs = 1;
 		this._getInit();
+		this.setLoopRate( 60 );
 		this.setCtx( new AudioContext() );
 		this.destination.setGain( this.env.def_appGain );
 	}
@@ -84,6 +86,9 @@ class DAWCore {
 		this._call( "currentTime", obj.getCurrentTime(), this._focused() );
 		this._clockUpdate();
 	}
+	setLoopRate( fps ) {
+		this._loopMs = 1000 / fps | 0;
+	}
 
 	// private:
 	_startLoop() {
@@ -91,6 +96,7 @@ class DAWCore {
 		this._loop();
 	}
 	_stopLoop() {
+		clearTimeout( this._frameId );
 		cancelAnimationFrame( this._frameId );
 	}
 	_loop() {
@@ -106,7 +112,9 @@ class DAWCore {
 			this._call( "currentTime", beat, this._focused() );
 			this._clockUpdate();
 		}
-		this._frameId = requestAnimationFrame( this._loop );
+		this._frameId = this._loopMs < 20
+			? requestAnimationFrame( this._loop )
+			: setTimeout( this._loop, this._loopMs );
 	}
 	_clockUpdate() {
 		this._call( "clockUpdate", this._focusedObj().getCurrentTime() );
