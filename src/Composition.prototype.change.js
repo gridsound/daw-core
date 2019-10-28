@@ -75,6 +75,13 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			}
 		} );
 	} ],
+	[ "patterns", function( { patterns } ) {
+		Object.entries( patterns ).forEach( ( [ patId, patObj ] ) => {
+			if ( "dest" in patObj && this.cmp.patterns[ patId ].type === "buffer" ) {
+				this.redirectPatternBuffer( patId, patObj.dest );
+			}
+		} );
+	} ],
 	[ "keys", function( { keys, patterns } ) {
 		const pats = Object.entries( this.cmp.patterns ),
 			patOpened = this.cmp.patternKeysOpened;
@@ -82,7 +89,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		Object.entries( keys ).forEach( ( [ keysId, keysObj ] ) => {
 			pats.some( ( [ patId, patObj ] ) => {
 				if ( patObj.keys === keysId ) {
-					this.assignPatternChange( patObj, keysObj );
+					this.assignPatternKeysChange( patId, keysObj );
 					if ( patId === patOpened ) {
 						this.daw.pianoroll.change( patterns && patterns[ patId ], keysObj );
 					}

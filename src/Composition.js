@@ -180,10 +180,18 @@ DAWCore.Composition = class {
 			this._sched.setLoopBeat( 0, cmp.duration || cmp.beatsPerMeasure );
 		}
 	}
-	assignPatternChange( pat, keys ) {
-		this._startedSched.forEach( sch => {
-			if ( sch.pattern === pat ) {
+	assignPatternKeysChange( patId, keys ) {
+		this._startedSched.forEach( ( [ patId2, sch ] ) => {
+			if ( patId2 === patId ) {
 				GSData.deepAssign( sch.data, keys );
+			}
+		} );
+	}
+	redirectPatternBuffer( patId, chanId ) {
+		this._startedBuffers.forEach( ( [ patId2, absn ] ) => {
+			if ( patId2 === patId ) {
+				absn.disconnect();
+				absn.connect( this._wamixer.getChanInput( chanId ) );
 			}
 		} );
 	}
@@ -194,7 +202,8 @@ DAWCore.Composition = class {
 			blc = blcs[ 0 ][ 1 ];
 
 		if ( cmp.tracks[ blc.track ].toggle ) {
-			const pat = cmp.patterns[ blc.pattern ];
+			const patId = blc.pattern,
+				pat = cmp.patterns[ patId ];
 
 			switch ( pat.type ) {
 				case "buffer": {
@@ -206,14 +215,13 @@ DAWCore.Composition = class {
 						absn.buffer = buf;
 						absn.connect( this._wamixer.getChanInput( pat.dest ) );
 						absn.start( when, off, dur );
-						this._startedBuffers.set( startedId, absn );
+						this._startedBuffers.set( startedId, [ patId, absn ] );
 					}
 				} break;
 				case "keys": {
 					const sch = new gswaScheduler();
 
-					this._startedSched.set( startedId, sch );
-					sch.pattern = pat;
+					this._startedSched.set( startedId, [ patId, sch ] );
 					sch.currentTime = this._sched.currentTime;
 					sch.ondatastart = this._onstartKey.bind( this, pat.synth );
 					sch.ondatastop = this._onstopKey.bind( this, pat.synth );
@@ -233,7 +241,7 @@ DAWCore.Composition = class {
 				this._startedBuffers.get( startedId );
 
 		if ( objStarted ) {
-			objStarted.stop();
+			objStarted[ 1 ].stop();
 			this._startedSched.delete( startedId );
 			this._startedBuffers.delete( startedId );
 		}
