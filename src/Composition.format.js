@@ -20,8 +20,8 @@ DAWCore.Composition.format = function( cmp ) {
 
 	// ***Opened
 	// ..........................................
-	cmp.synthOpened = `${ cmp.synthOpened || 0 }`;
-	cmp.patternKeysOpened = `${ cmp.patternKeysOpened || cmp.patternOpened || 0 }`;
+	cmp.synthOpened = cmp.synthOpened ? `${ cmp.synthOpened }` : null;
+	cmp.patternKeysOpened = cmp.patternKeysOpened ? `${ cmp.patternKeysOpened }` : null;
 	cmp.patternBufferOpened = cmp.patternBufferOpened ? `${ cmp.patternBufferOpened }` : null;
 	delete cmp.patternOpened;
 
