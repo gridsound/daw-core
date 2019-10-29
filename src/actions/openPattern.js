@@ -1,12 +1,13 @@
 "use strict";
 
 DAWCore.prototype.openPattern = function( id ) {
-	if ( id !== this.get.patternKeysOpened() ) {
-		const synId = this.get.pattern( id ).synth,
-			obj = { patternKeysOpened: id };
+	const pat = this.get.pattern( id );
 
-		if ( synId !== this.get.synthOpened() ) {
-			obj.synthOpened = synId;
+	if ( pat.type === "keys" && id !== this.get.patternKeysOpened() ) {
+		const obj = { patternKeysOpened: id };
+
+		if ( pat.synth !== this.get.synthOpened() ) {
+			obj.synthOpened = pat.synth;
 		}
 		this.composition.change( obj, DAWCore.composeUndo( this.get.composition(), obj ) );
 	}
