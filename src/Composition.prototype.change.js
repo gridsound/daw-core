@@ -77,7 +77,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	} ],
 	[ "patterns", function( { patterns } ) {
 		Object.entries( patterns ).forEach( ( [ patId, patObj ] ) => {
-			if ( "dest" in patObj && this.cmp.patterns[ patId ].type === "buffer" ) {
+			if ( patObj && "dest" in patObj && this.cmp.patterns[ patId ].type === "buffer" ) {
 				this.redirectPatternBuffer( patId, patObj.dest );
 			}
 		} );
