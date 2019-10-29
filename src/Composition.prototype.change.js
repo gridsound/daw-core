@@ -37,7 +37,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	[ "effects", function( { effects } ) {
 		this._waeffects.change( effects );
 	} ],
-	[ [ "loopA", "loopB" ], function() {
+	[ [ "duration", "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
 			const get = this.daw.get;
 
