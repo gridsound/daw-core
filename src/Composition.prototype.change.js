@@ -37,17 +37,20 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	[ "effects", function( { effects } ) {
 		this._waeffects.change( effects );
 	} ],
-	[ [ "duration", "loopA", "loopB" ], function() {
+	[ "blocks", function( { blocks } ) {
+		GSData.deepAssign( this._sched.data, blocks );
+	} ],
+	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.compositionFocused ) {
-			const get = this.daw.get;
-
 			this._sched.setLoopBeat(
-				get.loopA() || 0,
-				get.loopB() || get.duration() || get.beatsPerMeasure() );
+				this.cmp.loopA || 0,
+				this.cmp.loopB || this.cmp.duration || this.cmp.beatsPerMeasure );
 		}
 	} ],
-	[ "blocks", function( { blocks } ) {
-		this.assignBlocksChange( blocks );
+	[ "duration", function() {
+		if ( this.daw.compositionFocused && this.cmp.loopA === null ) {
+			this._sched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
+		}
 	} ],
 	[ "synths", function( { synths }, { synths: prevSynths } ) {
 		Object.entries( synths ).forEach( ( [ id, synthObj ] ) => {
@@ -57,8 +60,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} else if ( !prevSynths[ id ] ) {
 				const syn = new gswaSynth();
 
-				syn.setContext( this.daw.get.ctx() );
-				syn.setBPM( this.daw.get.bpm() );
+				syn.setContext( this.ctx );
+				syn.setBPM( this.cmp.bpm );
 				syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
 				this._synths.set( id, syn );
