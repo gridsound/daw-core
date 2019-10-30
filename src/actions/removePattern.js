@@ -4,16 +4,16 @@ DAWCore.prototype.removePattern = function( id ) {
 	const pat = this.get.pattern( id );
 
 	pat
-		? this.compositionChange( this._removePattern( id, pat ) )
+		? this.compositionChange( DAWCore._removePattern( this.get, id, pat ) )
 		: this._error( "removePattern", "patterns", id );
 };
 
-DAWCore.prototype._removePattern = function( patId, pat ) {
+DAWCore._removePattern = function( get, patId, pat ) {
 	const obj = {
 			keys: { [ pat.keys ]: undefined },
 			patterns: { [ patId ]: undefined },
 		},
-		blocks = Object.entries( this.get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
+		blocks = Object.entries( get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
 			if ( blc.pattern === patId ) {
 				blocks[ blcId ] = undefined;
 			}
@@ -21,10 +21,22 @@ DAWCore.prototype._removePattern = function( patId, pat ) {
 		}, {} );
 
 	if ( GSData.isntEmpty( blocks ) ) {
+		const realDur = Object.values( get.blocks() )
+				.reduce( ( dur, blc ) => {
+					return blc.pattern === patId
+						? dur
+						: Math.max( dur, blc.when + blc.duration );
+				}, 0 ),
+			bPM = get.beatsPerMeasure(),
+			dur = Math.max( 1, Math.ceil( realDur / bPM ) ) * bPM;
+
 		obj.blocks = blocks;
+		if ( dur !== get.duration() ) {
+			obj.duration = dur;
+		}
 	}
-	if ( patId === this.get.patternKeysOpened() ) {
-		if ( !Object.entries( this.get.patterns() ).some( ( [ k, v ] ) => {
+	if ( patId === get.patternKeysOpened() ) {
+		if ( !Object.entries( get.patterns() ).some( ( [ k, v ] ) => {
 			if ( k !== patId && v.synth === pat.synth ) {
 				obj.patternKeysOpened = k;
 				return true;
