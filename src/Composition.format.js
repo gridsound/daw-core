@@ -60,6 +60,7 @@ DAWCore.Composition.format = function( cmp ) {
 	}
 	Object.values( cmp.synths ).forEach( syn => {
 		delete syn.envelopes;
+		syn.lfo = syn.lfo || DAWCore.json.lfo();
 	} );
 
 	// ..........................................
