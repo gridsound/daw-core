@@ -12,6 +12,15 @@ DAWCore.History.prototype.nameAction = function( act, msg ) {
 };
 
 DAWCore.History.actionsToText = {
+	synth: {
+		addOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: add osc` ],
+		removeOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: remove osc` ],
+		changeOsc: ( prop, val, id, get ) => [ "oscillator", `${ get.synth( id ).name }: osc's ${ prop } = ${ val }` ],
+	},
+	synthLFO: {
+		toggle: ( b, id, get ) => [ "osc-sine", `${ get.synth( id ).name }: ${ b ? "enable" : "disable" } LFO` ],
+		changeProp: ( prop, val, id, get ) => [ "osc-sine", `${ get.synth( id ).name }: LFO's ${ prop } = ${ val }` ],
+	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
 		removeChan: chan => [ "minus", `mixer: delete "${ chan }"`, ],
@@ -70,19 +79,6 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 		}
 		if ( "dest" in rSyn ) {
 			return { i: "redirect", t: `${ syn.name }: redirects to "${ cmp.channels[ rSyn.dest ].name }"` };
-		}
-		if ( rSyn.oscillators ) {
-			const idOsc = Object.keys( rSyn.oscillators )[ 0 ],
-				rOsc = rSyn.oscillators[ idOsc ],
-				uOsc = uSyn.oscillators[ idOsc ],
-				param = rOsc && Object.entries( rOsc )[ 0 ];
-
-			if ( !rOsc || !uOsc ) {
-				return rOsc
-					? { i: "oscillator", t: `${ syn.name }: New oscillator` }
-					: { i: "minus", t: `${ syn.name }: Remove oscillator` };
-			}
-			return { i: "oscillator", t: `${ syn.name }: set ${ param[ 0 ] } to "${ param[ 1 ] }"` };
 		}
 	}
 };
