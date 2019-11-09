@@ -3,6 +3,7 @@
 DAWCore.json.synth = name => ( {
 	name,
 	dest: "main",
+	lfo: DAWCore.json.lfo(),
 	oscillators: { 0: {
 		order: 0,
 		type: "sine",
