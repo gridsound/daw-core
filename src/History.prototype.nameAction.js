@@ -13,14 +13,12 @@ DAWCore.History.prototype.nameAction = function( act, msg ) {
 
 DAWCore.History.actionsToText = {
 	synth: {
-		addOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: add osc` ],
-		removeOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: remove osc` ],
-		changeOsc: ( prop, val, id, get ) => [ "oscillator", `${ get.synth( id ).name }: osc's ${ prop } = ${ val }` ],
-		reorderOsc: ( id, get ) => [ "sort", `${ get.synth( id ).name }: reorder oscs` ],
-	},
-	synthLFO: {
-		toggle: ( b, id, get ) => [ "osc-sine", `${ get.synth( id ).name }: ${ b ? "enable" : "disable" } LFO` ],
-		changeProp: ( prop, val, id, get ) => [ "osc-sine", `${ get.synth( id ).name }: LFO's ${ prop } = ${ val }` ],
+		addOsc: syn => [ "oscillator", `${ syn }: add osc` ],
+		removeOsc: syn => [ "oscillator", `${ syn }: remove osc` ],
+		reorderOsc: syn => [ "sort", `${ syn }: reorder oscs` ],
+		changeOsc: ( syn, prop, val ) => [ "oscillator", `${ syn }: osc's ${ prop } = ${ val }` ],
+		toggleLFO: ( syn, b ) => [ "osc-sine", `${ syn }: ${ b ? "enable" : "disable" } LFO` ],
+		changeLFOProp: ( syn, prop, val ) => [ "osc-sine", `${ syn }: LFO's ${ prop } = ${ val }` ],
 	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
