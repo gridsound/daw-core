@@ -63,13 +63,13 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 				syn.setContext( this.ctx );
 				syn.setBPM( this.cmp.bpm );
 				syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
-				GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
+				syn.change( synthObj );
 				this._synths.set( id, syn );
 			} else {
 				const syn = this._synths.get( id );
 
 				if ( "oscillators" in synthObj ) {
-					GSData.deepAssign( syn.data.oscillators, synthObj.oscillators );
+					syn.change( synthObj );
 				}
 				if ( "dest" in synthObj ) {
 					syn.disconnect();
