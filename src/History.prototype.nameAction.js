@@ -16,6 +16,7 @@ DAWCore.History.actionsToText = {
 		addOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: add osc` ],
 		removeOsc: ( id, get ) => [ "oscillator", `${ get.synth( id ).name }: remove osc` ],
 		changeOsc: ( prop, val, id, get ) => [ "oscillator", `${ get.synth( id ).name }: osc's ${ prop } = ${ val }` ],
+		reorderOsc: ( id, get ) => [ "sort", `${ get.synth( id ).name }: reorder oscs` ],
 	},
 	synthLFO: {
 		toggle: ( b, id, get ) => [ "osc-sine", `${ get.synth( id ).name }: ${ b ? "enable" : "disable" } LFO` ],
