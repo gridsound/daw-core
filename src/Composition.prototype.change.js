@@ -68,7 +68,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} else {
 				const syn = this._synths.get( id );
 
-				if ( "oscillators" in synthObj ) {
+				if ( "oscillators" in synthObj || "lfo" in synthObj ) {
 					syn.change( synthObj );
 				}
 				if ( "dest" in synthObj ) {
