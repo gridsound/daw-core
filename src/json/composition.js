@@ -1,18 +1,20 @@
 "use strict";
 
 DAWCore.json.composition = ( env, id ) => {
-	const tracks = {};
+	const tracks = {},
+		sPB = env.def_stepsPerBeat,
+		bPM = env.def_beatsPerMeasure;
 
 	for ( let i = 0; i < env.def_nbTracks; ++i ) {
 		tracks[ i ] = {};
 	}
 	return {
 		id,
-		bpm: env.def_bpm,
-		stepsPerBeat: env.def_stepsPerBeat,
-		beatsPerMeasure: env.def_beatsPerMeasure,
 		name: "",
-		duration: 0,
+		bpm: env.def_bpm,
+		stepsPerBeat: sPB,
+		beatsPerMeasure: bPM,
+		duration: bPM,
 		loopA: false,
 		loopB: false,
 		synthOpened: "0",
@@ -26,12 +28,14 @@ DAWCore.json.composition = ( env, id ) => {
 				type: "keys",
 				keys: "0",
 				synth: "0",
-				duration: env.def_beatsPerMeasure,
+				duration: bPM,
 			},
 		},
 		channels: DAWCore.json.channels(),
 		tracks,
-		blocks: {},
+		blocks: {
+			0: { pattern: "0", track: "0", when: 0, duration: bPM },
+		},
 		synths: { 0: DAWCore.json.synth( "synth" ) },
 		keys: { 0: {} },
 	};
