@@ -30,6 +30,7 @@ DAWCore.Composition = class {
 	// un/load, change, save
 	// .........................................................................
 	setCtx( ctx ) {
+		gswaPeriodicWaves.clearCache();
 		this.ctx = ctx;
 		this._wamixer.setContext( ctx );
 		this._wamixer.connect( this.daw.get.destination() );
