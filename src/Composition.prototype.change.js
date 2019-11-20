@@ -62,8 +62,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 
 				syn.setContext( this.ctx );
 				syn.setBPM( this.cmp.bpm );
-				syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				syn.change( synthObj );
+				syn.output.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				this._synths.set( id, syn );
 			} else {
 				const syn = this._synths.get( id );
@@ -72,8 +72,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 					syn.change( synthObj );
 				}
 				if ( "dest" in synthObj ) {
-					syn.disconnect();
-					syn.connect( this._wamixer.getChanInput( synthObj.dest ) );
+					syn.output.disconnect();
+					syn.output.connect( this._wamixer.getChanInput( synthObj.dest ) );
 				}
 			}
 		} );

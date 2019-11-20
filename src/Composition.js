@@ -37,7 +37,8 @@ DAWCore.Composition = class {
 		this._waeffects.setContext( ctx ); // 1.
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
-			syn.connect( this._wamixer.getChanInput( this.cmp.synths[ synId ].dest ) );
+			syn.output.disconnect();
+			syn.output.connect( this._wamixer.getChanInput( this.cmp.synths[ synId ].dest ) );
 		} );
 	}
 	load( cmpOri ) {
