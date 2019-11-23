@@ -8,18 +8,22 @@ DAWCore.prototype.newPattern = function( synthId ) {
 			return pat.synth !== synthId
 				? max
 				: Math.max( max, pat.order );
-		}, 0 ) + 1;
+		}, 0 ) + 1,
+		obj = {
+			keys: { [ keysId ]: {} },
+			patterns: { [ patId ]: {
+				order,
+				type: "keys",
+				name: this._createUniqueName( "patterns", "pat" ),
+				keys: keysId,
+				synth: synthId,
+				duration: this.get.beatsPerMeasure(),
+			} },
+			patternKeysOpened: patId,
+		};
 
-	this.compositionChange( {
-		keys: { [ keysId ]: {} },
-		patterns: { [ patId ]: {
-			order,
-			type: "keys",
-			name: this._createUniqueName( "patterns", "pat" ),
-			keys: keysId,
-			synth: synthId,
-			duration: this.get.beatsPerMeasure(),
-		} },
-		patternKeysOpened: patId,
-	} );
+	if ( synthId !== this.get.synthOpened() ) {
+		obj.synthOpened = synthId;
+	}
+	this.compositionChange( obj );
 };
