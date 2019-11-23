@@ -35,6 +35,9 @@ DAWCore.Composition.format = function( cmp ) {
 		cmp.channels = DAWCore.json.channels();
 		Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 	}
+	if ( ( !cmp.savedAt || cmp.savedAt < 1574550000 ) && cmp.channels.main.gain > .8 ) { // Sun Nov 24 2019 00:00:00 GMT+0100
+		cmp.channels.main.gain = .4;
+	}
 	delete cmp.channels.main.order;
 
 	// effects
