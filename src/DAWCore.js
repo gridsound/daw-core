@@ -5,7 +5,7 @@ class DAWCore {
 		this.cb = {};
 		this.env = Object.seal( {
 			def_bpm: 120,
-			def_appGain: .5,
+			def_appGain: 1,
 			def_nbTracks: 21,
 			def_stepsPerBeat: 4,
 			def_beatsPerMeasure: 4,
