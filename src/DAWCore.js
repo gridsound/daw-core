@@ -11,7 +11,6 @@ class DAWCore {
 			def_beatsPerMeasure: 4,
 			analyserFFTsize: 8192,
 			analyserEnable: true,
-			sampleRate: 44100,
 			clockSteps: false,
 		} );
 		this.cmps = {

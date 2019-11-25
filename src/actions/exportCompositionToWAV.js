@@ -2,10 +2,9 @@
 
 DAWCore.prototype.exportCompositionToWAV = function() {
 	const ctx = this.ctx,
-		smpRate = this.env.sampleRate,
 		gain = this.destination.getGain(),
 		dur = Math.ceil( this.get.duration() * 60 / this.get.bpm() ) || 1,
-		ctxOff = new OfflineAudioContext( 2, ~~( dur * smpRate ), smpRate );
+		ctxOff = new OfflineAudioContext( 2, dur * ctx.sampleRate | 0, ctx.sampleRate );
 
 	this.stop();
 	if ( DAWCore._URLToRevoke ) {
