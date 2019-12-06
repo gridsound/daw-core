@@ -32,9 +32,9 @@ DAWCore.Composition = class {
 	setCtx( ctx ) {
 		gswaPeriodicWaves.clearCache();
 		this.ctx = ctx;
-		this._wamixer.setContext( ctx );
+		this._wamixer.setContext( ctx ); // 1.
 		this._wamixer.connect( this.daw.get.destination() );
-		this._waeffects.setContext( ctx ); // 1.
+		this._waeffects.setContext( ctx );
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.output.disconnect();
@@ -77,8 +77,8 @@ DAWCore.Composition = class {
 			const d = this._sched.data;
 
 			this.loaded = false;
+			this._waeffects.clear(); // 1.
 			this._wamixer.clear();
-			this._waeffects.clear();
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
@@ -251,5 +251,5 @@ DAWCore.Composition = class {
 };
 
 /*
-1. It's important to set the mixer's context before the effects' one.
+1. The order between the mixer and the effects is important.
 */
