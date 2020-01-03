@@ -18,7 +18,6 @@ DAWCore.Composition = class {
 		this._wamixer = wamix;
 		this._waeffects = wafxs;
 		this._synths = new Map();
-		this._startedKeys = new Map();
 		this._startedSched = new Map();
 		this._startedBuffers = new Map();
 		this._actionSavedOn = null;
@@ -175,9 +174,9 @@ DAWCore.Composition = class {
 
 	// .........................................................................
 	assignPatternKeysChange( patId, keys ) {
-		this._startedSched.forEach( ( [ patId2, sch ] ) => {
+		this._startedSched.forEach( ( [ patId2, sched ] ) => {
 			if ( patId2 === patId ) {
-				GSData.deepAssign( sch.data, keys );
+				sched.change( keys );
 			}
 		} );
 	}
@@ -213,18 +212,13 @@ DAWCore.Composition = class {
 					}
 				} break;
 				case "keys": {
-					const sch = new gswaScheduler();
+					const waKeys = new gswaKeysScheduler( this.ctx );
 
-					this._startedSched.set( startedId, [ patId, sch ] );
-					sch.currentTime = this._sched.currentTime;
-					sch.ondatastart = this._onstartKey.bind( this, pat.synth );
-					sch.ondatastop = this._onstopKey.bind( this, pat.synth );
-					sch.setBPM( cmp.bpm );
-					Object.assign( sch.data, cmp.keys[ pat.keys ] );
-					if ( this.ctx instanceof OfflineAudioContext ) {
-						sch.enableStreaming( false );
-					}
-					sch.start( when, off, dur );
+					this._startedSched.set( startedId, [ patId, waKeys ] );
+					waKeys.scheduler.setBPM( cmp.bpm );
+					waKeys.setSynth( this._synths.get( pat.synth ) );
+					waKeys.change( cmp.keys[ pat.keys ] );
+					waKeys.start( when, off, dur );
 				} break;
 			}
 		}
@@ -239,14 +233,6 @@ DAWCore.Composition = class {
 			this._startedSched.delete( startedId );
 			this._startedBuffers.delete( startedId );
 		}
-	}
-	_onstartKey( synthId, startedId, blcs, when, off, dur ) {
-		this._startedKeys.set( startedId,
-			this._synths.get( synthId ).startKey( blcs, when, off, dur ) );
-	}
-	_onstopKey( synthId, startedId ) {
-		this._synths.get( synthId ).stopKey( this._startedKeys.get( startedId ) );
-		this._startedKeys.delete( startedId );
 	}
 };
 

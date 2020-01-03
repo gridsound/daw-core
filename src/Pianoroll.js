@@ -2,7 +2,7 @@
 
 DAWCore.Pianoroll = class {
 	constructor( daw ) {
-		const waSched = new gswaScheduler();
+		const waKeys = new gswaKeysScheduler( daw.ctx );
 
 		this.daw = daw;
 		this.keys = {};
@@ -13,20 +13,16 @@ DAWCore.Pianoroll = class {
 		this.loopB = null;
 		this.duration = 0;
 		this._ctx = daw.ctx;
-		this._waSched = waSched;
-		this._keysStarted = {};
+		this._waKeys = waKeys;
 		this._keysStartedLive = {};
-		waSched.currentTime = () => this._ctx.currentTime;
-		waSched.ondatastart = this._startKey.bind( this );
-		waSched.ondatastop = this._stopKey.bind( this );
 	}
 
 	change( patObj, keysObj ) {
-		GSData.deepAssign( this._waSched.data, keysObj );
+		this._waKeys.change( keysObj );
 		if ( patObj && "duration" in patObj ) {
 			this.duration = patObj.duration;
 			if ( !this.looping && this.playing ) {
-				this._waSched.setLoopBeat( 0, this.duration );
+				this._waKeys.scheduler.setLoopBeat( 0, this.duration );
 			}
 		}
 	}
@@ -40,6 +36,7 @@ DAWCore.Pianoroll = class {
 				this.pause();
 			}
 			this._synth = syn;
+			this._waKeys.setSynth( syn );
 			if ( wasPlaying ) {
 				this.play();
 			}
@@ -55,7 +52,7 @@ DAWCore.Pianoroll = class {
 			daw.stop();
 			daw.stop();
 		}
-		this._waSched.empty();
+		this._waKeys.scheduler.empty();
 		if ( id ) {
 			const pat = daw.get.pattern( id );
 
@@ -69,39 +66,30 @@ DAWCore.Pianoroll = class {
 		}
 	}
 
-	// ........................................................................
-	_startKey( startedId, blcs, when, off, dur ) {
-		this._keysStarted[ startedId ] = this._synth.startKey( blcs, when, off, dur );
-	}
-	_stopKey( startedId ) {
-		this._synth.stopKey( this._keysStarted[ startedId ] );
-		delete this._keysStarted[ startedId ];
-	}
-
 	// controls
 	// ........................................................................
 	getCurrentTime() {
-		return this._waSched.getCurrentOffsetBeat();
+		return this._waKeys.scheduler.getCurrentOffsetBeat();
 	}
 	setCurrentTime( t ) {
-		this._waSched.setCurrentOffsetBeat( t );
+		this._waKeys.scheduler.setCurrentOffsetBeat( t );
 		this.daw._call( "currentTime", this.getCurrentTime(), "pianoroll" );
 		this.daw._clockUpdate();
 	}
 	setBPM( bpm ) {
-		this._waSched.setBPM( bpm );
+		this._waKeys.scheduler.setBPM( bpm );
 	}
 	setLoop( a, b ) {
 		this.loopA = a;
 		this.loopB = b;
 		this.looping = true;
-		this._waSched.setLoopBeat( a, b );
+		this._waKeys.scheduler.setLoopBeat( a, b );
 	}
 	clearLoop() {
 		this.loopA =
 		this.loopB = null;
 		this.looping = false;
-		this._waSched.setLoopBeat( 0, this.duration || this.daw.get.beatsPerMeasure() );
+		this._waKeys.scheduler.setLoopBeat( 0, this.duration || this.daw.get.beatsPerMeasure() );
 	}
 	liveKeydown( midi ) {
 		if ( !( midi in this._keysStartedLive ) ) {
@@ -111,7 +99,7 @@ DAWCore.Pianoroll = class {
 				gain: .8,
 				lowpass: 1,
 				highpass: 1,
-			} ] ], this._waSched.currentTime(), 0, Infinity );
+			} ] ], this._waKeys.scheduler.currentTime(), 0, Infinity );
 		}
 	}
 	liveKeyup( midi ) {
@@ -120,23 +108,20 @@ DAWCore.Pianoroll = class {
 			delete this._keysStartedLive[ midi ];
 		}
 	}
-	bpm( bpm ) {
-		this._waSched.setBPM( bpm );
-	}
 	play() {
 		if ( !this.playing ) {
 			const a = this.looping ? this.loopA : 0,
 				b = this.looping ? this.loopB : this.duration;
 
 			this.playing = true;
-			this._waSched.setLoopBeat( a, b );
-			this._waSched.startBeat( 0, this.getCurrentTime() );
+			this._waKeys.scheduler.setLoopBeat( a, b );
+			this._waKeys.scheduler.startBeat( 0, this.getCurrentTime() );
 		}
 	}
 	pause() {
 		if ( this.playing ) {
 			this.playing = false;
-			this._waSched.stop();
+			this._waKeys.stop();
 		}
 	}
 	stop() {
