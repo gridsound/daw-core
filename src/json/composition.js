@@ -22,14 +22,7 @@ DAWCore.json.composition = ( env, id ) => {
 		patternBufferOpened: null,
 		buffers: {},
 		patterns: {
-			0: {
-				order: 0,
-				name: "pat",
-				type: "keys",
-				keys: "0",
-				synth: "0",
-				duration: bPM,
-			},
+			0: { order: 0, type: "keys", name: "pat", keys: "0", synth: "0", duration: bPM, },
 		},
 		channels: DAWCore.json.channels(),
 		tracks,
@@ -37,6 +30,8 @@ DAWCore.json.composition = ( env, id ) => {
 			0: { pattern: "0", track: "0", when: 0, duration: bPM },
 		},
 		synths: { 0: DAWCore.json.synth( "synth" ) },
+		drumrows: {},
+		drums: {},
 		keys: { 0: {} },
 	};
 };

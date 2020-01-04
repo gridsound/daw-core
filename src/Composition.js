@@ -63,9 +63,11 @@ DAWCore.Composition = class {
 			} );
 			this.change( cmp, {
 				keys: {},
+				drums: {},
 				synths: {},
 				blocks: {},
 				buffers: {},
+				drumrows: {},
 				channels: {},
 				patterns: {},
 			} );

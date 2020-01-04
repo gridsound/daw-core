@@ -29,6 +29,11 @@ DAWCore.Composition.format = function( cmp ) {
 	// ..........................................
 	cmp.buffers = cmp.buffers || {};
 
+	// drums
+	// ..........................................
+	cmp.drumrows = cmp.drumrows || {};
+	cmp.drums = cmp.drums || {};
+
 	// channels
 	// ..........................................
 	if ( !cmp.channels ) {
