@@ -10,13 +10,27 @@ DAWCore.Buffers = class {
 		this._files.clear();
 	}
 	getBuffer( buf ) {
-		return this._files.get( buf.hash );
+		return this._files.get( buf.hash || buf.url );
 	}
 	getSize() {
 		return this._files.size;
 	}
 	setBuffer( buf ) {
-		this._files.set( buf.hash, Object.assign( {}, buf ) );
+		const bufCpy = Object.assign( {}, buf ),
+			url = buf.url,
+			key = buf.hash || url;
+
+		this._files.set( key, bufCpy );
+		return !url
+			? Promise.resolve( bufCpy )
+			: fetch( `http://localhost/gridsound/assets/samples/${ url }` )
+				.then( res => res.arrayBuffer() )
+				.then( arr => this.daw.ctx.decodeAudioData( arr ) )
+				.then( buffer => {
+					bufCpy.buffer = buffer;
+					bufCpy.duration = +buffer.duration.toFixed( 4 );
+					return bufCpy;
+				} );
 	}
 	loadFiles( files ) {
 		return new Promise( res => {
