@@ -53,8 +53,13 @@ DAWCore.Composition = class {
 		} ).then( cmp => {
 			this.cmp = cmp;
 			this.loaded = true;
-			Object.values( cmp.buffers ).forEach( buf => {
-				this.daw.buffers.setBuffer( buf );
+			Object.entries( cmp.buffers ).forEach( kv => {
+				this.daw.buffers.setBuffer( kv[ 1 ] )
+					.then( buf => {
+						if ( buf.buffer ) {
+							this.daw._call( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
+						}
+					} );
 			} );
 			this.change( cmp, {
 				keys: {},
