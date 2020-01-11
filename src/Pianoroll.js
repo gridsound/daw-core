@@ -61,8 +61,6 @@ DAWCore.Pianoroll = class {
 			if ( wasPlaying ) {
 				daw.play();
 			}
-		} else {
-			this.setSynth( null );
 		}
 	}
 
