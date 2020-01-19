@@ -18,13 +18,14 @@ class DAWCore {
 			cloud: new Map(),
 		};
 		this.pianoroll = null;
-		this.compositionFocused = true;
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
 		this._loop = this._loop.bind( this );
 		this._loopMs = 1;
+		this._focused = this.composition;
+		this._focusedStr = "composition";
 		this._getInit();
 		this.setLoopRate( 60 );
 		this.setCtx( new AudioContext() );
@@ -51,14 +52,20 @@ class DAWCore {
 	compositionNeedSave() {
 		return !this.composition._saved;
 	}
+	getFocusedObject() {
+		return this._focused;
+	}
+	getFocusedName() {
+		return this._focusedStr;
+	}
 	compositionFocus( force ) {
-		if ( !this.compositionFocused ) {
-			this._focusOn( true, force );
+		if ( this._focused !== this.composition ) {
+			this._focusOn( "composition", force );
 		}
 	}
 	pianorollFocus( force ) {
-		if ( this.compositionFocused && this.pianoroll && this.get.patternKeysOpened() ) {
-			this._focusOn( false, force );
+		if ( this._focused !== this.pianoroll && this.pianoroll && this.get.patternKeysOpened() ) {
+			this._focusOn( "pianoroll", force );
 		}
 	}
 	isPlaying() {
@@ -69,20 +76,18 @@ class DAWCore {
 		this.isPlaying() ? this.pause() : this.play();
 	}
 	play() {
-		this._focusedObj().play();
-		this._call( "play", this._focused() );
+		this._focused.play();
+		this._call( "play", this._focusedStr );
 	}
 	pause() {
-		this._focusedObj().pause();
-		this._call( "pause", this._focused() );
+		this._focused.pause();
+		this._call( "pause", this._focusedStr );
 		this._clockUpdate();
 	}
 	stop() {
-		const obj = this._focusedObj();
-
-		obj.stop();
-		this._call( "stop", this._focused() );
-		this._call( "currentTime", obj.getCurrentTime(), this._focused() );
+		this._focused.stop();
+		this._call( "stop", this._focusedStr );
+		this._call( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
 		this._clockUpdate();
 	}
 	setLoopRate( fps ) {
@@ -106,9 +111,9 @@ class DAWCore {
 			this._call( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
-			const beat = this._focusedObj().getCurrentTime();
+			const beat = this._focused.getCurrentTime();
 
-			this._call( "currentTime", beat, this._focused() );
+			this._call( "currentTime", beat, this._focusedStr );
 			this._clockUpdate();
 		}
 		this._frameId = this._loopMs < 20
@@ -116,18 +121,15 @@ class DAWCore {
 			: setTimeout( this._loop, this._loopMs );
 	}
 	_clockUpdate() {
-		this._call( "clockUpdate", this._focusedObj().getCurrentTime() );
+		this._call( "clockUpdate", this._focused.getCurrentTime() );
 	}
-	_focused() {
-		return this.compositionFocused ? "composition" : "pianoroll";
-	}
-	_focusedObj() {
-		return this.compositionFocused ? this.composition : this.pianoroll;
-	}
-	_focusOn( cmpFocused, force ) {
+	_focusOn( focusedStr, force ) {
 		if ( force === "-f" || !this.isPlaying() ) {
+			const cmpFocused = focusedStr === "composition";
+
 			this.pause();
-			this.compositionFocused = cmpFocused;
+			this._focused = cmpFocused ? this.composition : this.pianoroll;
+			this._focusedStr = focusedStr;
 			this._call( "focusOn", "composition", cmpFocused );
 			this._call( "focusOn", "pianoroll", !cmpFocused );
 			this._clockUpdate();

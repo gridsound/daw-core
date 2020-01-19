@@ -41,14 +41,14 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		GSData.deepAssign( this._sched.data, blocks );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
-		if ( this.daw.compositionFocused ) {
+		if ( this.daw.getFocusedObject() === this ) {
 			this._sched.setLoopBeat(
 				this.cmp.loopA || 0,
 				this.cmp.loopB || this.cmp.duration || this.cmp.beatsPerMeasure );
 		}
 	} ],
 	[ "duration", function() {
-		if ( this.daw.compositionFocused && this.cmp.loopA === null ) {
+		if ( this.daw.getFocusedObject() === this && this.cmp.loopA === null ) {
 			this._sched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
 		}
 	} ],
