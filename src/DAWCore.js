@@ -17,9 +17,9 @@ class DAWCore {
 			local: new Map(),
 			cloud: new Map(),
 		};
-		this.pianoroll = null;
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
+		this.pianoroll = new DAWCore.Pianoroll( this );
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
 		this._loop = this._loop.bind( this );
@@ -36,9 +36,6 @@ class DAWCore {
 		this.ctx = ctx;
 		this.destination.setCtx( ctx );
 		this.composition.setCtx( ctx );
-	}
-	initPianoroll() {
-		this.pianoroll = new DAWCore.Pianoroll( this );
 	}
 	envChange( obj ) {
 		Object.assign( this.env, obj );
