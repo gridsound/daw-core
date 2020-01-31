@@ -29,6 +29,9 @@ DAWCore.History.actionsToText = {
 		updateChanProp: ( chan, prop, val ) => [ "mixer", `mixer: "${ chan }" ${ prop }: ${ val }`, ],
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
+	patterns: {
+		removePattern: ( type, pat ) => [ "minus", `${ type }: remove pattern "${ pat }"` ],
+	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
 		toggleFx: ( type, b, dest, get ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } of ${ get.channel( dest ).name }`, ],
