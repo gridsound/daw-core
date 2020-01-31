@@ -33,6 +33,7 @@ Object.assign( DAWCore.prototype, {
 		obj.duration = () => cmp() && cmp().duration;
 		obj.synthOpened = () => cmp() && cmp().synthOpened;
 		obj.patternBufferOpened = () => cmp() && cmp().patternBufferOpened;
+		obj.patternDrumsOpened = () => cmp() && cmp().patternDrumsOpened;
 		obj.patternKeysOpened = () => cmp() && cmp().patternKeysOpened;
 		obj.beatsPerMeasure = () => cmp() && cmp().beatsPerMeasure;
 		obj.stepsPerBeat = () => cmp() && cmp().stepsPerBeat;
