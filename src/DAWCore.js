@@ -157,11 +157,17 @@ class DAWCore {
 			? `DAWCore.${ fnName }: cmp is not defined`
 			: `DAWCore.${ fnName }: cmp.${ collection }[${ id }] is not defined`;
 	}
+
+	// .........................................................................
 	_getNextIdOf( obj ) {
-		const ids = Object.keys( obj ),
-			id = ids.reduce( ( max, id ) => Math.max( max, parseInt( id ) || 0 ), 0 );
+		const id = Object.keys( obj )
+			.reduce( ( max, id ) => Math.max( max, parseInt( id ) || 0 ), 0 );
 
 		return `${ id + 1 }`;
+	}
+	_getNextOrderOf( obj ) {
+		return Object.values( obj )
+			.reduce( ( max, item ) => Math.max( max, item.order ), -1 ) + 1;
 	}
 	_createUniqueName( collection, name ) {
 		return DAWCore.uniqueName( name, Object.values(
