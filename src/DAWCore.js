@@ -17,6 +17,7 @@ class DAWCore {
 			local: new Map(),
 			cloud: new Map(),
 		};
+		this.drums = new DAWCore.Drums( this );
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
 		this.pianoroll = new DAWCore.Pianoroll( this );
@@ -63,6 +64,11 @@ class DAWCore {
 	pianorollFocus( force ) {
 		if ( this._focused !== this.pianoroll && this.pianoroll && this.get.patternKeysOpened() ) {
 			this._focusOn( "pianoroll", force );
+		}
+	}
+	drumsFocus( force ) {
+		if ( this._focused !== this.drums && this.drums && this.get.patternDrumsOpened() ) {
+			this._focusOn( "drums", force );
 		}
 	}
 	isPlaying() {
@@ -137,13 +143,12 @@ class DAWCore {
 	}
 	_focusOn( focusedStr, force ) {
 		if ( force === "-f" || !this.isPlaying() ) {
-			const cmpFocused = focusedStr === "composition";
-
 			this.pause();
-			this._focused = cmpFocused ? this.composition : this.pianoroll;
+			this._focused = this[ focusedStr ];
 			this._focusedStr = focusedStr;
-			this._call( "focusOn", "composition", cmpFocused );
-			this._call( "focusOn", "pianoroll", !cmpFocused );
+			this._call( "focusOn", "composition", focusedStr === "composition" );
+			this._call( "focusOn", "pianoroll", focusedStr === "pianoroll" );
+			this._call( "focusOn", "drums", focusedStr === "drums" );
 			this._clockUpdate();
 		}
 	}
