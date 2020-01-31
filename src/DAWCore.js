@@ -91,7 +91,22 @@ class DAWCore {
 		this._loopMs = 1000 / fps | 0;
 	}
 
+	// .........................................................................
+	_getPatByRowId( rowId ) {
+		return this.get.pattern( this.get.drumrow( rowId ).pattern );
+	}
+
+	// .........................................................................
+	callAction( action, ...args ) {
+		const ret = DAWCore.actions[ action ].apply( this, args );
+
+		if ( ret ) {
+			this.compositionChange( ...ret );
+		}
+	}
+
 	// private:
+	// .........................................................................
 	_startLoop() {
 		this._clockUpdate();
 		this._loop();
