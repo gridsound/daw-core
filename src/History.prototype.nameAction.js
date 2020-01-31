@@ -35,6 +35,18 @@ DAWCore.History.actionsToText = {
 		removeFx: ( type, dest, get ) => [ "minus", `fx: remove ${ type } of ${ get.channel( dest ).name }`, ],
 		changeFxData: ( type, dest, _act, get ) => [ "effects", `fx: change ${ type } of ${ get.channel( dest ).name }` ],
 	},
+	drumrows: {
+		addDrumrow: row => [ "drums", `drumrows: new "${ row }"` ],
+		removeDrumrow: row => [ "drums", `drumrows: remove "${ row }"` ],
+		reorderDrumrow: row => [ "drums", `drumrows: reorder "${ row }"` ],
+		changeDrumrow: ( row, prop, val ) => [ "drums", `drumrows: "${ row }" ${ prop }: ${ val }` ],
+		toggleDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute" : "mute" } "${ row }"` ],
+		toggleOnlyDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute all" : `mute all except "${ row }"` }` ],
+	},
+	drums: {
+		addDrums: ( pat, row, nb ) => [ "drums", `drums: add ${ nb } "${ row }" in "${ pat }"` ],
+		removeDrums: ( pat, row, nb ) => [ "drums", `drums: remove ${ nb } "${ row }" of "${ pat }"` ],
+	},
 };
 
 DAWCore.History.prototype._nameAction = function( act ) {
