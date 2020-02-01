@@ -31,6 +31,7 @@ DAWCore.History.actionsToText = {
 	},
 	patterns: {
 		removePattern: ( type, pat ) => [ "minus", `${ type }: remove pattern "${ pat }"` ],
+		clonePattern: ( type, pat ) => [ "clone", `${ type }: clone pattern "${ pat }"` ],
 	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],

@@ -1,15 +1,8 @@
 "use strict";
 
-DAWCore.prototype.clonePattern = function( id ) {
-	const pat = this.get.pattern( id );
-
-	pat
-		? this.compositionChange( this._clonePattern( id, pat ) )
-		: this._error( "clonePattern", "patterns", id );
-};
-
-DAWCore.prototype._clonePattern = function( patId, pat ) {
-	const newPat = Object.assign( {}, pat ),
+DAWCore.actions.clonePattern = function( patId ) {
+	const pat = this.get.pattern( patId ),
+		newPat = Object.assign( {}, pat ),
 		newPatId = this._getNextIdOf( this.get.patterns() ),
 		obj = {
 			patterns: { [ newPatId ]: newPat },
@@ -24,5 +17,8 @@ DAWCore.prototype._clonePattern = function( patId, pat ) {
 		obj.patternKeysOpened = newPatId;
 	}
 	newPat.name = this._createUniqueName( "patterns", pat.name );
-	return obj;
+	return [
+		obj,
+		[ "patterns", "clonePattern", newPat.type, newPat.name ],
+	];
 };
