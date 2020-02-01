@@ -24,7 +24,7 @@ DAWCore.History.actionsToText = {
 		addSynth: syn => [ "oscillator", `add new synth "${ syn }"` ],
 		renameSynth: ( old, neww ) => [ "pen", `rename synth "${ old }" -> "${ neww }"` ],
 		removeSynth: syn => [ "minus", `remove synth "${ syn }"` ],
-		redirectSynth: ( syn, chanDest ) => [ "redirect", `redirect synth "${ syn }" to "${ chanDest }"` ],
+		redirectSynth: ( syn, chanDest ) => [ "redirect", `redirect synth "${ syn }" to chan "${ chanDest }"` ],
 	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
@@ -36,10 +36,12 @@ DAWCore.History.actionsToText = {
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 	patterns: {
-		renamePattern: ( type, old, neww ) => [ "pen", `rename pattern-${ type } "${ old }" -> "${ neww }"` ],
-		removePattern: ( type, pat ) => [ "minus", `remove pattern-${ type } "${ pat }"` ],
-		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone pattern-${ type } "${ patSrc }" to "${ pat }"` ],
-		redirectPattern: ( pat, chanDest ) => [ "redirect", `redirect pattern-buffer "${ pat }" to "${ chanDest }"` ],
+		renamePattern: ( type, old, neww ) => [ "pen", `rename ${ type } "${ old }" -> "${ neww }"` ],
+		removePattern: ( type, pat ) => [ "minus", `remove ${ type } "${ pat }"` ],
+		reorderPattern: ( type, pat ) => [ "sort", `reorder ${ type } "${ pat }"` ],
+		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone ${ type } "${ patSrc }" to "${ pat }"` ],
+		redirectPattern: ( pat, chanDest ) => [ "redirect", `redirect buffer "${ pat }" to chan "${ chanDest }"` ],
+		redirectPatternKeys: ( pat, syn ) => [ "redirect", `redirect keys "${ pat }" to synth "${ syn }"` ],
 	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
