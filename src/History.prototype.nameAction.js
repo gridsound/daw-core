@@ -21,8 +21,9 @@ DAWCore.History.actionsToText = {
 		changeLFOProp: ( syn, prop, val ) => [ "osc-sine", `${ syn }: LFO's ${ prop } = ${ val }` ],
 	},
 	synths: {
+		addSynth: syn => [ "oscillator", `add new synth "${ syn }"` ],
 		renameSynth: ( old, neww ) => [ "pen", `rename synth "${ old }" -> "${ neww }"` ],
-		removeSynth: syn => [ "pen", `remove synth "${ syn }"` ],
+		removeSynth: syn => [ "minus", `remove synth "${ syn }"` ],
 	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
@@ -89,12 +90,7 @@ DAWCore.History._nameAction_synth = function( cmp, r, u ) {
 			rSyn = r.synths[ synthId ],
 			uSyn = u.synths[ synthId ];
 
-		if ( !rSyn || !uSyn ) {
-			return rSyn
-				? { i: "oscillator", t: `New synthesizer "${ rSyn.name }"` }
-				: { i: "minus", t: `Remove synthesizer "${ uSyn.name }"` };
-		}
-		if ( "dest" in rSyn ) {
+		if ( rSyn && "dest" in rSyn ) {
 			return { i: "redirect", t: `${ syn.name }: redirects to "${ cmp.channels[ rSyn.dest ].name }"` };
 		}
 	}
