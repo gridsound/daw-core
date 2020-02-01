@@ -19,6 +19,6 @@ DAWCore.actions.clonePattern = function( patId ) {
 	newPat.name = this._createUniqueName( "patterns", pat.name );
 	return [
 		obj,
-		[ "patterns", "clonePattern", newPat.type, newPat.name ],
+		[ "patterns", "clonePattern", newPat.type, newPat.name, pat.name ],
 	];
 };

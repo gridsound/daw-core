@@ -30,8 +30,9 @@ DAWCore.History.actionsToText = {
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 	patterns: {
-		removePattern: ( type, pat ) => [ "minus", `${ type }: remove pattern "${ pat }"` ],
-		clonePattern: ( type, pat ) => [ "clone", `${ type }: clone pattern "${ pat }"` ],
+		renamePattern: ( type, old, neww ) => [ "pen", `rename pattern-${ type } "${ old }" -> "${ neww }"` ],
+		removePattern: ( type, pat ) => [ "minus", `remove pattern-${ type } "${ pat }"` ],
+		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone pattern-${ type } "${ patSrc }" to "${ pat }"` ],
 	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
