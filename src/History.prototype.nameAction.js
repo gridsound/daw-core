@@ -22,6 +22,7 @@ DAWCore.History.actionsToText = {
 	},
 	synths: {
 		renameSynth: ( old, neww ) => [ "pen", `rename synth "${ old }" -> "${ neww }"` ],
+		removeSynth: syn => [ "pen", `remove synth "${ syn }"` ],
 	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],

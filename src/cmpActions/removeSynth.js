@@ -1,14 +1,6 @@
 "use strict";
 
-DAWCore.prototype.removeSynth = function( id ) {
-	const syn = this.get.synth( id );
-
-	syn
-		? this.compositionChange( this._removeSynth( id ) )
-		: this._error( "removeSynth", "synths", id );
-};
-
-DAWCore.prototype._removeSynth = function( synthId ) {
+DAWCore.actions.removeSynth = function( synthId ) {
 	const keys = {},
 		blocks = {},
 		patterns = {},
@@ -27,13 +19,9 @@ DAWCore.prototype._removeSynth = function( synthId ) {
 			} );
 		}
 	} );
-	if ( GSData.isntEmpty( keys ) ) {
-		obj.keys = keys;
-		obj.patterns = patterns;
-		if ( GSData.isntEmpty( blocks ) ) {
-			obj.blocks = blocks;
-		}
-	}
+	DAWCore.utils.addIfNotEmpty( obj, "keys", keys );
+	DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
+	DAWCore.utils.addIfNotEmpty( obj, "blocks", blocks );
 	if ( synthId === this.get.synthOpened() ) {
 		if ( !Object.keys( this.get.synths() ).some( k => {
 			if ( k !== synthId ) {
@@ -52,5 +40,8 @@ DAWCore.prototype._removeSynth = function( synthId ) {
 			obj.synthOpened = null;
 		}
 	}
-	return obj;
+	return [
+		obj,
+		[ "synths", "removeSynth", this.get.synth( synthId ).name ],
+	];
 };
