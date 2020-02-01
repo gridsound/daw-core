@@ -24,6 +24,7 @@ DAWCore.History.actionsToText = {
 		addSynth: syn => [ "oscillator", `add new synth "${ syn }"` ],
 		renameSynth: ( old, neww ) => [ "pen", `rename synth "${ old }" -> "${ neww }"` ],
 		removeSynth: syn => [ "minus", `remove synth "${ syn }"` ],
+		redirectSynth: ( syn, chanDest ) => [ "redirect", `redirect synth "${ syn }" to "${ chanDest }"` ],
 	},
 	mixer: {
 		addChan: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
@@ -38,6 +39,7 @@ DAWCore.History.actionsToText = {
 		renamePattern: ( type, old, neww ) => [ "pen", `rename pattern-${ type } "${ old }" -> "${ neww }"` ],
 		removePattern: ( type, pat ) => [ "minus", `remove pattern-${ type } "${ pat }"` ],
 		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone pattern-${ type } "${ patSrc }" to "${ pat }"` ],
+		redirectPattern: ( pat, chanDest ) => [ "redirect", `redirect pattern-buffer "${ pat }" to "${ chanDest }"` ],
 	},
 	effects: {
 		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
@@ -74,26 +76,12 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		};
 	}
 	return (
-		DAWCore.History._nameAction_synth( cmp, r, u ) ||
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
 		DAWCore.History._nameAction_blocks( cmp, r, u ) ||
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
 		{ i: "", t: "" }
 	);
-};
-
-DAWCore.History._nameAction_synth = function( cmp, r, u ) {
-	if ( r.synths ) {
-		const synthId = Object.keys( r.synths )[ 0 ],
-			syn = cmp.synths[ synthId ],
-			rSyn = r.synths[ synthId ],
-			uSyn = u.synths[ synthId ];
-
-		if ( rSyn && "dest" in rSyn ) {
-			return { i: "redirect", t: `${ syn.name }: redirects to "${ cmp.channels[ rSyn.dest ].name }"` };
-		}
-	}
 };
 
 DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
