@@ -15,6 +15,8 @@ DAWCore.History.actionsToText = {
 	cmp: {
 		renameComposition: ( old, neww ) => [ "pen", `rename compo "${ old || "untitled" }" to "${ neww }"` ],
 		changeTempo: ( bpm, bPM, sPB ) => [ "clock", `new tempo ${ bpm } (${ bPM }/${ sPB })` ],
+		changeLoop: ( a, b ) => [ "loop", `change loop ${ a } -> ${ b }` ],
+		removeLoop: () => [ "loop", `remove loop` ],
 	},
 	synth: {
 		addOsc: syn => [ "oscillator", `${ syn }: add osc` ],
@@ -72,7 +74,6 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		r = act.redo,
 		u = act.undo;
 
-	if ( "loopA" in r ) { return { i: "loop", t: `Loop: ${ r.loopA } -> ${ r.loopB }` }; }
 	return (
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
