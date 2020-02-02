@@ -42,6 +42,7 @@ DAWCore.History.actionsToText = {
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 	patterns: {
+		addPatternKeys: ( pat, syn ) => [ "plus", `add new keys "${ pat }" of synth "${ syn }"` ],
 		renamePattern: ( type, old, neww ) => [ "pen", `rename ${ type } "${ old }" -> "${ neww }"` ],
 		removePattern: ( type, pat ) => [ "minus", `remove ${ type } "${ pat }"` ],
 		reorderPattern: ( type, pat ) => [ "sort", `reorder ${ type } "${ pat }"` ],
@@ -75,7 +76,6 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		u = act.undo;
 
 	return (
-		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
 		DAWCore.History._nameAction_blocks( cmp, r, u ) ||
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
@@ -123,23 +123,6 @@ DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
 				i: o[ a ].toggle ? "unmute" : "mute",
 				t: `${ o[ a ].toggle ? "Unmute" : "Mute" } "${ cmp.tracks[ a ].name }" track`
 			};
-	}
-};
-
-DAWCore.History._nameAction_pattern = function( cmp, r, u ) {
-	for ( const id in r.patterns ) {
-		const pat = cmp.patterns[ id ],
-			rpat = r.patterns[ id ],
-			upat = u.patterns[ id ];
-
-		if ( !rpat || !upat ) {
-			return rpat
-				? { i: "plus", t: `New pattern "${ rpat.name }"` }
-				: { i: "minus", t: `Remove pattern "${ upat.name }"` };
-		}
-		if ( rpat.synth ) {
-			return { i: "redirect", t: `${ pat.name }: change its synthesizer` };
-		}
 	}
 };
 
