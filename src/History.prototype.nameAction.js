@@ -42,6 +42,7 @@ DAWCore.History.actionsToText = {
 		redirectChan: ( chan, chanDest ) => [ "redirect", `mixer: redirect "${ chan }" to "${ chanDest }"`, ],
 	},
 	patterns: {
+		addPattern: ( type, pat ) => [ "plus", `add new ${ type } "${ pat }"` ],
 		addPatternKeys: ( pat, syn ) => [ "plus", `add new keys "${ pat }" of synth "${ syn }"` ],
 		renamePattern: ( type, old, neww ) => [ "pen", `rename ${ type } "${ old }" -> "${ neww }"` ],
 		removePattern: ( type, pat ) => [ "minus", `remove ${ type } "${ pat }"` ],
