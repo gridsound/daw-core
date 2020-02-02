@@ -15,7 +15,7 @@ DAWCore.actions.removePattern = function( patId ) {
 	if ( type !== "buffer" ) {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
-	if ( GSData.isntEmpty( blocks ) ) {
+	if ( DAWCore.utils.isntEmpty( blocks ) ) {
 		const realDur = Object.values( get.blocks() )
 				.reduce( ( dur, blc ) => {
 					return blc.pattern === patId

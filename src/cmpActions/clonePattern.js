@@ -2,21 +2,22 @@
 
 DAWCore.actions.clonePattern = function( patId ) {
 	const pat = this.get.pattern( patId ),
+		type = pat.type,
 		newPat = Object.assign( {}, pat ),
 		newPatId = this._getNextIdOf( this.get.patterns() ),
-		obj = {
-			patterns: { [ newPatId ]: newPat },
-		};
+		obj = { patterns: { [ newPatId ]: newPat } };
 
-	if ( pat.type === "keys" ) {
-		const newKeys = GSData.deepCopy( this.get.keys( pat.keys ) ),
-			newKeysId = this._getNextIdOf( this.get.keys() );
-
-		newPat.keys = newKeysId;
-		obj.keys = { [ newKeysId ]: newKeys };
-		obj.patternKeysOpened = newPatId;
-	}
 	newPat.name = this._createUniqueName( "patterns", pat.name );
+	if ( type === "keys" || type === "drums" ) {
+		const newCnt = GSData.deepCopy( this.get[ type ]( pat[ type ] ) ),
+			newCntId = this._getNextIdOf( this.get[ type ]() );
+
+		newPat[ type ] = newCntId;
+		obj[ type ] = { [ newCntId ]: newCnt };
+		obj[ type === "keys"
+			? "patternKeysOpened"
+			: "patternDrumsOpened" ] = newPatId;
+	}
 	return [
 		obj,
 		[ "patterns", "clonePattern", newPat.type, newPat.name, pat.name ],
