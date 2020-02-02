@@ -2,6 +2,8 @@
 
 class DAWCore {
 	constructor() {
+		const ctx = new AudioContext();
+
 		this.cb = {};
 		this.env = Object.seal( {
 			def_bpm: 120,
@@ -17,6 +19,7 @@ class DAWCore {
 			local: new Map(),
 			cloud: new Map(),
 		};
+		this.ctx = ctx;
 		this.drums = new DAWCore.Drums( this );
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
@@ -29,7 +32,7 @@ class DAWCore {
 		this._focusedStr = "composition";
 		this._getInit();
 		this.setLoopRate( 60 );
-		this.setCtx( new AudioContext() );
+		this.setCtx( ctx );
 		this.destination.setGain( this.env.def_appGain );
 	}
 
