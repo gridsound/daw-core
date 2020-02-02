@@ -12,6 +12,9 @@ DAWCore.History.prototype.nameAction = function( act, msg ) {
 };
 
 DAWCore.History.actionsToText = {
+	cmp: {
+		changeTempo: ( bpm, bPM, sPB ) => [ "clock", `new tempo ${ bpm } (${ bPM }/${ sPB })` ],
+	},
 	synth: {
 		addOsc: syn => [ "oscillator", `${ syn }: add osc` ],
 		removeOsc: syn => [ "oscillator", `${ syn }: remove osc` ],
@@ -68,15 +71,8 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		r = act.redo,
 		u = act.undo;
 
-	if ( "bpm" in r ) { return { i: "clock", t: `BPM: ${ r.bpm }` }; }
 	if ( "name" in r ) { return { i: "pen", t: `Name: "${ r.name }"` }; }
 	if ( "loopA" in r ) { return { i: "loop", t: `Loop: ${ r.loopA } -> ${ r.loopB }` }; }
-	if ( r.beatsPerMeasure || r.stepsPerBeat ) {
-		return {
-			i: "clock",
-			t: `Time signature: ${ cmp.beatsPerMeasure }/${ cmp.stepsPerBeat }`,
-		};
-	}
 	return (
 		DAWCore.History._nameAction_pattern( cmp, r, u ) ||
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
