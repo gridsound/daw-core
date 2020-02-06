@@ -1,7 +1,8 @@
 "use strict";
 
-DAWCore.utils.addIfNotEmpty = ( data, attr, obj ) => {
-	if ( DAWCore.utils.isntEmpty( obj ) ) {
-		data[ attr ] = obj;
+DAWCore.utils.addIfNotEmpty = ( obj, attr, valObj ) => {
+	if ( DAWCore.utils.isntEmpty( valObj ) ) {
+		obj[ attr ] = valObj;
 	}
+	return obj;
 };
