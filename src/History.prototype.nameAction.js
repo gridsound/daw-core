@@ -62,6 +62,7 @@ DAWCore.History.actionsToText = {
 		removeDrumrow: row => [ "drums", `drumrows: remove "${ row }"` ],
 		reorderDrumrow: row => [ "drums", `drumrows: reorder "${ row }"` ],
 		changeDrumrow: ( row, prop, val ) => [ "drums", `drumrows: "${ row }" ${ prop }: ${ val }` ],
+		changeDrumrowPattern: ( row, newPat ) => [ "drums", `drumrows: "${ row }" -> "${ newPat }"` ],
 		toggleDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute" : "mute" } "${ row }"` ],
 		toggleOnlyDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute all" : `mute all except "${ row }"` }` ],
 	},
