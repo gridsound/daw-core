@@ -13,7 +13,8 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 		drumrows = this.get.drumrows(),
 		patRowId = this.get.drumrow( rowId ).pattern,
 		patRow = this.get.pattern( patRowId ),
-		drumsMap = Object.entries( drums ).reduce( ( map, [ drumId, drum ] ) => {
+		drumsEnt = Object.entries( drums ),
+		drumsMap = drumsEnt.reduce( ( map, [ drumId, drum ] ) => {
 			if ( drum.row === rowId ) {
 				map.set( Math.round( drum.when / stepDur ), drumId );
 			}
@@ -21,7 +22,8 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 		}, new Map() ),
 		newDrums = {},
 		nextDrumId = +this._getNextIdOf( drums );
-	let nbDrums = 0;
+	let nbDrums = 0,
+		drumWhenMax = pat.duration;
 
 	for ( let w = whenA; w <= whenB; ++w ) {
 		const drmId = drumsMap.get( w );
@@ -32,8 +34,11 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 				++nbDrums;
 			}
 		} else if ( status ) {
+			const when = w * stepDur;
+
+			drumWhenMax = Math.max( drumWhenMax, when + .001 );
 			newDrums[ nextDrumId + nbDrums ] = {
-				when: w * stepDur,
+				when,
 				row: rowId,
 				gain: 1,
 				pan: 0,
@@ -43,9 +48,42 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 			++nbDrums;
 		}
 	}
+	if ( nbDrums > 0 && !status ) {
+		drumWhenMax = drumsEnt.reduce( ( dur, [ drumId, drum ] ) => {
+			return drumId in newDrums
+				? dur
+				: Math.max( dur, drum.when + .001 );
+		}, 0 );
+	}
 	if ( nbDrums > 0 ) {
+		const bPM = this.get.beatsPerMeasure(),
+			duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM,
+			obj = { drums: { [ pat.drums ]: newDrums } };
+
+		if ( pat.duration !== duration ) {
+			let blockWhenMax = 0;
+			const blocks = Object.entries( this.get.blocks() ).reduce( ( obj, [ blcId, blc ] ) => {
+					if ( blc.pattern === patternId && !blc.durationEdited ) {
+						obj[ blcId ] = { duration };
+						blockWhenMax = Math.max( blockWhenMax, blc.when + duration );
+					} else {
+						blockWhenMax = Math.max( blockWhenMax, blc.when + blc.duration );
+					}
+					return obj;
+				}, {} );
+
+			obj.patterns = { [ patternId ]: { duration } };
+			if ( DAWCore.utils.isntEmpty( blocks ) ) {
+				const duration = Math.max( 1, Math.ceil( blockWhenMax / bPM ) ) * bPM;
+
+				obj.blocks = blocks;
+				if ( duration !== this.get.duration() ) {
+					obj.duration = duration;
+				}
+			}
+		}
 		return [
-			{ drums: { [ pat.drums ]: newDrums } },
+			obj,
 			[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],
 		];
 	}
