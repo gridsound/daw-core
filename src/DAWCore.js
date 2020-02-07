@@ -193,15 +193,10 @@ class DAWCore {
 			this._clockUpdate();
 		}
 	}
-	_call( cbName, a, b, c, d ) {
+	_call( cbName, ...args ) {
 		const fn = this.cb[ cbName ];
 
-		return fn && fn( a, b, c, d );
-	}
-	_error( fnName, collection, id ) {
-		return !this.get.composition()
-			? `DAWCore.${ fnName }: cmp is not defined`
-			: `DAWCore.${ fnName }: cmp.${ collection }[${ id }] is not defined`;
+		return fn && fn( ...args );
 	}
 }
 
