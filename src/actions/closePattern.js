@@ -10,6 +10,6 @@ DAWCore.prototype.closePattern = function( type ) {
 	if ( this.get[ attr ]() ) {
 		const obj = { [ attr ]: null };
 
-		this.composition.change( obj, DAWCore.composeUndo( this.get.composition(), obj ) );
+		this.composition.change( obj, DAWCore.utils.composeUndo( this.get.composition(), obj ) );
 	}
 };

@@ -91,12 +91,12 @@ DAWCore.Composition.format = function( cmp ) {
 	}, {} );
 	Object.values( cmp.keys ).forEach( keys => {
 		Object.values( keys ).forEach( k => {
-			k.pan = DAWCore.castToNumber( k.pan, 0, -1, 1, 2 );
-			k.gain = DAWCore.castToNumber( k.gain, .8, 0, 1, 2 );
-			k.attack = DAWCore.castToNumber( k.attack, 0, 0, Infinity, 3 );
-			k.release = DAWCore.castToNumber( k.release, 0, 0, Infinity, 3 );
-			k.lowpass = DAWCore.castToNumber( k.lowpass, 1, 0, 1, 2 );
-			k.highpass = DAWCore.castToNumber( k.highpass, 1, 0, 1, 2 );
+			k.pan = DAWCore.utils.castToNumber( k.pan, 0, -1, 1, 2 );
+			k.gain = DAWCore.utils.castToNumber( k.gain, .8, 0, 1, 2 );
+			k.attack = DAWCore.utils.castToNumber( k.attack, 0, 0, Infinity, 3 );
+			k.release = DAWCore.utils.castToNumber( k.release, 0, 0, Infinity, 3 );
+			k.lowpass = DAWCore.utils.castToNumber( k.lowpass, 1, 0, 1, 2 );
+			k.highpass = DAWCore.utils.castToNumber( k.highpass, 1, 0, 1, 2 );
 			k.selected = !!k.selected;
 			if ( typeof k.prev === "number" ) { k.prev += ""; }
 			if ( typeof k.next === "number" ) { k.next += ""; }

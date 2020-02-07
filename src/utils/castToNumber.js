@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.castToNumber = ( n, def, min, max, fix ) => {
+DAWCore.utils.castToNumber = ( n, def, min, max, fix ) => {
 	const x = Number.isFinite( +n )
 			? Math.max( min, Math.min( n, max ) )
 			: def;

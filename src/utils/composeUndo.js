@@ -1,12 +1,12 @@
 "use strict";
 
-DAWCore.composeUndo = ( data, obj ) => {
+DAWCore.utils.composeUndo = ( data, obj ) => {
 	if ( data && obj && typeof data === "object" && typeof obj === "object" ) {
 		const undo = {};
 
 		for ( const k in obj ) {
 			if ( data[ k ] !== obj[ k ] ) {
-				undo[ k ] = DAWCore.composeUndo( data[ k ], obj[ k ] );
+				undo[ k ] = DAWCore.utils.composeUndo( data[ k ], obj[ k ] );
 			}
 		}
 		return undo;

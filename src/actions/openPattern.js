@@ -20,6 +20,6 @@ DAWCore.prototype.openPattern = function( id ) {
 			break;
 	}
 	if ( obj ) {
-		this.composition.change( obj, DAWCore.composeUndo( this.get.composition(), obj ) );
+		this.composition.change( obj, DAWCore.utils.composeUndo( this.get.composition(), obj ) );
 	}
 };

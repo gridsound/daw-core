@@ -1,17 +1,17 @@
 "use strict";
 
-DAWCore.time = {
+DAWCore.utils.time = {
 
 	// mixtes:
 	beatToMin( beat, bpm ) {
 		return ~~( beat / bpm );
 	},
 	beatToSec( beat, bpm ) {
-		return DAWCore.time._padZero( beat * 60 / bpm % 60 );
+		return DAWCore.utils.time._padZero( beat * 60 / bpm % 60 );
 	},
 	beatToMinSec( beat, bpm ) {
-		const min = DAWCore.time.beatToMin( beat, bpm ),
-			sec = DAWCore.time.beatToSec( beat, bpm );
+		const min = DAWCore.utils.time.beatToMin( beat, bpm ),
+			sec = DAWCore.utils.time.beatToSec( beat, bpm );
 
 		return `${ min }:${ sec }`;
 	},
