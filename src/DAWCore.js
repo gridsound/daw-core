@@ -208,10 +208,6 @@ class DAWCore {
 	_getPatByRowId( rowId ) {
 		return this.get.pattern( this.get.drumrow( rowId ).pattern );
 	}
-	_getNextOrderOf( obj ) {
-		return Object.values( obj )
-			.reduce( ( max, item ) => Math.max( max, item.order ), -1 ) + 1;
-	}
 	_createUniqueName( collection, name ) {
 		return DAWCore.uniqueName( name, Object.values(
 			this.get[ collection ]() ).map( obj => obj.name ) );
