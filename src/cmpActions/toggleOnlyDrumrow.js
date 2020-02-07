@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.toggleOnlyDrumrow = function( rowId, get ) {
-	const patName = this._getPatByRowId( rowId ).name,
+DAWCore.actions.toggleOnlyDrumrow = ( rowId, get ) => {
+	const patName = DAWCore.common.getDrumrowName( rowId, get ),
 		entries = Object.entries( get.drumrows() ),
 		someOn = entries.some( kv => kv[ 0 ] !== rowId && kv[ 1 ].toggle === true ),
 		drumrows = entries.reduce( ( obj, [ id, row ] ) => {

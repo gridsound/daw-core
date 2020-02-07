@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.reorderDrumrow = function( rowId, drumrows ) {
-	const patName = this._getPatByRowId( rowId ).name;
+DAWCore.actions.reorderDrumrow = ( rowId, drumrows, get ) => {
+	const patName = DAWCore.common.getDrumrowName( rowId, get );
 
 	return [
 		{ drumrows },

@@ -205,9 +205,6 @@ class DAWCore {
 	}
 
 	// .........................................................................
-	_getPatByRowId( rowId ) {
-		return this.get.pattern( this.get.drumrow( rowId ).pattern );
-	}
 	_createUniqueName( collection, name ) {
 		return DAWCore.uniqueName( name, Object.values(
 			this.get[ collection ]() ).map( obj => obj.name ) );

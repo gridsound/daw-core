@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.toggleDrumrow = function( rowId, get ) {
-	const patName = this._getPatByRowId( rowId ).name,
+DAWCore.actions.toggleDrumrow = ( rowId, get ) => {
+	const patName = DAWCore.common.getDrumrowName( rowId, get ),
 		toggle = !get.drumrow( rowId ).toggle;
 
 	return [

@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.changeDrumrow = function( rowId, prop, val, get ) {
-	const patName = this._getPatByRowId( rowId ).name;
+DAWCore.actions.changeDrumrow = ( rowId, prop, val, get ) => {
+	const patName = DAWCore.common.getDrumrowName( rowId, get );
 
 	return [
 		{ drumrows: { [ rowId ]: { [ prop ]: val } } },
