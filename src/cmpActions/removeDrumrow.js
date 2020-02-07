@@ -4,26 +4,27 @@ DAWCore.actions.removeDrumrow = ( rowId, get ) => {
 	const patName = DAWCore.common.getDrumrowName( rowId, get );
 
 	return [
-		DAWCore.actions._removeDrumrow( rowId, get ),
+		DAWCore.actions._removeDrumrow( {}, rowId, get ),
 		[ "drumrows", "removeDrumrow", patName ],
 	];
 };
 
-DAWCore.actions._removeDrumrow = ( rowId, get ) => {
+DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 	const bPM = get.beatsPerMeasure(),
 		blocksEnt = Object.entries( get.blocks() ),
 		patternsEnt = Object.entries( get.patterns() ),
-		obj = { drumrows: { [ rowId ]: undefined } },
 		objDrums = {},
 		objBlocks = {},
 		objPatterns = {};
 
+	obj.drumrows = obj.drumrows || {};
+	obj.drumrows[ rowId ] = undefined;
 	patternsEnt.forEach( ( [ patId, pat ] ) => {
 		if ( pat.type === "drums" ) {
 			const drumsObj = {},
 				drumWhenMax = Object.entries( get.drums( pat.drums ) )
 					.reduce( ( max, [ drumId, drum ] ) => {
-						if ( drum.row === rowId ) {
+						if ( drum.row in obj.drumrows ) {
 							drumsObj[ drumId ] = undefined;
 							return max;
 						}
