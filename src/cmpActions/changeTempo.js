@@ -40,10 +40,10 @@ DAWCore.actions.changeTempo = function( bpm, bPM, sPB ) {
 					}
 				} );
 				if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-					const cmpDur = this.composition.getNewDuration( objPatterns );
+					const cmpDur = DAWCore.common.calcNewDuration( get, objPatterns );
 
 					obj.blocks = objBlocks;
-					if ( Math.abs( cmpDur - get.duration() ) > .001 ) {
+					if ( cmpDur !== get.duration() ) {
 						obj.duration = cmpDur;
 					}
 				}

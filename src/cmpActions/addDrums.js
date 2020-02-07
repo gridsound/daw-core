@@ -61,20 +61,16 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 			obj = { drums: { [ pat.drums ]: newDrums } };
 
 		if ( pat.duration !== duration ) {
-			let blockWhenMax = 0;
 			const blocks = Object.entries( this.get.blocks() ).reduce( ( obj, [ blcId, blc ] ) => {
 					if ( blc.pattern === patternId && !blc.durationEdited ) {
 						obj[ blcId ] = { duration };
-						blockWhenMax = Math.max( blockWhenMax, blc.when + duration );
-					} else {
-						blockWhenMax = Math.max( blockWhenMax, blc.when + blc.duration );
 					}
 					return obj;
 				}, {} );
 
 			obj.patterns = { [ patternId ]: { duration } };
 			if ( DAWCore.utils.isntEmpty( blocks ) ) {
-				const duration = Math.max( 1, Math.ceil( blockWhenMax / bPM ) ) * bPM;
+				const duration = DAWCore.common.calcNewDuration( this.get, obj.patterns );
 
 				obj.blocks = blocks;
 				if ( duration !== this.get.duration() ) {

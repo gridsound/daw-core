@@ -230,6 +230,7 @@ class DAWCore {
 
 DAWCore.json = {};
 DAWCore.utils = {};
+DAWCore.common = {};
 DAWCore.actions = {};
 
 /*

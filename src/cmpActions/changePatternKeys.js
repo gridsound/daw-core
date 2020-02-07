@@ -7,7 +7,7 @@ DAWCore.actions.changePatternKeys = function( patId, keysObj, duration ) {
 
 	if ( duration !== pat.duration ) {
 		const objPatterns = { [ patId ]: { duration } },
-			cmpDur = this.composition.getNewDuration( objPatterns ),
+			cmpDur = DAWCore.common.calcNewDuration( this.get, objPatterns ),
 			objBlocks = Object.entries( this.get.blocks() )
 				.reduce( ( obj, [ id, blc ] ) => {
 					if ( blc.pattern === patId && !blc.durationEdited ) {
