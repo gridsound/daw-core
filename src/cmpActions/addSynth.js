@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.addSynth = function( get ) {
+DAWCore.actions.addSynth = get => {
 	const id = DAWCore.common.getNextIdOf( get.synths() ),
-		name = this._createUniqueName( "synths", "synth" ),
+		name = DAWCore.common.createUniqueName( "synths", "synth", get ),
 		obj = {
 			synths: { [ id ]: DAWCore.json.synth( name ) },
 			synthOpened: id,

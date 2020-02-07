@@ -203,12 +203,6 @@ class DAWCore {
 			? `DAWCore.${ fnName }: cmp is not defined`
 			: `DAWCore.${ fnName }: cmp.${ collection }[${ id }] is not defined`;
 	}
-
-	// .........................................................................
-	_createUniqueName( collection, name ) {
-		return DAWCore.uniqueName( name, Object.values(
-			this.get[ collection ]() ).map( obj => obj.name ) );
-	}
 }
 
 DAWCore.json = {};
