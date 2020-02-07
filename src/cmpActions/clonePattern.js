@@ -9,7 +9,7 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 
 	newPat.name = DAWCore.common.createUniqueName( "patterns", pat.name, get );
 	if ( type === "keys" || type === "drums" ) {
-		const newCnt = GSData.deepCopy( get[ type ]( pat[ type ] ) ),
+		const newCnt = DAWCore.utils.deepCopy( get[ type ]( pat[ type ] ) ),
 			newCntId = DAWCore.common.getNextIdOf( get[ type ]() );
 
 		newPat[ type ] = newCntId;

@@ -5,7 +5,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		act = this.daw.history.getCurrentAction(),
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
-	GSData.deepAssign( cmp, obj );
+	DAWCore.utils.deepAssign( cmp, obj );
 	this.change.fn.forEach( ( fn, attr ) => {
 		if ( typeof attr === "string" ) {
 			if ( attr in obj ) {
@@ -38,7 +38,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._waeffects.change( effects );
 	} ],
 	[ "blocks", function( { blocks } ) {
-		GSData.deepAssign( this._sched.data, blocks );
+		DAWCore.utils.deepAssign( this._sched.data, blocks );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.getFocusedObject() === this ) {

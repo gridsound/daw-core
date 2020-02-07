@@ -8,7 +8,7 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 			name: `${ cmp.name || "untitled" }.gs`,
 			url: this._exportCompositionToJSON(
 				DAWCore.Composition.epure(
-				GSData.deepCopy( cmp ) ) )
+				DAWCore.utils.deepCopy( cmp ) ) )
 		};
 	}
 };
