@@ -30,7 +30,52 @@ class DAWCore {
 		this._loopMs = 1;
 		this._focused = this.composition;
 		this._focusedStr = "composition";
-		this._getInit();
+		this.get = {
+			ctx: () => this.ctx,
+			destination: () => this.destination.getDestination(),
+			currentTime: () => this.composition.currentTime,
+			waeffect: id => this.composition._waeffects._wafxs.get( id ),
+			saveMode: () => this.composition.cmp.options.saveMode,
+			composition: ( saveMode, id ) => {
+				const cmp = this.composition.cmp;
+
+				return !id || ( cmp && id === cmp.id && saveMode === cmp.options.saveMode )
+					? cmp
+					: this.cmps[ saveMode ].get( id );
+			},
+			// .................................................................
+			id: () => this.composition.cmp.id,
+			bpm: () => this.composition.cmp.bpm,
+			name: () => this.composition.cmp.name,
+			loopA: () => this.composition.cmp.loopA,
+			loopB: () => this.composition.cmp.loopB,
+			duration: () => this.composition.cmp.duration,
+			beatsPerMeasure: () => this.composition.cmp.beatsPerMeasure,
+			stepsPerBeat: () => this.composition.cmp.stepsPerBeat,
+			synthOpened: () => this.composition.cmp.synthOpened,
+			patternBufferOpened: () => this.composition.cmp.patternBufferOpened,
+			patternDrumsOpened: () => this.composition.cmp.patternDrumsOpened,
+			patternKeysOpened: () => this.composition.cmp.patternKeysOpened,
+			// .................................................................
+			block: id => this.composition.cmp.blocks[ id ],
+			blocks: () => this.composition.cmp.blocks,
+			buffer: id => this.composition.cmp.buffers[ id ],
+			buffers: () => this.composition.cmp.buffers,
+			channel: id => this.composition.cmp.channels[ id ],
+			channels: () => this.composition.cmp.channels,
+			drumrow: id => this.composition.cmp.drumrows[ id ],
+			drumrows: () => this.composition.cmp.drumrows,
+			drums: id => id ? this.composition.cmp.drums[ id ] : this.composition.cmp.drums, // 1.
+			effect: id => this.composition.cmp.effects[ id ],
+			effects: () => this.composition.cmp.effects,
+			keys: id => id ? this.composition.cmp.keys[ id ] : this.composition.cmp.keys, // 1.
+			pattern: id => this.composition.cmp.patterns[ id ],
+			patterns: () => this.composition.cmp.patterns,
+			synth: id => this.composition.cmp.synths[ id ],
+			synths: () => this.composition.cmp.synths,
+			track: id => this.composition.cmp.tracks[ id ],
+			tracks: () => this.composition.cmp.tracks,
+		};
 		this.setLoopRate( 60 );
 		this.setCtx( ctx );
 		this.destination.setGain( this.env.def_appGain );
@@ -186,3 +231,9 @@ class DAWCore {
 DAWCore.json = {};
 DAWCore.utils = {};
 DAWCore.actions = {};
+
+/*
+1. The getter 'keys' and 'drums' can't use their singular form like the others getters
+   because 'key' and 'drum' are refering to the objects contained in ONE 'keys' or 'drums'.
+   So `keys[0]` is a 'keys' not a 'key', a 'key' would be `keys[0][0]`.
+*/
