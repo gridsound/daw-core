@@ -1,5 +1,5 @@
 "use strict";
 
-DAWCore.actions.removeDrums = function( patternId, rowId, whenFrom, whenTo ) {
-	return DAWCore.actions._addDrums.call( this, false, patternId, rowId, whenFrom, whenTo );
+DAWCore.actions.removeDrums = ( patternId, rowId, whenFrom, whenTo, get ) => {
+	return DAWCore.actions._addDrums( false, patternId, rowId, whenFrom, whenTo, get );
 };

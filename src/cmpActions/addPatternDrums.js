@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.addPatternDrums = function() {
-	const pats = this.get.patterns(),
-		drumsId = DAWCore.common.getNextIdOf( this.get.keys() ),
+DAWCore.actions.addPatternDrums = function( get ) {
+	const pats = get.patterns(),
+		drumsId = DAWCore.common.getNextIdOf( get.keys() ),
 		patId = DAWCore.common.getNextIdOf( pats ),
 		patName = this._createUniqueName( "patterns", "drums" ),
 		order = Object.values( pats ).reduce( ( max, pat ) => {
@@ -17,7 +17,7 @@ DAWCore.actions.addPatternDrums = function() {
 				type: "drums",
 				name: patName,
 				drums: drumsId,
-				duration: this.get.beatsPerMeasure(),
+				duration: get.beatsPerMeasure(),
 			} },
 			patternDrumsOpened: patId,
 		};

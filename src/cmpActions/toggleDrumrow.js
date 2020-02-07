@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.toggleDrumrow = function( rowId ) {
+DAWCore.actions.toggleDrumrow = function( rowId, get ) {
 	const patName = this._getPatByRowId( rowId ).name,
-		toggle = !this.get.drumrow( rowId ).toggle;
+		toggle = !get.drumrow( rowId ).toggle;
 
 	return [
 		{ drumrows: { [ rowId ]: { toggle } } },

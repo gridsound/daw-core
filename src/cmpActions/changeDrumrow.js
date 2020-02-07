@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changeDrumrow = function( rowId, prop, val ) {
+DAWCore.actions.changeDrumrow = function( rowId, prop, val, get ) {
 	const patName = this._getPatByRowId( rowId ).name;
 
 	return [

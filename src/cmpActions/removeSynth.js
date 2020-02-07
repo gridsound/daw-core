@@ -1,11 +1,11 @@
 "use strict";
 
-DAWCore.actions.removeSynth = function( synthId ) {
+DAWCore.actions.removeSynth = ( synthId, get ) => {
 	const keys = {},
 		blocks = {},
 		patterns = {},
-		cmpBlocks = Object.entries( this.get.blocks() ),
-		cmpPatterns = Object.entries( this.get.patterns() ),
+		cmpBlocks = Object.entries( get.blocks() ),
+		cmpPatterns = Object.entries( get.patterns() ),
 		obj = { synths: { [ synthId ]: undefined } };
 
 	cmpPatterns.forEach( ( [ patId, pat ] ) => {
@@ -22,8 +22,8 @@ DAWCore.actions.removeSynth = function( synthId ) {
 	DAWCore.utils.addIfNotEmpty( obj, "keys", keys );
 	DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
 	DAWCore.utils.addIfNotEmpty( obj, "blocks", blocks );
-	if ( synthId === this.get.synthOpened() ) {
-		if ( !Object.keys( this.get.synths() ).some( k => {
+	if ( synthId === get.synthOpened() ) {
+		if ( !Object.keys( get.synths() ).some( k => {
 			if ( k !== synthId ) {
 				obj.synthOpened = k;
 				if ( !cmpPatterns.some( ( [ patId, pat ] ) => {
@@ -42,6 +42,6 @@ DAWCore.actions.removeSynth = function( synthId ) {
 	}
 	return [
 		obj,
-		[ "synths", "removeSynth", this.get.synth( synthId ).name ],
+		[ "synths", "removeSynth", get.synth( synthId ).name ],
 	];
 };

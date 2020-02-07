@@ -1,18 +1,18 @@
 "use strict";
 
-DAWCore.actions.addDrums = function( patternId, rowId, whenFrom, whenTo ) {
-	return DAWCore.actions._addDrums.call( this, true, patternId, rowId, whenFrom, whenTo );
+DAWCore.actions.addDrums = ( patternId, rowId, whenFrom, whenTo, get ) => {
+	return DAWCore.actions._addDrums( true, patternId, rowId, whenFrom, whenTo, get );
 };
 
-DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo ) {
-	const stepDur = 1 / this.get.stepsPerBeat(),
+DAWCore.actions._addDrums = ( status, patternId, rowId, whenFrom, whenTo, get ) => {
+	const stepDur = 1 / get.stepsPerBeat(),
 		whenA = Math.round( Math.min( whenFrom, whenTo ) / stepDur ),
 		whenB = Math.round( Math.max( whenFrom, whenTo ) / stepDur ),
-		pat = this.get.pattern( patternId ),
-		drums = this.get.drums( pat.drums ),
-		drumrows = this.get.drumrows(),
-		patRowId = this.get.drumrow( rowId ).pattern,
-		patRow = this.get.pattern( patRowId ),
+		pat = get.pattern( patternId ),
+		drums = get.drums( pat.drums ),
+		drumrows = get.drumrows(),
+		patRowId = get.drumrow( rowId ).pattern,
+		patRow = get.pattern( patRowId ),
 		drumsEnt = Object.entries( drums ),
 		drumsMap = drumsEnt.reduce( ( map, [ drumId, drum ] ) => {
 			if ( drum.row === rowId ) {
@@ -56,12 +56,12 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 		}, 0 );
 	}
 	if ( nbDrums > 0 ) {
-		const bPM = this.get.beatsPerMeasure(),
+		const bPM = get.beatsPerMeasure(),
 			duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM,
 			obj = { drums: { [ pat.drums ]: newDrums } };
 
 		if ( pat.duration !== duration ) {
-			const blocks = Object.entries( this.get.blocks() ).reduce( ( obj, [ blcId, blc ] ) => {
+			const blocks = Object.entries( get.blocks() ).reduce( ( obj, [ blcId, blc ] ) => {
 					if ( blc.pattern === patternId && !blc.durationEdited ) {
 						obj[ blcId ] = { duration };
 					}
@@ -70,10 +70,10 @@ DAWCore.actions._addDrums = function( status, patternId, rowId, whenFrom, whenTo
 
 			obj.patterns = { [ patternId ]: { duration } };
 			if ( DAWCore.utils.isntEmpty( blocks ) ) {
-				const duration = DAWCore.common.calcNewDuration( this.get, obj.patterns );
+				const duration = DAWCore.common.calcNewDuration( get, obj.patterns );
 
 				obj.blocks = blocks;
-				if ( duration !== this.get.duration() ) {
+				if ( duration !== get.duration() ) {
 					obj.duration = duration;
 				}
 			}

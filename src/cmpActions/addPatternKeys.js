@@ -1,11 +1,11 @@
 "use strict";
 
-DAWCore.actions.addPatternKeys = function( synthId ) {
-	const pats = this.get.patterns(),
-		keysId = DAWCore.common.getNextIdOf( this.get.keys() ),
+DAWCore.actions.addPatternKeys = function( synthId, get ) {
+	const pats = get.patterns(),
+		keysId = DAWCore.common.getNextIdOf( get.keys() ),
 		patId = DAWCore.common.getNextIdOf( pats ),
 		patName = this._createUniqueName( "patterns", "keys" ),
-		synName = this.get.synth( synthId ).name,
+		synName = get.synth( synthId ).name,
 		order = Object.values( pats ).reduce( ( max, pat ) => {
 			return pat.synth !== synthId
 				? max
@@ -19,12 +19,12 @@ DAWCore.actions.addPatternKeys = function( synthId ) {
 				name: patName,
 				keys: keysId,
 				synth: synthId,
-				duration: this.get.beatsPerMeasure(),
+				duration: get.beatsPerMeasure(),
 			} },
 			patternKeysOpened: patId,
 		};
 
-	if ( synthId !== this.get.synthOpened() ) {
+	if ( synthId !== get.synthOpened() ) {
 		obj.synthOpened = synthId;
 	}
 	return [

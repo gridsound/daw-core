@@ -1,8 +1,7 @@
 "use strict";
 
-DAWCore.actions.changeTempo = function( bpm, bPM, sPB ) {
-	const get = this.get,
-		bpmChanged = bpm !== get.bpm(),
+DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
+	const bpmChanged = bpm !== get.bpm(),
 		timeSignChanged =
 			bPM !== get.beatsPerMeasure() ||
 			sPB !== get.stepsPerBeat();

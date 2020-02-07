@@ -93,7 +93,7 @@ class DAWCore {
 		}
 	}
 	callAction( action, ...args ) {
-		const ret = DAWCore.actions[ action ].apply( this, args );
+		const ret = DAWCore.actions[ action ].call( this, ...args, this.get );
 
 		if ( ret ) {
 			this.compositionChange( ...ret );

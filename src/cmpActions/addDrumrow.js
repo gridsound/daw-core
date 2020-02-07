@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.addDrumrow = function( pattern ) {
-	const pat = this.get.pattern( pattern );
+DAWCore.actions.addDrumrow = ( pattern, get ) => {
+	const pat = get.pattern( pattern );
 
 	if ( pat.type === "buffer" ) {
-		const drumrows = this.get.drumrows(),
+		const drumrows = get.drumrows(),
 			rowId = DAWCore.common.getNextIdOf( drumrows ),
 			rowObj = {
 				order: DAWCore.common.getNextOrderOf( drumrows ),

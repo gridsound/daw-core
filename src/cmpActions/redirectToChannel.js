@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.redirectToChannel = function( family, id, dest ) {
-	const node = this.get[ family ]( id ),
-		chanName = this.get.channel( dest ).name,
+DAWCore.actions.redirectToChannel = ( family, id, dest, get ) => {
+	const node = get[ family ]( id ),
+		chanName = get.channel( dest ).name,
 		families = `${ family }s`;
 
 	return [

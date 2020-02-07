@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.renamePattern = function( id, newName ) {
+DAWCore.actions.renamePattern = ( id, newName, get ) => {
 	const name = DAWCore.trim2( newName ),
-		pat = this.get.pattern( id );
+		pat = get.pattern( id );
 
 	if ( name && name !== pat.name ) {
 		return [
