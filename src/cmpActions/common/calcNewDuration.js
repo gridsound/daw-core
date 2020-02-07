@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.common.calcNewDuration = ( get, newPatDurations ) => {
+DAWCore.common.calcNewDuration = ( newPatDurations, get ) => {
 	const bPM = get.beatsPerMeasure(),
 		dur = Object.values( get.blocks() ).reduce( ( max, blc ) => {
 			const pat = newPatDurations[ blc.pattern ],

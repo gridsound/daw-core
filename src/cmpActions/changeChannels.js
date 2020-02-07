@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changeChannels = function( channels, msg, get ) {
+DAWCore.actions.changeChannels = ( channels, msg, get ) => {
 	const synths = Object.entries( get.synths() ),
 		patterns = Object.entries( get.patterns() )
 			.filter( kv => kv[ 1 ].type === "buffer" ),

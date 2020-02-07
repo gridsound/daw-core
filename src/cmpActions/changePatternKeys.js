@@ -1,13 +1,13 @@
 "use strict";
 
-DAWCore.actions.changePatternKeys = function( patId, keysObj, duration, get ) {
+DAWCore.actions.changePatternKeys = ( patId, keysObj, duration, get ) => {
 	const pat = get.pattern( patId ),
 		keys = get.keys( pat.keys ),
 		obj = { keys: { [ pat.keys ]: keysObj } };
 
 	if ( duration !== pat.duration ) {
 		const objPatterns = { [ patId ]: { duration } },
-			cmpDur = DAWCore.common.calcNewDuration( get, objPatterns ),
+			cmpDur = DAWCore.common.calcNewDuration( objPatterns, get ),
 			objBlocks = Object.entries( get.blocks() )
 				.reduce( ( obj, [ id, blc ] ) => {
 					if ( blc.pattern === patId && !blc.durationEdited ) {
