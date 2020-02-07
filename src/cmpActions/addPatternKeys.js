@@ -2,8 +2,8 @@
 
 DAWCore.actions.addPatternKeys = function( synthId ) {
 	const pats = this.get.patterns(),
-		keysId = this._getNextIdOf( this.get.keys() ),
-		patId = this._getNextIdOf( pats ),
+		keysId = DAWCore.common.getNextIdOf( this.get.keys() ),
+		patId = DAWCore.common.getNextIdOf( pats ),
 		patName = this._createUniqueName( "patterns", "keys" ),
 		synName = this.get.synth( synthId ).name,
 		order = Object.values( pats ).reduce( ( max, pat ) => {

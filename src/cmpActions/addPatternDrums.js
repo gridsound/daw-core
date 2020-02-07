@@ -2,8 +2,8 @@
 
 DAWCore.actions.addPatternDrums = function() {
 	const pats = this.get.patterns(),
-		drumsId = this._getNextIdOf( this.get.keys() ),
-		patId = this._getNextIdOf( pats ),
+		drumsId = DAWCore.common.getNextIdOf( this.get.keys() ),
+		patId = DAWCore.common.getNextIdOf( pats ),
 		patName = this._createUniqueName( "patterns", "drums" ),
 		order = Object.values( pats ).reduce( ( max, pat ) => {
 			return pat.type !== "drums"

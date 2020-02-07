@@ -92,6 +92,13 @@ class DAWCore {
 			this._clockUpdate();
 		}
 	}
+	callAction( action, ...args ) {
+		const ret = DAWCore.actions[ action ].apply( this, args );
+
+		if ( ret ) {
+			this.compositionChange( ...ret );
+		}
+	}
 	compositionChange( obj, msg ) {
 		this.history.stackChange( obj, msg );
 	}
@@ -143,20 +150,6 @@ class DAWCore {
 	}
 	setLoopRate( fps ) {
 		this._loopMs = 1000 / fps | 0;
-	}
-
-	// .........................................................................
-	_getPatByRowId( rowId ) {
-		return this.get.pattern( this.get.drumrow( rowId ).pattern );
-	}
-
-	// .........................................................................
-	callAction( action, ...args ) {
-		const ret = DAWCore.actions[ action ].apply( this, args );
-
-		if ( ret ) {
-			this.compositionChange( ...ret );
-		}
 	}
 
 	// private:
@@ -212,11 +205,8 @@ class DAWCore {
 	}
 
 	// .........................................................................
-	_getNextIdOf( obj ) {
-		const id = Object.keys( obj )
-			.reduce( ( max, id ) => Math.max( max, parseInt( id ) || 0 ), 0 );
-
-		return `${ id + 1 }`;
+	_getPatByRowId( rowId ) {
+		return this.get.pattern( this.get.drumrow( rowId ).pattern );
 	}
 	_getNextOrderOf( obj ) {
 		return Object.values( obj )
