@@ -1,8 +1,7 @@
 "use strict";
 
-DAWCore.actions.removePattern = function( patId ) {
-	const get = this.get,
-		pat = get.pattern( patId ),
+DAWCore.actions.removePattern = ( patId, get ) => {
+	const pat = get.pattern( patId ),
 		type = pat.type,
 		obj = { patterns: { [ patId ]: undefined } },
 		blocks = Object.entries( get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
@@ -12,7 +11,14 @@ DAWCore.actions.removePattern = function( patId ) {
 			return blocks;
 		}, {} );
 
-	if ( type !== "buffer" ) {
+	if ( type === "buffer" ) {
+		Object.entries( get.drumrows() ).forEach( kv => {
+			if ( kv[ 1 ].pattern === patId ) {
+				DAWCore.utils.deepAssign( obj,
+					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], get ) );
+			}
+		} );
+	} else {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
 	if ( DAWCore.utils.isntEmpty( blocks ) ) {
