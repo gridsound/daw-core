@@ -23,12 +23,11 @@ DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 		if ( pat.type === "drums" ) {
 			const drumsObj = {},
 				drumWhenMax = Object.entries( get.drums( pat.drums ) )
-					.reduce( ( max, [ drumId, drum ] ) => {
-						if ( drum.row in obj.drumrows ) {
-							drumsObj[ drumId ] = undefined;
-							return max;
+					.reduce( ( max, [ id, { row, when } ] ) => {
+						if ( row === rowId ) {
+							drumsObj[ id ] = undefined;
 						}
-						return Math.max( max, drum.when + .001 );
+						return row in obj.drumrows ? max : Math.max( max, when + .001 );
 					}, 0 );
 
 			if ( DAWCore.utils.isntEmpty( drumsObj ) ) {
