@@ -2,7 +2,11 @@
 
 DAWCore.utils.addIfNotEmpty = ( obj, attr, valObj ) => {
 	if ( DAWCore.utils.isntEmpty( valObj ) ) {
-		obj[ attr ] = valObj;
+		if ( attr in obj ) {
+			DAWCore.utils.deepAssign( obj[ attr ], valObj );
+		} else {
+			obj[ attr ] = valObj;
+		}
 	}
 	return obj;
 };
