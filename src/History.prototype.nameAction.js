@@ -19,12 +19,12 @@ DAWCore.History.actionsToText = {
 		removeLoop: () => [ "loop", `remove loop` ],
 	},
 	synth: {
-		addOsc: syn => [ "oscillator", `${ syn }: add osc` ],
-		removeOsc: syn => [ "oscillator", `${ syn }: remove osc` ],
-		reorderOsc: syn => [ "sort", `${ syn }: reorder oscs` ],
-		changeOsc: ( syn, prop, val ) => [ "oscillator", `${ syn }: osc's ${ prop } = ${ val }` ],
+		addOscillator: syn => [ "oscillator", `${ syn }: add osc` ],
+		removeOscillator: syn => [ "oscillator", `${ syn }: remove osc` ],
+		reorderOscillator: syn => [ "sort", `${ syn }: reorder oscs` ],
+		changeOscillator: ( syn, prop, val ) => [ "oscillator", `${ syn }: change osc ${ prop } -> ${ val }` ],
 		toggleLFO: ( syn, b ) => [ "osc-sine", `${ syn }: ${ b ? "enable" : "disable" } LFO` ],
-		changeLFOProp: ( syn, prop, val ) => [ "osc-sine", `${ syn }: LFO's ${ prop } = ${ val }` ],
+		changeLFO: ( syn, prop, val ) => [ "osc-sine", `${ syn }: LFO's ${ prop } = ${ val }` ],
 	},
 	synths: {
 		addSynth: syn => [ "oscillator", `add new synth "${ syn }"` ],
@@ -71,6 +71,9 @@ DAWCore.History.actionsToText = {
 		removeDrums: ( pat, row, nb ) => [ "drums", `drums: remove ${ nb } "${ row }" of "${ pat }"` ],
 	},
 };
+
+// Everything below this line has to be removed to be sorted and rewrite above.
+// .............................................................................
 
 DAWCore.History.prototype._nameAction = function( act ) {
 	const cmp = this.daw.get.composition(),
