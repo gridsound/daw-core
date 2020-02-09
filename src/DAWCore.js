@@ -93,10 +93,16 @@ class DAWCore {
 		}
 	}
 	callAction( action, ...args ) {
-		const ret = DAWCore.actions[ action ]( ...args, this.get );
+		const fn = DAWCore.actions[ action ];
 
-		if ( ret ) {
-			this.compositionChange( ...ret );
+		if ( !fn ) {
+			console.error( `DAWCore: undefined action "${ action }"` );
+		} else {
+			const ret = fn( ...args, this.get );
+
+			if ( ret ) {
+				this.compositionChange( ...ret );
+			}
 		}
 	}
 	compositionChange( obj, msg ) {
