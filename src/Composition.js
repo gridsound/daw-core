@@ -215,6 +215,15 @@ DAWCore.Composition = class {
 					waKeys.change( cmp.keys[ pat.keys ] );
 					waKeys.start( when, off, dur );
 				} break;
+				case "drums": {
+					const waDrums = new gswaDrumsScheduler( this.ctx );
+
+					this._startedSched.set( startedId, [ patId, waDrums ] );
+					waDrums.scheduler.setBPM( cmp.bpm );
+					waDrums.setDrumrows( this.daw._wadrumrows );
+					waDrums.change( cmp.drums[ pat.drums ] );
+					waDrums.start( when, off, dur );
+				} break;
 			}
 		}
 	}
