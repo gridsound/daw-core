@@ -6,6 +6,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
 	DAWCore.utils.diffAssign( cmp, obj );
+	this.daw._wadrumrows.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
 		if ( typeof attr === "string" ) {
 			if ( attr in obj ) {

@@ -2,7 +2,8 @@
 
 class DAWCore {
 	constructor() {
-		const ctx = new AudioContext();
+		const ctx = new AudioContext(),
+			wadrumrows = new gswaDrumrows();
 
 		this.cb = {};
 		this.env = Object.seal( {
@@ -20,6 +21,7 @@ class DAWCore {
 			cloud: new Map(),
 		};
 		this.ctx = ctx;
+		this._wadrumrows = wadrumrows;
 		this.drums = new DAWCore.Drums( this );
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
@@ -43,6 +45,10 @@ class DAWCore {
 					? cmp
 					: this.cmps[ saveMode ].get( id );
 			},
+			// .................................................................
+			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
+			audioChanIn: id => this.composition._wamixer.getChanInput( id ),
+			audioChanOut: id => this.composition._wamixer.getChanOutput( id ),
 			// .................................................................
 			id: () => this.composition.cmp.id,
 			bpm: () => this.composition.cmp.bpm,
@@ -76,6 +82,9 @@ class DAWCore {
 			track: id => this.composition.cmp.tracks[ id ],
 			tracks: () => this.composition.cmp.tracks,
 		};
+
+		wadrumrows.getAudioBuffer = this.get.audioBuffer;
+		wadrumrows.getChannelInput = this.get.audioChanIn;
 		this.setLoopRate( 60 );
 		this.setCtx( ctx );
 		this.destination.setGain( this.env.def_appGain );
@@ -83,6 +92,7 @@ class DAWCore {
 
 	setCtx( ctx ) {
 		this.ctx = ctx;
+		this._wadrumrows.setContext( ctx );
 		this.destination.setCtx( ctx );
 		this.composition.setCtx( ctx );
 	}
