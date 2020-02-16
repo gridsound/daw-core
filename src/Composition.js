@@ -32,12 +32,12 @@ DAWCore.Composition = class {
 		gswaPeriodicWaves.clearCache();
 		this.ctx = ctx;
 		this._wamixer.setContext( ctx ); // 1.
-		this._wamixer.connect( this.daw.get.destination() );
+		this._wamixer.connect( this.daw.get.audioDestination() );
 		this._waeffects.setContext( ctx );
 		this._synths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.output.disconnect();
-			syn.output.connect( this._wamixer.getChanInput( this.cmp.synths[ synId ].dest ) );
+			syn.output.connect( this.daw.get.audioChanIn( this.cmp.synths[ synId ].dest ) );
 		} );
 	}
 	load( cmpOri ) {
@@ -113,9 +113,6 @@ DAWCore.Composition = class {
 
 	// controls
 	// .........................................................................
-	getSynth( id ) {
-		return this._synths.get( id );
-	}
 	getCurrentTime() {
 		return this._sched.getCurrentOffsetBeat();
 	}
@@ -179,7 +176,7 @@ DAWCore.Composition = class {
 		this._startedBuffers.forEach( ( [ patId2, absn ] ) => {
 			if ( patId2 === patId ) {
 				absn.disconnect();
-				absn.connect( this._wamixer.getChanInput( chanId ) );
+				absn.connect( this.daw.get.audioChanIn( chanId ) );
 			}
 		} );
 	}
@@ -195,13 +192,13 @@ DAWCore.Composition = class {
 
 			switch ( pat.type ) {
 				case "buffer": {
-					const buf = this.daw.buffers.getBuffer( cmp.buffers[ pat.buffer ] ).buffer;
+					const buf = this.daw.get.audioBuffer( pat.buffer );
 
 					if ( buf ) {
 						const absn = this.ctx.createBufferSource();
 
 						absn.buffer = buf;
-						absn.connect( this._wamixer.getChanInput( pat.dest ) );
+						absn.connect( this.daw.get.audioChanIn( pat.dest ) );
 						absn.start( when, off, dur );
 						this._startedBuffers.set( startedId, [ patId, absn ] );
 					}
@@ -211,7 +208,7 @@ DAWCore.Composition = class {
 
 					this._startedSched.set( startedId, [ patId, waKeys ] );
 					waKeys.scheduler.setBPM( cmp.bpm );
-					waKeys.setSynth( this._synths.get( pat.synth ) );
+					waKeys.setSynth( this.daw.get.audioSynth( pat.synth ) );
 					waKeys.change( cmp.keys[ pat.keys ] );
 					waKeys.start( when, off, dur );
 				} break;

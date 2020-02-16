@@ -27,8 +27,7 @@ DAWCore.Pianoroll = class {
 		}
 	}
 	setSynth( id ) {
-		const daw = this.daw,
-			syn = id ? daw.composition.getSynth( id ) : null,
+		const syn = id ? this.daw.get.audioSynth( id ) : null,
 			wasPlaying = this.playing;
 
 		if ( syn !== this._synth ) {

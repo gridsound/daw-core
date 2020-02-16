@@ -33,10 +33,7 @@ class DAWCore {
 		this._focused = this.composition;
 		this._focusedStr = "composition";
 		this.get = {
-			ctx: () => this.ctx,
-			destination: () => this.destination.getDestination(),
 			currentTime: () => this.composition.currentTime,
-			waeffect: id => this.composition._waeffects._wafxs.get( id ),
 			saveMode: () => this.composition.cmp.options.saveMode,
 			composition: ( saveMode, id ) => {
 				const cmp = this.composition.cmp;
@@ -46,9 +43,13 @@ class DAWCore {
 					: this.cmps[ saveMode ].get( id );
 			},
 			// .................................................................
+			ctx: () => this.ctx,
+			audioDestination: () => this.destination.getDestination(),
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
 			audioChanIn: id => this.composition._wamixer.getChanInput( id ),
 			audioChanOut: id => this.composition._wamixer.getChanOutput( id ),
+			audioEffect: id => this.composition._waeffects._wafxs.get( id ),
+			audioSynth: id => this.composition._synths.get( id ),
 			// .................................................................
 			id: () => this.composition.cmp.id,
 			bpm: () => this.composition.cmp.bpm,
