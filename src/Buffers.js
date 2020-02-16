@@ -23,7 +23,7 @@ DAWCore.Buffers = class {
 		this._files.set( key, bufCpy );
 		return !url
 			? Promise.resolve( bufCpy )
-			: fetch( `http://localhost/gridsound/assets/samples/${ url }` )
+			: fetch( `../assets/samples/${ url }` )
 				.then( res => res.arrayBuffer() )
 				.then( arr => this.daw.ctx.decodeAudioData( arr ) )
 				.then( buffer => {
