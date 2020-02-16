@@ -2,11 +2,9 @@
 
 DAWCore.Drums = class {
 	constructor( daw ) {
-		const waDrums = null;
-		// const waDrums = new gswaDrumsScheduler( daw.ctx );
+		const waDrums = new gswaDrumsScheduler( daw.ctx );
 
 		this.daw = daw;
-		// this.keys = {};
 		this.looping =
 		this.playing = false;
 		this.loopA =
@@ -14,22 +12,24 @@ DAWCore.Drums = class {
 		this.duration = 0;
 		this._ctx = daw.ctx;
 		this._waDrums = waDrums;
+
+		waDrums.setDrumrows( daw._wadrumrows );
 	}
 
-	change( patObj, keysObj ) {
-		// this._waDrums.change( keysObj );
-		// if ( patObj && "duration" in patObj ) {
-		// 	this.duration = patObj.duration;
-		// 	if ( !this.looping && this.playing ) {
-		// 		this._waDrums.scheduler.setLoopBeat( 0, this.duration );
-		// 	}
-		// }
+	change( patObj, drumsObj ) {
+		this._waDrums.change( drumsObj );
+		if ( patObj && "duration" in patObj ) {
+			this.duration = patObj.duration;
+			if ( !this.looping && this.playing ) {
+				this._waDrums.scheduler.setLoopBeat( 0, this.duration );
+			}
+		}
 	}
 	openPattern( id ) {
 		const daw = this.daw,
 			wasPlaying = this.playing;
 
-		id ? daw.pianorollFocus()
+		id ? daw.drumsFocus()
 			: daw.compositionFocus( "-f" );
 		if ( wasPlaying ) {
 			daw.stop();
@@ -39,8 +39,7 @@ DAWCore.Drums = class {
 		if ( id ) {
 			const pat = daw.get.pattern( id );
 
-			// this.setSynth( pat.synth );
-			this.change( pat, daw.get.keys( pat.keys ) );
+			this.change( pat, daw.get.drums( pat.drums ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}
@@ -50,7 +49,6 @@ DAWCore.Drums = class {
 	// controls
 	// .........................................................................
 	getCurrentTime() {
-		return 0;
 		return this._waDrums.scheduler.getCurrentOffsetBeat();
 	}
 	setCurrentTime( t ) {

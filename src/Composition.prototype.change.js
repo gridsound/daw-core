@@ -30,6 +30,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._sched.setBPM( bpm );
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
 		this._waeffects.setBPM( bpm );
+		this.daw.drums.setBPM( bpm );
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "channels", function( { channels } ) {
@@ -93,7 +94,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		Object.entries( keys ).forEach( ( [ keysId, keysObj ] ) => {
 			pats.some( ( [ patId, patObj ] ) => {
 				if ( patObj.keys === keysId ) {
-					this.assignPatternKeysChange( patId, keysObj );
+					this.assignPatternChange( patId, keysObj );
 					if ( patId === patOpened ) {
 						this.daw.pianoroll.change( patterns && patterns[ patId ], keysObj );
 					}
@@ -102,8 +103,27 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} );
 		} );
 	} ],
+	[ "drums", function( { drums, patterns } ) {
+		const pats = Object.entries( this.cmp.patterns ),
+			patOpened = this.cmp.patternDrumsOpened;
+
+		Object.entries( drums ).forEach( ( [ drumsId, drumsObj ] ) => {
+			pats.some( ( [ patId, patObj ] ) => {
+				if ( patObj.drums === drumsId ) {
+					this.assignPatternChange( patId, drumsObj );
+					if ( patId === patOpened ) {
+						this.daw.drums.change( patterns && patterns[ patId ], drumsObj );
+					}
+					return true;
+				}
+			} );
+		} );
+	} ],
 	[ "patternKeysOpened", function( obj ) {
 		this.daw.pianoroll.openPattern( obj.patternKeysOpened );
+	} ],
+	[ "patternDrumsOpened", function( obj ) {
+		this.daw.drums.openPattern( obj.patternDrumsOpened );
 	} ],
 	[ "synthOpened", function( obj ) {
 		this.daw.pianoroll.setSynth( obj.synthOpened );

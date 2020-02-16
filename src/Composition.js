@@ -166,7 +166,7 @@ DAWCore.Composition = class {
 	}
 
 	// .........................................................................
-	assignPatternKeysChange( patId, keys ) {
+	assignPatternChange( patId, keys ) {
 		this._startedSched.forEach( ( [ patId2, sched ] ) => {
 			if ( patId2 === patId ) {
 				sched.change( keys );

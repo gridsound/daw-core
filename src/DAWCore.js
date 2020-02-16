@@ -134,18 +134,17 @@ class DAWCore {
 		}
 	}
 	pianorollFocus( force ) {
-		if ( this._focused !== this.pianoroll && this.pianoroll && this.get.patternKeysOpened() ) {
+		if ( this._focused !== this.pianoroll && this.get.patternKeysOpened() ) {
 			this._focusOn( "pianoroll", force );
 		}
 	}
 	drumsFocus( force ) {
-		if ( this._focused !== this.drums && this.drums && this.get.patternDrumsOpened() ) {
+		if ( this._focused !== this.drums && this.get.patternDrumsOpened() ) {
 			this._focusOn( "drums", force );
 		}
 	}
 	isPlaying() {
-		return this.composition.playing ||
-			( this.pianoroll ? this.pianoroll.playing : false );
+		return this.composition.playing || this.pianoroll.playing || this.drums.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();
