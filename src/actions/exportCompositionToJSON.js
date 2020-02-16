@@ -21,6 +21,7 @@ DAWCore._exportJSONTabs = {
 	buffers: 3,
 	channels: 3,
 	patterns: 3,
+	drumrows: 3,
 };
 
 DAWCore.prototype._exportCompositionToJSON = function( cmp ) {

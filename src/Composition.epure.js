@@ -6,6 +6,9 @@ DAWCore.Composition.epure = function( cmp ) {
 		delete cmp.loopA;
 		delete cmp.loopB;
 	}
+	Object.values( cmp.drumrows ).forEach( row => {
+		if ( row.toggle ) { delete row.toggle; }
+	} );
 	Object.values( cmp.tracks ).forEach( tr => {
 		if ( !tr.name ) { delete tr.name; }
 		if ( tr.toggle ) { delete tr.toggle; }

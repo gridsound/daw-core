@@ -31,8 +31,11 @@ DAWCore.Composition.format = function( cmp ) {
 
 	// drums
 	// ..........................................
-	cmp.drumrows = cmp.drumrows || {};
 	cmp.drums = cmp.drums || {};
+	cmp.drumrows = cmp.drumrows || {};
+	Object.values( cmp.drumrows ).forEach( row => {
+		row.toggle = row.toggle !== false;
+	} );
 
 	// channels
 	// ..........................................
