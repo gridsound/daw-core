@@ -88,6 +88,7 @@ DAWCore.Composition = class {
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
+			this.daw._wadrumrows.clear();
 			this._saved = true;
 			this.daw._call( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
