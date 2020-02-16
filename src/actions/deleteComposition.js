@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.prototype.deleteComposition = function( saveMode, id ) {
-	if ( id === this.get.id() ) {
+	if ( this.composition.cmp && id === this.get.id() ) {
 		this.closeComposition();
 	}
 	this._deleteComposition( this.cmps[ saveMode ].get( id ) );
