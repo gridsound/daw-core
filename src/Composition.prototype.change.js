@@ -7,6 +7,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 
 	DAWCore.utils.diffAssign( cmp, obj );
 	this.daw._wadrumrows.change( obj );
+	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
 		if ( typeof attr === "string" ) {
 			if ( attr in obj ) {
@@ -35,9 +36,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	} ],
 	[ "channels", function( { channels } ) {
 		this._wamixer.change( channels );
-	} ],
-	[ "effects", function( { effects } ) {
-		this._waeffects.change( effects );
 	} ],
 	[ "blocks", function( { blocks } ) {
 		DAWCore.utils.diffAssign( this._sched.data, blocks );
