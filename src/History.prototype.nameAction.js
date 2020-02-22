@@ -55,10 +55,10 @@ DAWCore.History.actionsToText = {
 		redirectPatternKeys: ( pat, syn ) => [ "redirect", `redirect keys "${ pat }" to synth "${ syn }"` ],
 	},
 	effects: {
-		addFx: ( type, dest, get ) => [ "effects", `fx: new ${ type } on ${ get.channel( dest ).name }`, ],
-		toggleFx: ( type, b, dest, get ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } of ${ get.channel( dest ).name }`, ],
-		removeFx: ( type, dest, get ) => [ "minus", `fx: remove ${ type } of ${ get.channel( dest ).name }`, ],
-		changeFxData: ( type, dest, _act, get ) => [ "effects", `fx: change ${ type } of ${ get.channel( dest ).name }` ],
+		addEffect: ( dest, type ) => [ "effects", `fx: new ${ type } on ${ dest }`, ],
+		toggleEffect: ( dest, type, b ) => [ b ? "unmute" : "mute", `fx: ${ b ? "unmute" : "mute" } ${ type } of ${ dest }`, ],
+		removeEffect: ( dest, type ) => [ "minus", `fx: remove ${ type } of ${ dest }`, ],
+		changeEffect: ( dest, type, prop ) => [ "effects", `fx: change ${ type }'s ${ prop } of ${ dest }` ],
 	},
 	drumrows: {
 		addDrumrow: row => [ "drums", `drumrows: new "${ row }"` ],
