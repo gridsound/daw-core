@@ -4,8 +4,11 @@ DAWCore.History.prototype.nameAction = function( act, msg ) {
 	if ( msg ) {
 		const [ part, actionName, ...args ] = msg,
 			fn = DAWCore.History.actionsToText[ part ][ actionName ],
-			[ i, t ] = fn( ...args, this.daw.get );
+			[ i, t ] = fn ? fn( ...args ) : { i: "close", t: "undefined" };
 
+		if ( !fn ) {
+			console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );
+		}
 		return { i, t };
 	}
 	return this._nameAction( act );
@@ -84,7 +87,7 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
 		DAWCore.History._nameAction_blocks( cmp, r, u ) ||
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
-		{ i: "", t: "" }
+		{ i: "close", t: "undefined" }
 	);
 };
 
