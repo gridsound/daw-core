@@ -22,7 +22,7 @@ DAWCore.actions.changeChannels = ( channels, msg, get ) => {
 			} );
 		}
 	} );
-	DAWCore.utils.addIfNotEmpty( obj, "synths", objSynths );
-	DAWCore.utils.addIfNotEmpty( obj, "patterns", objPatterns );
+	GSUtils.addIfNotEmpty( obj, "synths", objSynths );
+	GSUtils.addIfNotEmpty( obj, "patterns", objPatterns );
 	return [ obj, msg ];
 };

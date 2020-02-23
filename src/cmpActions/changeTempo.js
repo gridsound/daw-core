@@ -27,7 +27,7 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 					}
 				}
 			} );
-			if ( DAWCore.utils.isntEmpty( objPatterns ) ) {
+			if ( GSUtils.isntEmpty( objPatterns ) ) {
 				const objBlocks = {};
 
 				obj.patterns = objPatterns;
@@ -38,7 +38,7 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 						objBlocks[ id ] = { duration: pat.duration };
 					}
 				} );
-				if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
+				if ( GSUtils.isntEmpty( objBlocks ) ) {
 					const cmpDur = DAWCore.common.calcNewDuration( objPatterns, get );
 
 					obj.blocks = objBlocks;

@@ -7,6 +7,6 @@ DAWCore.actions.redirectToChannel = ( family, id, dest, get ) => {
 
 	return [
 		{ [ families ]: { [ id ]: { dest } } },
-		[ families, `redirect${ DAWCore.utils.capitalize( family ) }`, node.name, chanName ],
+		[ families, `redirect${ GSUtils.capitalize( family ) }`, node.name, chanName ],
 	];
 };

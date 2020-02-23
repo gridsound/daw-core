@@ -17,7 +17,7 @@ DAWCore.actions.changePatternKeys = ( patId, keysObj, duration, get ) => {
 				}, {} );
 
 		obj.patterns = objPatterns;
-		DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
+		GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
 		if ( Math.abs( cmpDur - get.duration() ) > .001 ) {
 			obj.duration = cmpDur;
 		}

@@ -42,7 +42,7 @@ DAWCore.Composition = class {
 	}
 	load( cmpOri ) {
 		return new Promise( ( res, rej ) => {
-			const cmp = DAWCore.utils.jsonCopy( cmpOri );
+			const cmp = GSUtils.jsonCopy( cmpOri );
 
 			if ( DAWCore.Composition.format( cmp ) ) {
 				this.unload();

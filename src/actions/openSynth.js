@@ -8,7 +8,7 @@ DAWCore.prototype.openSynth = function( id ) {
 		if ( patId !== this.get.patternKeysOpened() ) {
 			obj.patternKeysOpened = patId;
 		}
-		this.composition.change( obj, DAWCore.utils.composeUndo( this.get.composition(), obj ) );
+		this.composition.change( obj, GSUtils.composeUndo( this.get.composition(), obj ) );
 	}
 };
 

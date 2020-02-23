@@ -5,7 +5,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		act = this.daw.history.getCurrentAction(),
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
-	DAWCore.utils.diffAssign( cmp, obj );
+	GSUtils.diffAssign( cmp, obj );
 	this.daw._wadrumrows.change( obj );
 	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
@@ -38,7 +38,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._wamixer.change( channels );
 	} ],
 	[ "blocks", function( { blocks } ) {
-		DAWCore.utils.diffAssign( this._sched.data, blocks );
+		GSUtils.diffAssign( this._sched.data, blocks );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.getFocusedObject() === this ) {
