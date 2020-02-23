@@ -41,7 +41,7 @@ DAWCore.json.composition = ( env, id ) => {
 			0: { pattern: "0", track: "0", when: 0, duration: bPM },
 			1: { pattern: "1", track: "1", when: 0, duration: bPM },
 		},
-		synths: { 0: DAWCore.json.synth( "synth" ) },
+		synths: { 0: DAWCore.json.synth() },
 		drumrows: {
 			0: { order: 0, pattern: "2", gain: 1, pan: 0 },
 			1: { order: 1, pattern: "3", gain: 1, pan: 0 },

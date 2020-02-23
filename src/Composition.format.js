@@ -67,7 +67,7 @@ DAWCore.Composition.format = function( cmp ) {
 	// synths
 	// ..........................................
 	if ( !cmp.synths ) {
-		cmp.synths = { 0: DAWCore.json.synth( "synth" ) };
+		cmp.synths = { 0: DAWCore.json.synth() };
 	}
 	Object.values( cmp.synths ).forEach( syn => {
 		delete syn.envelopes;

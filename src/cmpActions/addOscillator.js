@@ -3,7 +3,7 @@
 DAWCore.actions.addOscillator = ( synthId, get ) => {
 	const oscs = get.synth( synthId ).oscillators,
 		id = DAWCore.common.getNextIdOf( oscs ),
-		osc = Object.assign( {}, DAWCore.json.oscillator );
+		osc = DAWCore.json.oscillator();
 
 	osc.order = DAWCore.common.getNextOrderOf( oscs );
 	return [
