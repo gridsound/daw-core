@@ -37,14 +37,7 @@ DAWCore.actions._addDrums = ( status, patternId, rowId, whenFrom, whenTo, get ) 
 			const when = w * stepDur;
 
 			drumWhenMax = Math.max( drumWhenMax, when + .001 );
-			newDrums[ nextDrumId + nbDrums ] = {
-				when,
-				row: rowId,
-				gain: 1,
-				pan: 0,
-				lowpass: 0,
-				highpass: 0,
-			};
+			newDrums[ nextDrumId + nbDrums ] = DAWCore.json.drum( { when, row: rowId } );
 			++nbDrums;
 		}
 	}
