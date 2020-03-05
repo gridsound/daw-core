@@ -35,7 +35,23 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "blocks", function( { blocks } ) {
-		GSUtils.diffAssign( this._sched.data, blocks );
+		const get = this.daw.get,
+			cpy = GSUtils.deepCopy( blocks ),
+			longPat = this.daw._wadrumrows.gsdata.longestPattern;
+
+		if ( longPat ) {
+			const bps = get.bpm() / 60,
+				maxBufDur = get.pattern( longPat ).duration * bps;
+
+			Object.entries( cpy ).forEach( ( [ blcId, blc ] ) => {
+				if ( blc && blc.duration !== undefined &&
+					get.pattern( get.block( blcId ).pattern ).type === "drums"
+				) {
+					blc.duration += maxBufDur; // 1.
+				}
+			} );
+		}
+		GSUtils.diffAssign( this._sched.data, cpy );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.getFocusedObject() === this ) {
@@ -124,3 +140,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this.daw.pianoroll.setSynth( obj.synthOpened );
 	} ],
 ] );
+
+/*
+1. We have to increase each drums pattern because
+   each drum will continue even after the end of the block.
+*/
