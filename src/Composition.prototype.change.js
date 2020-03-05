@@ -6,6 +6,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
 	GSUtils.diffAssign( cmp, obj );
+	this._wamixer.change( obj );
 	this.daw._wadrumrows.change( obj );
 	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
@@ -33,9 +34,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._waeffects.setBPM( bpm );
 		this.daw.drums.setBPM( bpm );
 		this.daw.pianoroll.setBPM( bpm );
-	} ],
-	[ "channels", function( { channels } ) {
-		this._wamixer.change( channels );
 	} ],
 	[ "blocks", function( { blocks } ) {
 		GSUtils.diffAssign( this._sched.data, blocks );
