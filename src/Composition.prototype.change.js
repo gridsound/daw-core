@@ -31,7 +31,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	[ "bpm", function( { bpm } ) {
 		this._sched.setBPM( bpm );
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
-		this._waeffects.setBPM( bpm );
 		this.daw.drums.setBPM( bpm );
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
