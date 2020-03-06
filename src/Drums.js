@@ -12,6 +12,7 @@ DAWCore.Drums = class {
 		this.duration = 0;
 		this._ctx = daw.ctx;
 		this._waDrums = waDrums;
+		Object.seal( this );
 
 		waDrums.setDrumrows( daw._wadrumrows );
 	}
@@ -70,6 +71,13 @@ DAWCore.Drums = class {
 		this.loopB = null;
 		this.looping = false;
 		this._waDrums.scheduler.setLoopBeat( 0, this.duration || this.daw.get.beatsPerMeasure() );
+	}
+	startLiveDrum( rowId ) {
+		this.daw._wadrumrows.startLiveDrum( rowId );
+	}
+	stopLiveDrum( rowId ) {
+		this.daw._wadrumrows.stopLiveDrum( rowId );
+		this.daw._call( "onstopdrumrow", rowId )
 	}
 	play() {
 		if ( !this.playing ) {
