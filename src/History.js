@@ -37,11 +37,8 @@ DAWCore.History = class {
 	goToAction( act ) {
 		let n = act.index - this._stackInd;
 
-		if ( n < 0 ) {
-			while ( n++ < 0 ) { this.undo(); }
-		} else if ( n > 0 ) {
-			while ( n-- > 0 ) { this.redo(); }
-		}
+		     if ( n < 0 ) { while ( n++ < 0 ) { this.undo(); } }
+		else if ( n > 0 ) { while ( n-- > 0 ) { this.redo(); } }
 		return false;
 	}
 	undo() {
@@ -58,7 +55,7 @@ DAWCore.History = class {
 	// private:
 	_change( act, undoredo, cbStr ) {
 		const obj = act[ undoredo ],
-			prevObj = act[ undoredo === "undo" ? "redo" : "undo" ];
+			prevObj = undoredo === "undo" ? act.redo : act.undo;
 
 		this.daw._call( cbStr, act );
 		this.daw.composition.change( obj, prevObj );
