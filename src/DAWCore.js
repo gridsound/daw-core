@@ -113,8 +113,12 @@ class DAWCore {
 		} else {
 			const ret = fn( ...args, this.get );
 
-			if ( ret ) {
+			if ( Array.isArray( ret ) ) {
 				this.compositionChange( ...ret );
+			} else if ( ret ) {
+				const undo = GSUtils.composeUndo( this.get.cmp(), ret );
+
+				this.composition.change( ret, undo );
 			}
 		}
 	}
