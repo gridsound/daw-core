@@ -51,6 +51,7 @@ class DAWCore {
 			audioEffect: id => this.composition._waeffects._wafxs.get( id ),
 			audioSynth: id => this.composition._synths.get( id ),
 			// .................................................................
+			cmp: () => this.composition.cmp,
 			id: () => this.composition.cmp.id,
 			bpm: () => this.composition.cmp.bpm,
 			name: () => this.composition.cmp.name,
