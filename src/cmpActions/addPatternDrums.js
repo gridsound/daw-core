@@ -9,7 +9,7 @@ DAWCore.actions.addPatternDrums = get => {
 			return pat.type !== "drums"
 				? max
 				: Math.max( max, pat.order );
-		}, 0 ) + 1,
+		}, -1 ) + 1,
 		obj = {
 			drums: { [ drumsId ]: {} },
 			patterns: { [ patId ]: {
