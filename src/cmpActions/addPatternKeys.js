@@ -10,7 +10,7 @@ DAWCore.actions.addPatternKeys = ( synthId, get ) => {
 			return pat.synth !== synthId
 				? max
 				: Math.max( max, pat.order );
-		}, 0 ) + 1,
+		}, -1 ) + 1,
 		obj = {
 			keys: { [ keysId ]: {} },
 			patterns: { [ patId ]: {
