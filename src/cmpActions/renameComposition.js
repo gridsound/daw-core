@@ -8,6 +8,6 @@ DAWCore.actions.renameComposition = ( nameBrut, get ) => {
 		return [
 			{ name },
 			[ "cmp", "renameComposition", oldName, name ],
-		]
+		];
 	}
 };

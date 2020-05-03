@@ -10,7 +10,6 @@ DAWCore.actions._addDrums = ( status, patternId, rowId, whenFrom, whenTo, get ) 
 		whenB = Math.round( Math.max( whenFrom, whenTo ) / stepDur ),
 		pat = get.pattern( patternId ),
 		drums = get.drums( pat.drums ),
-		drumrows = get.drumrows(),
 		patRowId = get.drumrow( rowId ).pattern,
 		patRow = get.pattern( patRowId ),
 		drumsEnt = Object.entries( drums ),

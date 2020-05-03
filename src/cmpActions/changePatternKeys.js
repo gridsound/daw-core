@@ -2,7 +2,6 @@
 
 DAWCore.actions.changePatternKeys = ( patId, keysObj, duration, get ) => {
 	const pat = get.pattern( patId ),
-		keys = get.keys( pat.keys ),
 		obj = { keys: { [ pat.keys ]: keysObj } };
 
 	if ( duration !== pat.duration ) {

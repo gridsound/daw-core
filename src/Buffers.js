@@ -15,21 +15,21 @@ DAWCore.Buffers = class {
 	getSize() {
 		return this._files.size;
 	}
-	setBuffer( buf ) {
-		const bufCpy = Object.assign( {}, buf ),
+	setBuffer( obj ) {
+		const buf = { ...obj },
 			url = buf.url,
 			key = buf.hash || url;
 
-		this._files.set( key, bufCpy );
+		this._files.set( key, buf );
 		return !url
-			? Promise.resolve( bufCpy )
+			? Promise.resolve( buf )
 			: fetch( `../assets/samples/${ url }` )
 				.then( res => res.arrayBuffer() )
 				.then( arr => this.daw.ctx.decodeAudioData( arr ) )
 				.then( buffer => {
-					bufCpy.buffer = buffer;
-					bufCpy.duration = +buffer.duration.toFixed( 4 );
-					return bufCpy;
+					buf.buffer = buffer;
+					buf.duration = +buffer.duration.toFixed( 4 );
+					return buf;
 				} );
 	}
 	loadFiles( files ) {

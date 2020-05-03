@@ -19,7 +19,7 @@ DAWCore.History.actionsToText = {
 		renameComposition: ( old, neww ) => [ "pen", `rename compo "${ old || "untitled" }" to "${ neww }"` ],
 		changeTempo: ( bpm, bPM, sPB ) => [ "clock", `new tempo ${ bpm } (${ bPM }/${ sPB })` ],
 		changeLoop: ( a, b ) => [ "loop", `change loop ${ a } -> ${ b }` ],
-		removeLoop: () => [ "loop", `remove loop` ],
+		removeLoop: () => [ "loop", "remove loop" ],
 	},
 	synth: {
 		addOscillator: syn => [ "oscillator", `${ syn }: add osc` ],

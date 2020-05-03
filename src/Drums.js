@@ -79,7 +79,7 @@ DAWCore.Drums = class {
 	}
 	stopLiveDrum( rowId ) {
 		this.daw._wadrumrows.stopLiveDrum( rowId );
-		this.daw._call( "onstopdrumrow", rowId )
+		this.daw._call( "onstopdrumrow", rowId );
 	}
 	play() {
 		if ( !this.playing ) {

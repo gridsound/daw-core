@@ -1,11 +1,12 @@
 "use strict";
 
-DAWCore.prototype.addComposition = function( cmp, opt = {} ) {
+DAWCore.prototype.addComposition = function( cmp, opt ) {
 	const cpy = GSUtils.jsonCopy( cmp );
 
-	cpy.options = Object.freeze( Object.assign( {
+	cpy.options = Object.freeze( {
 		saveMode: "local",
-	}, opt ) );
+		...opt,
+	} );
 	this.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
 	this._call( "compositionAdded", cpy );
 	this._call( "compositionSavedStatus", cpy, true );
