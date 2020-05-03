@@ -18,7 +18,9 @@ DAWCore.Drums = class {
 	}
 
 	change( patObj, drumsObj ) {
-		this._waDrums.change( drumsObj );
+		if ( drumsObj ) {
+			this._waDrums.change( drumsObj );
+		}
 		if ( patObj && "duration" in patObj ) {
 			this.duration = patObj.duration;
 			if ( !this.looping && this.playing ) {
