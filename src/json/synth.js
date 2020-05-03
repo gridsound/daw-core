@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.synth = obj => Object.assign( {
+DAWCore.json.synth = obj => ( {
 	name: "synth",
 	dest: "main",
 	lfo: DAWCore.json.lfo(),
@@ -8,4 +8,5 @@ DAWCore.json.synth = obj => Object.assign( {
 		0: DAWCore.json.oscillator( { gain: .75 } ),
 		1: DAWCore.json.oscillator( { order: 1, gain: .2, detune: -24 } ),
 	},
-}, obj );
+	...obj,
+} );
