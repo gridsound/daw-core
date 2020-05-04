@@ -49,7 +49,7 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 				}
 			} );
 			if ( GSUtils.isntEmpty( objBlocks ) ) {
-				const cmpDur = DAWCore.common.calcNewDuration( objPatterns, get );
+				const cmpDur = DAWCore.common.calcNewDuration( obj, get );
 
 				obj.blocks = objBlocks;
 				if ( cmpDur !== get.duration() ) {

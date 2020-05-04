@@ -62,7 +62,7 @@ DAWCore.actions._addDrums = ( status, patternId, rowId, whenFrom, whenTo, get ) 
 
 			obj.patterns = { [ patternId ]: { duration } };
 			if ( GSUtils.isntEmpty( blocks ) ) {
-				const duration = DAWCore.common.calcNewDuration( obj.patterns, get );
+				const duration = DAWCore.common.calcNewDuration( obj, get );
 
 				obj.blocks = blocks;
 				if ( duration !== get.duration() ) {
