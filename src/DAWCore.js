@@ -33,15 +33,9 @@ class DAWCore {
 		this._focused = this.composition;
 		this._focusedStr = "composition";
 		this.get = {
-			currentTime: () => this.composition.currentTime,
 			saveMode: () => this.composition.cmp.options.saveMode,
-			composition: ( saveMode, id ) => {
-				const cmp = this.composition.cmp;
-
-				return !id || ( cmp && id === cmp.id && saveMode === cmp.options.saveMode )
-					? cmp
-					: this.cmps[ saveMode ].get( id );
-			},
+			currentTime: () => this.composition.currentTime,
+			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),

@@ -75,11 +75,11 @@ DAWCore.History.actionsToText = {
 	},
 };
 
-// Everything below this line has to be removed to be sorted and rewrite above.
+// Everything below this line has to be removed, sorted and rewrited above.
 // .............................................................................
 
 DAWCore.History.prototype._nameAction = function( act ) {
-	const cmp = this.daw.get.composition(),
+	const cmp = this.daw.get.cmp(),
 		r = act.redo,
 		u = act.undo;
 

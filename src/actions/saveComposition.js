@@ -4,7 +4,7 @@ DAWCore.prototype.saveComposition = function() {
 	const actSave = this.composition._actionSavedOn;
 
 	if ( this.composition.save() ) {
-		const cmp = this.get.composition(),
+		const cmp = this.get.cmp(),
 			id = this.get.id();
 
 		if ( this.get.saveMode() === "local" ) {
