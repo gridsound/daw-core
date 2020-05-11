@@ -220,6 +220,7 @@ DAWCore.json = { effects: {} };
 DAWCore.utils = {};
 DAWCore.common = {};
 DAWCore.actions = {};
+DAWCore.controllers = {};
 
 /*
 1. The getter 'keys' and 'drums' can't use their singular form like the others getters
