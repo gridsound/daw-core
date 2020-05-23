@@ -11,7 +11,6 @@ DAWCore.controllersFx.filter = class {
 			"drawCurve",
 		], fns.dataCallbacks );
 		this.data = Object.seal( DAWCore.json.effects.filter() );
-		this.actionCallback = fns.actionCallback || GSUtils.noop;
 		Object.freeze( this );
 	}
 

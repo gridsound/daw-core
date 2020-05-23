@@ -17,7 +17,6 @@ DAWCore.controllers.synth = class {
 			"changeLFOProp",
 			"updateLFOWave",
 		], fns.dataCallbacks );
-		this.actionCallback = fns.actionCallback || GSUtils.noop;
 		this._oscsCrud = GSUtils.createUpdateDelete.bind( null, this.data.oscillators,
 			this._addOsc.bind( this ),
 			this._updateOsc.bind( this ),

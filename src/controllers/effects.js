@@ -11,7 +11,6 @@ DAWCore.controllers.effects = class {
 			"connectEffectTo",
 			"changeEffectData",
 		], fns.dataCallbacks );
-		this.actionCallback = fns.actionCallback || GSUtils.noop;
 		this.values = Object.seal( {
 			destFilter: null,
 		} );

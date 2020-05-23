@@ -8,7 +8,6 @@ DAWCore.controllers.drums = class {
 			"removeDrum",
 			"updateDrum",
 		], fns.dataCallbacks );
-		this.actionCallback = fns.actionCallback || GSUtils.noop;
 		this._drumsCrud = GSUtils.createUpdateDelete.bind( null, this.data,
 			this._addDrum.bind( this ),
 			this._updateDrum.bind( this ),

@@ -11,7 +11,6 @@ DAWCore.controllers.drumrows = class {
 			"removeDrumrow",
 			"changeDrumrow",
 		], fns.dataCallbacks );
-		this.actionCallback = fns.actionCallback || GSUtils.noop;
 		this._drumrowsCrud = GSUtils.createUpdateDelete.bind( null, this.data.drumrows,
 			this._addDrumrow.bind( this ),
 			this._updateDrumrow.bind( this ),
