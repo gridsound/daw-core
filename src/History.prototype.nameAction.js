@@ -4,7 +4,7 @@ DAWCore.History.prototype.nameAction = function( act, msg ) {
 	if ( msg ) {
 		const [ part, actionName, ...args ] = msg,
 			fn = DAWCore.History.actionsToText[ part ][ actionName ],
-			[ i, t ] = fn ? fn( ...args ) : { i: "close", t: "undefined" };
+			[ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
 
 		if ( !fn ) {
 			console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );
