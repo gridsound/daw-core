@@ -12,7 +12,7 @@ DAWCore.actions.removeChannel = ( id, get ) => {
 		GSUtils.addIfNotEmpty( obj, "patterns", patterns );
 		return [
 			obj,
-			[ "mixer", "removeChannel", get.channel( id ).name ],
+			[ "channels", "removeChannel", get.channel( id ).name ],
 		];
 	}
 };

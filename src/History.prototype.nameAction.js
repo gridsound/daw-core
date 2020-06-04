@@ -35,7 +35,7 @@ DAWCore.History.actionsToText = {
 		removeSynth: syn => [ "minus", `remove synth "${ syn }"` ],
 		redirectSynth: ( syn, chanDest ) => [ "redirect", `redirect synth "${ syn }" to chan "${ chanDest }"` ],
 	},
-	mixer: {
+	channels: {
 		addChannel: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
 		removeChannel: chan => [ "minus", `mixer: delete "${ chan }"`, ],
 		reorderChannel: chan => [ "sort", `mixer: reorder "${ chan }"`, ],

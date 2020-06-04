@@ -6,6 +6,6 @@ DAWCore.actions.toggleChannel = ( id, get ) => {
 
 	return [
 		{ channels: { [ id ]: { toggle } } },
-		[ "mixer", "toggleChannel", chan.name, toggle ],
+		[ "channels", "toggleChannel", chan.name, toggle ],
 	];
 };

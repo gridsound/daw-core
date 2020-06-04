@@ -9,6 +9,6 @@ DAWCore.actions.addChannel = get => {
 
 	return [
 		{ channels: { [ id ]: chanObj } },
-		[ "mixer", "addChannel", name ],
+		[ "channels", "addChannel", name ],
 	];
 };
