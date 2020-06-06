@@ -51,7 +51,7 @@ DAWCore.History.actionsToText = {
 		removePattern: ( type, pat ) => [ "minus", `remove ${ type } "${ pat }"` ],
 		reorderPattern: ( type, pat ) => [ "sort", `reorder ${ type } "${ pat }"` ],
 		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone ${ type } "${ patSrc }" to "${ pat }"` ],
-		redirectPattern: ( pat, chanDest ) => [ "redirect", `redirect buffer "${ pat }" to chan "${ chanDest }"` ],
+		redirectPatternBuffer: ( pat, chanDest ) => [ "redirect", `redirect buffer "${ pat }" to chan "${ chanDest }"` ],
 		redirectPatternKeys: ( pat, syn ) => [ "redirect", `redirect keys "${ pat }" to synth "${ syn }"` ],
 	},
 	effects: {

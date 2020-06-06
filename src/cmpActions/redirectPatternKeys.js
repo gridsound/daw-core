@@ -1,15 +1,13 @@
 "use strict";
 
 DAWCore.actions.redirectPatternKeys = ( patId, synthId, patterns, get ) => {
-	const obj = { patterns },
-		patName = get.pattern( patId ).name,
-		synName = get.synth( synthId ).name;
+	const obj = { patterns };
 
 	if ( patId === get.patternKeysOpened() ) {
 		obj.synthOpened = synthId;
 	}
 	return [
 		obj,
-		[ "patterns", "redirectPatternKeys", patName, synName ],
+		[ "patterns", "redirectPatternKeys", get.pattern( patId ).name, get.synth( synthId ).name ],
 	];
 };
