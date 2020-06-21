@@ -82,6 +82,7 @@ class DAWCore {
 		wadrumrows.getAudioBuffer = this.get.audioBuffer;
 		wadrumrows.getChannelInput = this.get.audioChanIn;
 		wadrumrows.onstartdrum = rowId => this._call( "onstartdrum", rowId );
+		wadrumrows.onstartdrumcut = rowId => this._call( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
 		this.setCtx( ctx );
 		this.destination.setGain( this.env.def_appGain );
