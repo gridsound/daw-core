@@ -7,6 +7,8 @@ DAWCore.controllers.drums = class {
 			"addDrum",
 			"removeDrum",
 			"updateDrum",
+			"addDrumcut",
+			"removeDrumcut",
 		], fns.dataCallbacks );
 		this._drumsCrud = GSUtils.createUpdateDelete.bind( null, this.data,
 			this._addDrum.bind( this ),
@@ -23,18 +25,25 @@ DAWCore.controllers.drums = class {
 
 	// .........................................................................
 	_addDrum( id, obj ) {
-		const drum = { ...obj };
+		const drum = { ...obj },
+			fn = "gain" in drum
+				? this.on.addDrum
+				: this.on.addDrumcut;
 
 		this.data[ id ] = drum;
-		this.on.addDrum( id, drum );
+		fn( id, drum );
 	}
 	_updateDrum( id, obj ) {
 		Object.assign( this.data[ id ], obj );
 		this.on.updateDrum( id, obj );
 	}
 	_deleteDrum( id ) {
+		const fn = "gain" in this.data[ id ]
+				? this.on.removeDrum
+				: this.on.removeDrumcut;
+
 		delete this.data[ id ];
-		this.on.removeDrum( id );
+		fn( id );
 	}
 };
 
