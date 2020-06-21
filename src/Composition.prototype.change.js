@@ -35,7 +35,7 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "blocks", function( { blocks } ) {
-		GSUtils.diffAssign( this._sched.data, blocks );
+		this._sched.change( blocks );
 	} ],
 	[ [ "loopA", "loopB" ], function() {
 		if ( this.daw.getFocusedObject() === this ) {
