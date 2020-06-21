@@ -7,8 +7,8 @@ DAWCore.json.channels = () => {
 	delete main.order;
 	return {
 		main,
-		1: DAWCore.json.channel( { order: 0, name: "chan 1" } ),
-		2: DAWCore.json.channel( { order: 1, name: "chan 2" } ),
+		1: DAWCore.json.channel( { order: 0, name: "drums" } ),
+		2: DAWCore.json.channel( { order: 1, name: "synth" } ),
 		3: DAWCore.json.channel( { order: 2, name: "chan 3" } ),
 		4: DAWCore.json.channel( { order: 3, name: "chan 4" } ),
 	};

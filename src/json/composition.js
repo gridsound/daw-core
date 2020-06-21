@@ -30,10 +30,10 @@ DAWCore.json.composition = ( env, id ) => {
 		patterns: {
 			0: { order: 0, type: "keys", name: "keys", keys: "0", synth: "0", duration: bPM, },
 			1: { order: 0, type: "drums", name: "drums", drums: "0", duration: bPM, },
-			2: { order: 0, type: "buffer", dest: "main", buffer: "0", duration: 1, name: "kick" },
-			3: { order: 1, type: "buffer", dest: "main", buffer: "1", duration: 1, name: "clap" },
-			4: { order: 2, type: "buffer", dest: "main", buffer: "2", duration: 1, name: "hat" },
-			5: { order: 3, type: "buffer", dest: "main", buffer: "3", duration: 1, name: "snare" },
+			2: { order: 0, type: "buffer", dest: "1", buffer: "0", duration: 1, name: "kick" },
+			3: { order: 1, type: "buffer", dest: "1", buffer: "1", duration: 1, name: "clap" },
+			4: { order: 2, type: "buffer", dest: "1", buffer: "2", duration: 1, name: "hat" },
+			5: { order: 3, type: "buffer", dest: "1", buffer: "3", duration: 1, name: "snare" },
 		},
 		channels: DAWCore.json.channels(),
 		tracks,
@@ -41,7 +41,7 @@ DAWCore.json.composition = ( env, id ) => {
 			0: { pattern: "0", track: "0", when: 0, duration: bPM },
 			1: { pattern: "1", track: "1", when: 0, duration: bPM },
 		},
-		synths: { 0: DAWCore.json.synth() },
+		synths: { 0: DAWCore.json.synth( { dest: "2" } ) },
 		drumrows: {
 			0: { order: 0, pattern: "2", gain: 1, pan: 0 },
 			1: { order: 1, pattern: "3", gain: 1, pan: 0 },
