@@ -33,7 +33,7 @@ DAWCore.json.composition = ( env, id ) => {
 			1: { order: 0, type: "drums", name: "drums", drums: "0", duration: bPM, },
 			2: { order: 0, type: "buffer", dest: "1", buffer: "0", duration: 1, name: "kick" },
 			3: { order: 1, type: "buffer", dest: "1", buffer: "1", duration: 1, name: "clap" },
-			4: { order: 2, type: "buffer", dest: "1", buffer: "2", duration: 1, name: "closed hat" },
+			4: { order: 2, type: "buffer", dest: "1", buffer: "2", duration: 1, name: "hat" },
 			6: { order: 3, type: "buffer", dest: "1", buffer: "4", duration: 1, name: "open hat" },
 			5: { order: 4, type: "buffer", dest: "1", buffer: "3", duration: 1, name: "snare" },
 		},
