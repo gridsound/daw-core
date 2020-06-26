@@ -74,6 +74,9 @@ DAWCore.Drums = class {
 		this.looping = false;
 		this._waDrums.scheduler.setLoopBeat( 0, this.duration || this.daw.get.beatsPerMeasure() );
 	}
+	changeLiveDrumrow( rowId, prop, val ) {
+		this.daw._wadrumrows.change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
+	}
 	startLiveDrum( rowId ) {
 		this.daw._wadrumrows.startLiveDrum( rowId );
 	}
