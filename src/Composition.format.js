@@ -35,6 +35,7 @@ DAWCore.Composition.format = function( cmp ) {
 	cmp.drumrows = cmp.drumrows || {};
 	Object.values( cmp.drumrows ).forEach( row => {
 		row.toggle = row.toggle !== false;
+		row.detune = row.detune || 0;
 	} );
 
 	// channels
