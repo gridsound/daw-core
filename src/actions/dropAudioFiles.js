@@ -35,7 +35,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 					};
 					buffersLoaded[ bufId ] = this.buffers.getBuffer( buf );
 				} );
-				this.compositionChange( obj );
+				this.callAction( "addBuffers", obj );
 			}
 			if ( knownBuffers.length ) {
 				const bufmap = Object.entries( cmpBuffers )

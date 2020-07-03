@@ -109,16 +109,13 @@ class DAWCore {
 			const ret = fn( ...args, this.get );
 
 			if ( Array.isArray( ret ) ) {
-				this.compositionChange( ...ret );
+				this.history.stackChange( ...ret );
 			} else if ( ret ) {
 				const undo = GSUtils.composeUndo( this.get.cmp(), ret );
 
 				this.composition.change( ret, undo );
 			}
 		}
-	}
-	compositionChange( obj, msg ) {
-		this.history.stackChange( obj, msg );
 	}
 	compositionNeedSave() {
 		return !this.composition._saved;
