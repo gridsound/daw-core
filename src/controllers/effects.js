@@ -13,6 +13,7 @@ DAWCore.controllers.effects = class {
 		], fns.dataCallbacks );
 		this.values = Object.seal( {
 			destFilter: null,
+			resetting: false,
 		} );
 		this._effectsCrud = GSUtils.createUpdateDelete.bind( null, this.data,
 			this._addEffect.bind( this ),
@@ -28,7 +29,9 @@ DAWCore.controllers.effects = class {
 	reset() {
 		const ent = Object.entries( this.data );
 
+		this.values.resetting = true;
 		ent.forEach( kv => this._deleteEffect( kv[ 0 ] ) );
+		this.values.resetting = false;
 		ent.forEach( kv => this._addEffect( kv[ 0 ], kv[ 1 ] ) );
 	}
 	change( obj ) {
@@ -84,7 +87,7 @@ DAWCore.controllers.effects = class {
 		delete this.data[ id ];
 	}
 	__deleteEffect( id, diffObj ) {
-		if ( !GSUtils.isNoop( this.on.connectEffectTo ) ) {
+		if ( !this.values.resetting && !GSUtils.isNoop( this.on.connectEffectTo ) ) {
 			const [ prevId, nextId ] = this._findSiblingFxIds( id, diffObj );
 
 			this.on.connectEffectTo( this.data[ id ].dest, prevId, nextId );
