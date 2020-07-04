@@ -106,7 +106,7 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = fn( ...args, this.get );
+			const ret = GSUtils.deepFreeze( fn( ...args, this.get ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.history.stackChange( ...ret );

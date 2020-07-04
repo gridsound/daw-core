@@ -29,7 +29,7 @@ DAWCore.History = class {
 		}
 		++this._stackInd;
 		act.index = stack.push( act );
-		this._change( GSUtils.deepFreeze( act ), "redo", "historyAddAction" );
+		this._change( Object.freeze( act ), "redo", "historyAddAction" );
 	}
 	getCurrentAction() {
 		return this._stack[ this._stackInd - 1 ] || null;
