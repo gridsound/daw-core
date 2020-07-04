@@ -3,12 +3,15 @@
 DAWCore.actions.removeChannel = ( id, get ) => {
 	if ( id !== "main" ) {
 		const red = DAWCore.actions.removeChannel_redirect,
-			channels = red( id, get.channels(), { [ id ]: undefined } ),
-			patterns = red( id, get.patterns(), {} ),
-			synths = red( id, get.synths(), {} ),
+			destMain = { dest: "main" },
+			channels = red( id, get.channels(), { [ id ]: undefined }, destMain ),
+			patterns = red( id, get.patterns(), {}, destMain ),
+			effects = red( id, get.effects(), {}, undefined ),
+			synths = red( id, get.synths(), {}, destMain ),
 			obj = { channels };
 
 		GSUtils.addIfNotEmpty( obj, "synths", synths );
+		GSUtils.addIfNotEmpty( obj, "effects", effects );
 		GSUtils.addIfNotEmpty( obj, "patterns", patterns );
 		return [
 			obj,
@@ -17,11 +20,11 @@ DAWCore.actions.removeChannel = ( id, get ) => {
 	}
 };
 
-DAWCore.actions.removeChannel_redirect = ( id, list, obj ) => {
-	Object.entries( list ).forEach( kv => {
-		if ( kv[ 1 ].dest === id ) {
-			obj[ kv[ 0 ] ] = { dest: "main" };
+DAWCore.actions.removeChannel_redirect = ( chanId, list, obj, val ) => {
+	return Object.entries( list ).reduce( ( obj, kv ) => {
+		if ( kv[ 1 ].dest === chanId ) {
+			obj[ kv[ 0 ] ] = val;
 		}
-	} );
-	return obj;
+		return obj;
+	}, obj );
 };
