@@ -29,13 +29,23 @@ DAWCore.Composition.format = function( cmp ) {
 	// ..........................................
 	cmp.buffers = cmp.buffers || {};
 
-	// drums
+	// drumrows
 	// ..........................................
-	cmp.drums = cmp.drums || {};
 	cmp.drumrows = cmp.drumrows || {};
 	Object.values( cmp.drumrows ).forEach( row => {
 		row.toggle = row.toggle !== false;
-		row.detune = row.detune || 0;
+		row.detune = row.detune ?? 0;
+	} );
+
+	// drums
+	// ..........................................
+	cmp.drums = cmp.drums || {};
+	Object.values( cmp.drums ).forEach( drums => {
+		Object.values( drums ).forEach( drum => {
+			drum.pan = drum.pan ?? 0;
+			drum.gain = drum.gain ?? 1;
+			drum.detune = drum.detune ?? 0;
+		} );
 	} );
 
 	// channels
