@@ -6,13 +6,13 @@ DAWCore.controllers.drums = class {
 		this.on = GSUtils.mapCallbacks( [
 			"addDrum",
 			"removeDrum",
-			"updateDrum",
+			"changeDrum",
 			"addDrumcut",
 			"removeDrumcut",
 		], fns.dataCallbacks );
 		this._drumsCrud = GSUtils.createUpdateDelete.bind( null, this.data,
 			this._addDrum.bind( this ),
-			this._updateDrum.bind( this ),
+			this._changeDrum.bind( this ),
 			this._deleteDrum.bind( this ) );
 		Object.freeze( this );
 	}
@@ -25,17 +25,15 @@ DAWCore.controllers.drums = class {
 
 	// .........................................................................
 	_addDrum( id, obj ) {
-		const drum = { ...obj },
-			fn = "gain" in drum
-				? this.on.addDrum
-				: this.on.addDrumcut;
+		const cpy = { ...obj };
 
-		this.data[ id ] = drum;
-		fn( id, drum );
-	}
-	_updateDrum( id, obj ) {
-		Object.assign( this.data[ id ], obj );
-		this.on.updateDrum( id, obj );
+		this.data[ id ] = cpy;
+		if ( "gain" in cpy ) {
+			this.on.addDrum( id, cpy );
+			this._changeDrum( id, cpy );
+		} else {
+			this.on.addDrumcut( id, cpy );
+		}
 	}
 	_deleteDrum( id ) {
 		const fn = "gain" in this.data[ id ]
@@ -44,6 +42,17 @@ DAWCore.controllers.drums = class {
 
 		delete this.data[ id ];
 		fn( id );
+	}
+	_changeDrum( id, obj ) {
+		this._changeDrumProp( id, "detune", obj.detune );
+		this._changeDrumProp( id, "gain", obj.gain );
+		this._changeDrumProp( id, "pan", obj.pan );
+	}
+	_changeDrumProp( id, prop, val ) {
+		if ( val !== undefined ) {
+			this.data[ id ][ prop ] = val;
+			this.on.changeDrum( id, prop, val );
+		}
 	}
 };
 
