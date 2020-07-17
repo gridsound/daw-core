@@ -71,7 +71,8 @@ DAWCore.History.actionsToText = {
 	},
 	drums: {
 		addDrums: ( pat, row, nb ) => [ "drums", `drums: add ${ nb } "${ row }" in "${ pat }"` ],
-		removeDrums: ( pat, row, nb ) => [ "drums", `drums: remove ${ nb } "${ row }" of "${ pat }"` ],
+		removeDrums: ( pat, row, nb ) => [ "drums", `drums: remove ${ nb } "${ row }" in "${ pat }"` ],
+		changeDrumsProps: ( pat, row, prop, nb ) => [ "drums", `drums: set ${ prop } to ${ nb } "${ row }" in "${ pat }"` ],
 	},
 };
 
