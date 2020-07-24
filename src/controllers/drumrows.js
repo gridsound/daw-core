@@ -84,6 +84,7 @@ DAWCore.controllers.drumrows = class {
 		this.___updateDrumrow( id, "order", obj.order );
 		this.___updateDrumrow( id, "toggle", obj.toggle );
 		this.___updateDrumrow( id, "detune", obj.detune );
+		this.___updateDrumrow( id, "pan", obj.pan );
 		this.___updateDrumrow( id, "gain", obj.gain );
 		this.___updateDrumrow( id, "pattern", obj.pattern );
 		this.___updateDrumrow( id, "name", obj.pattern && pat.name );
