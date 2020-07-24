@@ -42,9 +42,10 @@ DAWCore.Composition.format = function( cmp ) {
 	cmp.drums = cmp.drums || {};
 	Object.values( cmp.drums ).forEach( drums => {
 		Object.values( drums ).forEach( drum => {
-			drum.pan = drum.pan ?? 0;
-			drum.gain = drum.gain ?? 1;
-			drum.detune = drum.detune ?? 0;
+			if ( "gain" in drum ) {
+				drum.pan = drum.pan ?? 0;
+				drum.detune = drum.detune ?? 0;
+			}
 		} );
 	} );
 
