@@ -3,6 +3,7 @@
 DAWCore.json.synth = obj => ( {
 	name: "synth",
 	dest: "main",
+	env: DAWCore.json.env(),
 	lfo: DAWCore.json.lfo(),
 	oscillators: {
 		0: DAWCore.json.oscillator( { gain: .75 } ),
