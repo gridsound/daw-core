@@ -26,6 +26,8 @@ DAWCore.History.actionsToText = {
 		removeOscillator: syn => [ "oscillator", `${ syn }: remove osc` ],
 		reorderOscillator: syn => [ "sort", `${ syn }: reorder oscs` ],
 		changeOscillator: ( syn, prop, val ) => [ "oscillator", `${ syn }: change osc ${ prop } -> ${ val }` ],
+		toggleEnv: ( syn, b ) => [ "osc-sine", `${ syn }: ${ b ? "enable" : "disable" } envelope` ],
+		changeEnv: ( syn, prop, val ) => [ "osc-sine", `${ syn }: envelope's ${ prop } = ${ val }` ],
 		toggleLFO: ( syn, b ) => [ "osc-sine", `${ syn }: ${ b ? "enable" : "disable" } LFO` ],
 		changeLFO: ( syn, prop, val ) => [ "osc-sine", `${ syn }: LFO's ${ prop } = ${ val }` ],
 	},
