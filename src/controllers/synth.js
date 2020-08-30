@@ -4,6 +4,7 @@ DAWCore.controllers.synth = class {
 	constructor( fns ) {
 		this.data = Object.seal( {
 			name: "",
+			env: Object.seal( DAWCore.json.env() ),
 			lfo: Object.seal( DAWCore.json.lfo() ),
 			oscillators: {},
 		} );
@@ -16,6 +17,9 @@ DAWCore.controllers.synth = class {
 			"changeLFO",
 			"changeLFOProp",
 			"updateLFOWave",
+			"changeEnv",
+			"changeEnvProp",
+			"updateEnvWave",
 		], fns.dataCallbacks );
 		this._oscsCrud = GSUtils.createUpdateDelete.bind( null, this.data.oscillators,
 			this._addOsc.bind( this ),
@@ -37,6 +41,9 @@ DAWCore.controllers.synth = class {
 	change( obj ) {
 		if ( "name" in obj ) {
 			this.data.name = obj.name;
+		}
+		if ( obj.env ) {
+			this._updateEnv( obj.env );
 		}
 		if ( obj.lfo ) {
 			this._updateLFO( obj.lfo );
@@ -69,6 +76,19 @@ DAWCore.controllers.synth = class {
 		this._setProp( dataOsc, cb, "detune", obj.detune );
 		this.on.updateOscWave( id );
 		this.on.changeOsc( id, obj );
+	}
+	_updateEnv( obj ) {
+		const dataEnv = this.data.env,
+			cb = this.on.changeEnvProp;
+
+		this._setProp( dataEnv, cb, "toggle", obj.toggle );
+		this._setProp( dataEnv, cb, "attack", obj.attack );
+		this._setProp( dataEnv, cb, "hold", obj.hold );
+		this._setProp( dataEnv, cb, "decay", obj.decay );
+		this._setProp( dataEnv, cb, "substain", obj.substain );
+		this._setProp( dataEnv, cb, "release", obj.release );
+		this.on.updateEnvWave();
+		this.on.changeEnv( obj );
 	}
 	_updateLFO( obj ) {
 		const dataLFO = this.data.lfo,
