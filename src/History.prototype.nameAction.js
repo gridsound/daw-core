@@ -24,6 +24,8 @@ DAWCore.History.actionsToText = {
 	blocks: {
 		moveBlocks: len => [ "arrows", `move ${ len } block${ len > 1 ? "s" : "" }` ],
 		selectBlocks: len => [ "mouse", `select ${ len } block${ len > 1 ? "s" : "" }` ],
+		cropEndBlocks: len => [ "crop", `crop-end ${ len } block${ len > 1 ? "s" : "" }` ],
+		cropStartBlocks: len => [ "crop", `crop-start ${ len } block${ len > 1 ? "s" : "" }` ],
 		unselectBlocks: len => [ "mouse", `unselect ${ len } block${ len > 1 ? "s" : "" }` ],
 		duplicateSelectedBlocks: len => [ "plus", `duplicate ${ len } block${ len > 1 ? "s" : "" }` ],
 	},
