@@ -48,7 +48,7 @@ DAWCore.History.actionsToText = {
 	},
 	channels: {
 		addChannel: chan => [ "plus", `mixer: new channel "${ chan }"`, ],
-		removeChannel: chan => [ "minus", `mixer: delete "${ chan }"`, ],
+		removeChannel: chan => [ "minus", `mixer: remove "${ chan }"`, ],
 		reorderChannel: chan => [ "sort", `mixer: reorder "${ chan }"`, ],
 		renameChannel: ( old, neww ) => [ "pen", `mixer: rename "${ old }" -> "${ neww }"` ],
 		toggleChannel: ( chan, b ) => [ b ? "unmute" : "mute", `mixer: ${ b ? "unmute" : "mute" } "${ chan }"`, ],
@@ -97,24 +97,9 @@ DAWCore.History.prototype._nameAction = function( act ) {
 
 	return (
 		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
-		DAWCore.History._nameAction_blocks( cmp, r, u ) ||
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
 		{ i: "close", t: "undefined" }
 	);
-};
-
-DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
-	const rBlcs = r.blocks;
-
-	for ( const id in rBlcs ) {
-		const arrK = Object.keys( rBlcs ),
-			rBlc = rBlcs[ id ],
-			msg = `${ arrK.length } block${ arrK.length > 1 ? "s" : "" }`;
-
-		if ( !rBlc )              { return { i: "erase",  t: `Remove ${ msg }` }; }
-		if ( !u.blocks[ id ] )    { return { i: "music",  t: `Add ${ msg }` }; }
-		if ( "duration" in rBlc ) { return { i: "crop",   t: `Crop ${ msg }` }; }
-	}
 };
 
 DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
