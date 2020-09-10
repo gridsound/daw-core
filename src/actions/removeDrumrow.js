@@ -46,13 +46,13 @@ DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 		}
 	} );
 	GSUtils.addIfNotEmpty( obj, "drums", objDrums );
+	GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
 	GSUtils.addIfNotEmpty( obj, "patterns", objPatterns );
 	if ( GSUtils.isntEmpty( objBlocks ) ) {
-		const duration = DAWCore.common.calcNewDuration( obj, get );
+		const dur = DAWCore.common.calcNewDuration( obj, get );
 
-		obj.blocks = objBlocks;
-		if ( duration !== get.duration() ) {
-			obj.duration = duration;
+		if ( dur !== get.duration() ) {
+			obj.duration = dur;
 		}
 	}
 	return obj;

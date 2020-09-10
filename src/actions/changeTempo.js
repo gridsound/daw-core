@@ -48,12 +48,12 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 					objBlocks[ id ] = { duration: pat.duration };
 				}
 			} );
+			GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
 			if ( GSUtils.isntEmpty( objBlocks ) ) {
-				const cmpDur = DAWCore.common.calcNewDuration( obj, get );
+				const dur = DAWCore.common.calcNewDuration( obj, get );
 
-				obj.blocks = objBlocks;
-				if ( cmpDur !== get.duration() ) {
-					obj.duration = cmpDur;
+				if ( dur !== get.duration() ) {
+					obj.duration = dur;
 				}
 			}
 		}

@@ -6,7 +6,6 @@ DAWCore.actions.changePatternKeys = ( patId, keysObj, duration, get ) => {
 
 	if ( duration !== pat.duration ) {
 		const objPatterns = { [ patId ]: { duration } },
-			cmpDur = DAWCore.common.calcNewDuration( { patterns: objPatterns }, get ),
 			objBlocks = Object.entries( get.blocks() )
 				.reduce( ( obj, [ id, blc ] ) => {
 					if ( blc.pattern === patId && !blc.durationEdited ) {
@@ -17,8 +16,12 @@ DAWCore.actions.changePatternKeys = ( patId, keysObj, duration, get ) => {
 
 		obj.patterns = objPatterns;
 		GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
-		if ( Math.abs( cmpDur - get.duration() ) > .001 ) {
-			obj.duration = cmpDur;
+		if ( GSUtils.isntEmpty( objBlocks ) ) {
+			const dur = DAWCore.common.calcNewDuration( obj, get );
+
+			if ( dur !== get.duration() ) {
+				obj.duration = dur;
+			}
 		}
 	}
 	return [

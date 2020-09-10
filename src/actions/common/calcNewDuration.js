@@ -1,14 +1,24 @@
 "use strict";
 
 DAWCore.common.calcNewDuration = ( changeObj, get ) => {
-	const { patterns, beatsPerMeasure } = changeObj,
-		bPM = beatsPerMeasure || get.beatsPerMeasure(),
-		dur = Object.values( get.blocks() ).reduce( ( max, blc ) => {
-			const pat = patterns[ blc.pattern ],
-				dur = ( pat && !blc.durationEdited ? pat : blc ).duration;
+	const blocks = changeObj.blocks || {},
+		bPM = changeObj.beatsPerMeasure || get.beatsPerMeasure(),
+		dur = Object.entries( get.blocks() ).reduce( ( max, [ id, blc ] ) => {
+			const blcChange = blocks[ id ];
 
-			return Math.max( max, blc.when + dur );
-		}, 0 );
+			if ( blcChange || !( id in blocks ) ) {
+				const when = blcChange?.when ?? blc.when,
+					dur = blcChange?.duration ?? blc.duration;
 
-	return Math.ceil( dur / bPM ) * bPM;
+				return Math.max( max, when + dur );
+			}
+			return max;
+		}, 0 ),
+		dur2 = Object.entries( blocks ).reduce( ( max, [ id, blc ] ) => {
+			return blc && !get.block( id )
+				? Math.max( max, blc.when + blc.duration )
+				: max;
+		}, dur );
+
+	return Math.ceil( dur2 / bPM ) * bPM;
 };
