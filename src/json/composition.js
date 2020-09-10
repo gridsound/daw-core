@@ -6,7 +6,7 @@ DAWCore.json.composition = ( env, id ) => {
 		bPM = env.def_beatsPerMeasure;
 
 	for ( let i = 0; i < env.def_nbTracks; ++i ) {
-		tracks[ i ] = {};
+		tracks[ i ] = DAWCore.json.track( { order: i } );
 	}
 	return {
 		id,
