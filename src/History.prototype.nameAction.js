@@ -21,6 +21,10 @@ DAWCore.History.actionsToText = {
 		changeLoop: ( a, b ) => [ "loop", `change loop ${ a } -> ${ b }` ],
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
+	blocks: {
+		selectBlocks: len => [ "mouse", `select ${ len } block${ len > 1 ? "s" : "" }` ],
+		unselectBlocks: len => [ "mouse", `unselect ${ len } block${ len > 1 ? "s" : "" }` ],
+	},
 	synth: {
 		addOscillator: syn => [ "oscillator", `${ syn }: add osc` ],
 		removeOscillator: syn => [ "oscillator", `${ syn }: remove osc` ],
