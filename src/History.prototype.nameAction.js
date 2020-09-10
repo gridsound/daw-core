@@ -22,6 +22,7 @@ DAWCore.History.actionsToText = {
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
 	blocks: {
+		moveBlocks: len => [ "arrows", `move ${ len } block${ len > 1 ? "s" : "" }` ],
 		selectBlocks: len => [ "mouse", `select ${ len } block${ len > 1 ? "s" : "" }` ],
 		unselectBlocks: len => [ "mouse", `unselect ${ len } block${ len > 1 ? "s" : "" }` ],
 	},
@@ -106,15 +107,9 @@ DAWCore.History._nameAction_blocks = function( cmp, r, u ) {
 			rBlc = rBlcs[ id ],
 			msg = `${ arrK.length } block${ arrK.length > 1 ? "s" : "" }`;
 
-		if ( !rBlc )                             { return { i: "erase",  t: `Remove ${ msg }` }; }
-		if ( !u.blocks[ id ] )                   { return { i: "music",  t: `Add ${ msg }` }; }
-		if ( "duration" in rBlc )                { return { i: "crop",   t: `Crop ${ msg }` }; }
-		if ( "when" in rBlc || "track" in rBlc ) { return { i: "arrows", t: `Move ${ msg }` }; }
-		if ( "selected" in rBlc ) {
-			return rBlc.selected
-				? { i: "mouse", t: `Select ${ msg }` }
-				: { i: "mouse", t: `Unselect ${ msg }` };
-		}
+		if ( !rBlc )              { return { i: "erase",  t: `Remove ${ msg }` }; }
+		if ( !u.blocks[ id ] )    { return { i: "music",  t: `Add ${ msg }` }; }
+		if ( "duration" in rBlc ) { return { i: "crop",   t: `Crop ${ msg }` }; }
 	}
 };
 
