@@ -25,6 +25,7 @@ DAWCore.History.actionsToText = {
 		moveBlocks: len => [ "arrows", `move ${ len } block${ len > 1 ? "s" : "" }` ],
 		selectBlocks: len => [ "mouse", `select ${ len } block${ len > 1 ? "s" : "" }` ],
 		unselectBlocks: len => [ "mouse", `unselect ${ len } block${ len > 1 ? "s" : "" }` ],
+		duplicateSelectedBlocks: len => [ "plus", `duplicate ${ len } block${ len > 1 ? "s" : "" }` ],
 	},
 	synth: {
 		addOscillator: syn => [ "oscillator", `${ syn }: add osc` ],
