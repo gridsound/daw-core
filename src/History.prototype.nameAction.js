@@ -22,6 +22,7 @@ DAWCore.History.actionsToText = {
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
 	blocks: {
+		addBlock: pat => [ "plus", `add a new ${ pat } block` ],
 		moveBlocks: len => [ "arrows", `move ${ len } block${ len > 1 ? "s" : "" }` ],
 		selectBlocks: len => [ "mouse", `select ${ len } block${ len > 1 ? "s" : "" }` ],
 		removeBlocks: len => [ "erase", `remove ${ len } block${ len > 1 ? "s" : "" }` ],
