@@ -22,6 +22,7 @@ DAWCore.History.actionsToText = {
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
 	tracks: {
+		toggleTrack: ( tr, b ) => [ b ? "unmute" : "mute", `${ b ? "unmute" : "mute" } track "${ tr }"` ],
 		renameTrack: ( old, neww ) => [ "pen", `rename track "${ old }" -> "${ neww }"` ],
 	},
 	blocks: {
