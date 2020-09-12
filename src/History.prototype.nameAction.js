@@ -21,6 +21,9 @@ DAWCore.History.actionsToText = {
 		changeLoop: ( a, b ) => [ "loop", `change loop ${ a } -> ${ b }` ],
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
+	tracks: {
+		renameTrack: ( old, neww ) => [ "pen", `rename track "${ old }" -> "${ neww }"` ],
+	},
 	blocks: {
 		addBlock: pat => [ "plus", `add a new ${ pat } block` ],
 		moveBlocks: len => [ "arrows", `move ${ len } block${ len > 1 ? "s" : "" }` ],
