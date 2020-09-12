@@ -22,8 +22,9 @@ DAWCore.History.actionsToText = {
 		removeLoop: () => [ "loop", "remove loop" ],
 	},
 	tracks: {
-		toggleTrack: ( tr, b ) => [ b ? "unmute" : "mute", `${ b ? "unmute" : "mute" } track "${ tr }"` ],
 		renameTrack: ( old, neww ) => [ "pen", `rename track "${ old }" -> "${ neww }"` ],
+		toggleTrack: ( tr, b ) => [ b ? "unmute" : "mute", `${ b ? "unmute" : "mute" } track "${ tr }"` ],
+		toggleSoloTrack: ( tr, b ) => [ b ? "unmute" : "mute", `${ b ? "unmute all tracks" : `mute all tracks except "${ tr }"` }` ],
 	},
 	blocks: {
 		addBlock: pat => [ "plus", `add a new ${ pat } block` ],
@@ -101,33 +102,9 @@ DAWCore.History.prototype._nameAction = function( act ) {
 		u = act.undo;
 
 	return (
-		DAWCore.History._nameAction_tracks( cmp, r, u ) ||
 		DAWCore.History._nameAction_keys( cmp, r, u ) ||
 		{ i: "close", t: "undefined" }
 	);
-};
-
-DAWCore.History._nameAction_tracks = function( cmp, r, u ) {
-	const o = r.tracks;
-
-	if ( o ) {
-		let a, i = 0;
-
-		for ( a in o ) {
-			if ( o[ a ].name ) {
-				return { i: "pen", t: `Name track: "${ u.tracks[ a ].name }" -> "${ o[ a ].name }"` };
-			}
-			if ( i++ ) {
-				break;
-			}
-		}
-		return i > 1
-			? { i: "unmute", t: "Un/mute several tracks" }
-			: {
-				i: o[ a ].toggle ? "unmute" : "mute",
-				t: `${ o[ a ].toggle ? "Unmute" : "Mute" } "${ cmp.tracks[ a ].name }" track`
-			};
-	}
 };
 
 DAWCore.History._nameAction_keys = function( cmp, r, u ) {
