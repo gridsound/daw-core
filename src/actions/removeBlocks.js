@@ -22,6 +22,6 @@ DAWCore.actions.removeBlocks = ( blcIds, get ) => {
 		obj,
 		blcIds.length
 			? [ "blocks", "removeBlocks", blcIds.length ]
-			: [ "blocks", "unselectBlocks", selLen ],
+			: [ "blocks", "unselectAllBlocks", selLen ],
 	];
 };
