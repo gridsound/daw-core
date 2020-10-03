@@ -33,6 +33,7 @@ DAWCore.History.actionsToText = {
 		removeBlocks: len => [ "erase", `remove ${ len } block${ len > 1 ? "s" : "" }` ],
 		cropEndBlocks: len => [ "crop", `crop-end ${ len } block${ len > 1 ? "s" : "" }` ],
 		cropStartBlocks: len => [ "crop", `crop-start ${ len } block${ len > 1 ? "s" : "" }` ],
+		unselectBlock: () => [ "mouse", `unselect 1 block` ],
 		unselectBlocks: len => [ "mouse", `unselect ${ len } block${ len > 1 ? "s" : "" }` ],
 		duplicateSelectedBlocks: len => [ "plus", `duplicate ${ len } block${ len > 1 ? "s" : "" }` ],
 	},
