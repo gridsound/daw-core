@@ -93,6 +93,7 @@ DAWCore.History.actionsToText = {
 		changeDrumsProps: ( pat, row, prop, nb ) => [ "drums", `drums: set ${ prop } to ${ nb } "${ row }" in "${ pat }"` ],
 	},
 	keys: {
+		moveKeys: len => [ "arrows", `move ${ len } key${ len > 1 ? "s" : "" }` ],
 		selectKeys: len => [ "mouse", `select ${ len } key${ len > 1 ? "s" : "" }` ],
 		unselectKey: () => [ "mouse", "unselect 1 key" ],
 	},
