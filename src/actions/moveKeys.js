@@ -1,8 +1,8 @@
 "use strict";
 
 DAWCore.actions.moveKeys = ( patId, keyIds, whenIncr, keyIncr, get ) => {
-	const pat = get.pattern( patId ),
-		patKeys = get.keys( pat.keys ),
+	const keysId = get.pattern( patId ).keys,
+		patKeys = get.keys( keysId ),
 		keys = keyIds.reduce( ( obj, id ) => {
 			const k = patKeys[ id ],
 				o = {};
@@ -16,31 +16,12 @@ DAWCore.actions.moveKeys = ( patId, keyIds, whenIncr, keyIncr, get ) => {
 			}
 			return obj;
 		}, {} ),
-		obj = { keys: { [ pat.keys ]: keys } };
+		obj = { keys: { [ keysId ]: keys } };
 
 	if ( whenIncr ) {
-		const duration = DAWCore.common.calcNewKeysDuration( pat.keys, keys, get );
+		const duration = DAWCore.common.calcNewKeysDuration( keysId, keys, get );
 
-		if ( duration !== pat.duration ) {
-			const objPatterns = { [ patId ]: { duration } },
-				objBlocks = Object.entries( get.blocks() )
-					.reduce( ( obj, [ id, blc ] ) => {
-						if ( blc.pattern === patId && !blc.durationEdited ) {
-							obj[ id ] = { duration };
-						}
-						return obj;
-					}, {} );
-
-			obj.patterns = objPatterns;
-			GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
-			if ( GSUtils.isntEmpty( objBlocks ) ) {
-				const dur = DAWCore.common.calcNewDuration( obj, get );
-
-				if ( dur !== get.duration() ) {
-					obj.duration = dur;
-				}
-			}
-		}
+		DAWCore.common.updatePatternDuration( obj, patId, duration, get );
 	}
 	return [
 		obj,

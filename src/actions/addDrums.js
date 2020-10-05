@@ -53,24 +53,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 			duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM,
 			obj = { drums: { [ pat.drums ]: newDrums } };
 
-		if ( pat.duration !== duration ) {
-			const blocks = Object.entries( get.blocks() ).reduce( ( obj, [ blcId, blc ] ) => {
-					if ( blc.pattern === patternId && !blc.durationEdited ) {
-						obj[ blcId ] = { duration };
-					}
-					return obj;
-				}, {} );
-
-			obj.patterns = { [ patternId ]: { duration } };
-			GSUtils.addIfNotEmpty( obj, "blocks", blocks );
-			if ( GSUtils.isntEmpty( blocks ) ) {
-				const dur = DAWCore.common.calcNewDuration( obj, get );
-
-				if ( dur !== get.duration() ) {
-					obj.duration = dur;
-				}
-			}
-		}
+		DAWCore.common.updatePatternDuration( obj, patternId, duration, get );
 		return [
 			obj,
 			[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],
