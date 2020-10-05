@@ -94,6 +94,7 @@ DAWCore.History.actionsToText = {
 	},
 	keys: {
 		selectKeys: len => [ "mouse", `select ${ len } key${ len > 1 ? "s" : "" }` ],
+		unselectKey: () => [ "mouse", "unselect 1 key" ],
 	},
 };
 
