@@ -1,17 +1,14 @@
 "use strict";
 
 DAWCore.History.prototype.nameAction = function( act, msg ) {
-	if ( msg ) {
-		const [ part, actionName, ...args ] = msg,
-			fn = DAWCore.History.actionsToText[ part ][ actionName ],
-			[ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
+	const [ part, actionName, ...args ] = msg || [],
+		fn = DAWCore.History.actionsToText[ part ]?.[ actionName ],
+		[ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
 
-		if ( !fn ) {
-			console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );
-		}
-		return { i, t };
+	if ( !fn ) {
+		console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );
 	}
-	return this._nameAction( act );
+	return { i, t };
 };
 
 DAWCore.History.actionsToText = {
@@ -101,44 +98,4 @@ DAWCore.History.actionsToText = {
 		redirectKey: ( pat, b ) => [ "glissando", `${ b ? "add" : "remove" } a glissando in "${ pat }"` ],
 		changeKeysProps: ( pat, prop, len ) => [ "drums", `keys: set ${ prop } to ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
 	},
-};
-
-// Everything below this line has to be removed, sorted and rewrited above.
-// .............................................................................
-
-DAWCore.History.prototype._nameAction = function( act ) {
-	const cmp = this.daw.get.cmp(),
-		r = act.redo,
-		u = act.undo;
-
-	return (
-		DAWCore.History._nameAction_keys( cmp, r, u ) ||
-		{ i: "close", t: "undefined" }
-	);
-};
-
-DAWCore.History._nameAction_keys = function( cmp, r, u ) {
-	for ( const a in r.keys ) {
-		const o = r.keys[ a ];
-
-		for ( const b in o ) {
-			const arrK = Object.keys( o ),
-				msgPat = cmp.patterns[ cmp.patternKeysOpened ].name,
-				msgSmp = `${ arrK.length } key${ arrK.length > 1 ? "s" : "" }`,
-				oB = o[ b ];
-
-			return (
-				( !oB                             && { i: "erase",  t: `${ msgPat }: remove ${       msgSmp }` } ) ||
-				( !u.keys[ a ][ b ]               && { i: "keys",   t: `${ msgPat }: add ${          msgSmp }` } ) ||
-				( "duration" in oB                && { i: "crop",   t: `${ msgPat }: crop ${         msgSmp }` } ) ||
-				( "gain" in oB                    && { i: "keys",   t: `${ msgPat }: edit gain of ${ msgSmp }` } ) ||
-				( "pan" in oB                     && { i: "keys",   t: `${ msgPat }: edit pan of ${  msgSmp }` } ) ||
-				( ( "when" in oB || "key" in oB ) && { i: "arrows", t: `${ msgPat }: move ${         msgSmp }` } ) ||
-				( "selected" in oB && ( oB.selected
-					? { i: "mouse", t: `${ msgPat }: select ${ msgSmp }` }
-					: { i: "mouse", t: `${ msgPat }: unselect ${ msgSmp }` }
-				) )
-			);
-		}
-	}
 };
