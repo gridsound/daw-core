@@ -99,6 +99,6 @@ DAWCore.History.actionsToText = {
 		redirectKey: ( pat, b ) => [ "glissando", `${ b ? "add" : "remove" } a glissando in "${ pat }"` ],
 		unselectAllKeys: ( pat, len ) => [ "mouse", `unselect ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
 		changeKeysEnv: ( pat, len, prop ) => [ "glissando", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
-		changeKeysProps: ( pat, prop, len ) => [ "drums", `keys: set ${ prop } to ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
+		changeKeysProps: ( pat, prop, len ) => [ "drums", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
 	},
 };
