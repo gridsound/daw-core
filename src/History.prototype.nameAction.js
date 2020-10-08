@@ -90,7 +90,7 @@ DAWCore.History.actionsToText = {
 		changeDrumsProps: ( pat, row, prop, nb ) => [ "drums", `drums: set ${ prop } to ${ nb } "${ row }" in "${ pat }"` ],
 	},
 	keys: {
-		addKey: pat => [ "plus", `add a new key in "${ pat }"` ],
+		addKey: pat => [ "keys", `add a new key in "${ pat }"` ],
 		moveKeys: ( pat, len ) => [ "arrows", `keys: move ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
 		removeKeys: ( pat, len ) => [ "erase", `keys: remove ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
 		selectKeys: ( pat, len ) => [ "mouse", `keys: select ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
@@ -98,7 +98,8 @@ DAWCore.History.actionsToText = {
 		unselectKey: pat => [ "mouse", `keys: unselect ${ GSUtils.plural( 1, "key" ) } in "${ pat }"` ],
 		redirectKey: ( pat, b ) => [ "glissando", `${ b ? "add" : "remove" } a glissando in "${ pat }"` ],
 		unselectAllKeys: ( pat, len ) => [ "mouse", `unselect ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
-		changeKeysEnv: ( pat, len, prop ) => [ "glissando", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
-		changeKeysProps: ( pat, prop, len ) => [ "drums", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
+		changeKeysEnv: ( pat, len, prop ) => [ "keys", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
+		changeKeysProps: ( pat, prop, len ) => [ "keys", `keys: change ${ GSUtils.plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
+		cloneSelectedKeys: ( pat, len ) => [ "keys", `clone ${ GSUtils.plural( len, "key" ) } in "${ pat }"` ],
 	},
 };
