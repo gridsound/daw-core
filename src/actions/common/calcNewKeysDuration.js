@@ -20,5 +20,5 @@ DAWCore.common.calcNewKeysDuration = ( keysId, keysObj, get ) => {
 				: max;
 		}, dur );
 
-	return Math.ceil( dur2 / bPM ) * bPM;
+	return Math.max( 1, Math.ceil( dur2 / bPM ) ) * bPM;
 };
