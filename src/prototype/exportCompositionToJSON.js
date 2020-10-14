@@ -4,11 +4,12 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 	const cmp = this.get.composition( saveMode, id );
 
 	if ( cmp ) {
+		const cpy = GSUtils.jsonCopy( cmp ),
+			cpyFormated = DAWCore.Composition.format( DAWCore.Composition.epure( cpy ) );
+
 		return {
 			name: `${ cmp.name || "untitled" }.gs`,
-			url: this._exportCompositionToJSON(
-				DAWCore.Composition.epure(
-				GSUtils.jsonCopy( cmp ) ) )
+			url: this._exportCompositionToJSON( cpyFormated ),
 		};
 	}
 };
