@@ -5,7 +5,7 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 
 	if ( cmp ) {
 		const cpy = GSUtils.jsonCopy( cmp ),
-			cpyFormated = DAWCore.Composition.format( DAWCore.Composition.epure( cpy ) );
+			cpyFormated = DAWCore.Composition.epure( DAWCore.Composition.format( cpy ) );
 
 		return {
 			name: `${ cmp.name || "untitled" }.gs`,
