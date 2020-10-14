@@ -124,10 +124,10 @@ DAWCore.Composition.format = function( cmp ) {
 					k.key = window.gsuiKeys.keyStrToMidi( k.key );
 				} else {
 					console.warn( "DAWCore.Composition.format: gsuiKeys is needed to convert an old midi notation" );
-					return false;
+					return null;
 				}
 			}
 		} );
 	} );
-	return true;
+	return cmp;
 };
