@@ -90,9 +90,14 @@ class DAWCore {
 
 	setCtx( ctx ) {
 		this.ctx = ctx;
+		this.drums._waDrums.setContext( ctx );
+		this.pianoroll._waKeys.setContext( ctx );
 		this._wadrumrows.setContext( ctx );
 		this.destination.setCtx( ctx );
 		this.composition.setCtx( ctx );
+	}
+	resetAudioContext() {
+		this.setCtx( new AudioContext() );
 	}
 	envChange( obj ) {
 		Object.assign( this.env, obj );
