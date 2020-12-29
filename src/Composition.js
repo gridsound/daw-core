@@ -205,19 +205,21 @@ DAWCore.Composition = class {
 					}
 				} break;
 				case "keys": {
-					const waKeys = new gswaKeysScheduler( this.ctx );
+					const waKeys = new gswaKeysScheduler();
 
 					this._startedSched.set( startedId, [ patId, waKeys ] );
 					waKeys.scheduler.setBPM( cmp.bpm );
+					waKeys.setContext( this.ctx );
 					waKeys.setSynth( this.daw.get.audioSynth( pat.synth ) );
 					waKeys.change( cmp.keys[ pat.keys ] );
 					waKeys.start( when, off, dur );
 				} break;
 				case "drums": {
-					const waDrums = new gswaDrumsScheduler( this.ctx );
+					const waDrums = new gswaDrumsScheduler();
 
 					this._startedSched.set( startedId, [ patId, waDrums ] );
 					waDrums.scheduler.setBPM( cmp.bpm );
+					waDrums.setContext( this.ctx );
 					waDrums.setDrumrows( this.daw._wadrumrows );
 					waDrums.change( cmp.drums[ pat.drums ] );
 					waDrums.start( when, off, dur );

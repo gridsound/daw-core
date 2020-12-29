@@ -2,7 +2,7 @@
 
 DAWCore.Drums = class {
 	constructor( daw ) {
-		const waDrums = new gswaDrumsScheduler( daw.ctx );
+		const waDrums = new gswaDrumsScheduler();
 
 		this.daw = daw;
 		this.looping =
@@ -10,10 +10,10 @@ DAWCore.Drums = class {
 		this.loopA =
 		this.loopB = null;
 		this.duration = 0;
-		this._ctx = daw.ctx;
 		this._waDrums = waDrums;
 		Object.seal( this );
 
+		waDrums.setContext( daw.ctx );
 		waDrums.setDrumrows( daw._wadrumrows );
 	}
 

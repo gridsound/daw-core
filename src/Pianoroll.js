@@ -2,7 +2,7 @@
 
 DAWCore.Pianoroll = class {
 	constructor( daw ) {
-		const waKeys = new gswaKeysScheduler( daw.ctx );
+		const waKeys = new gswaKeysScheduler();
 
 		this.daw = daw;
 		this.keys = {};
@@ -12,9 +12,11 @@ DAWCore.Pianoroll = class {
 		this.loopA =
 		this.loopB = null;
 		this.duration = 0;
-		this._ctx = daw.ctx;
 		this._waKeys = waKeys;
 		this._keysStartedLive = {};
+		Object.seal( this );
+
+		waKeys.setContext( daw.ctx );
 	}
 
 	change( patObj, keysObj ) {
