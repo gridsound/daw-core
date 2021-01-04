@@ -16,6 +16,7 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 
 DAWCore._exportJSONTabs = {
 	keys: 4,
+	drums: 4,
 	synths: 5,
 	tracks: 3,
 	blocks: 3,
