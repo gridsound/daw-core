@@ -92,13 +92,9 @@ DAWCore.Pianoroll = class {
 	}
 	liveKeydown( midi ) {
 		if ( !( midi in this._keysStartedLive ) ) {
-			this._keysStartedLive[ midi ] = this._synth.startKey( [ [ null, {
-				key: midi,
-				pan: 0,
-				gain: .8,
-				lowpass: 1,
-				highpass: 1,
-			} ] ], this._waKeys.scheduler.currentTime(), 0, Infinity );
+			this._keysStartedLive[ midi ] = this._synth.startKey(
+				[ [ null, DAWCore.json.key( { key: midi } ) ] ],
+				this._waKeys.scheduler.currentTime(), 0, Infinity );
 		}
 	}
 	liveKeyup( midi ) {
