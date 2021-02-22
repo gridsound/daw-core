@@ -113,6 +113,7 @@ DAWCore.Composition.format = function( cmp ) {
 			k.release = GSUtils.castToNumber( k.release, 0, 0, Infinity, 3 );
 			k.lowpass = GSUtils.castToNumber( k.lowpass, 1, 0, 1, 2 );
 			k.highpass = GSUtils.castToNumber( k.highpass, 1, 0, 1, 2 );
+			k.lfoSpeed = k.lfoSpeed ?? 1;
 			k.selected = !!k.selected;
 			if ( typeof k.prev === "number" ) { k.prev += ""; }
 			if ( typeof k.next === "number" ) { k.next += ""; }
