@@ -1,8 +1,10 @@
 "use strict";
 
 DAWCore.json.key = obj => ( {
+	prev: null,
+	next: null,
 	key: 57,
-	when: 1,
+	when: 0,
 	duration: 1,
 	gain: .8,
 	pan: 0,
@@ -11,7 +13,6 @@ DAWCore.json.key = obj => ( {
 	attack: 0,
 	release: 0,
 	selected: false,
-	prev: null,
-	next: null,
+	lfoSpeed: 1,
 	...obj,
 } );
