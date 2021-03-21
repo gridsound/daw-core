@@ -13,7 +13,7 @@ DAWCore.json.key = obj => ( {
 	attack: 0,
 	release: 0,
 	selected: false,
-	lfoAmp: 1,
-	lfoSpeed: 1,
+	lfoGainAmp: 1,
+	lfoGainSpeed: 1,
 	...obj,
 } );

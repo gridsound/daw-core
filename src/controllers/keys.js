@@ -48,8 +48,8 @@ DAWCore.controllers.keys = class {
 		this._setProp( dataKey, cb, "pan", obj.pan );
 		this._setProp( dataKey, cb, "lowpass", obj.lowpass );
 		this._setProp( dataKey, cb, "highpass", obj.highpass );
-		this._setProp( dataKey, cb, "lfoAmp", obj.lfoAmp );
-		this._setProp( dataKey, cb, "lfoSpeed", obj.lfoSpeed );
+		this._setProp( dataKey, cb, "lfoGainAmp", obj.lfoGainAmp );
+		this._setProp( dataKey, cb, "lfoGainSpeed", obj.lfoGainSpeed );
 		this._setProp( dataKey, cb, "selected", obj.selected );
 		this._setProp( dataKey, cb, "prev", obj.prev );
 		this._setProp( dataKey, cb, "next", obj.next );
