@@ -114,14 +114,16 @@ DAWCore.Composition.format = function( cmp ) {
 			k.lowpass = GSUtils.castToNumber( k.lowpass, 1, 0, 1, 2 );
 			k.highpass = GSUtils.castToNumber( k.highpass, 1, 0, 1, 2 );
 			k.selected = !!k.selected;
-			k.lfoGainAmp = k.lfoAmp ?? k.lfoGainAmp ?? 1;
-			k.lfoGainSpeed = k.lfoSpeed ?? k.lfoGainSpeed ?? 1;
+			k.gainLFOAmp = k.lfoAmp ?? k.lfoGainAmp ?? k.gainLFOAmp ?? 1;
+			k.gainLFOSpeed = k.lfoSpeed ?? k.lfoGainSpeed ?? k.gainLFOSpeed ?? 1;
 			if ( typeof k.prev === "number" ) { k.prev += ""; }
 			if ( typeof k.next === "number" ) { k.next += ""; }
 			k.prev = k.prev || null;
 			k.next = k.next || null;
 			delete k.lfoAmp;
 			delete k.lfoSpeed;
+			delete k.lfoGainAmp;
+			delete k.lfoGainSpeed;
 			delete k.durationEdited;
 			if ( typeof k.key === "string" ) {
 				if ( window.gsuiKeys ) {
