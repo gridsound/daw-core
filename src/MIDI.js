@@ -3,9 +3,10 @@
 DAWCore.MIDI = class {
     constructor( daw ) {
         this.daw = daw
-        this.midiSupport = this._MIDIApiBrowserSupport(),
-        this.midiInputs = null,
-        this.midiOutputs = null,
+        this.MIDIEnable
+        this.MIDISupport = this._MIDIApiBrowserSupport(),
+        this.MIDIInputs = null,
+        this.MIDIOutputs = null,
         this._MIDIAccess()
 	}
 
@@ -21,9 +22,9 @@ DAWCore.MIDI = class {
     _MIDIAccess() {
         if (this.midiSupport) {
             navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
-            function onMIDISuccess(midiAccess) {
-                this.midiInputs = midiAccess.inputs;
-                this.midiOutputs = midiAccess.outputs;
+            function onMIDISuccess(MIDIAccess) {
+                this.MIDIInputs = MIDIAccess.inputs;
+                this.MIDIOutputs = MIDIAccess.outputs;
             }
         
             function onMIDIFailure() {
@@ -32,7 +33,7 @@ DAWCore.MIDI = class {
         }
     }
 
-    _getMIDIInput(id, callback = MIDIMessageReceived) {
+    getMIDIInput(id, callback = MIDIMessageReceived) {
          if (this.midiSupport) {
             var connectedMIDI = midi.inputs.get(id);
             // connect midi on message to callback
@@ -51,13 +52,15 @@ DAWCore.MIDI = class {
         };
     }
 
-    MIDIMessageReceived(e) {
+    MIDIMessageReceived(e, callback) {
         if (this.midiSupport) {
             var midiMessage = parseMidiMessage(e);
             if (midiMessage.velocity > 0) {
                 this.daw.pianoroll.liveKeydown(midiMessage.note);
+                callback()
             } else {
                 this.daw.pianoroll.liveKeyup(midiMessage.note);
+                callback()
             }
         }
     }

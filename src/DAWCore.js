@@ -28,6 +28,7 @@ class DAWCore {
 		this.pianoroll = new DAWCore.Pianoroll( this );
 		this.composition = new DAWCore.Composition( this );
 		this.destination = new DAWCore.Destination( this );
+		this.midi = new DAWCore.MIDI( this );
 		this._loop = this._loop.bind( this );
 		this._loopMs = 1;
 		this._focused = this.composition;
@@ -36,6 +37,7 @@ class DAWCore {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
+			midiInputDevices: id => this.midi.getMIDIInput(id),
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),
@@ -76,7 +78,7 @@ class DAWCore {
 			synth: id => this.composition.cmp.synths[ id ],
 			synths: () => this.composition.cmp.synths,
 			track: id => this.composition.cmp.tracks[ id ],
-			tracks: () => this.composition.cmp.tracks,
+			tracks: () => this.composition.cmp.tracks
 		};
 
 		wadrumrows.getAudioBuffer = this.get.audioBuffer;
