@@ -1,19 +1,12 @@
 "use strict";
 
-DAWCore.controllers.midi = class {
-    constructor( fns ) {
-		this.data = {
-            midiSupport: this._MIDIApiBrowserSupport(),
-            midiInputs: null,
-            midiOutputs: null,
-        };
+DAWCore.MIDI = class {
+    constructor( daw ) {
+        this.daw = daw
+        this.midiSupport = this._MIDIApiBrowserSupport(),
+        this.midiInputs = null,
+        this.midiOutputs = null,
         this._MIDIAccess()
-		this.on = GSUtils.mapCallbacks( [], fns.dataCallbacks );
-		this._keysCrud = GSUtils.createUpdateDelete.bind( null, this.data,
-			this._addKey.bind( this ),
-			this._updateKey.bind( this ),
-			this._deleteKey.bind( this ) );
-		Object.freeze( this );
 	}
 
     _MIDIApiBrowserSupport() {
@@ -39,7 +32,7 @@ DAWCore.controllers.midi = class {
         }
     }
 
-    _getMIDIInput(id, callback) {
+    _getMIDIInput(id, callback = MIDIMessageReceived) {
          if (this.midiSupport) {
             var connectedMIDI = midi.inputs.get(id);
             // connect midi on message to callback
@@ -62,11 +55,9 @@ DAWCore.controllers.midi = class {
         if (this.midiSupport) {
             var midiMessage = parseMidiMessage(e);
             if (midiMessage.velocity > 0) {
-                DAW.pianoroll.liveKeydown(midiMessage.note);
-                UIkeys.midiKeyDown(midiMessage.note);
+                this.daw.pianoroll.liveKeydown(midiMessage.note);
             } else {
-                DAW.pianoroll.liveKeyup(midiMessage.note);
-                UIkeys.midiKeyUp(midiMessage.note);
+                this.daw.pianoroll.liveKeyup(midiMessage.note);
             }
         }
     }
