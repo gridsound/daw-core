@@ -37,7 +37,7 @@ class DAWCore {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
-			midiInputDevices: id => this.midi.getMIDIInput(id),
+			midiInputDevice: id => this.midi.getMIDIInput(id),
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),
