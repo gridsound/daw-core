@@ -109,8 +109,6 @@ DAWCore.Composition.format = function( cmp ) {
 		Object.values( keys ).forEach( k => {
 			k.pan = GSUtils.castToNumber( k.pan, 0, -1, 1, 2 );
 			k.gain = GSUtils.castToNumber( k.gain, .8, 0, 1, 2 );
-			k.attack = GSUtils.castToNumber( k.attack, 0, 0, Infinity, 3 );
-			k.release = GSUtils.castToNumber( k.release, 0, 0, Infinity, 3 );
 			k.lowpass = GSUtils.castToNumber( k.lowpass, 1, 0, 1, 2 );
 			k.highpass = GSUtils.castToNumber( k.highpass, 1, 0, 1, 2 );
 			k.selected = !!k.selected;
@@ -120,6 +118,8 @@ DAWCore.Composition.format = function( cmp ) {
 			if ( typeof k.next === "number" ) { k.next += ""; }
 			k.prev = k.prev || null;
 			k.next = k.next || null;
+			delete k.attack;
+			delete k.release;
 			delete k.lfoAmp;
 			delete k.lfoSpeed;
 			delete k.lfoGainAmp;

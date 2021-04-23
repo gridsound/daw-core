@@ -12,8 +12,6 @@ DAWCore.json.key = obj => ( {
 	pan: 0,
 	highpass: 1,
 	lowpass: 1,
-	attack: 0,
-	release: 0,
 	selected: false,
 	...obj,
 } );

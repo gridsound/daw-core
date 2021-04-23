@@ -42,8 +42,6 @@ DAWCore.controllers.keys = class {
 		this._setProp( dataKey, cb, "key", obj.key );
 		this._setProp( dataKey, cb, "when", obj.when );
 		this._setProp( dataKey, cb, "duration", obj.duration );
-		this._setProp( dataKey, cb, "attack", obj.attack );
-		this._setProp( dataKey, cb, "release", obj.release );
 		this._setProp( dataKey, cb, "gain", obj.gain );
 		this._setProp( dataKey, cb, "gainLFOAmp", obj.gainLFOAmp );
 		this._setProp( dataKey, cb, "gainLFOSpeed", obj.gainLFOSpeed );
