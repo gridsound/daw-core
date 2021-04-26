@@ -33,9 +33,15 @@ DAWCore.Destination = class {
 		this.ctx = ctx;
 		this._inputNode = ctx.createGain();
 		this._gainNode = ctx.createGain();
-		this._gainNode.connect( ctx.destination );
-		this._inputNode.connect( this._gainNode );
-		this.toggleAnalyser( !offline && this.daw.env.analyserEnable );
+		this._inputNode
+			.connect( this._gainNode )
+			.connect( ctx.destination );
+		if ( offline ) {
+			this.toggleAnalyser( false );
+		} else {
+			this.toggleAnalyser( this.daw.env.analyserEnable );
+			this.setGain( this._gain );
+		}
 	}
 	analyserFillData() {
 		if ( this._analyserNode ) {
