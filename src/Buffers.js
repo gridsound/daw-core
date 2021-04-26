@@ -1,31 +1,34 @@
 "use strict";
 
 DAWCore.Buffers = class {
+	#daw = null
+	#files = new Map()
+
 	constructor( daw ) {
-		this.daw = daw;
-		this._files = new Map();
+		this.#daw = daw;
+		Object.seal( this );
 	}
 
 	empty() {
-		this._files.clear();
+		this.#files.clear();
 	}
 	getBuffer( buf ) {
-		return this._files.get( buf.hash || buf.url );
+		return this.#files.get( buf.hash || buf.url );
 	}
 	getSize() {
-		return this._files.size;
+		return this.#files.size;
 	}
 	setBuffer( obj ) {
 		const buf = { ...obj },
 			url = buf.url,
 			key = buf.hash || url;
 
-		this._files.set( key, buf );
+		this.#files.set( key, buf );
 		return !url
 			? Promise.resolve( buf )
 			: fetch( `../assets/samples/${ url }` )
 				.then( res => res.arrayBuffer() )
-				.then( arr => this.daw.ctx.decodeAudioData( arr ) )
+				.then( arr => this.#daw.ctx.decodeAudioData( arr ) )
 				.then( buffer => {
 					buf.buffer = buffer;
 					buf.duration = +buffer.duration.toFixed( 4 );
@@ -40,7 +43,7 @@ DAWCore.Buffers = class {
 			let nbDone = 0;
 
 			Array.from( files ).forEach( file => {
-				this._getBufferFromFile( file )
+				this.#getBufferFromFile( file )
 					.then( ( [ hash, buffer ] ) => {
 						const buf = {
 								hash,
@@ -73,23 +76,23 @@ DAWCore.Buffers = class {
 		} );
 	}
 
-	// private:
-	_getBufferFromFile( file ) {
+	// .........................................................................
+	#getBufferFromFile( file ) {
 		return new Promise( ( res, rej ) => {
 			const reader = new FileReader();
 
 			reader.onload = e => {
 				const buf = e.target.result,
-					hash = this._hashBuffer_v1( new Uint8Array( buf ) ); // 1.
+					hash = this.#hashBufferV1( new Uint8Array( buf ) ); // 1.
 
-				this.daw.ctx.decodeAudioData( buf ).then( audiobuf => {
+				this.#daw.ctx.decodeAudioData( buf ).then( audiobuf => {
 					res( [ hash, audiobuf ] );
 				}, rej );
 			};
 			reader.readAsArrayBuffer( file );
 		} );
 	}
-	_hashBuffer_v1( u8buf ) {
+	#hashBufferV1( u8buf ) {
 		const hash = new Uint8Array( 19 ),
 			len = `${ u8buf.length }`.padStart( 9, "0" );
 		let i = 0,
@@ -109,6 +112,8 @@ DAWCore.Buffers = class {
 			.join( "" ) }`;
 	}
 };
+
+Object.freeze( DAWCore.Buffers );
 
 /*
 1. the hash is calculed before the data decoded
