@@ -1,78 +1,80 @@
 "use strict";
 
 DAWCore.Destination = class {
+	#daw = null
+	#ctx = null
+	#gainNode = null
+	#inputNode = null
+	#analyserNode = null
+	#analyserData = null
+	#gain = 1
+
 	constructor( daw ) {
-		this.daw = daw;
-		this.ctx =
-		this._gainNode =
-		this._inputNode =
-		this._analyserNode =
-		this._analyserData = null;
-		this._gain = 1;
-		this.empty();
+		this.#daw = daw;
 		Object.seal( this );
 	}
 
 	getDestination() {
-		return this._inputNode;
+		return this.#inputNode;
 	}
 	getGain() {
-		return this._gain;
+		return this.#gain;
 	}
 	setGain( v ) {
-		this._gain = v;
-		this._gainNode.gain.value = v * v;
+		this.#gain = v;
+		if ( this.#ctx instanceof AudioContext ) {
+			this.#gainNode.gain.value = v * v;
+		}
 	}
 	empty() {
-		this._gainNode && this._gainNode.disconnect();
-		this._inputNode && this._inputNode.disconnect();
-		this._analyserNode && this._analyserNode.disconnect();
-		this._gainNode =
-		this._inputNode =
-		this._analyserNode =
-		this._analyserData = null;
+		this.#gainNode && this.#gainNode.disconnect();
+		this.#inputNode && this.#inputNode.disconnect();
+		this.#analyserNode && this.#analyserNode.disconnect();
+		this.#gainNode =
+		this.#inputNode =
+		this.#analyserNode =
+		this.#analyserData = null;
 	}
 	setCtx( ctx ) {
-		const offline = ctx instanceof OfflineAudioContext;
-
 		this.empty();
-		this.ctx = ctx;
-		this._inputNode = ctx.createGain();
-		this._gainNode = ctx.createGain();
-		this._inputNode
-			.connect( this._gainNode )
+		this.#ctx = ctx;
+		this.#inputNode = ctx.createGain();
+		this.#gainNode = ctx.createGain();
+		this.#inputNode
+			.connect( this.#gainNode )
 			.connect( ctx.destination );
-		if ( offline ) {
-			this.toggleAnalyser( false );
+		if ( ctx instanceof AudioContext ) {
+			this.toggleAnalyser( this.#daw.env.analyserEnable );
+			this.setGain( this.#gain );
 		} else {
-			this.toggleAnalyser( this.daw.env.analyserEnable );
-			this.setGain( this._gain );
+			this.toggleAnalyser( false );
 		}
 	}
 	analyserFillData() {
-		if ( this._analyserNode ) {
-			this._analyserNode.getByteFrequencyData( this._analyserData );
-			return this._analyserData;
+		if ( this.#analyserNode ) {
+			this.#analyserNode.getByteFrequencyData( this.#analyserData );
+			return this.#analyserData;
 		}
 	}
 	toggleAnalyser( b ) {
-		if ( this._analyserNode ) {
-			this._analyserNode.disconnect();
+		if ( this.#analyserNode ) {
+			this.#analyserNode.disconnect();
 		}
 		if ( b ) {
-			const an = this.ctx.createAnalyser(),
-				fftSize = this.daw.env.analyserFFTsize;
+			const an = this.#ctx.createAnalyser(),
+				fftSize = this.#daw.env.analyserFFTsize;
 
-			this._analyserNode = an;
-			this._analyserData = new Uint8Array( fftSize / 2 );
+			this.#analyserNode = an;
+			this.#analyserData = new Uint8Array( fftSize / 2 );
 			an.fftSize = fftSize;
 			an.smoothingTimeConstant = 0;
-			an.connect( this._gainNode );
-			this._inputNode.connect( an );
+			this.#inputNode
+				.connect( an )
+				.connect( this.#gainNode );
 		} else {
-			this._analyserNode =
-			this._analyserData = null;
-			this._inputNode.connect( this._gainNode );
+			this.#analyserNode =
+			this.#analyserData = null;
+			this.#inputNode.connect( this.#gainNode );
 		}
 	}
 };
