@@ -3,8 +3,14 @@
 DAWCore.Destination = class {
 	constructor( daw ) {
 		this.daw = daw;
+		this.ctx =
+		this._gainNode =
+		this._inputNode =
+		this._analyserNode =
+		this._analyserData = null;
 		this._gain = 1;
 		this.empty();
+		Object.seal( this );
 	}
 
 	getDestination() {
@@ -70,3 +76,5 @@ DAWCore.Destination = class {
 		}
 	}
 };
+
+Object.freeze( DAWCore.Destination );
