@@ -2,9 +2,6 @@
 
 class DAWCore {
 	constructor() {
-		const ctx = new AudioContext(),
-			wadrumrows = new gswaDrumrows();
-
 		this.cb = {};
 		this.env = Object.seal( {
 			def_bpm: 120,
@@ -12,6 +9,7 @@ class DAWCore {
 			def_nbTracks: 21,
 			def_stepsPerBeat: 4,
 			def_beatsPerMeasure: 4,
+			sampleRate: 48000,
 			analyserFFTsize: 8192,
 			analyserEnable: true,
 			clockSteps: false,
@@ -20,8 +18,8 @@ class DAWCore {
 			local: new Map(),
 			cloud: new Map(),
 		};
-		this.ctx = ctx;
-		this._wadrumrows = wadrumrows;
+		this.ctx = null;
+		this._wadrumrows = new gswaDrumrows();
 		this.drums = new DAWCore.Drums( this );
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
@@ -79,12 +77,12 @@ class DAWCore {
 			tracks: () => this.composition.cmp.tracks,
 		};
 
-		wadrumrows.getAudioBuffer = this.get.audioBuffer;
-		wadrumrows.getChannelInput = this.get.audioChanIn;
-		wadrumrows.onstartdrum = rowId => this._call( "onstartdrum", rowId );
-		wadrumrows.onstartdrumcut = rowId => this._call( "onstopdrumrow", rowId );
+		this._wadrumrows.getAudioBuffer = this.get.audioBuffer;
+		this._wadrumrows.getChannelInput = this.get.audioChanIn;
+		this._wadrumrows.onstartdrum = rowId => this._call( "onstartdrum", rowId );
+		this._wadrumrows.onstartdrumcut = rowId => this._call( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
-		this.setCtx( ctx );
+		this.resetAudioContext();
 		this.destination.setGain( this.env.def_appGain );
 	}
 
@@ -97,7 +95,8 @@ class DAWCore {
 		this.composition.setCtx( ctx );
 	}
 	resetAudioContext() {
-		this.setCtx( new AudioContext() );
+		this.stop();
+		this.setCtx( new AudioContext( { sampleRate: this.env.sampleRate } ) );
 	}
 	envChange( obj ) {
 		Object.assign( this.env, obj );
@@ -166,6 +165,12 @@ class DAWCore {
 		this._call( "stop", this._focusedStr );
 		this._call( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
 		this._clockUpdate();
+	}
+	setSampleRate( sr ) {
+		if ( sr !== this.env.sampleRate ) {
+			this.env.sampleRate = sr;
+			this.resetAudioContext();
+		}
 	}
 	setLoopRate( fps ) {
 		this._loopMs = 1000 / fps | 0;
