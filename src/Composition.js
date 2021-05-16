@@ -21,6 +21,7 @@ DAWCore.Composition = class {
 		this._startedSched = new Map();
 		this._startedBuffers = new Map();
 		this._actionSavedOn = null;
+		sch.delayStopCallback = 4;
 		sch.currentTime = () => this.ctx.currentTime;
 		sch.ondatastart = this._onstartBlock.bind( this );
 		sch.ondatastop = this._onstopBlock.bind( this );
