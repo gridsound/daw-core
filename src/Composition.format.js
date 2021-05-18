@@ -85,6 +85,7 @@ DAWCore.Composition.format = function( cmp ) {
 		delete syn.envelopes;
 		syn.env = syn.env || DAWCore.json.env();
 		syn.lfo = syn.lfo || DAWCore.json.lfo();
+		delete syn.env.substain;
 		Object.values( syn.oscillators ).forEach( osc => {
 			osc.detune = Math.min( Math.max( -24, Math.round( osc.detune ) ), 24 );
 		} );

@@ -85,7 +85,7 @@ DAWCore.controllers.synth = class {
 		this._setProp( dataEnv, cb, "attack", obj.attack );
 		this._setProp( dataEnv, cb, "hold", obj.hold );
 		this._setProp( dataEnv, cb, "decay", obj.decay );
-		this._setProp( dataEnv, cb, "substain", obj.substain );
+		this._setProp( dataEnv, cb, "sustain", obj.sustain );
 		this._setProp( dataEnv, cb, "release", obj.release );
 		this.on.updateEnvWave();
 		this.on.changeEnv( obj );

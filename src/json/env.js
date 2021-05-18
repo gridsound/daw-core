@@ -5,7 +5,7 @@ DAWCore.json.env = obj => ( {
 	attack: .04,
 	hold: 0,
 	decay: .08,
-	substain: .75,
+	sustain: .75,
 	release: .25,
 	...obj,
 } );
