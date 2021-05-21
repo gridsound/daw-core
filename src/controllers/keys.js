@@ -3,12 +3,12 @@
 DAWCore.controllers.keys = class {
 	constructor( fns ) {
 		this.data = {};
-		this.on = GSUtils.mapCallbacks( [
+		this.on = DAWCore.utils.mapCallbacks( [
 			"addKey",
 			"removeKey",
 			"changeKeyProp",
 		], fns.dataCallbacks );
-		this._keysCrud = GSUtils.createUpdateDelete.bind( null, this.data,
+		this._keysCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
 			this._addKey.bind( this ),
 			this._updateKey.bind( this ),
 			this._deleteKey.bind( this ) );

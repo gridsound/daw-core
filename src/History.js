@@ -18,7 +18,7 @@ DAWCore.History = class {
 	}
 	stackChange( redo, msg ) {
 		const stack = this.#stack,
-			undo = GSUtils.composeUndo( this.#daw.composition.cmp, redo ),
+			undo = DAWCore.utils.composeUndo( this.#daw.composition.cmp, redo ),
 			act = { redo, undo },
 			desc = this.nameAction( act, msg );
 

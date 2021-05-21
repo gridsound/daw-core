@@ -5,7 +5,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 		act = this.daw.history.getCurrentAction(),
 		saved = act === this._actionSavedOn && !!cmp.savedAt;
 
-	GSUtils.diffAssign( cmp, obj );
+	DAWCore.utils.diffAssign( cmp, obj );
 	this._wamixer.change( obj );
 	this.daw._wadrumrows.change( obj );
 	this._waeffects.change( obj );

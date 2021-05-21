@@ -4,7 +4,7 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 	const cmp = this.get.composition( saveMode, id );
 
 	if ( cmp ) {
-		const cpy = GSUtils.jsonCopy( cmp ),
+		const cpy = DAWCore.utils.jsonCopy( cmp ),
 			cpyFormated = DAWCore.Composition.epure( DAWCore.Composition.format( cpy ) );
 
 		return {

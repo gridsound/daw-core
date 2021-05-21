@@ -19,9 +19,9 @@ DAWCore.actions.removeSynth = ( synthId, get ) => {
 			} );
 		}
 	} );
-	GSUtils.addIfNotEmpty( obj, "keys", keys );
-	GSUtils.addIfNotEmpty( obj, "patterns", patterns );
-	GSUtils.addIfNotEmpty( obj, "blocks", blocks );
+	DAWCore.utils.addIfNotEmpty( obj, "keys", keys );
+	DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
+	DAWCore.utils.addIfNotEmpty( obj, "blocks", blocks );
 	if ( synthId === get.synthOpened() ) {
 		if ( !Object.keys( get.synths() ).some( k => {
 			if ( k !== synthId ) {

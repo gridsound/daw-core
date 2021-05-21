@@ -8,7 +8,7 @@ DAWCore.controllers.synth = class {
 			lfo: Object.seal( DAWCore.json.lfo() ),
 			oscillators: {},
 		} );
-		this.on = GSUtils.mapCallbacks( [
+		this.on = DAWCore.utils.mapCallbacks( [
 			"addOsc",
 			"removeOsc",
 			"changeOsc",
@@ -21,7 +21,7 @@ DAWCore.controllers.synth = class {
 			"changeEnvProp",
 			"updateEnvWave",
 		], fns.dataCallbacks );
-		this._oscsCrud = GSUtils.createUpdateDelete.bind( null, this.data.oscillators,
+		this._oscsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.oscillators,
 			this._addOsc.bind( this ),
 			this._updateOsc.bind( this ),
 			this._deleteOsc.bind( this ) );

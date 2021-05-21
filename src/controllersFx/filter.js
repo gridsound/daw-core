@@ -2,7 +2,7 @@
 
 DAWCore.controllersFx.filter = class {
 	constructor( fns ) {
-		this.on = GSUtils.mapCallbacks( [
+		this.on = DAWCore.utils.mapCallbacks( [
 			"type",
 			"Q",
 			"gain",

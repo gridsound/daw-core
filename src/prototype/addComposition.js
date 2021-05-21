@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.prototype.addComposition = function( cmp, opt ) {
-	const cpy = GSUtils.jsonCopy( cmp );
+	const cpy = DAWCore.utils.jsonCopy( cmp );
 
 	cpy.options = Object.freeze( {
 		saveMode: "local",

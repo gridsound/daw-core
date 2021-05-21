@@ -11,8 +11,8 @@ DAWCore.common.updatePatternDuration = ( obj, patId, duration, get ) => {
 				}, {} );
 
 		obj.patterns = { [ patId ]: { duration } };
-		GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
-		if ( GSUtils.isntEmpty( objBlocks ) ) {
+		DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
+		if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
 			const dur = DAWCore.common.calcNewDuration( obj, get );
 
 			if ( dur !== get.duration() ) {

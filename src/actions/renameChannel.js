@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.renameChannel = ( id, newName, get ) => {
-	const name = GSUtils.trim2( newName ),
+	const name = DAWCore.utils.trim2( newName ),
 		chan = get.channel( id );
 
 	if ( name && name !== chan.name ) {

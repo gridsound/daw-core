@@ -37,7 +37,7 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 				}
 			} );
 		}
-		if ( GSUtils.isntEmpty( objPatterns ) ) {
+		if ( DAWCore.utils.isntEmpty( objPatterns ) ) {
 			const objBlocks = {};
 
 			obj.patterns = objPatterns;
@@ -48,8 +48,8 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 					objBlocks[ id ] = { duration: pat.duration };
 				}
 			} );
-			GSUtils.addIfNotEmpty( obj, "blocks", objBlocks );
-			if ( GSUtils.isntEmpty( objBlocks ) ) {
+			DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
+			if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
 				const dur = DAWCore.common.calcNewDuration( obj, get );
 
 				if ( dur !== get.duration() ) {

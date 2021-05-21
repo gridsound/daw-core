@@ -14,14 +14,14 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 	if ( type === "buffer" ) {
 		Object.entries( get.drumrows() ).forEach( kv => {
 			if ( kv[ 1 ].pattern === patId ) {
-				GSUtils.deepAssign( obj,
+				DAWCore.utils.deepAssign( obj,
 					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], get ) );
 			}
 		} );
 	} else {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
-	if ( GSUtils.isntEmpty( blocks ) ) {
+	if ( DAWCore.utils.isntEmpty( blocks ) ) {
 		const realDur = Object.values( get.blocks() )
 				.reduce( ( dur, blc ) => {
 					return blc.pattern === patId

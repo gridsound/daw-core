@@ -6,16 +6,16 @@ DAWCore.controllers.drumrows = class {
 			patterns: {},
 			drumrows: {},
 		} );
-		this.on = GSUtils.mapCallbacks( [
+		this.on = DAWCore.utils.mapCallbacks( [
 			"addDrumrow",
 			"removeDrumrow",
 			"changeDrumrow",
 		], fns.dataCallbacks );
-		this._drumrowsCrud = GSUtils.createUpdateDelete.bind( null, this.data.drumrows,
+		this._drumrowsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.drumrows,
 			this._addDrumrow.bind( this ),
 			this._updateDrumrow.bind( this ),
 			this._deleteDrumrow.bind( this ) );
-		this._patternsCrud = GSUtils.createUpdateDelete.bind( null, this.data.patterns,
+		this._patternsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.patterns,
 			this._addPattern.bind( this ),
 			this._updatePattern.bind( this ),
 			this._deletePattern.bind( this ) );

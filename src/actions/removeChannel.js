@@ -10,9 +10,9 @@ DAWCore.actions.removeChannel = ( id, get ) => {
 			synths = red( id, get.synths(), {}, destMain ),
 			obj = { channels };
 
-		GSUtils.addIfNotEmpty( obj, "synths", synths );
-		GSUtils.addIfNotEmpty( obj, "effects", effects );
-		GSUtils.addIfNotEmpty( obj, "patterns", patterns );
+		DAWCore.utils.addIfNotEmpty( obj, "synths", synths );
+		DAWCore.utils.addIfNotEmpty( obj, "effects", effects );
+		DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
 		return [
 			obj,
 			[ "channels", "removeChannel", get.channel( id ).name ],
