@@ -6,8 +6,8 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 	this.buffers.loadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
 		if ( newBuffers.length || knownBuffers.length ) {
 			const cmpBuffers = this.get.buffers(),
-				bufNextId = +DAWCore.common.getNextIdOf( cmpBuffers ),
-				patNextId = +DAWCore.common.getNextIdOf( this.get.patterns() ),
+				bufNextId = +DAWCore.actions.common.getNextIdOf( cmpBuffers ),
+				patNextId = +DAWCore.actions.common.getNextIdOf( this.get.patterns() ),
 				buffersLoaded = {};
 
 			if ( newBuffers.length ) {

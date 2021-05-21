@@ -3,7 +3,7 @@
 DAWCore.actions.cloneSelectedKeys = ( patId, keyIds, whenIncr, get ) => {
 	const pat = get.pattern( patId ),
 		keys = get.keys( pat.keys ),
-		nextId = DAWCore.common.getNextIdOf( keys ),
+		nextId = DAWCore.actions.common.getNextIdOf( keys ),
 		keysObj = {},
 		obj = { keys: { [ pat.keys ]: keysObj } },
 		mapIds = keyIds.reduce( ( map, id, i ) => {
@@ -18,7 +18,7 @@ DAWCore.actions.cloneSelectedKeys = ( patId, keyIds, whenIncr, get ) => {
 			map.set( id, nId );
 			return map;
 		}, new Map() ),
-		dur = DAWCore.common.calcNewKeysDuration( pat.keys, keysObj, get );
+		dur = DAWCore.actions.common.calcNewKeysDuration( pat.keys, keysObj, get );
 
 	keyIds.forEach( id => {
 		const keyNext = keys[ id ].next;
@@ -31,7 +31,7 @@ DAWCore.actions.cloneSelectedKeys = ( patId, keyIds, whenIncr, get ) => {
 			keysObj[ nIdNext ].prev = nId;
 		}
 	} );
-	DAWCore.common.updatePatternDuration( obj, patId, dur, get );
+	DAWCore.actions.common.updatePatternDuration( obj, patId, dur, get );
 	return [
 		obj,
 		[ "keys", "cloneSelectedKeys", pat.name, keyIds.length ],

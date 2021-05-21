@@ -6,7 +6,7 @@ DAWCore.actions.removeBlocks = ( blcIds, get ) => {
 			return obj;
 		}, {} ),
 		obj = { blocks },
-		dur = DAWCore.common.calcNewDuration( obj, get );
+		dur = DAWCore.actions.common.calcNewDuration( obj, get );
 	let selLen = 0;
 
 	Object.entries( get.blocks() ).forEach( ( [ id, blc ] ) => {

@@ -28,7 +28,7 @@ DAWCore.actions.removeKeys = ( patId, keyIds, get ) => {
 			return obj;
 		}, {} ),
 		obj = { keys: { [ pat.keys ]: keysObj } },
-		patDur = DAWCore.common.calcNewKeysDuration( pat.keys, keysObj, get ),
+		patDur = DAWCore.actions.common.calcNewKeysDuration( pat.keys, keysObj, get ),
 		selLen = Object.entries( keys ).reduce( ( nb, [ id, key ] ) => {
 			if ( key.selected && !( id in keysObj ) ) {
 				keysObj[ id ] = { selected: false };
@@ -37,7 +37,7 @@ DAWCore.actions.removeKeys = ( patId, keyIds, get ) => {
 			return nb;
 		}, 0 );
 
-	DAWCore.common.updatePatternDuration( obj, patId, patDur, get );
+	DAWCore.actions.common.updatePatternDuration( obj, patId, patDur, get );
 	return [
 		obj,
 		keyIds.length

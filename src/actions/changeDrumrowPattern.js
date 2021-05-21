@@ -5,7 +5,7 @@ DAWCore.actions.changeDrumrowPattern = ( rowId, pattern, get ) => {
 		pat = get.pattern( pattern );
 
 	if ( row.pattern !== pattern && pat.type === "buffer" ) {
-		const oldPat = DAWCore.common.getDrumrowName( rowId, get );
+		const oldPat = DAWCore.actions.common.getDrumrowName( rowId, get );
 
 		return [
 			{ drumrows: { [ rowId ]: { pattern } } },

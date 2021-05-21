@@ -2,9 +2,9 @@
 
 DAWCore.actions.addPatternDrums = get => {
 	const pats = get.patterns(),
-		drumsId = DAWCore.common.getNextIdOf( get.drums() ),
-		patId = DAWCore.common.getNextIdOf( pats ),
-		patName = DAWCore.common.createUniqueName( "patterns", "drums", get ),
+		drumsId = DAWCore.actions.common.getNextIdOf( get.drums() ),
+		patId = DAWCore.actions.common.getNextIdOf( pats ),
+		patName = DAWCore.actions.common.createUniqueName( "patterns", "drums", get ),
 		order = Object.values( pats ).reduce( ( max, pat ) => {
 			return pat.type !== "drums"
 				? max

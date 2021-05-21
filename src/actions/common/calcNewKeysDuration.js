@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.common.calcNewKeysDuration = ( keysId, keysObj, get ) => {
+DAWCore.actions.common.calcNewKeysDuration = ( keysId, keysObj, get ) => {
 	const bPM = get.beatsPerMeasure(),
 		keys = get.keys( keysId ),
 		dur = Object.entries( keys ).reduce( ( max, [ id, key ] ) => {

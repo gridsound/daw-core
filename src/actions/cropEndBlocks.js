@@ -9,7 +9,7 @@ DAWCore.actions.cropEndBlocks = ( blcIds, whenIncr, get ) => {
 			return obj;
 		}, {} ),
 		obj = { blocks },
-		dur = DAWCore.common.calcNewDuration( obj, get );
+		dur = DAWCore.actions.common.calcNewDuration( obj, get );
 
 	if ( dur !== get.duration() ) {
 		obj.duration = dur;

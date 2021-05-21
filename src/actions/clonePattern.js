@@ -4,14 +4,14 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 	const pat = get.pattern( patId ),
 		type = pat.type,
 		newPat = { ...pat },
-		newPatId = DAWCore.common.getNextIdOf( get.patterns() ),
+		newPatId = DAWCore.actions.common.getNextIdOf( get.patterns() ),
 		obj = { patterns: { [ newPatId ]: newPat } };
 
-	newPat.name = DAWCore.common.createUniqueName( "patterns", pat.name, get );
+	newPat.name = DAWCore.actions.common.createUniqueName( "patterns", pat.name, get );
 	++newPat.order;
 	if ( type === "keys" || type === "drums" ) {
 		const newCnt = DAWCore.utils.jsonCopy( get[ type ]( pat[ type ] ) ),
-			newCntId = DAWCore.common.getNextIdOf( get[ type ]() );
+			newCntId = DAWCore.actions.common.getNextIdOf( get[ type ]() );
 
 		newPat[ type ] = newCntId;
 		obj[ type ] = { [ newCntId ]: newCnt };

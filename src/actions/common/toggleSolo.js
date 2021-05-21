@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.common.toggleSolo = ( soloId, list ) => {
+DAWCore.actions.common.toggleSolo = ( soloId, list ) => {
 	const entries = Object.entries( list ),
 		someOn = entries.some( kv => kv[ 0 ] !== soloId && kv[ 1 ].toggle === true ),
 		obj = entries.reduce( ( obj, [ id, item ] ) => {

@@ -226,8 +226,7 @@ class DAWCore {
 
 DAWCore.json = { effects: {} };
 DAWCore.utils = {};
-DAWCore.common = {};
-DAWCore.actions = {};
+DAWCore.actions = { common: {} };
 DAWCore.controllers = {};
 DAWCore.controllersFx = {};
 
