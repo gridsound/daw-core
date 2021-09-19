@@ -9,19 +9,15 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 
 	newPat.name = DAWCore.actions.common.createUniqueName( "patterns", pat.name, get );
 	++newPat.order;
-	if ( type === "keys" || type === "drums" ) {
+	if ( type !== "buffer" ) {
 		const newCnt = DAWCore.utils.jsonCopy( get[ type ]( pat[ type ] ) ),
 			newCntId = DAWCore.actions.common.getNextIdOf( get[ type ]() );
 
 		newPat[ type ] = newCntId;
 		obj[ type ] = { [ newCntId ]: newCnt };
-		obj[ type === "keys"
-			? "patternKeysOpened"
-			: "patternDrumsOpened" ] = newPatId;
+		obj[ DAWCore.actions.clonePattern_opened[ type ] ] = newPatId;
 		Object.entries( get.patterns() )
-			.filter( type === "keys"
-				? ( [ , pat ] ) => pat.type === type && pat.order >= newPat.order && pat.synth === newPat.synth
-				: ( [ , pat ] ) => pat.type === type && pat.order >= newPat.order )
+			.filter( DAWCore.actions.clonePattern_filterFn[ type ].bind( null, newPat ) )
 			.forEach( ( [ id, pat ] ) => obj.patterns[ id ] = { order: pat.order + 1 } );
 	}
 	return [
@@ -29,3 +25,15 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 		[ "patterns", "clonePattern", newPat.type, newPat.name, pat.name ],
 	];
 };
+
+DAWCore.actions.clonePattern_opened = Object.freeze( {
+	keys: "patternKeysOpened",
+	drums: "patternDrumsOpened",
+	slices: "patternSlicesOpened",
+} );
+
+DAWCore.actions.clonePattern_filterFn = Object.freeze( {
+	keys: ( newPat, [, pat ] ) => pat.type === "keys" && pat.order >= newPat.order && pat.synth === newPat.synth,
+	drums: ( newPat, [, pat ] ) => pat.type === "drums" && pat.order >= newPat.order,
+	slices: ( newPat, [, pat ] ) => pat.type === "slices" && pat.order >= newPat.order,
+} );
