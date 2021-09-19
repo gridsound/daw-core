@@ -133,12 +133,8 @@ DAWCore.Composition.format = function( cmp ) {
 			delete k.lfoGainSpeed;
 			delete k.durationEdited;
 			if ( typeof k.key === "string" ) {
-				if ( window.gsuiKeys ) {
-					k.key = window.gsuiKeys.keyStrToMidi( k.key );
-				} else {
-					console.warn( "DAWCore.Composition.format: gsuiKeys is needed to convert an old midi notation" );
-					return null;
-				}
+				k.key = 12 * 4;
+				console.warn( `DAWCore.Composition.format: the key ${ k.key } should be an integer` );
 			}
 		} );
 	} );
