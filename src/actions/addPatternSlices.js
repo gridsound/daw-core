@@ -11,7 +11,12 @@ DAWCore.actions.addPatternSlices = get => {
 				: Math.max( max, pat.order );
 		}, -1 ) + 1,
 		obj = {
-			slices: { [ slicesId ]: {} },
+			slices: { [ slicesId ]: {
+				cropA: 0,
+				cropB: 0,
+				duration: get.beatsPerMeasure(),
+				slices: {},
+			} },
 			patterns: { [ patId ]: {
 				order,
 				type: "slices",
