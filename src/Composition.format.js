@@ -24,11 +24,16 @@ DAWCore.Composition.format = function( cmp ) {
 	cmp.patternKeysOpened = cmp.patternKeysOpened ? `${ cmp.patternKeysOpened }` : null;
 	cmp.patternDrumsOpened = cmp.patternDrumsOpened ? `${ cmp.patternDrumsOpened }` : null;
 	cmp.patternBufferOpened = cmp.patternBufferOpened ? `${ cmp.patternBufferOpened }` : null;
+	cmp.patternSlicesOpened = cmp.patternSlicesOpened ? `${ cmp.patternSlicesOpened }` : null;
 	delete cmp.patternOpened;
 
 	// buffers
 	// ..........................................
 	cmp.buffers = cmp.buffers || {};
+
+	// slices
+	// ..........................................
+	cmp.slices = cmp.slices || {};
 
 	// drumrows
 	// ..........................................
