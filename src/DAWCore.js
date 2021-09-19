@@ -54,6 +54,7 @@ class DAWCore {
 			stepsPerBeat: () => this.composition.cmp.stepsPerBeat,
 			synthOpened: () => this.composition.cmp.synthOpened,
 			patternBufferOpened: () => this.composition.cmp.patternBufferOpened,
+			patternSlicesOpened: () => this.composition.cmp.patternSlicesOpened,
 			patternDrumsOpened: () => this.composition.cmp.patternDrumsOpened,
 			patternKeysOpened: () => this.composition.cmp.patternKeysOpened,
 			// .................................................................
@@ -63,6 +64,7 @@ class DAWCore {
 			buffers: () => this.composition.cmp.buffers,
 			channel: id => this.composition.cmp.channels[ id ],
 			channels: () => this.composition.cmp.channels,
+			slices: id => id ? this.composition.cmp.slices[ id ] : this.composition.cmp.slices, // 1.
 			drumrow: id => this.composition.cmp.drumrows[ id ],
 			drumrows: () => this.composition.cmp.drumrows,
 			drums: id => id ? this.composition.cmp.drums[ id ] : this.composition.cmp.drums, // 1.
@@ -231,7 +233,7 @@ DAWCore.controllers = {};
 DAWCore.controllersFx = {};
 
 /*
-1. The getter 'keys' and 'drums' can't use their singular form like the others getters
-   because 'key' and 'drum' are refering to the objects contained in ONE 'keys' or 'drums'.
+1. The getter 'keys', 'drums' and 'slices' can't use their singular form like the others getters
+   because 'key' and 'drum' are referring to the objects contained in ONE 'keys' or 'drums'.
    So `keys[0]` is a 'keys' not a 'key', a 'key' would be `keys[0][0]`.
 */
