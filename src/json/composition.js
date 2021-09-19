@@ -20,6 +20,7 @@ DAWCore.json.composition = ( env, id ) => {
 		synthOpened: "0",
 		patternKeysOpened: "0",
 		patternDrumsOpened: "1",
+		patternSlicesOpened: null,
 		patternBufferOpened: null,
 		buffers: {
 			0: { type: "audio/wav", duration: .1529, url: "kick-00.wav" },
@@ -51,6 +52,7 @@ DAWCore.json.composition = ( env, id ) => {
 			4: DAWCore.json.drumrow( { order: 3, pattern: "6" } ),
 			3: DAWCore.json.drumrow( { order: 4, pattern: "5" } ),
 		},
+		slices: { 0: {} },
 		drums: { 0: {} },
 		keys: { 0: {} },
 	};
