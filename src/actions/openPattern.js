@@ -4,6 +4,11 @@ DAWCore.actions.openPattern = ( patId, get ) => {
 	const pat = get.pattern( patId );
 
 	switch ( pat.type ) {
+		case "slices":
+			if ( patId !== get.patternSlicesOpened() ) {
+				return { patternSlicesOpened: patId };
+			}
+			break;
 		case "drums":
 			if ( patId !== get.patternDrumsOpened() ) {
 				return { patternDrumsOpened: patId };
