@@ -1,6 +1,21 @@
 "use strict";
 
 DAWCore.controllers.keys = class {
+	static #keyProps = Object.freeze( [
+		"key",
+		"when",
+		"duration",
+		"gain",
+		"gainLFOAmp",
+		"gainLFOSpeed",
+		"pan",
+		"lowpass",
+		"highpass",
+		"selected",
+		"prev",
+		"next",
+	] )
+
 	constructor( fns ) {
 		this.data = {};
 		this.on = DAWCore.utils.mapCallbacks( [
@@ -36,23 +51,17 @@ DAWCore.controllers.keys = class {
 		this.on.removeKey( id );
 	}
 	_updateKey( id, obj ) {
-		const dataKey = this.data[ id ],
-			cb = this.on.changeKeyProp.bind( null, id );
-
-		this._setProp( dataKey, cb, "key", obj.key );
-		this._setProp( dataKey, cb, "when", obj.when );
-		this._setProp( dataKey, cb, "duration", obj.duration );
-		this._setProp( dataKey, cb, "gain", obj.gain );
-		this._setProp( dataKey, cb, "gainLFOAmp", obj.gainLFOAmp );
-		this._setProp( dataKey, cb, "gainLFOSpeed", obj.gainLFOSpeed );
-		this._setProp( dataKey, cb, "pan", obj.pan );
-		this._setProp( dataKey, cb, "lowpass", obj.lowpass );
-		this._setProp( dataKey, cb, "highpass", obj.highpass );
-		this._setProp( dataKey, cb, "selected", obj.selected );
-		this._setProp( dataKey, cb, "prev", obj.prev );
-		this._setProp( dataKey, cb, "next", obj.next );
+		DAWCore.controllers.keys.#keyProps.forEach(
+			DAWCore.controllers.keys.#setProp.bind( null,
+				this.data[ id ],
+				this.on.changeKeyProp.bind( null, id ),
+				obj
+			)
+		);
 	}
-	_setProp( data, cb, prop, val ) {
+	static #setProp( data, cb, obj, prop ) {
+		const val = obj[ prop ];
+
 		if ( val !== undefined ) {
 			data[ prop ] = val;
 			cb( prop, val );
