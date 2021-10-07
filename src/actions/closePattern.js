@@ -1,11 +1,7 @@
 "use strict";
 
 DAWCore.actions.closePattern = ( type, get ) => {
-	const attr = type === "keys"
-			? "patternKeysOpened"
-			: type === "drums"
-				? "patternDrumsOpened"
-				: "patternBufferOpened";
+	const attr = DAWCore.actions.common.patternOpenedByType[ type ];
 
 	if ( get[ attr ]() ) {
 		return { [ attr ]: null };
