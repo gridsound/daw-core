@@ -58,6 +58,17 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 				obj.patternDrumsOpened = null;
 			}
 		}
+	} else if ( type === "slices" ) {
+		if ( patId === get.patternSlicesOpened() ) {
+			if ( !Object.entries( get.patterns() ).some( ( [ k, v ] ) => {
+				if ( k !== patId && v.type === "slices" ) {
+					obj.patternSlicesOpened = k;
+					return true;
+				}
+			} ) ) {
+				obj.patternSlicesOpened = null;
+			}
+		}
 	}
 	return [
 		obj,
