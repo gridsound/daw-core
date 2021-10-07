@@ -3,6 +3,7 @@
 DAWCore.actions.removePattern = ( patId, get ) => {
 	const pat = get.pattern( patId ),
 		type = pat.type,
+		typeOpe = DAWCore.actions.common.patternOpenedByType[ type ],
 		obj = { patterns: { [ patId ]: undefined } },
 		blocks = Object.entries( get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
 			if ( blc.pattern === patId ) {
@@ -36,39 +37,11 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 			obj.duration = dur;
 		}
 	}
-	if ( type === "keys" ) {
-		if ( patId === get.patternKeysOpened() ) {
-			if ( !Object.entries( get.patterns() ).some( ( [ k, v ] ) => {
-				if ( k !== patId && v.synth === pat.synth ) {
-					obj.patternKeysOpened = k;
-					return true;
-				}
-			} ) ) {
-				obj.patternKeysOpened = null;
-			}
-		}
-	} else if ( type === "drums" ) {
-		if ( patId === get.patternDrumsOpened() ) {
-			if ( !Object.entries( get.patterns() ).some( ( [ k, v ] ) => {
-				if ( k !== patId && v.type === "drums" ) {
-					obj.patternDrumsOpened = k;
-					return true;
-				}
-			} ) ) {
-				obj.patternDrumsOpened = null;
-			}
-		}
-	} else if ( type === "slices" ) {
-		if ( patId === get.patternSlicesOpened() ) {
-			if ( !Object.entries( get.patterns() ).some( ( [ k, v ] ) => {
-				if ( k !== patId && v.type === "slices" ) {
-					obj.patternSlicesOpened = k;
-					return true;
-				}
-			} ) ) {
-				obj.patternSlicesOpened = null;
-			}
-		}
+	if ( patId === get[ typeOpe ]() ) {
+		const found = Object.entries( get.patterns() )
+				.find( ( [ k, v ] ) => k !== patId && v.type === type && v.synth === pat.synth );
+
+		obj[ typeOpe ] = found ? found[ 0 ] : null;
 	}
 	return [
 		obj,
