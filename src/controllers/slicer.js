@@ -13,7 +13,6 @@ DAWCore.controllers.slicer = class {
 	constructor( fns ) {
 		this.on = DAWCore.utils.mapCallbacks( [
 			"disabled",
-			"renamePattern",
 			"timedivision",
 			"setBuffer",
 			"renameBuffer",
@@ -109,6 +108,7 @@ DAWCore.controllers.slicer = class {
 		this.on.removeSlice( id );
 	}
 	#updateSlice( id, obj ) {
+		Object.assign( this.data[ id ], obj );
 		this.on.changeSlice( id, obj );
 	}
 };
