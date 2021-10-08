@@ -68,6 +68,7 @@ DAWCore.History.actionsToText = {
 		clonePattern: ( type, pat, patSrc ) => [ "clone", `clone ${ type } "${ patSrc }" to "${ pat }"` ],
 		redirectPatternBuffer: ( pat, chanDest ) => [ "redirect", `redirect buffer "${ pat }" to chan "${ chanDest }"` ],
 		redirectPatternKeys: ( pat, syn ) => [ "redirect", `redirect keys "${ pat }" to synth "${ syn }"` ],
+		redirectPatternSlices: ( pat, src ) => [ "redirect", `redirect slices "${ pat }" to buffer "${ src }"` ],
 	},
 	effects: {
 		addEffect: ( dest, type ) => [ "effects", `fx: new ${ type } on ${ dest }`, ],
@@ -83,6 +84,11 @@ DAWCore.History.actionsToText = {
 		changeDrumrowPattern: ( row, newPat ) => [ "drums", `drumrows: "${ row }" -> "${ newPat }"` ],
 		toggleDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute" : "mute" } "${ row }"` ],
 		toggleSoloDrumrow: ( row, b ) => [ "drums", `drumrows: ${ b ? "unmute all" : `mute all except "${ row }"` }` ],
+	},
+	slices: {
+		cropSlices: sli => [ "slices", `crop "${ sli }"` ],
+		changeSlices: sli => [ "slices", `change "${ sli }"'s slices` ],
+		changeSlicesDuration: ( sli, dur ) => [ "slices", `"${ sli }"'s duration: ${ dur }beat` ],
 	},
 	drums: {
 		addDrums: ( pat, row, nb ) => [ "drums", `drums: add ${ nb } "${ row }" in "${ pat }"` ],
