@@ -86,8 +86,7 @@ DAWCore.controllers.slicer = class {
 	#changeSource( srcId, get ) {
 		if ( srcId ) {
 			const patSrc = get.pattern( srcId ),
-				objBuf = get.buffer( patSrc.buffer ),
-				buf = this.#dawcore.buffers.getBuffer( objBuf ).buffer;
+				buf = get.audioBuffer( patSrc.buffer );
 
 			this.on.setBuffer( buf );
 			this.on.renameBuffer( patSrc.name );
