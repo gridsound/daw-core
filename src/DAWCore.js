@@ -46,6 +46,7 @@ class DAWCore {
 			cmp: () => this.composition.cmp,
 			id: () => this.composition.cmp.id,
 			bpm: () => this.composition.cmp.bpm,
+			bps: () => this.composition.cmp.bpm / 60,
 			name: () => this.composition.cmp.name,
 			loopA: () => this.composition.cmp.loopA,
 			loopB: () => this.composition.cmp.loopB,

@@ -29,7 +29,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 						type: "buffer",
 						dest: "main",
 						buffer: `${ bufId }`,
-						duration: Math.ceil( buf.duration * ( this.get.bpm() / 60 ) ),
+						duration: Math.ceil( buf.duration * this.get.bps() ),
 						name: patname,
 						order: order + i,
 					};
