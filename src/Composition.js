@@ -52,25 +52,33 @@ DAWCore.Composition = class {
 				rej();
 			}
 		} ).then( cmp => {
+			const proms = [],
+				bufLoaded = {};
+
 			this.cmp = cmp;
 			this.loaded = true;
 			Object.entries( cmp.buffers ).forEach( kv => {
-				this.daw.buffers.setBuffer( kv[ 1 ] )
+				proms.push( this.daw.buffers.setBuffer( kv[ 1 ] )
 					.then( buf => {
 						if ( buf.buffer ) {
+							bufLoaded[ kv[ 0 ] ] = buf;
 							this.daw._call( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
 						}
-					} );
+					} ) );
 			} );
 			this.change( cmp, {
 				keys: {},
 				drums: {},
 				synths: {},
 				blocks: {},
+				slices: {},
 				buffers: {},
 				drumrows: {},
 				channels: {},
 				patterns: {},
+			} );
+			Promise.allSettled( proms ).then( () => {
+				this.daw.slices.buffersLoaded( bufLoaded );
 			} );
 			this._actionSavedOn = null;
 			this._saved = cmp.options.saveMode === "cloud" ||
@@ -89,6 +97,7 @@ DAWCore.Composition = class {
 			this._sched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
+			this.daw.slices.clear();
 			this.daw._wadrumrows.clear();
 			this._saved = true;
 			this.daw._call( "compositionSavedStatus", this.cmp, true );
@@ -203,6 +212,20 @@ DAWCore.Composition = class {
 						absn.buffer = buf;
 						absn.connect( get.audioChanIn( pat.dest ) );
 						absn.start( when, off, dur );
+						this._startedBuffers.set( startedId, [ patId, absn ] );
+					}
+				} break;
+				case "slices": {
+					const buf = get.audioSlices( patId );
+
+					if ( buf ) {
+						const absn = this.ctx.createBufferSource(),
+							spd = buf.duration / ( pat.duration / get.bps() );
+
+						absn.buffer = buf;
+						absn.playbackRate.value = spd;
+						absn.connect( get.audioChanIn( get.pattern( pat.source ).dest ) );
+						absn.start( when, off * spd, dur * spd );
 						this._startedBuffers.set( startedId, [ patId, absn ] );
 					}
 				} break;

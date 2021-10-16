@@ -7,6 +7,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 
 	DAWCore.utils.diffAssign( cmp, obj );
 	this._wamixer.change( obj );
+	this.daw.slices.change( obj );
 	this.daw._wadrumrows.change( obj );
 	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {

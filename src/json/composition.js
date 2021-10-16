@@ -52,7 +52,7 @@ DAWCore.json.composition = ( env, id ) => {
 			3: DAWCore.json.drumrow( { order: 3, pattern: "5" } ),
 			4: DAWCore.json.drumrow( { order: 4, pattern: "6" } ),
 		},
-		slices: { 0: {} },
+		slices: {},
 		drums: { 0: {} },
 		keys: { 0: {} },
 	};
