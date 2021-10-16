@@ -185,7 +185,8 @@ DAWCore.Composition = class {
 
 	// .........................................................................
 	_onstartBlock( startedId, blcs, when, off, dur ) {
-		const cmp = this.cmp,
+		const get = this.daw.get,
+			cmp = this.cmp,
 			blc = blcs[ 0 ][ 1 ];
 
 		if ( cmp.tracks[ blc.track ].toggle ) {
@@ -194,13 +195,13 @@ DAWCore.Composition = class {
 
 			switch ( pat.type ) {
 				case "buffer": {
-					const buf = this.daw.get.audioBuffer( pat.buffer );
+					const buf = get.audioBuffer( pat.buffer );
 
 					if ( buf ) {
 						const absn = this.ctx.createBufferSource();
 
 						absn.buffer = buf;
-						absn.connect( this.daw.get.audioChanIn( pat.dest ) );
+						absn.connect( get.audioChanIn( pat.dest ) );
 						absn.start( when, off, dur );
 						this._startedBuffers.set( startedId, [ patId, absn ] );
 					}
@@ -211,7 +212,7 @@ DAWCore.Composition = class {
 					this._startedSched.set( startedId, [ patId, waKeys ] );
 					waKeys.scheduler.setBPM( cmp.bpm );
 					waKeys.setContext( this.ctx );
-					waKeys.setSynth( this.daw.get.audioSynth( pat.synth ) );
+					waKeys.setSynth( get.audioSynth( pat.synth ) );
 					waKeys.change( cmp.keys[ pat.keys ] );
 					waKeys.start( when, off, dur );
 				} break;
