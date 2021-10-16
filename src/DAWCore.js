@@ -40,7 +40,7 @@ class DAWCore {
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
 			audioChanIn: id => this.composition._wamixer.getChanInput( id ),
 			audioChanOut: id => this.composition._wamixer.getChanOutput( id ),
-			audioEffect: id => this.composition._waeffects._wafxs.get( id ),
+			audioEffect: id => this.composition._waeffects.getFx( id ),
 			audioSynth: id => this.composition._synths.get( id ),
 			// .................................................................
 			cmp: () => this.composition.cmp,
