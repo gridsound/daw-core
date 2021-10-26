@@ -10,6 +10,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 	this.daw.slices.change( obj );
 	this.daw.slicer.change( obj );
 	this.daw._wadrumrows.change( obj );
+	this.daw.drums.change( obj );
 	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
 		if ( typeof attr === "string" ) {
@@ -33,7 +34,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	[ "bpm", function( { bpm } ) {
 		this._sched.setBPM( bpm );
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
-		this.daw.drums.setBPM( bpm );
 		this.daw.pianoroll.setBPM( bpm );
 	} ],
 	[ "blocks", function( { blocks } ) {
@@ -83,8 +83,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 				}
 				if ( patId === this.cmp.patternKeysOpened ) {
 					this.daw.pianoroll.change( patObj );
-				} else if ( patId === this.cmp.patternDrumsOpened ) {
-					this.daw.drums.change( patObj );
 				}
 			}
 		} );
@@ -105,27 +103,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			} );
 		} );
 	} ],
-	[ "drums", function( { drums, patterns } ) {
-		const pats = Object.entries( this.cmp.patterns ),
-			patOpened = this.cmp.patternDrumsOpened;
-
-		Object.entries( drums ).forEach( ( [ drumsId, drumsObj ] ) => {
-			pats.some( ( [ patId, patObj ] ) => {
-				if ( patObj.drums === drumsId ) {
-					this.assignPatternChange( patId, drumsObj );
-					if ( patId === patOpened ) {
-						this.daw.drums.change( patterns && patterns[ patId ], drumsObj );
-					}
-					return true;
-				}
-			} );
-		} );
-	} ],
 	[ "patternKeysOpened", function( obj ) {
 		this.daw.pianoroll.openPattern( obj.patternKeysOpened );
-	} ],
-	[ "patternDrumsOpened", function( obj ) {
-		this.daw.drums.openPattern( obj.patternDrumsOpened );
 	} ],
 	[ "synthOpened", function( obj ) {
 		this.daw.pianoroll.setSynth( obj.synthOpened );

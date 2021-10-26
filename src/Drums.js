@@ -17,7 +17,33 @@ DAWCore.Drums = class {
 		waDrums.setDrumrows( daw._wadrumrows );
 	}
 
-	change( patObj, drumsObj ) {
+	change( obj ) {
+		const get = this.daw.get,
+			patId = get.patternDrumsOpened();
+
+		if ( "bpm" in obj ) {
+			this._waDrums.scheduler.setBPM( obj.bpm );
+		}
+		if ( "patternDrumsOpened" in obj ) {
+			this.#openPattern( patId );
+		}
+		if ( "drums" in obj ) {
+			if ( patId ) {
+				const drums = obj.drums[ get.pattern( patId ).drums ];
+
+				if ( drums ) {
+					this.#changePattern( obj.patterns?.[ patId ], drums );
+					// this._waDrums.change( drums );
+				}
+			}
+		}
+		if ( "patterns" in obj ) {
+			const pat = obj.patterns[ patId ];
+
+			this.#changePattern( pat );
+		}
+	}
+	#changePattern( patObj, drumsObj ) {
 		if ( drumsObj ) {
 			this._waDrums.change( drumsObj );
 		}
@@ -28,7 +54,7 @@ DAWCore.Drums = class {
 			}
 		}
 	}
-	openPattern( id ) {
+	#openPattern( id ) {
 		const daw = this.daw,
 			wasPlaying = this.playing;
 
@@ -42,7 +68,7 @@ DAWCore.Drums = class {
 		if ( id ) {
 			const pat = daw.get.pattern( id );
 
-			this.change( pat, daw.get.drums( pat.drums ) );
+			this.#changePattern( pat, daw.get.drums( pat.drums ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}
