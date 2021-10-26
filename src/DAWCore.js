@@ -22,6 +22,7 @@ class DAWCore {
 		this._wadrumrows = new gswaDrumrows();
 		this.drums = new DAWCore.Drums( this );
 		this.slices = new DAWCore.Slices( this );
+		this.slicer = new DAWCore.Slicer( this );
 		this.buffers = new DAWCore.Buffers( this );
 		this.history = new DAWCore.History( this );
 		this.pianoroll = new DAWCore.Pianoroll( this );
@@ -94,6 +95,7 @@ class DAWCore {
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
+		this.slicer.setContext( ctx );
 		this.pianoroll._waKeys.setContext( ctx );
 		this._wadrumrows.setContext( ctx );
 		this.destination.setCtx( ctx );
@@ -145,13 +147,18 @@ class DAWCore {
 			this._focusOn( "pianoroll", force );
 		}
 	}
+	slicerFocus( force ) {
+		if ( this._focused !== this.slicer && this.get.patternSlicesOpened() ) {
+			this._focusOn( "slicer", force );
+		}
+	}
 	drumsFocus( force ) {
 		if ( this._focused !== this.drums && this.get.patternDrumsOpened() ) {
 			this._focusOn( "drums", force );
 		}
 	}
 	isPlaying() {
-		return this.composition.playing || this.pianoroll.playing || this.drums.playing;
+		return this.composition.playing || this.pianoroll.playing || this.drums.playing || this.slicer.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();
@@ -218,6 +225,7 @@ class DAWCore {
 			this._focusedStr = focusedStr;
 			this._call( "focusOn", "composition", focusedStr === "composition" );
 			this._call( "focusOn", "pianoroll", focusedStr === "pianoroll" );
+			this._call( "focusOn", "slicer", focusedStr === "slicer" );
 			this._call( "focusOn", "drums", focusedStr === "drums" );
 			this._clockUpdate();
 		}

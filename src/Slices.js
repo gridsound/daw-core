@@ -9,6 +9,7 @@ DAWCore.Slices = class {
 		Object.seal( this );
 	}
 
+	// .........................................................................
 	getBuffer( patId ) {
 		return this.#buffers.get( patId );
 	}
@@ -72,6 +73,7 @@ DAWCore.Slices = class {
 		} );
 	}
 
+	// .........................................................................
 	#setBuffer( patSliId, buffer ) {
 		const get = this.#daw.get,
 			pat = get.pattern( patSliId ),
