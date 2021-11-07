@@ -23,7 +23,7 @@ class DAWCore {
 		this.buffers = new DAWCore.Buffers( this );
 		this.buffersSlices = new DAWCore.BuffersSlices( this );
 		this.drums = new DAWCore.Drums( this );
-		this.slicer = new DAWCore.Slicer( this );
+		this.slices = new DAWCore.Slices( this );
 		this.history = new DAWCore.History( this );
 		this.pianoroll = new DAWCore.Pianoroll( this );
 		this.composition = new DAWCore.Composition( this );
@@ -95,7 +95,7 @@ class DAWCore {
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
-		this.slicer.setContext( ctx );
+		this.slices.setContext( ctx );
 		this.pianoroll._waKeys.setContext( ctx );
 		this._wadrumrows.setContext( ctx );
 		this.destination.setCtx( ctx );
@@ -148,7 +148,7 @@ class DAWCore {
 		}
 	}
 	slicerFocus( force ) {
-		if ( this._focused !== this.slicer && this.get.patternSlicesOpened() ) {
+		if ( this._focused !== this.slices && this.get.patternSlicesOpened() ) {
 			this._focusOn( "slicer", force );
 		}
 	}
@@ -158,7 +158,7 @@ class DAWCore {
 		}
 	}
 	isPlaying() {
-		return this.composition.playing || this.pianoroll.playing || this.drums.playing || this.slicer.playing;
+		return this.composition.playing || this.pianoroll.playing || this.drums.playing || this.slices.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();

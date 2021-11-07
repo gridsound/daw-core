@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.Slicer = class {
+DAWCore.Slices = class {
 	#daw = null
 	#waSched = new gswaScheduler()
 	#duration = 4
