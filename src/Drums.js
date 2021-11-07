@@ -17,6 +17,7 @@ DAWCore.Drums = class {
 		waDrums.setDrumrows( daw._wadrumrows );
 	}
 
+	// .........................................................................
 	change( obj ) {
 		const get = this.daw.get,
 			patId = get.patternDrumsOpened();
@@ -58,8 +59,7 @@ DAWCore.Drums = class {
 		const daw = this.daw,
 			wasPlaying = this.playing;
 
-		id ? daw.drumsFocus()
-			: daw.compositionFocus( "-f" );
+		daw.focusOn( "drums" );
 		if ( wasPlaying ) {
 			daw.stop();
 			daw.stop();
@@ -75,7 +75,6 @@ DAWCore.Drums = class {
 		}
 	}
 
-	// controls
 	// .........................................................................
 	getCurrentTime() {
 		return this._waDrums.scheduler.getCurrentOffsetBeat();

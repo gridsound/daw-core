@@ -19,6 +19,7 @@ DAWCore.Keys = class {
 		waKeys.setContext( daw.ctx );
 	}
 
+	// .........................................................................
 	change( patObj, keysObj ) {
 		this._waKeys.change( keysObj );
 		if ( patObj && "duration" in patObj ) {
@@ -47,8 +48,7 @@ DAWCore.Keys = class {
 		const daw = this.daw,
 			wasPlaying = this.playing;
 
-		id ? daw.pianorollFocus()
-			: daw.compositionFocus( "-f" );
+		daw.focusOn( "keys" );
 		if ( wasPlaying ) {
 			daw.stop();
 			daw.stop();
@@ -65,14 +65,13 @@ DAWCore.Keys = class {
 		}
 	}
 
-	// controls
-	// ........................................................................
+	// .........................................................................
 	getCurrentTime() {
 		return this._waKeys.scheduler.getCurrentOffsetBeat();
 	}
 	setCurrentTime( t ) {
 		this._waKeys.scheduler.setCurrentOffsetBeat( t );
-		this.daw._call( "currentTime", this.getCurrentTime(), "pianoroll" );
+		this.daw._call( "currentTime", this.getCurrentTime(), "keys" );
 		this.daw._clockUpdate();
 	}
 	setBPM( bpm ) {

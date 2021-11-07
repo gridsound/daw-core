@@ -32,6 +32,7 @@ class DAWCore {
 		this._loopMs = 1;
 		this._focused = this.composition;
 		this._focusedStr = "composition";
+		this._focusedSwitch = "keys";
 		this.get = {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
@@ -56,11 +57,13 @@ class DAWCore {
 			duration: () => this.composition.cmp.duration,
 			beatsPerMeasure: () => this.composition.cmp.beatsPerMeasure,
 			stepsPerBeat: () => this.composition.cmp.stepsPerBeat,
+			// .................................................................
 			synthOpened: () => this.composition.cmp.synthOpened,
 			patternBufferOpened: () => this.composition.cmp.patternBufferOpened,
 			patternSlicesOpened: () => this.composition.cmp.patternSlicesOpened,
 			patternDrumsOpened: () => this.composition.cmp.patternDrumsOpened,
 			patternKeysOpened: () => this.composition.cmp.patternKeysOpened,
+			opened: t => this.composition.cmp[ DAWCore.actions.common.patternOpenedByType[ t ] ],
 			// .................................................................
 			block: id => this.composition.cmp.blocks[ id ],
 			blocks: () => this.composition.cmp.blocks,
@@ -131,32 +134,48 @@ class DAWCore {
 	compositionNeedSave() {
 		return !this.composition._saved;
 	}
+
+	// ..........................................................................
 	getFocusedObject() {
 		return this._focused;
 	}
 	getFocusedName() {
 		return this._focusedStr;
 	}
-	compositionFocus( force ) {
-		if ( this._focused !== this.composition ) {
-			this._focusOn( "composition", force );
+	focusSwitch() {
+		this.focusOn( this._focusedStr === "composition" ? this._focusedSwitch : "composition", "-f" );
+	}
+	focusOn( win, f ) {
+		switch ( win ) {
+			case "keys":
+			case "drums":
+			case "slices":
+				if ( this.get.opened( win ) !== null ) {
+					if ( this._focused !== this[ win ] ) {
+						this.#focusOn( win, f );
+					}
+					return;
+				}
+			case "composition":
+				if ( this._focused !== this.composition ) {
+					this.#focusOn( "composition", f );
+				}
 		}
 	}
-	pianorollFocus( force ) {
-		if ( this._focused !== this.keys && this.get.patternKeysOpened() ) {
-			this._focusOn( "pianoroll", force );
+	#focusOn( focusedStr, force ) {
+		if ( force === "-f" || !this.isPlaying() ) {
+			this.pause();
+			this._focused = this[ focusedStr ];
+			this._focusedStr = focusedStr;
+			if ( focusedStr !== "composition" ) {
+				this._focusedSwitch = focusedStr;
+			}
+			this._call( "focusOn", focusedStr );
+			this._clockUpdate();
 		}
 	}
-	slicerFocus( force ) {
-		if ( this._focused !== this.slices && this.get.patternSlicesOpened() ) {
-			this._focusOn( "slicer", force );
-		}
-	}
-	drumsFocus( force ) {
-		if ( this._focused !== this.drums && this.get.patternDrumsOpened() ) {
-			this._focusOn( "drums", force );
-		}
-	}
+
+	// ..........................................................................
 	isPlaying() {
 		return this.composition.playing || this.keys.playing || this.drums.playing || this.slices.playing;
 	}
@@ -188,8 +207,7 @@ class DAWCore {
 		this._loopMs = 1000 / fps | 0;
 	}
 
-	// private:
-	// .........................................................................
+	// ..........................................................................
 	_startLoop() {
 		this._clockUpdate();
 		this._loop();
@@ -217,18 +235,6 @@ class DAWCore {
 	}
 	_clockUpdate() {
 		this._call( "clockUpdate", this._focused.getCurrentTime() );
-	}
-	_focusOn( focusedStr, force ) {
-		if ( force === "-f" || !this.isPlaying() ) {
-			this.pause();
-			this._focused = this[ focusedStr ];
-			this._focusedStr = focusedStr;
-			this._call( "focusOn", "composition", focusedStr === "composition" );
-			this._call( "focusOn", "pianoroll", focusedStr === "pianoroll" );
-			this._call( "focusOn", "slicer", focusedStr === "slicer" );
-			this._call( "focusOn", "drums", focusedStr === "drums" );
-			this._clockUpdate();
-		}
 	}
 	_call( cbName, ...args ) {
 		const fn = this.cb[ cbName ];

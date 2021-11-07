@@ -31,8 +31,11 @@ DAWCore.Slices = class {
 		let bufUpdated,
 			durUpdated;
 
-		if ( obj.patternSlicesOpened ) {
-			durUpdated = get.pattern( patId ).duration;
+		if ( "patternSlicesOpened" in obj ) {
+			if ( obj.patternSlicesOpened ) {
+				durUpdated = get.pattern( patId ).duration;
+			}
+			this.#daw.focusOn( "slices" );
 		}
 		if ( "bpm" in obj ) {
 			this.#waSched.setBPM( obj.bpm );
@@ -66,13 +69,11 @@ DAWCore.Slices = class {
 		}
 	}
 	#changeDuration( dur ) {
-		lg("SLICER change duration", dur)
 		this.#duration = dur;
 		this.#waSched.change( { 1: { duration: dur } } );
 		this.#waSched.setLoopBeat( 0, dur );
 	}
 	#bufferUpdated() {
-		lg("SLICER #bufferUpdated")
 		this.#restart();
 	}
 	#restart() {
@@ -89,7 +90,7 @@ DAWCore.Slices = class {
 	}
 	setCurrentTime( t ) {
 		this.#waSched.setCurrentOffsetBeat( t );
-		this.#daw._call( "currentTime", this.getCurrentTime(), "slicer" );
+		this.#daw._call( "currentTime", this.getCurrentTime(), "slices" );
 		this.#daw._clockUpdate();
 	}
 	// setLoop( a, b ) {
@@ -109,7 +110,6 @@ DAWCore.Slices = class {
 			const a = this.looping ? this.loopA : 0,
 				b = this.looping ? this.loopB : this.#duration;
 
-			lg("SLICER play", a, b)
 			this.playing = true;
 			this.#waSched.setLoopBeat( a, b );
 			this.#waSched.startBeat( 0, this.getCurrentTime() );
@@ -134,7 +134,6 @@ DAWCore.Slices = class {
 		const get = this.#daw.get,
 			buf = get.audioSlices( get.patternSlicesOpened() );
 
-		lg("SLICER onstartBlock")
 		if ( buf ) {
 			const pat = get.pattern( get.patternSlicesOpened() ),
 				absn = get.ctx().createBufferSource(),

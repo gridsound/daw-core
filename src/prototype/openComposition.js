@@ -16,7 +16,7 @@ DAWCore.prototype.openComposition = function( saveMode, id ) {
 };
 
 DAWCore.prototype._compositionOpened = function( cmp ) {
-	this.compositionFocus();
+	this.focusOn( "composition" );
 	this._call( "compositionOpened", cmp );
 	this._startLoop();
 	return cmp;
