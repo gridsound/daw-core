@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.Slices = class {
+DAWCore.BuffersSlices = class {
 	#daw = null
 	#buffers = new Map()
 
@@ -83,4 +83,4 @@ DAWCore.Slices = class {
 	}
 };
 
-Object.freeze( DAWCore.Slices );
+Object.freeze( DAWCore.BuffersSlices );

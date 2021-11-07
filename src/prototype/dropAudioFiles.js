@@ -49,7 +49,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 
 					buffersLoaded[ idBuf ] = this.buffers.getBuffer( buf );
 				} );
-				this.slices.buffersLoaded( buffersLoaded );
+				this.buffersSlices.buffersLoaded( buffersLoaded );
 			}
 			this._call( "buffersLoaded", buffersLoaded );
 		}

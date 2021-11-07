@@ -20,10 +20,10 @@ class DAWCore {
 		};
 		this.ctx = null;
 		this._wadrumrows = new gswaDrumrows();
-		this.drums = new DAWCore.Drums( this );
-		this.slices = new DAWCore.Slices( this );
-		this.slicer = new DAWCore.Slicer( this );
 		this.buffers = new DAWCore.Buffers( this );
+		this.buffersSlices = new DAWCore.BuffersSlices( this );
+		this.drums = new DAWCore.Drums( this );
+		this.slicer = new DAWCore.Slicer( this );
 		this.history = new DAWCore.History( this );
 		this.pianoroll = new DAWCore.Pianoroll( this );
 		this.composition = new DAWCore.Composition( this );
@@ -40,7 +40,7 @@ class DAWCore {
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
-			audioSlices: id => this.slices.getBuffer( id ),
+			audioSlices: id => this.buffersSlices.getBuffer( id ),
 			audioChanIn: id => this.composition._wamixer.getChanInput( id ),
 			audioChanOut: id => this.composition._wamixer.getChanOutput( id ),
 			audioEffect: id => this.composition._waeffects.getFx( id ),
