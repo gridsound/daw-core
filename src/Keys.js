@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.Pianoroll = class {
+DAWCore.Keys = class {
 	constructor( daw ) {
 		const waKeys = new gswaKeysScheduler();
 
