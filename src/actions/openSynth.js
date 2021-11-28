@@ -6,7 +6,7 @@ DAWCore.actions.openSynth = ( id, get ) => {
 			patId = pat ? pat[ 0 ] : null,
 			obj = { synthOpened: id };
 
-		if ( patId !== get.patternKeysOpened() ) {
+		if ( patId !== get.opened( "keys" ) ) {
 			obj.patternKeysOpened = patId;
 		}
 		return obj;
