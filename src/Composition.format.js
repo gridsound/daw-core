@@ -31,10 +31,8 @@ DAWCore.Composition.format = function( cmp ) {
 	// ..........................................
 	cmp.buffers = cmp.buffers || {};
 	Object.values( cmp.buffers ).forEach( buf => {
-		if ( buf.type.includes( "/" ) ) {
-			buf.MIME = buf.type;
-			delete buf.type;
-		}
+		buf.MIME = buf.type || buf.MIME;
+		delete buf.type;
 	} );
 
 	// slices
@@ -83,8 +81,16 @@ DAWCore.Composition.format = function( cmp ) {
 			pat.order = orderDefault;
 		}
 		orderDefault = Math.max( pat.order, orderDefault ) + 1;
-		if ( pat.type === "keys" ) {
-			pat.synth = pat.synth || "0";
+		switch ( pat.type ) {
+			case "keys":
+				pat.synth = pat.synth || "0";
+				break;
+			case "buffer":
+				pat.bufferType = pat.bufferType || null;
+				if ( pat.bufferType === "loop" ) {
+					pat.bufferBpm = pat.bufferBpm || null;
+				}
+				break;
 		}
 	} );
 

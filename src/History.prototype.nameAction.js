@@ -61,6 +61,7 @@ DAWCore.History.actionsToText = {
 	},
 	patterns: {
 		dropBuffers: ( nb ) => [ "file-buffer", `drop ${ DAWCore.utils.plural( nb, "new buffer" ) }` ],
+		changePatternBufferInfo: ( pat ) => [ "pen", `edit info of the buffer "${ pat }"` ],
 		addPattern: ( type, pat ) => [ "plus", `add new ${ type } "${ pat }"` ],
 		addPatternKeys: ( pat, syn ) => [ "plus", `add new keys "${ pat }" of synth "${ syn }"` ],
 		renamePattern: ( type, old, neww ) => [ "pen", `rename ${ type } "${ old }" -> "${ neww }"` ],
