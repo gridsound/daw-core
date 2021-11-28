@@ -20,7 +20,7 @@ DAWCore.Drums = class {
 	// .........................................................................
 	change( obj ) {
 		const get = this.daw.get,
-			patId = get.patternDrumsOpened();
+			patId = get.opened( "drums" );
 
 		if ( "bpm" in obj ) {
 			this._waDrums.scheduler.setBPM( obj.bpm );

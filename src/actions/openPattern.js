@@ -1,11 +1,10 @@
 "use strict";
 
 DAWCore.actions.openPattern = ( id, get ) => {
-	const pat = get.pattern( id ),
-		attr = DAWCore.actions.common.patternOpenedByType[ pat.type ];
+	const pat = get.pattern( id );
 
-	if ( id !== get[ attr ]() && pat.type !== "buffer" ) {
-		const obj = { [ attr ]: id }
+	if ( id !== get.opened( pat.type ) && pat.type !== "buffer" ) {
+		const obj = { [ DAWCore.actions.common.patternOpenedByType[ pat.type ] ]: id }
 
 		if ( pat.type === "keys" && pat.synth !== get.synthOpened() ) {
 			obj.synthOpened = pat.synth;

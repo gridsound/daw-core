@@ -22,7 +22,7 @@ DAWCore.actions.removeSynth = ( synthId, get ) => {
 	DAWCore.utils.addIfNotEmpty( obj, "keys", keys );
 	DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
 	DAWCore.utils.addIfNotEmpty( obj, "blocks", blocks );
-	if ( synthId === get.synthOpened() ) {
+	if ( synthId === get.opened( "synth" ) ) {
 		if ( !Object.keys( get.synths() ).some( k => {
 			if ( k !== synthId ) {
 				obj.synthOpened = k;

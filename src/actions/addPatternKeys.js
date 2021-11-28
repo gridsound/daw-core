@@ -24,7 +24,7 @@ DAWCore.actions.addPatternKeys = ( synthId, get ) => {
 			patternKeysOpened: patId,
 		};
 
-	if ( synthId !== get.synthOpened() ) {
+	if ( synthId !== get.opened( "synth" ) ) {
 		obj.synthOpened = synthId;
 	}
 	return [

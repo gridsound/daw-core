@@ -27,7 +27,7 @@ DAWCore.Slices = class {
 	}
 	change( obj ) {
 		const get = this.#daw.get,
-			patId = get.patternSlicesOpened();
+			patId = get.opened( "slices" );
 		let bufUpdated,
 			durUpdated;
 
@@ -132,10 +132,10 @@ DAWCore.Slices = class {
 	// .........................................................................
 	#onstartBlock( startedId, _blcs, when, off, dur ) {
 		const get = this.#daw.get,
-			buf = get.audioSlices( get.patternSlicesOpened() );
+			buf = get.audioSlices( get.opened( "slices" ) );
 
 		if ( buf ) {
-			const pat = get.pattern( get.patternSlicesOpened() ),
+			const pat = get.pattern( get.opened( "slices" ) ),
 				absn = get.ctx().createBufferSource(),
 				spd = buf.duration / ( pat.duration / get.bps() );
 

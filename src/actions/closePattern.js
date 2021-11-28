@@ -1,9 +1,7 @@
 "use strict";
 
 DAWCore.actions.closePattern = ( type, get ) => {
-	const attr = DAWCore.actions.common.patternOpenedByType[ type ];
-
-	if ( get[ attr ]() ) {
-		return { [ attr ]: null };
+	if ( get.opened( type ) ) {
+		return { [ DAWCore.actions.common.patternOpenedByType[ type ] ]: null };
 	}
 };

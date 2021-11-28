@@ -8,7 +8,7 @@ DAWCore.actions.addSynth = get => {
 			synthOpened: id,
 		};
 
-	if ( get.patternKeysOpened() != null ) {
+	if ( get.opened( "keys" ) != null ) {
 		obj.patternKeysOpened = null;
 	}
 	return [

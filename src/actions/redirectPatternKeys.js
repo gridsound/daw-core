@@ -3,7 +3,7 @@
 DAWCore.actions.redirectPatternKeys = ( patId, synthId, patterns, get ) => {
 	const obj = { patterns };
 
-	if ( patId === get.patternKeysOpened() ) {
+	if ( patId === get.opened( "keys" ) ) {
 		obj.synthOpened = synthId;
 	}
 	return [

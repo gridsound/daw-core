@@ -3,7 +3,6 @@
 DAWCore.actions.removePattern = ( patId, get ) => {
 	const pat = get.pattern( patId ),
 		type = pat.type,
-		typeOpe = DAWCore.actions.common.patternOpenedByType[ type ],
 		obj = { patterns: { [ patId ]: undefined } },
 		blocks = Object.entries( get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
 			if ( blc.pattern === patId ) {
@@ -37,11 +36,11 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 			obj.duration = dur;
 		}
 	}
-	if ( patId === get[ typeOpe ]() ) {
+	if ( patId === get.opened( type ) ) {
 		const found = Object.entries( get.patterns() )
 				.find( ( [ k, v ] ) => k !== patId && v.type === type && v.synth === pat.synth );
 
-		obj[ typeOpe ] = found ? found[ 0 ] : null;
+		obj[ DAWCore.actions.common.patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;
 	}
 	return [
 		obj,

@@ -37,6 +37,7 @@ class DAWCore {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
+			opened: t => this.composition.cmp[ DAWCore.actions.common.patternOpenedByType[ t ] ],
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),
@@ -57,13 +58,6 @@ class DAWCore {
 			duration: () => this.composition.cmp.duration,
 			beatsPerMeasure: () => this.composition.cmp.beatsPerMeasure,
 			stepsPerBeat: () => this.composition.cmp.stepsPerBeat,
-			// .................................................................
-			synthOpened: () => this.composition.cmp.synthOpened,
-			patternBufferOpened: () => this.composition.cmp.patternBufferOpened,
-			patternSlicesOpened: () => this.composition.cmp.patternSlicesOpened,
-			patternDrumsOpened: () => this.composition.cmp.patternDrumsOpened,
-			patternKeysOpened: () => this.composition.cmp.patternKeysOpened,
-			opened: t => this.composition.cmp[ DAWCore.actions.common.patternOpenedByType[ t ] ],
 			// .................................................................
 			block: id => this.composition.cmp.blocks[ id ],
 			blocks: () => this.composition.cmp.blocks,
