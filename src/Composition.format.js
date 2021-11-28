@@ -30,6 +30,12 @@ DAWCore.Composition.format = function( cmp ) {
 	// buffers
 	// ..........................................
 	cmp.buffers = cmp.buffers || {};
+	Object.values( cmp.buffers ).forEach( buf => {
+		if ( buf.type.includes( "/" ) ) {
+			buf.MIME = buf.type;
+			delete buf.type;
+		}
+	} );
 
 	// slices
 	// ..........................................
