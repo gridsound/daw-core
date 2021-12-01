@@ -9,12 +9,12 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 	if ( signChanged || bpmChanged ) {
 		const obj = {},
 			objPatterns = {},
-			patts = Object.entries( get.patterns() );
+			pats = Object.entries( get.patterns() );
 
 		if ( signChanged ) {
 			obj.beatsPerMeasure = bPM;
 			obj.stepsPerBeat = sPB;
-			patts.forEach( ( [ id, pat ] ) => {
+			pats.forEach( ( [ id, pat ] ) => {
 				if ( pat.type === "keys" || pat.type === "drums" ) {
 					const duration = Math.max( 1, Math.ceil( pat.duration / bPM ) ) * bPM;
 
@@ -26,8 +26,8 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 		}
 		if ( bpmChanged ) {
 			obj.bpm = bpm;
-			patts.forEach( ( [ id, pat ] ) => {
-				if ( pat.type === "buffer" ) {
+			pats.forEach( ( [ id, pat ] ) => {
+				if ( pat.type === "buffer" && !pat.bufferBpm ) {
 					const bufDur = get.buffer( pat.buffer ).duration,
 						duration = Math.ceil( bufDur * ( bpm / 60 ) );
 

@@ -203,53 +203,48 @@ DAWCore.Composition = class {
 				pat = cmp.patterns[ patId ];
 
 			switch ( pat.type ) {
-				case "buffer": {
-					const buf = get.audioBuffer( pat.buffer );
-
-					if ( buf ) {
-						const absn = this.ctx.createBufferSource();
-
-						absn.buffer = buf;
-						absn.connect( get.audioChanIn( pat.dest ) );
-						absn.start( when, off, dur );
-						this._startedBuffers.set( startedId, [ patId, absn ] );
-					}
-				} break;
-				case "slices": {
-					const buf = get.audioSlices( patId );
-
-					if ( buf ) {
-						const absn = this.ctx.createBufferSource(),
-							spd = buf.duration / ( pat.duration / get.bps() );
-
-						absn.buffer = buf;
-						absn.playbackRate.value = spd;
-						absn.connect( get.audioChanIn( get.pattern( pat.source ).dest ) );
-						absn.start( when, off * spd, dur * spd );
-						this._startedBuffers.set( startedId, [ patId, absn ] );
-					}
-				} break;
+				case "buffer":
+					this._startBufferBlock( startedId, patId, when, off, dur, get.audioBuffer( pat.buffer ), pat.dest, get );
+					break;
+				case "slices":
+					this._startBufferBlock( startedId, patId, when, off, dur, get.audioSlices( patId ), get.pattern( pat.source ).dest, get );
+					break;
 				case "keys": {
-					const waKeys = new gswaKeysScheduler();
+					const sch = new gswaKeysScheduler();
 
-					this._startedSched.set( startedId, [ patId, waKeys ] );
-					waKeys.scheduler.setBPM( cmp.bpm );
-					waKeys.setContext( this.ctx );
-					waKeys.setSynth( get.audioSynth( pat.synth ) );
-					waKeys.change( cmp.keys[ pat.keys ] );
-					waKeys.start( when, off, dur );
+					this._startedSched.set( startedId, [ patId, sch ] );
+					sch.scheduler.setBPM( cmp.bpm );
+					sch.setContext( this.ctx );
+					sch.setSynth( get.audioSynth( pat.synth ) );
+					sch.change( cmp.keys[ pat.keys ] );
+					sch.start( when, off, dur );
 				} break;
 				case "drums": {
-					const waDrums = new gswaDrumsScheduler();
+					const sch = new gswaDrumsScheduler();
 
-					this._startedSched.set( startedId, [ patId, waDrums ] );
-					waDrums.scheduler.setBPM( cmp.bpm );
-					waDrums.setContext( this.ctx );
-					waDrums.setDrumrows( this.daw._wadrumrows );
-					waDrums.change( cmp.drums[ pat.drums ] );
-					waDrums.start( when, off, dur );
+					this._startedSched.set( startedId, [ patId, sch ] );
+					sch.scheduler.setBPM( cmp.bpm );
+					sch.setContext( this.ctx );
+					sch.setDrumrows( this.daw._wadrumrows );
+					sch.change( cmp.drums[ pat.drums ] );
+					sch.start( when, off, dur );
 				} break;
 			}
+		}
+	}
+	_startBufferBlock( startedId, patId, when, off, dur, buf, chanId, get ) {
+		if ( buf ) {
+			const absn = this.ctx.createBufferSource(),
+				pat = get.pattern( patId ),
+				spd = pat.type === "slices" || pat.bufferBpm
+					? buf.duration / ( pat.duration / get.bps() )
+					: 1;
+
+			absn.buffer = buf;
+			absn.playbackRate.value = spd;
+			absn.connect( get.audioChanIn( chanId ) );
+			absn.start( when, off * spd, dur * spd );
+			this._startedBuffers.set( startedId, [ patId, absn ] );
 		}
 	}
 	_onstopBlock( startedId ) {

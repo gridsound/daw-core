@@ -2,23 +2,35 @@
 
 DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
 	const pat = get.pattern( id ),
-		obj = {};
+		obj = {},
+		objPat = {};
 
+	if ( name !== pat.name ) {
+		objPat.name = name;
+	}
 	if ( type !== pat.bufferType ) {
-		obj.bufferType = type;
+		objPat.bufferType = type;
 		if ( pat.bufferType === "loop" ) {
-			obj.bufferBpm = undefined;
+			objPat.bufferBpm = undefined;
 		}
 	}
 	if ( bpm !== pat.bufferBpm && type === "loop" ) {
-		obj.bufferBpm = bpm;
+		objPat.bufferBpm = bpm;
 	}
-	if ( name !== pat.name ) {
-		obj.name = name;
+	if ( "bufferBpm" in objPat ) {
+		const bufDur = get.buffer( pat.buffer ).duration,
+			dur = objPat.bufferBpm
+				? Math.round( bufDur * ( objPat.bufferBpm / 60 ) )
+				: Math.ceil( bufDur * get.bps() );
+
+		DAWCore.actions.common.updatePatternDuration( obj, id, dur, get );
+	}
+	if ( DAWCore.utils.isntEmpty( objPat ) ) {
+		DAWCore.utils.deepAssign( obj, { patterns: { [ id ]: objPat } } );
 	}
 	if ( DAWCore.utils.isntEmpty( obj ) ) {
 		return [
-			{ patterns: { [ id ]: obj } },
+			obj,
 			[ "patterns", "changePatternBufferInfo", name || pat.name ],
 		];
 	}
