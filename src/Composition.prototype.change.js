@@ -36,6 +36,15 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
 		this.daw.keys.setBPM( bpm );
 	} ],
+	[ "buffers", function( { buffers }, { buffers: prevBuffers } ) {
+		Object.entries( buffers ).forEach( ( [ id, buf ] ) => {
+			if ( buf ) {
+				this.daw.buffers.setBuffer( buf );
+			} else {
+				this.daw.buffers.removeBuffer( prevBuffers[ id ] );
+			}
+		} );
+	} ],
 	[ "blocks", function( { blocks } ) {
 		this._sched.change( blocks );
 	} ],
