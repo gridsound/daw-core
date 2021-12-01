@@ -18,6 +18,7 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], get ) );
 			}
 		} );
+		obj.buffers = { [ pat.buffer ]: undefined };
 	} else {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
