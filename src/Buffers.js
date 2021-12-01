@@ -9,14 +9,18 @@ DAWCore.Buffers = class {
 		Object.seal( this );
 	}
 
+	// ..........................................................................
 	empty() {
 		this.#files.clear();
+	}
+	getSize() {
+		return this.#files.size;
 	}
 	getBuffer( buf ) {
 		return this.#files.get( buf.hash || buf.url );
 	}
-	getSize() {
-		return this.#files.size;
+	removeBuffer( buf ) {
+		this.#files.delete( buf.hash || buf.url );
 	}
 	setBuffer( obj ) {
 		const buf = { ...obj },
@@ -76,7 +80,7 @@ DAWCore.Buffers = class {
 		} );
 	}
 
-	// .........................................................................
+	// ..........................................................................
 	#getBufferFromFile( file ) {
 		return new Promise( ( res, rej ) => {
 			const reader = new FileReader();
