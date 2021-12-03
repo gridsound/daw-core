@@ -89,6 +89,16 @@ DAWCore.Composition.format = function( cmp ) {
 				pat.bufferType = pat.bufferType || null;
 				if ( pat.bufferType === "loop" ) {
 					pat.bufferBpm = pat.bufferBpm || null;
+				} else if ( pat.bufferType === null ) {
+					switch ( cmp.buffers[ pat.buffer ].url ) {
+						case "kick-00.wav":
+						case "clap-00.wav":
+						case "hat-00.wav":
+						case "snare-00.wav":
+						case "hat-open-00.wav":
+							pat.bufferType = "drum";
+							break;
+					}
 				}
 				break;
 		}
