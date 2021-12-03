@@ -38,10 +38,10 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 	} ],
 	[ "buffers", function( { buffers }, { buffers: prevBuffers } ) {
 		Object.entries( buffers ).forEach( ( [ id, buf ] ) => {
-			if ( buf ) {
-				this.daw.buffers.setBuffer( buf );
-			} else {
+			if ( !buf ) {
 				this.daw.buffers.removeBuffer( prevBuffers[ id ] );
+			} else if ( !this.daw.buffers.getBuffer( buf ) ) {
+				this.daw.buffers.setBuffer( buf );
 			}
 		} );
 	} ],
