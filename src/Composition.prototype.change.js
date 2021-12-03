@@ -41,7 +41,11 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 			if ( !buf ) {
 				this.daw.buffers.removeBuffer( prevBuffers[ id ] );
 			} else if ( !this.daw.buffers.getBuffer( buf ) ) {
-				this.daw.buffers.setBuffer( buf );
+				const pr = this.daw.buffers.setBuffer( buf );
+
+				if ( buf.url ) {
+					pr.then( buf => this.daw._call( "buffersLoaded", { [ id ]: buf } ) );
+				}
 			}
 		} );
 	} ],
