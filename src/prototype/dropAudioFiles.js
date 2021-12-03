@@ -21,7 +21,7 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 						bufId = bufNextId + i;
 
 					obj.buffers[ bufId ] = {
-						type: buf.type,
+						MIME: buf.MIME,
 						duration: buf.duration,
 						hash: buf.hash,
 					};

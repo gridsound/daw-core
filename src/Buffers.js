@@ -52,7 +52,7 @@ DAWCore.Buffers = class {
 						const buf = {
 								hash,
 								buffer,
-								type: file.type,
+								MIME: file.type,
 								name: file.name,
 								duration: +buffer.duration.toFixed( 4 ),
 							},
@@ -65,7 +65,7 @@ DAWCore.Buffers = class {
 						}
 					}, () => {
 						failedBuffers.push( {
-							type: file.type,
+							MIME: file.type,
 							name: file.name,
 						} );
 					} )
