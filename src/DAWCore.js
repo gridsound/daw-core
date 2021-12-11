@@ -78,6 +78,16 @@ class DAWCore {
 			synths: () => this.composition.cmp.synths,
 			track: id => this.composition.cmp.tracks[ id ],
 			tracks: () => this.composition.cmp.tracks,
+			// .................................................................
+			patternDuration: id => {
+				const pat = this.get.pattern( id );
+
+				return pat.type !== "slices"
+					? pat.duration
+					: pat.source
+						? this.get.pattern( pat.source ).duration
+						: this.get.beatsPerMeasure();
+			},
 		};
 
 		this._wadrumrows.getAudioBuffer = this.get.audioBuffer;
