@@ -10,7 +10,7 @@ DAWCore.actions.common.updatePatternDuration = ( obj, patId, duration, get ) => 
 					return obj;
 				}, {} );
 
-		obj.patterns = { [ patId ]: { duration } };
+		DAWCore.utils.deepAssign( obj, { patterns: { [ patId ]: { duration } } } );
 		DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 		if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
 			const dur = DAWCore.actions.common.calcNewDuration( obj, get );
