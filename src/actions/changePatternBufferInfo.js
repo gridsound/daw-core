@@ -24,6 +24,9 @@ DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
 				: Math.ceil( bufDur * get.bps() );
 
 		DAWCore.actions.common.updatePatternDuration( obj, id, dur, get );
+		Object.entries( get.patterns() )
+			.filter( kv => kv[ 1 ].type === "slices" && kv[ 1 ].source === id )
+			.forEach( kv => DAWCore.actions.common.updatePatternDuration( obj, kv[ 0 ], dur, get ) );
 	}
 	if ( DAWCore.utils.isntEmpty( objPat ) ) {
 		DAWCore.utils.deepAssign( obj, { patterns: { [ id ]: objPat } } );

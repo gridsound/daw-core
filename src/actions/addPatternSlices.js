@@ -10,7 +10,6 @@ DAWCore.actions.addPatternSlices = get => {
 				? max
 				: Math.max( max, pat.order );
 		}, -1 ) + 1,
-		duration = get.beatsPerMeasure(),
 		obj = {
 			slices: {
 				[ slicesId ]: {
@@ -26,7 +25,6 @@ DAWCore.actions.addPatternSlices = get => {
 				name: patName,
 				slices: slicesId,
 				source: null,
-				duration,
 			} },
 			patternSlicesOpened: patId,
 		};

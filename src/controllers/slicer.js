@@ -57,25 +57,26 @@ DAWCore.controllers.slicer = class {
 				this.#patternId = id;
 				this.#slicesId = pat.slices;
 				Object.keys( this.data ).forEach( this.#deleteSlice, this );
-				this.#changePattern( pat, get );
+				this.#changeSource( pat.source, get );
 				this.#slicesCrud( get.slices( this.#slicesId ) );
 				this.on.disabled( false );
 			}
-		} else {
-			this.#changePattern( obj.patterns?.[ this.#patternId ], get );
+		} else if ( this.#patternId ) {
+			const objPat = obj.patterns?.[ this.#patternId ];
+
+			if ( objPat && "source" in objPat ) {
+				this.#changeSource( objPat.source, get );
+			} else {
+				this.#updateSourceDur( obj, get );
+			}
 			this.#slicesCrud( obj.slices?.[ this.#slicesId ] );
 		}
 	}
-	#changePattern( objPat, get ) {
-		const pat = get.pattern( this.#patternId );
+	#updateSourceDur( obj, get ) {
+		const dur = obj.patterns?.[ get.pattern( this.#patternId ).source ]?.duration;
 
-		if ( objPat ) {
-			if ( "source" in objPat ) {
-				this.#changeSource( objPat.source, get );
-			}
-			if ( "duration" in objPat ) {
-				this.on.changeDuration( objPat.duration );
-			}
+		if ( dur ) {
+			this.on.changeDuration( dur );
 		}
 	}
 	#changeSource( srcId, get ) {
@@ -85,6 +86,7 @@ DAWCore.controllers.slicer = class {
 
 			this.on.setBuffer( buf );
 			this.on.renameBuffer( patSrc.name );
+			this.on.changeDuration( patSrc.duration );
 		} else {
 			this.on.removeBuffer();
 		}

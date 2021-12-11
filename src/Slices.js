@@ -33,31 +33,31 @@ DAWCore.Slices = class {
 
 		if ( "patternSlicesOpened" in obj ) {
 			if ( obj.patternSlicesOpened ) {
-				durUpdated = get.pattern( patId ).duration;
+				durUpdated = true;
 			}
 			this.#daw.focusOn( "slices" );
 		}
 		if ( "bpm" in obj ) {
 			this.#waSched.setBPM( obj.bpm );
 		}
-		if ( "slices" in obj ) {
-			if ( patId ) {
+		if ( patId ) {
+			if ( "slices" in obj ) {
 				const sliOpened = get.pattern( patId ).slices;
 
 				if ( sliOpened in obj.slices ) {
 					bufUpdated = true;
 				}
 			}
-		}
-		if ( "patterns" in obj ) {
-			const pat = obj.patterns[ patId ];
+			if ( "patterns" in obj ) {
+				const pat = obj.patterns[ patId ],
+					patSrc = obj.patterns[ get.pattern( patId ).source ];
 
-			if ( pat ) {
-				if ( "source" in pat ) {
+				if ( pat && "source" in pat ) {
 					bufUpdated = true;
+					durUpdated = true;
 				}
-				if ( "duration" in pat ) {
-					durUpdated = pat.duration;
+				if ( patSrc && "duration" in patSrc ) {
+					durUpdated = true;
 				}
 			}
 		}
@@ -65,7 +65,7 @@ DAWCore.Slices = class {
 			this.#bufferUpdated();
 		}
 		if ( durUpdated ) {
-			this.#changeDuration( durUpdated );
+			this.#changeDuration( get.patternDuration( patId ) );
 		}
 	}
 	#changeDuration( dur ) {
@@ -136,12 +136,13 @@ DAWCore.Slices = class {
 
 		if ( buf ) {
 			const pat = get.pattern( get.opened( "slices" ) ),
+				patSrc = get.pattern( pat.source ),
 				absn = get.ctx().createBufferSource(),
-				spd = buf.duration / ( pat.duration / get.bps() );
+				spd = buf.duration / ( patSrc.duration / get.bps() );
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;
-			absn.connect( get.audioChanIn( get.pattern( pat.source ).dest ) );
+			absn.connect( get.audioChanIn( patSrc.dest ) );
 			absn.start( when, off * spd, dur * spd );
 			this.#startedBuffers.set( startedId, absn );
 		}

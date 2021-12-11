@@ -204,10 +204,10 @@ DAWCore.Composition = class {
 
 			switch ( pat.type ) {
 				case "buffer":
-					this._startBufferBlock( startedId, patId, when, off, dur, get.audioBuffer( pat.buffer ), pat.dest, get );
+					this._startBufferBlock( startedId, patId, when, off, dur, get.audioBuffer( pat.buffer ), patId, get );
 					break;
 				case "slices":
-					this._startBufferBlock( startedId, patId, when, off, dur, get.audioSlices( patId ), get.pattern( pat.source ).dest, get );
+					this._startBufferBlock( startedId, patId, when, off, dur, get.audioSlices( patId ), get.pattern( patId ).source, get );
 					break;
 				case "keys": {
 					const sch = new gswaKeysScheduler();
@@ -232,17 +232,17 @@ DAWCore.Composition = class {
 			}
 		}
 	}
-	_startBufferBlock( startedId, patId, when, off, dur, buf, chanId, get ) {
+	_startBufferBlock( startedId, patId, when, off, dur, buf, patSrcId, get ) {
 		if ( buf ) {
 			const absn = this.ctx.createBufferSource(),
-				pat = get.pattern( patId ),
-				spd = pat.type === "slices" || pat.bufferBpm
+				pat = get.pattern( patSrcId ),
+				spd = pat.bufferBpm
 					? buf.duration / ( pat.duration / get.bps() )
 					: 1;
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;
-			absn.connect( get.audioChanIn( chanId ) );
+			absn.connect( get.audioChanIn( pat.dest ) );
 			absn.start( when, off * spd, dur * spd );
 			this._startedBuffers.set( startedId, [ patId, absn ] );
 		}
