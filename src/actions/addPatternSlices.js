@@ -27,8 +27,6 @@ DAWCore.actions.addPatternSlices = get => {
 				slices: slicesId,
 				source: null,
 				duration,
-				cropA: 0,
-				cropB: 1,
 			} },
 			patternSlicesOpened: patId,
 		};

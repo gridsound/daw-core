@@ -77,7 +77,7 @@ DAWCore.BuffersSlices = class {
 	#setBuffer( patSliId, buffer ) {
 		const get = this.#daw.get,
 			pat = get.pattern( patSliId ),
-			bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, pat.cropA, pat.cropB, get.slices( pat.slices ) );
+			bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, 0, 1, get.slices( pat.slices ) );
 
 		this.#buffers.set( patSliId, bufSliced );
 	}

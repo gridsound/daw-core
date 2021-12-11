@@ -17,7 +17,6 @@ DAWCore.controllers.slicer = class {
 			"setBuffer",
 			"renameBuffer",
 			"removeBuffer",
-			"changeCrop",
 			"changeDuration",
 			"addSlice",
 			"removeSlice",
@@ -38,7 +37,6 @@ DAWCore.controllers.slicer = class {
 		this.#slicesId = null;
 		this.on.disabled( true );
 		this.on.removeBuffer();
-		this.on.changeCrop( 0, 1 );
 		this.on.changeDuration( 4 );
 		Object.keys( this.data ).forEach( this.#deleteSlice, this );
 	}
@@ -74,9 +72,6 @@ DAWCore.controllers.slicer = class {
 		if ( objPat ) {
 			if ( "source" in objPat ) {
 				this.#changeSource( objPat.source, get );
-			}
-			if ( "cropA" in objPat || "cropB" in objPat ) {
-				this.on.changeCrop( pat.cropA, pat.cropB );
 			}
 			if ( "duration" in objPat ) {
 				this.on.changeDuration( objPat.duration );

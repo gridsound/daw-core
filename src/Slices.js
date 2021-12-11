@@ -53,7 +53,7 @@ DAWCore.Slices = class {
 			const pat = obj.patterns[ patId ];
 
 			if ( pat ) {
-				if ( "source" in pat || "cropA" in pat || "cropB" in pat ) {
+				if ( "source" in pat ) {
 					bufUpdated = true;
 				}
 				if ( "duration" in pat ) {
