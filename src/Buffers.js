@@ -10,6 +10,23 @@ DAWCore.Buffers = class {
 	}
 
 	// ..........................................................................
+	change( obj, prevObj ) {
+		if ( "buffers" in obj ) {
+			Object.entries( obj.buffers ).forEach( ( [ id, buf ] ) => {
+				if ( !buf ) {
+					this.removeBuffer( prevObj.buffers[ id ] );
+				} else if ( !this.getBuffer( buf ) ) {
+					const pr = this.setBuffer( buf );
+
+					if ( buf.url ) {
+						pr.then( buf => this.#daw._call( "buffersLoaded", { [ id ]: buf } ) );
+					}
+				}
+			} );
+		}
+	}
+
+	// ..........................................................................
 	empty() {
 		this.#files.clear();
 	}

@@ -7,6 +7,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 
 	DAWCore.utils.diffAssign( cmp, obj );
 	this._wamixer.change( obj );
+	this.daw.buffers.change( obj, prevObj );
 	this.daw.buffersSlices.change( obj );
 	this.daw.slices.change( obj );
 	this.daw._wadrumrows.change( obj );
@@ -35,19 +36,6 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		this._sched.setBPM( bpm );
 		this._synths.forEach( syn => syn.setBPM( bpm ) );
 		this.daw.keys.setBPM( bpm );
-	} ],
-	[ "buffers", function( { buffers }, { buffers: prevBuffers } ) {
-		Object.entries( buffers ).forEach( ( [ id, buf ] ) => {
-			if ( !buf ) {
-				this.daw.buffers.removeBuffer( prevBuffers[ id ] );
-			} else if ( !this.daw.buffers.getBuffer( buf ) ) {
-				const pr = this.daw.buffers.setBuffer( buf );
-
-				if ( buf.url ) {
-					pr.then( buf => this.daw._call( "buffersLoaded", { [ id ]: buf } ) );
-				}
-			}
-		} );
 	} ],
 	[ "blocks", function( { blocks } ) {
 		this._sched.change( blocks );
