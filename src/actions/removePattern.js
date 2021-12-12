@@ -18,6 +18,11 @@ DAWCore.actions.removePattern = ( patId, get ) => {
 					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], get ) );
 			}
 		} );
+		Object.entries( get.patterns() ).forEach( kv => {
+			if ( kv[ 1 ].type === "slices" && kv[ 1 ].source === patId ) {
+				obj.patterns[ kv[ 0 ] ] = { source: null };
+			}
+		} );
 		obj.buffers = { [ pat.buffer ]: undefined };
 	} else {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
