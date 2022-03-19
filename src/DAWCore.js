@@ -147,6 +147,11 @@ class DAWCore {
 	getFocusedName() {
 		return this._focusedStr;
 	}
+	getFocusedDuration() {
+		return this._focusedStr === "composition"
+			? this.get.duration()
+			: this.get.patternDuration( this.get.opened( this._focusedStr ) );
+	}
 	focusSwitch() {
 		this.focusOn( this._focusedStr === "composition" ? this._focusedSwitch : "composition", "-f" );
 	}
