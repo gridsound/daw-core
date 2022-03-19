@@ -50,14 +50,22 @@ DAWCore.Slices = class {
 			}
 			if ( "patterns" in obj ) {
 				const pat = obj.patterns[ patId ],
-					patSrc = obj.patterns[ get.pattern( patId ).source ];
+					patSrcId = get.pattern( patId ).source,
+					patSrc = obj.patterns[ patSrcId ];
 
 				if ( pat && "source" in pat ) {
 					bufUpdated = true;
 					durUpdated = true;
 				}
-				if ( patSrc && "duration" in patSrc ) {
-					durUpdated = true;
+				if ( patSrc ) {
+					if ( "duration" in patSrc ) {
+						durUpdated = true;
+					}
+				} else if ( patSrcId in obj.patterns ) {
+					if ( this.#daw.isPlaying() ) {
+						this.#daw.stop();
+						this.#waSched.empty();
+					}
 				}
 			}
 		}
@@ -132,12 +140,12 @@ DAWCore.Slices = class {
 	// .........................................................................
 	#onstartBlock( startedId, _blcs, when, off, dur ) {
 		const get = this.#daw.get,
-			buf = get.audioSlices( get.opened( "slices" ) );
+			buf = get.audioSlices( get.opened( "slices" ) ),
+			pat = get.pattern( get.opened( "slices" ) ),
+			patSrc = get.pattern( pat.source );
 
-		if ( buf ) {
-			const pat = get.pattern( get.opened( "slices" ) ),
-				patSrc = get.pattern( pat.source ),
-				absn = get.ctx().createBufferSource(),
+		if ( buf && patSrc ) {
+			const absn = get.ctx().createBufferSource(),
 				spd = buf.duration / ( patSrc.duration / get.bps() );
 
 			absn.buffer = buf;
