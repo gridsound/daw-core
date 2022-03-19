@@ -36,6 +36,7 @@ class DAWCore {
 		this.get = {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
+			compositions: saveMode => this.cmps[ saveMode ],
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
 			opened: t => this.composition.cmp[ DAWCore.actions.common.patternOpenedByType[ t ] ],
 			// .................................................................
