@@ -1,11 +1,11 @@
 "use strict";
 
 DAWCore.Slices = class {
-	#daw = null
-	#waSched = new gswaScheduler()
-	#duration = 4
-	#startedBuffers = new Map()
-	playing = false
+	#daw = null;
+	#waSched = new gswaScheduler();
+	#duration = 4;
+	#startedBuffers = new Map();
+	playing = false;
 
 	constructor( daw ) {
 		this.looping = false;
@@ -101,18 +101,6 @@ DAWCore.Slices = class {
 		this.#daw._call( "currentTime", this.getCurrentTime(), "slices" );
 		this.#daw._clockUpdate();
 	}
-	// setLoop( a, b ) {
-	// 	this.loopA = a;
-	// 	this.loopB = b;
-	// 	this.looping = true;
-	// 	this.#waSched.setLoopBeat( a, b );
-	// }
-	// clearLoop() {
-	// 	this.loopA =
-	// 	this.loopB = null;
-	// 	this.looping = false;
-	// 	this.#waSched.setLoopBeat( 0, this.#duration || this.#daw.get.beatsPerMeasure() );
-	// }
 	play() {
 		if ( !this.#waSched.started ) {
 			const a = this.looping ? this.loopA : 0,

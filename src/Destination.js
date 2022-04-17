@@ -1,13 +1,13 @@
 "use strict";
 
 DAWCore.Destination = class {
-	#daw = null
-	#ctx = null
-	#gainNode = null
-	#inputNode = null
-	#analyserNode = null
-	#analyserData = null
-	#gain = 1
+	#daw = null;
+	#ctx = null;
+	#gainNode = null;
+	#inputNode = null;
+	#analyserNode = null;
+	#analyserData = null;
+	#gain = 1;
 
 	constructor( daw ) {
 		this.#daw = daw;

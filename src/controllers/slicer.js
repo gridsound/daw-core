@@ -1,14 +1,15 @@
 "use strict";
 
 DAWCore.controllers.slicer = class {
-	data = {}
-	#dawcore = null
-	#patternId = null
-	#slicesId = null
+	data = {};
+	#dawcore = null;
+	#patternId = null;
+	#slicesId = null;
 	#slicesCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
 		this.#addSlice.bind( this ),
 		this.#updateSlice.bind( this ),
-		this.#deleteSlice.bind( this ) )
+		this.#deleteSlice.bind( this )
+	);
 
 	constructor( fns ) {
 		this.on = DAWCore.utils.mapCallbacks( [

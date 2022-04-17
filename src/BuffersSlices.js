@@ -1,8 +1,8 @@
 "use strict";
 
 DAWCore.BuffersSlices = class {
-	#daw = null
-	#buffers = new Map()
+	#daw = null;
+	#buffers = new Map();
 
 	constructor( daw ) {
 		this.#daw = daw;

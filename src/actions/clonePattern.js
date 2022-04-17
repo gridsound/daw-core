@@ -27,7 +27,7 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 };
 
 DAWCore.actions.clonePattern_filterFn = Object.freeze( {
-	keys: ( newPat, [, pat ] ) => pat.type === "keys" && pat.order >= newPat.order && pat.synth === newPat.synth,
-	drums: ( newPat, [, pat ] ) => pat.type === "drums" && pat.order >= newPat.order,
-	slices: ( newPat, [, pat ] ) => pat.type === "slices" && pat.order >= newPat.order,
+	keys: ( newPat, [ , pat ] ) => pat.type === "keys" && pat.order >= newPat.order && pat.synth === newPat.synth,
+	drums: ( newPat, [ , pat ] ) => pat.type === "drums" && pat.order >= newPat.order,
+	slices: ( newPat, [ , pat ] ) => pat.type === "slices" && pat.order >= newPat.order,
 } );

@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.History = class {
-	#daw = null
-	#stack = []
-	#stackInd = 0
+	#daw = null;
+	#stack = [];
+	#stackInd = 0;
 
 	constructor( daw ) {
 		this.#daw = daw;
@@ -33,13 +33,6 @@ DAWCore.History = class {
 	}
 	getCurrentAction() {
 		return this.#stack[ this.#stackInd - 1 ] || null;
-	}
-	goToAction( act ) {
-		let n = act.index - this.#stackInd;
-
-		     if ( n < 0 ) { while ( n++ < 0 ) { this.undo(); } }
-		else if ( n > 0 ) { while ( n-- > 0 ) { this.redo(); } }
-		return false;
 	}
 	undo() {
 		return this.#stackInd > 0

@@ -6,7 +6,7 @@ DAWCore.utils.plural = ( nb, word, s ) => {
 			: `${ word }${ nb > 1 ? "s" : "" }`,
 		ws = s !== "'s"
 			? w
-			: `${ w }'${ w[ w.length - 1 ] === "s" ? "" : "s" }`
+			: `${ w }'${ w[ w.length - 1 ] === "s" ? "" : "s" }`;
 
 	return `${ nb } ${ ws }`;
 };

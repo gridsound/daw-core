@@ -14,7 +14,7 @@ DAWCore.controllers.keys = class {
 		"selected",
 		"prev",
 		"next",
-	] )
+	] );
 
 	constructor( fns ) {
 		this.data = {};
