@@ -30,8 +30,8 @@ DAWCore.Keys = class {
 		}
 	}
 	setSynth( id ) {
-		const syn = id ? this.daw.get.audioSynth( id ) : null,
-			wasPlaying = this.playing;
+		const syn = id ? this.daw.get.audioSynth( id ) : null;
+		const wasPlaying = this.playing;
 
 		if ( syn !== this._synth ) {
 			if ( wasPlaying ) {
@@ -45,8 +45,8 @@ DAWCore.Keys = class {
 		}
 	}
 	openPattern( id ) {
-		const daw = this.daw,
-			wasPlaying = this.playing;
+		const daw = this.daw;
+		const wasPlaying = this.playing;
 
 		daw.focusOn( "keys" );
 		if ( wasPlaying ) {
@@ -104,8 +104,8 @@ DAWCore.Keys = class {
 	}
 	play() {
 		if ( !this.playing ) {
-			const a = this.looping ? this.loopA : 0,
-				b = this.looping ? this.loopB : this.duration;
+			const a = this.looping ? this.loopA : 0;
+			const b = this.looping ? this.loopB : this.duration;
 
 			this.playing = true;
 			this._waKeys.scheduler.setLoopBeat( a, b );

@@ -18,8 +18,8 @@ DAWCore.BuffersSlices = class {
 	}
 	change( obj ) {
 		if ( "patterns" in obj || "slices" in obj  ) {
-			const get = this.#daw.get,
-				ids = new Set();
+			const get = this.#daw.get;
+			const ids = new Set();
 
 			if ( "patterns" in obj ) {
 				Object.entries( obj.patterns ).forEach( ( [ id, objPat ] ) => {
@@ -42,8 +42,8 @@ DAWCore.BuffersSlices = class {
 				} );
 			}
 			ids.forEach( id => {
-				const src = get.pattern( id ).source,
-					buf = src && get.audioBuffer( get.pattern( src ).buffer );
+				const src = get.pattern( id ).source;
+				const buf = src && get.audioBuffer( get.pattern( src ).buffer );
 
 				if ( buf ) {
 					this.#setBuffer( id, buf );
@@ -52,19 +52,19 @@ DAWCore.BuffersSlices = class {
 		}
 	}
 	buffersLoaded( buffersLoaded ) {
-		const get = this.#daw.get,
-			bufToSli = Object.entries( get.patterns() ).reduce( ( map, [ id, pat ] ) => {
-				if ( pat.type === "slices" ) {
-					const bufId = get.pattern( pat.source ).buffer;
+		const get = this.#daw.get;
+		const bufToSli = Object.entries( get.patterns() ).reduce( ( map, [ id, pat ] ) => {
+			if ( pat.type === "slices" ) {
+				const bufId = get.pattern( pat.source ).buffer;
 
-					if ( bufId in map ) {
-						map[ bufId ][ id ] = true;
-					} else {
-						map[ bufId ] = { [ id ]: true };
-					}
+				if ( bufId in map ) {
+					map[ bufId ][ id ] = true;
+				} else {
+					map[ bufId ] = { [ id ]: true };
 				}
-				return map;
-			}, {} );
+			}
+			return map;
+		}, {} );
 
 		Object.entries( buffersLoaded ).forEach( ( [ id, obj ] ) => {
 			if ( id in bufToSli ) {
@@ -75,9 +75,9 @@ DAWCore.BuffersSlices = class {
 
 	// .........................................................................
 	#setBuffer( patSliId, buffer ) {
-		const get = this.#daw.get,
-			pat = get.pattern( patSliId ),
-			bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, 0, 1, get.slices( pat.slices ) );
+		const get = this.#daw.get;
+		const pat = get.pattern( patSliId );
+		const bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, 0, 1, get.slices( pat.slices ) );
 
 		this.#buffers.set( patSliId, bufSliced );
 	}

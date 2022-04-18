@@ -19,8 +19,8 @@ DAWCore.Drums = class {
 
 	// .........................................................................
 	change( obj ) {
-		const get = this.daw.get,
-			patId = get.opened( "drums" );
+		const get = this.daw.get;
+		const patId = get.opened( "drums" );
 
 		if ( "bpm" in obj ) {
 			this._waDrums.scheduler.setBPM( obj.bpm );
@@ -56,8 +56,8 @@ DAWCore.Drums = class {
 		}
 	}
 	#openPattern( id ) {
-		const daw = this.daw,
-			wasPlaying = this.playing;
+		const daw = this.daw;
+		const wasPlaying = this.playing;
 
 		daw.focusOn( "drums" );
 		if ( wasPlaying ) {
@@ -111,8 +111,8 @@ DAWCore.Drums = class {
 	}
 	play() {
 		if ( !this.playing ) {
-			const a = this.looping ? this.loopA : 0,
-				b = this.looping ? this.loopB : this.duration;
+			const a = this.looping ? this.loopA : 0;
+			const b = this.looping ? this.loopB : this.duration;
 
 			this.playing = true;
 			this._waDrums.scheduler.setLoopBeat( a, b );

@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.History.prototype.nameAction = function( act, msg ) {
-	const [ part, actionName, ...args ] = msg || [],
-		fn = DAWCore.History.actionsToText[ part ]?.[ actionName ],
-		[ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
+	const [ part, actionName, ...args ] = msg || [];
+	const fn = DAWCore.History.actionsToText[ part ]?.[ actionName ];
+	const [ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
 
 	if ( !fn ) {
 		console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );

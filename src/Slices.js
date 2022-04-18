@@ -26,10 +26,10 @@ DAWCore.Slices = class {
 		this.#waSched.enableStreaming( !( ctx instanceof OfflineAudioContext ) );
 	}
 	change( obj ) {
-		const get = this.#daw.get,
-			patId = get.opened( "slices" );
-		let bufUpdated,
-			durUpdated;
+		const get = this.#daw.get;
+		const patId = get.opened( "slices" );
+		let bufUpdated;
+		let durUpdated;
 
 		if ( "patternSlicesOpened" in obj ) {
 			if ( obj.patternSlicesOpened ) {
@@ -49,9 +49,9 @@ DAWCore.Slices = class {
 				}
 			}
 			if ( "patterns" in obj ) {
-				const pat = obj.patterns[ patId ],
-					patSrcId = get.pattern( patId ).source,
-					patSrc = obj.patterns[ patSrcId ];
+				const pat = obj.patterns[ patId ];
+				const patSrcId = get.pattern( patId ).source;
+				const patSrc = obj.patterns[ patSrcId ];
 
 				if ( pat && "source" in pat ) {
 					bufUpdated = true;
@@ -103,8 +103,8 @@ DAWCore.Slices = class {
 	}
 	play() {
 		if ( !this.#waSched.started ) {
-			const a = this.looping ? this.loopA : 0,
-				b = this.looping ? this.loopB : this.#duration;
+			const a = this.looping ? this.loopA : 0;
+			const b = this.looping ? this.loopB : this.#duration;
 
 			this.playing = true;
 			this.#waSched.setLoopBeat( a, b );
@@ -127,14 +127,14 @@ DAWCore.Slices = class {
 
 	// .........................................................................
 	#onstartBlock( startedId, _blcs, when, off, dur ) {
-		const get = this.#daw.get,
-			buf = get.audioSlices( get.opened( "slices" ) ),
-			pat = get.pattern( get.opened( "slices" ) ),
-			patSrc = get.pattern( pat.source );
+		const get = this.#daw.get;
+		const buf = get.audioSlices( get.opened( "slices" ) );
+		const pat = get.pattern( get.opened( "slices" ) );
+		const patSrc = get.pattern( pat.source );
 
 		if ( buf && patSrc ) {
-			const absn = get.ctx().createBufferSource(),
-				spd = buf.duration / ( patSrc.duration / get.bps() );
+			const absn = get.ctx().createBufferSource();
+			const spd = buf.duration / ( patSrc.duration / get.bps() );
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;

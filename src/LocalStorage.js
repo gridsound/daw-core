@@ -24,12 +24,12 @@ DAWCore.LocalStorage = Object.freeze( {
 	},
 	getAll() {
 		const cmps = Object.keys( localStorage )
-				.reduce( ( arr, id ) => {
-					const cmp = this.get( id );
+			.reduce( ( arr, id ) => {
+				const cmp = this.get( id );
 
-					cmp && arr.push( cmp );
-					return arr;
-				}, [] );
+				cmp && arr.push( cmp );
+				return arr;
+			}, [] );
 
 		cmps.sort( ( a, b ) => a.savedAt < b.savedAt );
 		return cmps;

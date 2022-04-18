@@ -2,12 +2,12 @@
 
 DAWCore.Composition = class {
 	constructor( daw ) {
-		const sch = new gswaScheduler(),
-			wamix = new gswaMixer(),
-			wafxs = new gswaEffects( {
-				getChanInput: wamix.getChanInput.bind( wamix ),
-				getChanOutput: wamix.getChanOutput.bind( wamix ),
-			} );
+		const sch = new gswaScheduler();
+		const wamix = new gswaMixer();
+		const wafxs = new gswaEffects( {
+			getChanInput: wamix.getChanInput.bind( wamix ),
+			getChanOutput: wamix.getChanOutput.bind( wamix ),
+		} );
 
 		this.daw = daw;
 		this.cmp = null;
@@ -52,8 +52,8 @@ DAWCore.Composition = class {
 				rej();
 			}
 		} ).then( cmp => {
-			const proms = [],
-				bufLoaded = {};
+			const proms = [];
+			const bufLoaded = {};
 
 			this.cmp = cmp;
 			this.loaded = true;
@@ -113,8 +113,8 @@ DAWCore.Composition = class {
 		}
 	}
 	updateChanAudioData() {
-		const mix = this._wamixer,
-			fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
+		const mix = this._wamixer;
+		const fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
 
 		Object.keys( this.daw.get.channels() ).forEach( chanId => {
 			mix.fillAudioData( chanId );
@@ -194,13 +194,13 @@ DAWCore.Composition = class {
 
 	// .........................................................................
 	_onstartBlock( startedId, blcs, when, off, dur ) {
-		const get = this.daw.get,
-			cmp = this.cmp,
-			blc = blcs[ 0 ][ 1 ];
+		const get = this.daw.get;
+		const cmp = this.cmp;
+		const blc = blcs[ 0 ][ 1 ];
 
 		if ( cmp.tracks[ blc.track ].toggle ) {
-			const patId = blc.pattern,
-				pat = cmp.patterns[ patId ];
+			const patId = blc.pattern;
+			const pat = cmp.patterns[ patId ];
 
 			switch ( pat.type ) {
 				case "buffer":
@@ -234,11 +234,11 @@ DAWCore.Composition = class {
 	}
 	_startBufferBlock( startedId, patId, when, off, dur, buf, patSrcId, get ) {
 		if ( buf ) {
-			const absn = this.ctx.createBufferSource(),
-				pat = get.pattern( patSrcId ),
-				spd = pat.bufferBpm
-					? buf.duration / ( pat.duration / get.bps() )
-					: 1;
+			const absn = this.ctx.createBufferSource();
+			const pat = get.pattern( patSrcId );
+			const spd = pat.bufferBpm
+				? buf.duration / ( pat.duration / get.bps() )
+				: 1;
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;

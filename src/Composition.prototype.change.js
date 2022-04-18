@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.Composition.prototype.change = function( obj, prevObj ) {
-	const cmp = this.cmp,
-		act = this.daw.history.getCurrentAction(),
-		saved = act === this._actionSavedOn && !!cmp.savedAt;
+	const cmp = this.cmp;
+	const act = this.daw.history.getCurrentAction();
+	const saved = act === this._actionSavedOn && !!cmp.savedAt;
 
 	DAWCore.utils.diffAssign( cmp, obj );
 	this._wamixer.change( obj );
@@ -89,8 +89,8 @@ DAWCore.Composition.prototype.change.fn = new Map( [
 		} );
 	} ],
 	[ "keys", function( { keys, patterns } ) {
-		const pats = Object.entries( this.cmp.patterns ),
-			patOpened = this.cmp.patternKeysOpened;
+		const pats = Object.entries( this.cmp.patterns );
+		const patOpened = this.cmp.patternKeysOpened;
 
 		Object.entries( keys ).forEach( ( [ keysId, keysObj ] ) => {
 			pats.some( ( [ patId, patObj ] ) => {

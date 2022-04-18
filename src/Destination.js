@@ -61,8 +61,8 @@ DAWCore.Destination = class {
 			this.#analyserNode.disconnect();
 		}
 		if ( b ) {
-			const an = this.#ctx.createAnalyser(),
-				fftSize = this.#daw.env.analyserFFTsize;
+			const an = this.#ctx.createAnalyser();
+			const fftSize = this.#daw.env.analyserFFTsize;
 
 			this.#analyserNode = an;
 			this.#analyserData = new Uint8Array( fftSize / 2 );

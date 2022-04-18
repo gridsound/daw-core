@@ -17,10 +17,10 @@ DAWCore.History = class {
 		this.#stackInd = 0;
 	}
 	stackChange( redo, msg ) {
-		const stack = this.#stack,
-			undo = DAWCore.utils.composeUndo( this.#daw.composition.cmp, redo ),
-			act = { redo, undo },
-			desc = this.nameAction( act, msg );
+		const stack = this.#stack;
+		const undo = DAWCore.utils.composeUndo( this.#daw.composition.cmp, redo );
+		const act = { redo, undo };
+		const desc = this.nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
@@ -47,8 +47,8 @@ DAWCore.History = class {
 
 	// .........................................................................
 	#change( act, undoredo, cbStr ) {
-		const obj = act[ undoredo ],
-			prevObj = undoredo === "undo" ? act.redo : act.undo;
+		const obj = act[ undoredo ];
+		const prevObj = undoredo === "undo" ? act.redo : act.undo;
 
 		this.#daw._call( cbStr, act );
 		this.#daw.composition.change( obj, prevObj );

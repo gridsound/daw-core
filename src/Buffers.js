@@ -40,9 +40,9 @@ DAWCore.Buffers = class {
 		this.#files.delete( buf.hash || buf.url );
 	}
 	setBuffer( obj ) {
-		const buf = { ...obj },
-			url = buf.url,
-			key = buf.hash || url;
+		const buf = { ...obj };
+		const url = buf.url;
+		const key = buf.hash || url;
 
 		this.#files.set( key, buf );
 		return !url
@@ -58,22 +58,22 @@ DAWCore.Buffers = class {
 	}
 	loadFiles( files ) {
 		return new Promise( res => {
-			const newBuffers = [],
-				knownBuffers = [],
-				failedBuffers = [];
+			const newBuffers = [];
+			const knownBuffers = [];
+			const failedBuffers = [];
 			let nbDone = 0;
 
 			Array.from( files ).forEach( file => {
 				this.#getBufferFromFile( file )
 					.then( ( [ hash, buffer ] ) => {
 						const buf = {
-								hash,
-								buffer,
-								MIME: file.type,
-								name: file.name,
-								duration: +buffer.duration.toFixed( 4 ),
-							},
-							old = this.getBuffer( buf );
+							hash,
+							buffer,
+							MIME: file.type,
+							name: file.name,
+							duration: +buffer.duration.toFixed( 4 ),
+						};
+						const old = this.getBuffer( buf );
 
 						if ( !old ) {
 							newBuffers.push( buf );
@@ -103,8 +103,8 @@ DAWCore.Buffers = class {
 			const reader = new FileReader();
 
 			reader.onload = e => {
-				const buf = e.target.result,
-					hash = this.#hashBufferV1( new Uint8Array( buf ) ); // 1.
+				const buf = e.target.result;
+				const hash = this.#hashBufferV1( new Uint8Array( buf ) ); // 1.
 
 				this.#daw.ctx.decodeAudioData( buf ).then( audiobuf => {
 					res( [ hash, audiobuf ] );
@@ -114,10 +114,10 @@ DAWCore.Buffers = class {
 		} );
 	}
 	#hashBufferV1( u8buf ) {
-		const hash = new Uint8Array( 19 ),
-			len = `${ u8buf.length }`.padStart( 9, "0" );
-		let i = 0,
-			ind = 0;
+		const hash = new Uint8Array( 19 );
+		const len = `${ u8buf.length }`.padStart( 9, "0" );
+		let i = 0;
+		let ind = 0;
 
 		for ( const u8 of u8buf ) {
 			hash[ ind ] += u8;
