@@ -1,15 +1,15 @@
 "use strict";
 
 DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
-	const bpmChanged = bpm !== get.bpm(),
-		signChanged =
+	const bpmChanged = bpm !== get.bpm();
+	const signChanged =
 			bPM !== get.beatsPerMeasure() ||
 			sPB !== get.stepsPerBeat();
 
 	if ( signChanged || bpmChanged ) {
-		const obj = {},
-			objPatterns = {},
-			pats = Object.entries( get.patterns() );
+		const obj = {};
+		const objPatterns = {};
+		const pats = Object.entries( get.patterns() );
 
 		if ( signChanged ) {
 			obj.beatsPerMeasure = bPM;
@@ -28,8 +28,8 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 			obj.bpm = bpm;
 			pats.forEach( ( [ id, pat ] ) => {
 				if ( pat.type === "buffer" && !pat.bufferBpm ) {
-					const bufDur = get.buffer( pat.buffer ).duration,
-						duration = Math.ceil( bufDur * ( bpm / 60 ) );
+					const bufDur = get.buffer( pat.buffer ).duration;
+					const duration = Math.ceil( bufDur * ( bpm / 60 ) );
 
 					if ( duration !== pat.duration ) {
 						objPatterns[ id ] = { duration };

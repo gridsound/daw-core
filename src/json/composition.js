@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.json.composition = ( env, id ) => {
-	const tracks = {},
-		sPB = env.def_stepsPerBeat,
-		bPM = env.def_beatsPerMeasure;
+	const tracks = {};
+	const sPB = env.def_stepsPerBeat;
+	const bPM = env.def_beatsPerMeasure;
 
 	for ( let i = 0; i < env.def_nbTracks; ++i ) {
 		tracks[ i ] = DAWCore.json.track( { order: i } );

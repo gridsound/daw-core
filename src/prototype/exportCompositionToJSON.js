@@ -4,8 +4,8 @@ DAWCore.prototype.exportCompositionToJSON = function( saveMode, id ) {
 	const cmp = this.get.composition( saveMode, id );
 
 	if ( cmp ) {
-		const cpy = DAWCore.utils.jsonCopy( cmp ),
-			cpyFormated = DAWCore.Composition.epure( DAWCore.Composition.format( cpy ) );
+		const cpy = DAWCore.utils.jsonCopy( cmp );
+		const cpyFormated = DAWCore.Composition.epure( DAWCore.Composition.format( cpy ) );
 
 		return {
 			name: `${ cmp.name || "untitled" }.gs`,
@@ -27,12 +27,12 @@ DAWCore._exportJSONTabs = {
 };
 
 DAWCore.prototype._exportCompositionToJSON = function( cmp ) {
-	const delTabs = DAWCore._exportJSONTabs,
-		reg = /^\t"(\w*)": {$/,
-		lines = JSON.stringify( cmp, null, "\t" ).split( "\n" );
-	let regTab,
-		regTa2,
-		delTabCurr;
+	const delTabs = DAWCore._exportJSONTabs;
+	const reg = /^\t"(\w*)": {$/;
+	const lines = JSON.stringify( cmp, null, "\t" ).split( "\n" );
+	let regTab;
+	let regTa2;
+	let delTabCurr;
 
 	if ( DAWCore._URLToRevoke ) {
 		URL.revokeObjectURL( DAWCore._URLToRevoke );

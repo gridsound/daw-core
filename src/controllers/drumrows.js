@@ -41,9 +41,9 @@ DAWCore.controllers.drumrows = class {
 	}
 	_updatePattern( id, { name, duration, dest } ) {
 		if ( name !== undefined || duration !== undefined || dest !== undefined ) {
-			const pat = this.data.patterns[ id ],
-				rowsEnt = Object.entries( this.data.drumrows )
-					.filter( kv => kv[ 1 ].pattern === id );
+			const pat = this.data.patterns[ id ];
+			const rowsEnt = Object.entries( this.data.drumrows )
+				.filter( kv => kv[ 1 ].pattern === id );
 
 			this.__updatePattern( pat, rowsEnt, "name", name );
 			this.__updatePattern( pat, rowsEnt, "dest", dest );

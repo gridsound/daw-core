@@ -10,25 +10,25 @@ DAWCore.actions.removeDrumrow = ( rowId, get ) => {
 };
 
 DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
-	const bPM = get.beatsPerMeasure(),
-		blocksEnt = Object.entries( get.blocks() ),
-		patternsEnt = Object.entries( get.patterns() ),
-		objDrums = {},
-		objBlocks = {},
-		objPatterns = {};
+	const bPM = get.beatsPerMeasure();
+	const blocksEnt = Object.entries( get.blocks() );
+	const patternsEnt = Object.entries( get.patterns() );
+	const objDrums = {};
+	const objBlocks = {};
+	const objPatterns = {};
 
 	obj.drumrows = obj.drumrows || {};
 	obj.drumrows[ rowId ] = undefined;
 	patternsEnt.forEach( ( [ patId, pat ] ) => {
 		if ( pat.type === "drums" ) {
-			const drumsObj = {},
-				drumWhenMax = Object.entries( get.drums( pat.drums ) )
-					.reduce( ( max, [ id, { row, when } ] ) => {
-						if ( row === rowId ) {
-							drumsObj[ id ] = undefined;
-						}
-						return row in obj.drumrows ? max : Math.max( max, when + .001 );
-					}, 0 );
+			const drumsObj = {};
+			const drumWhenMax = Object.entries( get.drums( pat.drums ) )
+				.reduce( ( max, [ id, { row, when } ] ) => {
+					if ( row === rowId ) {
+						drumsObj[ id ] = undefined;
+					}
+					return row in obj.drumrows ? max : Math.max( max, when + .001 );
+				}, 0 );
 
 			if ( DAWCore.utils.isntEmpty( drumsObj ) ) {
 				const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;

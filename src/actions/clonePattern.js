@@ -1,17 +1,17 @@
 "use strict";
 
 DAWCore.actions.clonePattern = ( patId, get ) => {
-	const pat = get.pattern( patId ),
-		type = pat.type,
-		newPat = { ...pat },
-		newPatId = DAWCore.actions.common.getNextIdOf( get.patterns() ),
-		obj = { patterns: { [ newPatId ]: newPat } };
+	const pat = get.pattern( patId );
+	const type = pat.type;
+	const newPat = { ...pat };
+	const newPatId = DAWCore.actions.common.getNextIdOf( get.patterns() );
+	const obj = { patterns: { [ newPatId ]: newPat } };
 
 	newPat.name = DAWCore.actions.common.createUniqueName( "patterns", pat.name, get );
 	++newPat.order;
 	if ( type !== "buffer" ) {
-		const newCnt = DAWCore.utils.jsonCopy( get[ type ]( pat[ type ] ) ),
-			newCntId = DAWCore.actions.common.getNextIdOf( get[ type ]() );
+		const newCnt = DAWCore.utils.jsonCopy( get[ type ]( pat[ type ] ) );
+		const newCntId = DAWCore.actions.common.getNextIdOf( get[ type ]() );
 
 		newPat[ type ] = newCntId;
 		obj[ type ] = { [ newCntId ]: newCnt };

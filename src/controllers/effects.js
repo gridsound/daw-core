@@ -95,8 +95,8 @@ DAWCore.controllers.effects = class {
 		this.on.removeEffect( id );
 	}
 	_updateEffect( id, fx, diffObj ) {
-		const dataObj = this.data[ id ],
-			destOk = this._fxDestOk( dataObj );
+		const dataObj = this.data[ id ];
+		const destOk = this._fxDestOk( dataObj );
 
 		if ( "toggle" in fx ) {
 			dataObj.toggle = fx.toggle;
@@ -135,10 +135,10 @@ DAWCore.controllers.effects = class {
 	}
 	_findSiblingFxIds( id, diffObj = {} ) {
 		const { dest, order } = this.data[ id ];
-		let prevId = null,
-			nextId = null,
-			prevOrder = -Infinity,
-			nextOrder = Infinity;
+		let prevId = null;
+		let nextId = null;
+		let prevOrder = -Infinity;
+		let nextOrder = Infinity;
 
 		Object.entries( this.data ).forEach( ( [ fxId, fx ] ) => {
 			if ( fxId !== id && fx.dest === dest ) {

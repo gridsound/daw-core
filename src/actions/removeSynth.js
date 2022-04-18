@@ -1,12 +1,12 @@
 "use strict";
 
 DAWCore.actions.removeSynth = ( synthId, get ) => {
-	const keys = {},
-		blocks = {},
-		patterns = {},
-		cmpBlocks = Object.entries( get.blocks() ),
-		cmpPatterns = Object.entries( get.patterns() ),
-		obj = { synths: { [ synthId ]: undefined } };
+	const keys = {};
+	const blocks = {};
+	const patterns = {};
+	const cmpBlocks = Object.entries( get.blocks() );
+	const cmpPatterns = Object.entries( get.patterns() );
+	const obj = { synths: { [ synthId ]: undefined } };
 
 	cmpPatterns.forEach( ( [ patId, pat ] ) => {
 		if ( pat.synth === synthId ) {

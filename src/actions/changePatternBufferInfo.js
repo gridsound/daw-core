@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
-	const pat = get.pattern( id ),
-		obj = {},
-		objPat = {};
+	const pat = get.pattern( id );
+	const obj = {};
+	const objPat = {};
 
 	if ( name !== pat.name ) {
 		objPat.name = name;
@@ -18,10 +18,10 @@ DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
 		objPat.bufferBpm = bpm;
 	}
 	if ( "bufferBpm" in objPat ) {
-		const bufDur = get.buffer( pat.buffer ).duration,
-			dur = objPat.bufferBpm
-				? Math.round( bufDur * ( objPat.bufferBpm / 60 ) )
-				: Math.ceil( bufDur * get.bps() );
+		const bufDur = get.buffer( pat.buffer ).duration;
+		const dur = objPat.bufferBpm
+			? Math.round( bufDur * ( objPat.bufferBpm / 60 ) )
+			: Math.ceil( bufDur * get.bps() );
 
 		DAWCore.actions.common.updatePatternDuration( obj, id, dur, get );
 		Object.entries( get.patterns() )

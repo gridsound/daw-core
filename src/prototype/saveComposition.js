@@ -4,8 +4,8 @@ DAWCore.prototype.saveComposition = function() {
 	const actSave = this.composition._actionSavedOn;
 
 	if ( this.composition.save() ) {
-		const cmp = this.get.cmp(),
-			id = this.get.id();
+		const cmp = this.get.cmp();
+		const id = this.get.id();
 
 		if ( this.get.saveMode() === "local" ) {
 			this.cmps.local.set( id, cmp );

@@ -37,8 +37,8 @@ DAWCore.controllers.blocks = class {
 		this.on.removeBlock( id );
 	}
 	_updateBlock( id, obj ) {
-		const dataBlc = this.data[ id ],
-			cb = this.on.changeBlockProp.bind( null, id );
+		const dataBlc = this.data[ id ];
+		const cb = this.on.changeBlockProp.bind( null, id );
 
 		this._setProp( dataBlc, cb, "when", obj.when );
 		this._setProp( dataBlc, cb, "duration", obj.duration );

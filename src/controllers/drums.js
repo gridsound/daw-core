@@ -37,8 +37,8 @@ DAWCore.controllers.drums = class {
 	}
 	_deleteDrum( id ) {
 		const fn = "gain" in this.data[ id ]
-				? this.on.removeDrum
-				: this.on.removeDrumcut;
+			? this.on.removeDrum
+			: this.on.removeDrumcut;
 
 		delete this.data[ id ];
 		fn( id );

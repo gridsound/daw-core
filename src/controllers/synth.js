@@ -66,8 +66,8 @@ DAWCore.controllers.synth = class {
 		this.on.removeOsc( id );
 	}
 	_updateOsc( id, obj ) {
-		const dataOsc = this.data.oscillators[ id ],
-			cb = this.on.changeOscProp.bind( null, id );
+		const dataOsc = this.data.oscillators[ id ];
+		const cb = this.on.changeOscProp.bind( null, id );
 
 		this._setProp( dataOsc, cb, "order", obj.order );
 		this._setProp( dataOsc, cb, "type", obj.type );
@@ -78,8 +78,8 @@ DAWCore.controllers.synth = class {
 		this.on.changeOsc( id, obj );
 	}
 	_updateEnv( obj ) {
-		const dataEnv = this.data.env,
-			cb = this.on.changeEnvProp;
+		const dataEnv = this.data.env;
+		const cb = this.on.changeEnvProp;
 
 		this._setProp( dataEnv, cb, "toggle", obj.toggle );
 		this._setProp( dataEnv, cb, "attack", obj.attack );
@@ -91,8 +91,8 @@ DAWCore.controllers.synth = class {
 		this.on.changeEnv( obj );
 	}
 	_updateLFO( obj ) {
-		const dataLFO = this.data.lfo,
-			cb = this.on.changeLFOProp;
+		const dataLFO = this.data.lfo;
+		const cb = this.on.changeLFOProp;
 
 		this._setProp( dataLFO, cb, "toggle", obj.toggle );
 		this._setProp( dataLFO, cb, "type", obj.type );

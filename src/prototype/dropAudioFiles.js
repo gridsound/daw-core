@@ -5,10 +5,10 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 
 	this.buffers.loadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
 		if ( newBuffers.length || knownBuffers.length ) {
-			const cmpBuffers = this.get.buffers(),
-				bufNextId = +DAWCore.actions.common.getNextIdOf( cmpBuffers ),
-				patNextId = +DAWCore.actions.common.getNextIdOf( this.get.patterns() ),
-				buffersLoaded = {};
+			const cmpBuffers = this.get.buffers();
+			const bufNextId = +DAWCore.actions.common.getNextIdOf( cmpBuffers );
+			const patNextId = +DAWCore.actions.common.getNextIdOf( this.get.patterns() );
+			const buffersLoaded = {};
 
 			if ( newBuffers.length ) {
 				const obj = {};
@@ -16,9 +16,9 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 				obj.buffers = {};
 				obj.patterns = {};
 				newBuffers.forEach( ( buf, i ) => {
-					const dotind = buf.name.lastIndexOf( "." ),
-						patname = dotind > -1 ? buf.name.substr( 0, dotind ) : buf.name,
-						bufId = bufNextId + i;
+					const dotind = buf.name.lastIndexOf( "." );
+					const patname = dotind > -1 ? buf.name.substr( 0, dotind ) : buf.name;
+					const bufId = bufNextId + i;
 
 					obj.buffers[ bufId ] = {
 						MIME: buf.MIME,
@@ -39,10 +39,10 @@ DAWCore.prototype.dropAudioFiles = function( files ) {
 			}
 			if ( knownBuffers.length ) {
 				const bufmap = Object.entries( cmpBuffers )
-						.reduce( ( map, [ idBuf, buf ] ) => {
-							map.set( buf.hash, idBuf );
-							return map;
-						}, new Map() );
+					.reduce( ( map, [ idBuf, buf ] ) => {
+						map.set( buf.hash, idBuf );
+						return map;
+					}, new Map() );
 
 				knownBuffers.forEach( buf => {
 					const idBuf = bufmap.get( buf.hash );

@@ -2,14 +2,14 @@
 
 DAWCore.actions.cropEndBlocks = ( blcIds, whenIncr, get ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
-			obj[ id ] = {
-				duration: get.block( id ).duration + whenIncr,
-				durationEdited: true,
-			};
-			return obj;
-		}, {} ),
-		obj = { blocks },
-		dur = DAWCore.actions.common.calcNewDuration( obj, get );
+		obj[ id ] = {
+			duration: get.block( id ).duration + whenIncr,
+			durationEdited: true,
+		};
+		return obj;
+	}, {} );
+	const obj = { blocks };
+	const dur = DAWCore.actions.common.calcNewDuration( obj, get );
 
 	if ( dur !== get.duration() ) {
 		obj.duration = dur;

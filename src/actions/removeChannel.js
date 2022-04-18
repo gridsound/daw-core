@@ -2,13 +2,13 @@
 
 DAWCore.actions.removeChannel = ( id, get ) => {
 	if ( id !== "main" ) {
-		const red = DAWCore.actions.removeChannel_redirect,
-			destMain = { dest: "main" },
-			channels = red( id, get.channels(), { [ id ]: undefined }, destMain ),
-			patterns = red( id, get.patterns(), {}, destMain ),
-			effects = red( id, get.effects(), {}, undefined ),
-			synths = red( id, get.synths(), {}, destMain ),
-			obj = { channels };
+		const red = DAWCore.actions.removeChannel_redirect;
+		const destMain = { dest: "main" };
+		const channels = red( id, get.channels(), { [ id ]: undefined }, destMain );
+		const patterns = red( id, get.patterns(), {}, destMain );
+		const effects = red( id, get.effects(), {}, undefined );
+		const synths = red( id, get.synths(), {}, destMain );
+		const obj = { channels };
 
 		DAWCore.utils.addIfNotEmpty( obj, "synths", synths );
 		DAWCore.utils.addIfNotEmpty( obj, "effects", effects );

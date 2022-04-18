@@ -1,13 +1,13 @@
 "use strict";
 
 DAWCore.actions.changeDrumsProps = ( patId, prop, arr, get ) => {
-	const pat = get.pattern( patId ),
-		rowId = get.drums( pat.drums )[ arr[ 0 ][ 0 ] ].row,
-		patRowName = DAWCore.actions.common.getDrumrowName( rowId, get ),
-		obj = arr.reduce( ( obj, [ drmId, val ] ) => {
-			obj[ drmId ] = { [ prop ]: val };
-			return obj;
-		}, {} );
+	const pat = get.pattern( patId );
+	const rowId = get.drums( pat.drums )[ arr[ 0 ][ 0 ] ].row;
+	const patRowName = DAWCore.actions.common.getDrumrowName( rowId, get );
+	const obj = arr.reduce( ( obj, [ drmId, val ] ) => {
+		obj[ drmId ] = { [ prop ]: val };
+		return obj;
+	}, {} );
 
 	return [
 		{ drums: { [ pat.drums ]: obj } },

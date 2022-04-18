@@ -2,11 +2,11 @@
 
 DAWCore.actions.removeBlocks = ( blcIds, get ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
-			obj[ id ] = undefined;
-			return obj;
-		}, {} ),
-		obj = { blocks },
-		dur = DAWCore.actions.common.calcNewDuration( obj, get );
+		obj[ id ] = undefined;
+		return obj;
+	}, {} );
+	const obj = { blocks };
+	const dur = DAWCore.actions.common.calcNewDuration( obj, get );
 	let selLen = 0;
 
 	Object.entries( get.blocks() ).forEach( ( [ id, blc ] ) => {

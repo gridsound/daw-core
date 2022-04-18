@@ -10,8 +10,8 @@ DAWCore.prototype.openComposition = function( saveMode, id ) {
 		return ( this.get.composition( saveMode, id ) // 1.
 			? Promise.resolve( cmp )
 			: this.addNewComposition( { saveMode } ) )
-				.then( cmp => this.composition.load( cmp ) )
-				.then( cmp => this._compositionOpened( cmp ) );
+			.then( cmp => this.composition.load( cmp ) )
+			.then( cmp => this._compositionOpened( cmp ) );
 	}
 };
 
