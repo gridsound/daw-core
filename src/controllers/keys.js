@@ -1,6 +1,12 @@
 "use strict";
 
 DAWCore.controllers.keys = class {
+	on = null;
+	data = {};
+	#keysCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+		this.#addKey.bind( this ),
+		this.#updateKey.bind( this ),
+		this.#deleteKey.bind( this ) );
 	static #keyProps = Object.freeze( [
 		"key",
 		"when",
@@ -17,40 +23,35 @@ DAWCore.controllers.keys = class {
 	] );
 
 	constructor( fns ) {
-		this.data = {};
 		this.on = DAWCore.utils.mapCallbacks( [
 			"addKey",
 			"removeKey",
 			"changeKeyProp",
 		], fns.dataCallbacks );
-		this._keysCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
-			this._addKey.bind( this ),
-			this._updateKey.bind( this ),
-			this._deleteKey.bind( this ) );
 		Object.freeze( this );
 	}
 
 	// .........................................................................
 	clear() {
-		Object.keys( this.data ).forEach( this._deleteKey, this );
+		Object.keys( this.data ).forEach( this.#deleteKey, this );
 	}
 	change( keysObj ) {
-		this._keysCrud( keysObj );
+		this.#keysCrud( keysObj );
 	}
 
 	// .........................................................................
-	_addKey( id, obj ) {
+	#addKey( id, obj ) {
 		const key = { ...obj };
 
 		this.data[ id ] = key;
 		this.on.addKey( id, key );
-		this._updateKey( id, key );
+		this.#updateKey( id, key );
 	}
-	_deleteKey( id ) {
+	#deleteKey( id ) {
 		delete this.data[ id ];
 		this.on.removeKey( id );
 	}
-	_updateKey( id, obj ) {
+	#updateKey( id, obj ) {
 		DAWCore.controllers.keys.#keyProps.forEach(
 			DAWCore.controllers.keys.#setProp.bind( null,
 				this.data[ id ],

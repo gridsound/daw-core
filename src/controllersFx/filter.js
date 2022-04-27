@@ -1,6 +1,9 @@
 "use strict";
 
 DAWCore.controllersFx.filter = class {
+	on = null;
+	data = Object.seal( DAWCore.json.effects.filter() );
+
 	constructor( fns ) {
 		this.on = DAWCore.utils.mapCallbacks( [
 			"type",
@@ -10,7 +13,6 @@ DAWCore.controllersFx.filter = class {
 			"frequency",
 			"drawCurve",
 		], fns.dataCallbacks );
-		this.data = Object.seal( DAWCore.json.effects.filter() );
 		Object.freeze( this );
 	}
 
@@ -23,15 +25,16 @@ DAWCore.controllersFx.filter = class {
 		this.on.drawCurve();
 	}
 	change( obj ) {
-		this._changeProp( "type", obj.type, this.on.type );
-		this._changeProp( "Q", obj.Q, this.on.Q );
-		this._changeProp( "gain", obj.gain, this.on.gain );
-		this._changeProp( "detune", obj.detune, this.on.detune );
-		this._changeProp( "frequency", obj.frequency, this.on.frequency );
+		this.#changeProp( "type", obj.type, this.on.type );
+		this.#changeProp( "Q", obj.Q, this.on.Q );
+		this.#changeProp( "gain", obj.gain, this.on.gain );
+		this.#changeProp( "detune", obj.detune, this.on.detune );
+		this.#changeProp( "frequency", obj.frequency, this.on.frequency );
 		this.on.drawCurve();
 	}
 
-	_changeProp( prop, val, cb ) {
+	// .........................................................................
+	#changeProp( prop, val, cb ) {
 		if ( val !== undefined ) {
 			this.data[ prop ] = val;
 			cb( val );

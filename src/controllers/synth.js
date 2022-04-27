@@ -1,13 +1,19 @@
 "use strict";
 
 DAWCore.controllers.synth = class {
+	on = null;
+	data = Object.seal( {
+		name: "",
+		env: Object.seal( DAWCore.json.env() ),
+		lfo: Object.seal( DAWCore.json.lfo() ),
+		oscillators: {},
+	} );
+	#oscsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.oscillators,
+		this.#addOsc.bind( this ),
+		this.#updateOsc.bind( this ),
+		this.#deleteOsc.bind( this ) );
+
 	constructor( fns ) {
-		this.data = Object.seal( {
-			name: "",
-			env: Object.seal( DAWCore.json.env() ),
-			lfo: Object.seal( DAWCore.json.lfo() ),
-			oscillators: {},
-		} );
 		this.on = DAWCore.utils.mapCallbacks( [
 			"addOsc",
 			"removeOsc",
@@ -21,16 +27,12 @@ DAWCore.controllers.synth = class {
 			"changeEnvProp",
 			"updateEnvWave",
 		], fns.dataCallbacks );
-		this._oscsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.oscillators,
-			this._addOsc.bind( this ),
-			this._updateOsc.bind( this ),
-			this._deleteOsc.bind( this ) );
 		Object.freeze( this );
 	}
 
 	// .........................................................................
 	clear() {
-		Object.keys( this.data.oscillators ).forEach( this._deleteOsc, this );
+		Object.keys( this.data.oscillators ).forEach( this.#deleteOsc, this );
 	}
 	recall() {
 		const oscs = Object.entries( this.data.oscillators );
@@ -43,67 +45,67 @@ DAWCore.controllers.synth = class {
 			this.data.name = obj.name;
 		}
 		if ( obj.env ) {
-			this._updateEnv( obj.env );
+			this.#updateEnv( obj.env );
 		}
 		if ( obj.lfo ) {
-			this._updateLFO( obj.lfo );
+			this.#updateLFO( obj.lfo );
 		}
 		if ( obj.oscillators ) {
-			this._oscsCrud( obj.oscillators );
+			this.#oscsCrud( obj.oscillators );
 		}
 	}
 
 	// .........................................................................
-	_addOsc( id, obj ) {
+	#addOsc( id, obj ) {
 		const osc = { ...obj };
 
 		this.data.oscillators[ id ] = osc;
 		this.on.addOsc( id, osc );
-		this._updateOsc( id, osc );
+		this.#updateOsc( id, osc );
 	}
-	_deleteOsc( id ) {
+	#deleteOsc( id ) {
 		delete this.data.oscillators[ id ];
 		this.on.removeOsc( id );
 	}
-	_updateOsc( id, obj ) {
+	#updateOsc( id, obj ) {
 		const dataOsc = this.data.oscillators[ id ];
 		const cb = this.on.changeOscProp.bind( null, id );
 
-		this._setProp( dataOsc, cb, "order", obj.order );
-		this._setProp( dataOsc, cb, "type", obj.type );
-		this._setProp( dataOsc, cb, "pan", obj.pan );
-		this._setProp( dataOsc, cb, "gain", obj.gain );
-		this._setProp( dataOsc, cb, "detune", obj.detune );
+		this.#setProp( dataOsc, cb, "order", obj.order );
+		this.#setProp( dataOsc, cb, "type", obj.type );
+		this.#setProp( dataOsc, cb, "pan", obj.pan );
+		this.#setProp( dataOsc, cb, "gain", obj.gain );
+		this.#setProp( dataOsc, cb, "detune", obj.detune );
 		this.on.updateOscWave( id );
 		this.on.changeOsc( id, obj );
 	}
-	_updateEnv( obj ) {
+	#updateEnv( obj ) {
 		const dataEnv = this.data.env;
 		const cb = this.on.changeEnvProp;
 
-		this._setProp( dataEnv, cb, "toggle", obj.toggle );
-		this._setProp( dataEnv, cb, "attack", obj.attack );
-		this._setProp( dataEnv, cb, "hold", obj.hold );
-		this._setProp( dataEnv, cb, "decay", obj.decay );
-		this._setProp( dataEnv, cb, "sustain", obj.sustain );
-		this._setProp( dataEnv, cb, "release", obj.release );
+		this.#setProp( dataEnv, cb, "toggle", obj.toggle );
+		this.#setProp( dataEnv, cb, "attack", obj.attack );
+		this.#setProp( dataEnv, cb, "hold", obj.hold );
+		this.#setProp( dataEnv, cb, "decay", obj.decay );
+		this.#setProp( dataEnv, cb, "sustain", obj.sustain );
+		this.#setProp( dataEnv, cb, "release", obj.release );
 		this.on.updateEnvWave();
 		this.on.changeEnv( obj );
 	}
-	_updateLFO( obj ) {
+	#updateLFO( obj ) {
 		const dataLFO = this.data.lfo;
 		const cb = this.on.changeLFOProp;
 
-		this._setProp( dataLFO, cb, "toggle", obj.toggle );
-		this._setProp( dataLFO, cb, "type", obj.type );
-		this._setProp( dataLFO, cb, "delay", obj.delay );
-		this._setProp( dataLFO, cb, "attack", obj.attack );
-		this._setProp( dataLFO, cb, "speed", obj.speed );
-		this._setProp( dataLFO, cb, "amp", obj.amp );
+		this.#setProp( dataLFO, cb, "toggle", obj.toggle );
+		this.#setProp( dataLFO, cb, "type", obj.type );
+		this.#setProp( dataLFO, cb, "delay", obj.delay );
+		this.#setProp( dataLFO, cb, "attack", obj.attack );
+		this.#setProp( dataLFO, cb, "speed", obj.speed );
+		this.#setProp( dataLFO, cb, "amp", obj.amp );
 		this.on.updateLFOWave();
 		this.on.changeLFO( obj );
 	}
-	_setProp( data, cb, prop, val ) {
+	#setProp( data, cb, prop, val ) {
 		if ( val !== undefined ) {
 			data[ prop ] = val;
 			cb( prop, val );

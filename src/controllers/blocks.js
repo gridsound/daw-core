@@ -1,55 +1,57 @@
 "use strict";
 
 DAWCore.controllers.blocks = class {
+	on = null;
+	data = {};
+	#blocksCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+		this.#addBlock.bind( this ),
+		this.#updateBlock.bind( this ),
+		this.#deleteBlock.bind( this ) );
+
 	constructor( fns ) {
-		this.data = {};
 		this.on = DAWCore.utils.mapCallbacks( [
 			"addBlock",
 			"removeBlock",
 			"changeBlockProp",
 			"updateBlockViewBox",
 		], fns.dataCallbacks );
-		this._blocksCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
-			this._addBlock.bind( this ),
-			this._updateBlock.bind( this ),
-			this._deleteBlock.bind( this ) );
 		Object.freeze( this );
 	}
 
 	// .........................................................................
 	clear() {
-		Object.keys( this.data ).forEach( this._deleteBlock, this );
+		Object.keys( this.data ).forEach( this.#deleteBlock, this );
 	}
 	change( obj ) {
-		this._blocksCrud( obj.blocks );
+		this.#blocksCrud( obj.blocks );
 	}
 
 	// .........................................................................
-	_addBlock( id, obj ) {
+	#addBlock( id, obj ) {
 		const blc = { ...obj };
 
 		this.data[ id ] = blc;
 		this.on.addBlock( id, blc );
-		this._updateBlock( id, blc );
+		this.#updateBlock( id, blc );
 	}
-	_deleteBlock( id ) {
+	#deleteBlock( id ) {
 		delete this.data[ id ];
 		this.on.removeBlock( id );
 	}
-	_updateBlock( id, obj ) {
+	#updateBlock( id, obj ) {
 		const dataBlc = this.data[ id ];
 		const cb = this.on.changeBlockProp.bind( null, id );
 
-		this._setProp( dataBlc, cb, "when", obj.when );
-		this._setProp( dataBlc, cb, "duration", obj.duration );
-		this._setProp( dataBlc, cb, "offset", obj.offset );
-		this._setProp( dataBlc, cb, "track", obj.track );
-		this._setProp( dataBlc, cb, "selected", obj.selected );
+		this.#setProp( dataBlc, cb, "when", obj.when );
+		this.#setProp( dataBlc, cb, "duration", obj.duration );
+		this.#setProp( dataBlc, cb, "offset", obj.offset );
+		this.#setProp( dataBlc, cb, "track", obj.track );
+		this.#setProp( dataBlc, cb, "selected", obj.selected );
 		if ( "offset" in obj || "duration" in obj ) {
 			this.on.updateBlockViewBox( id, dataBlc );
 		}
 	}
-	_setProp( data, cb, prop, val ) {
+	#setProp( data, cb, prop, val ) {
 		if ( val !== undefined ) {
 			data[ prop ] = val;
 			cb( prop, val );
