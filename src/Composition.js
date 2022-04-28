@@ -130,7 +130,6 @@ DAWCore.Composition = class {
 	setCurrentTime( t ) {
 		this._sched.setCurrentOffsetBeat( t );
 		this.daw._call( "currentTime", this.getCurrentTime(), "composition" );
-		this.daw._clockUpdate();
 	}
 	play() {
 		if ( !this.playing ) {

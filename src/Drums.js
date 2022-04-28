@@ -82,7 +82,6 @@ DAWCore.Drums = class {
 	setCurrentTime( t ) {
 		this._waDrums.scheduler.setCurrentOffsetBeat( t );
 		this.daw._call( "currentTime", this.getCurrentTime(), "drums" );
-		this.daw._clockUpdate();
 	}
 	setBPM( bpm ) {
 		this._waDrums.scheduler.setBPM( bpm );

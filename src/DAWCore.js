@@ -12,7 +12,6 @@ class DAWCore {
 			sampleRate: 48000,
 			analyserFFTsize: 8192,
 			analyserEnable: true,
-			clockSteps: false,
 		} );
 		this.cmps = {
 			local: new Map(),
@@ -115,9 +114,6 @@ class DAWCore {
 	}
 	envChange( obj ) {
 		Object.assign( this.env, obj );
-		if ( "clockSteps" in obj ) {
-			this._clockUpdate();
-		}
 	}
 	callAction( action, ...args ) {
 		const fn = DAWCore.actions.get( action );
@@ -181,7 +177,6 @@ class DAWCore {
 				this._focusedSwitch = focusedStr;
 			}
 			this._call( "focusOn", focusedStr );
-			this._clockUpdate();
 		}
 	}
 
@@ -199,13 +194,11 @@ class DAWCore {
 	pause() {
 		this._focused.pause();
 		this._call( "pause", this._focusedStr );
-		this._clockUpdate();
 	}
 	stop() {
 		this._focused.stop();
 		this._call( "stop", this._focusedStr );
 		this._call( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
-		this._clockUpdate();
 	}
 	setSampleRate( sr ) {
 		if ( sr !== this.env.sampleRate ) {
@@ -219,7 +212,6 @@ class DAWCore {
 
 	// ..........................................................................
 	_startLoop() {
-		this._clockUpdate();
 		this._loop();
 	}
 	_stopLoop() {
@@ -237,14 +229,10 @@ class DAWCore {
 			const beat = this._focused.getCurrentTime();
 
 			this._call( "currentTime", beat, this._focusedStr );
-			this._clockUpdate();
 		}
 		this._frameId = this._loopMs < 20
 			? requestAnimationFrame( this._loop )
 			: setTimeout( this._loop, this._loopMs );
-	}
-	_clockUpdate() {
-		this._call( "clockUpdate", this._focused.getCurrentTime() );
 	}
 	_call( cbName, ...args ) {
 		const fn = this.cb[ cbName ];

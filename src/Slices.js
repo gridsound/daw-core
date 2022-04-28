@@ -99,7 +99,6 @@ DAWCore.Slices = class {
 	setCurrentTime( t ) {
 		this.#waSched.setCurrentOffsetBeat( t );
 		this.#daw._call( "currentTime", this.getCurrentTime(), "slices" );
-		this.#daw._clockUpdate();
 	}
 	play() {
 		if ( !this.#waSched.started ) {
