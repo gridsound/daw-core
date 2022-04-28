@@ -5,8 +5,8 @@ DAWCore.actions.addDrumrow = ( pattern, get ) => {
 
 	if ( pat.type === "buffer" ) {
 		const drumrows = get.drumrows();
-		const id = DAWCore.actions.common.getNextIdOf( drumrows );
-		const order = DAWCore.actions.common.getNextOrderOf( drumrows );
+		const id = DAWCore.actionsCommon.getNextIdOf( drumrows );
+		const order = DAWCore.actionsCommon.getNextOrderOf( drumrows );
 		const rowObj = DAWCore.json.drumrow( { pattern, order } );
 
 		return [

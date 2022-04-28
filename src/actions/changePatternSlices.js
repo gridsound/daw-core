@@ -12,7 +12,7 @@ DAWCore.actions.changePatternSlices = ( id, prop, val, get ) => {
 			break;
 		case "duration":
 			act = "changeSlicesDuration";
-			DAWCore.actions.common.updatePatternDuration( obj, id, val, get );
+			DAWCore.actionsCommon.updatePatternDuration( obj, id, val, get );
 			break;
 		case "slices":
 			act = "changeSlices";

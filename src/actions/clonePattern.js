@@ -4,18 +4,18 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 	const pat = get.pattern( patId );
 	const type = pat.type;
 	const newPat = { ...pat };
-	const newPatId = DAWCore.actions.common.getNextIdOf( get.patterns() );
+	const newPatId = DAWCore.actionsCommon.getNextIdOf( get.patterns() );
 	const obj = { patterns: { [ newPatId ]: newPat } };
 
-	newPat.name = DAWCore.actions.common.createUniqueName( "patterns", pat.name, get );
+	newPat.name = DAWCore.actionsCommon.createUniqueName( "patterns", pat.name, get );
 	++newPat.order;
 	if ( type !== "buffer" ) {
 		const newCnt = DAWCore.utils.jsonCopy( get[ type ]( pat[ type ] ) );
-		const newCntId = DAWCore.actions.common.getNextIdOf( get[ type ]() );
+		const newCntId = DAWCore.actionsCommon.getNextIdOf( get[ type ]() );
 
 		newPat[ type ] = newCntId;
 		obj[ type ] = { [ newCntId ]: newCnt };
-		obj[ DAWCore.actions.common.patternOpenedByType[ type ] ] = newPatId;
+		obj[ DAWCore.actionsCommon.patternOpenedByType[ type ] ] = newPatId;
 		Object.entries( get.patterns() )
 			.filter( DAWCore.actions.clonePattern_filterFn[ type ].bind( null, newPat ) )
 			.forEach( ( [ id, pat ] ) => obj.patterns[ id ] = { order: pat.order + 1 } );

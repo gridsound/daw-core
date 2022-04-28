@@ -20,7 +20,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 		return map;
 	}, new Map() );
 	const newDrums = {};
-	const nextDrumId = +DAWCore.actions.common.getNextIdOf( drums );
+	const nextDrumId = +DAWCore.actionsCommon.getNextIdOf( drums );
 	const jsonType = DAWCore.json[ type ];
 	let nbDrums = 0;
 	let drumWhenMax = pat.duration;
@@ -53,7 +53,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 		const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;
 		const obj = { drums: { [ pat.drums ]: newDrums } };
 
-		DAWCore.actions.common.updatePatternDuration( obj, patternId, duration, get );
+		DAWCore.actionsCommon.updatePatternDuration( obj, patternId, duration, get );
 		return [
 			obj,
 			[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],

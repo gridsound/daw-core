@@ -50,7 +50,7 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 			} );
 			DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 			if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-				const dur = DAWCore.actions.common.calcNewDuration( obj, get );
+				const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
 
 				if ( dur !== get.duration() ) {
 					obj.duration = dur;

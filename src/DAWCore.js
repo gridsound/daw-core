@@ -38,7 +38,7 @@ class DAWCore {
 			currentTime: () => this.composition.currentTime,
 			compositions: saveMode => this.cmps[ saveMode ],
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
-			opened: t => this.composition.cmp[ DAWCore.actions.common.patternOpenedByType[ t ] ],
+			opened: t => this.composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destination.getDestination(),
@@ -255,7 +255,8 @@ class DAWCore {
 
 DAWCore.json = { effects: {} };
 DAWCore.utils = {};
-DAWCore.actions = { common: {} };
+DAWCore.actions = {};
+DAWCore.actionsCommon = {};
 DAWCore.controllers = {};
 DAWCore.controllersFx = {};
 

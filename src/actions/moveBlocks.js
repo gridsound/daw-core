@@ -18,7 +18,7 @@ DAWCore.actions.moveBlocks = ( blcIds, whenIncr, trackIncr, get ) => {
 		}
 	} );
 	if ( whenIncr ) {
-		const dur = DAWCore.actions.common.calcNewDuration( obj, get );
+		const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
 
 		if ( dur !== get.duration() ) {
 			obj.duration = dur;

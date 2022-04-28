@@ -3,9 +3,9 @@
 DAWCore.actions.addKey = ( patId, key, when, duration, get ) => {
 	const pat = get.pattern( patId );
 	const keys = get.keys( pat.keys );
-	const id = DAWCore.actions.common.getNextIdOf( keys );
+	const id = DAWCore.actionsCommon.getNextIdOf( keys );
 	const keysObj = { [ id ]: DAWCore.json.key( { key, when, duration } ) };
-	const patDur = DAWCore.actions.common.calcNewKeysDuration( pat.keys, keysObj, get );
+	const patDur = DAWCore.actionsCommon.calcNewKeysDuration( pat.keys, keysObj, get );
 	const obj = { keys: { [ pat.keys ]: keysObj } };
 
 	Object.entries( keys ).reduce( ( obj, [ id, key ] ) => {
@@ -14,7 +14,7 @@ DAWCore.actions.addKey = ( patId, key, when, duration, get ) => {
 		}
 		return obj;
 	}, keysObj );
-	DAWCore.actions.common.updatePatternDuration( obj, patId, patDur, get );
+	DAWCore.actionsCommon.updatePatternDuration( obj, patId, patDur, get );
 	return [
 		obj,
 		[ "keys", "addKey", pat.name ],

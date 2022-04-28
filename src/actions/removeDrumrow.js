@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.removeDrumrow = ( rowId, get ) => {
-	const patName = DAWCore.actions.common.getDrumrowName( rowId, get );
+	const patName = DAWCore.actionsCommon.getDrumrowName( rowId, get );
 
 	return [
 		DAWCore.actions._removeDrumrow( {}, rowId, get ),
@@ -49,7 +49,7 @@ DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 	DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 	DAWCore.utils.addIfNotEmpty( obj, "patterns", objPatterns );
 	if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-		const dur = DAWCore.actions.common.calcNewDuration( obj, get );
+		const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
 
 		if ( dur !== get.duration() ) {
 			obj.duration = dur;

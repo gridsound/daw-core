@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.common.calcNewDuration = ( changeObj, get ) => {
+DAWCore.actionsCommon.calcNewDuration = ( changeObj, get ) => {
 	const blocks = changeObj.blocks || {};
 	const bPM = changeObj.beatsPerMeasure || get.beatsPerMeasure();
 	const dur = Object.entries( get.blocks() ).reduce( ( max, [ id, blc ] ) => {
