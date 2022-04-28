@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.selectBlocks = blcIds => {
+DAWCore.actions.set( "selectBlocks", blcIds => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = { selected: true };
 		return obj;
@@ -10,4 +10,4 @@ DAWCore.actions.selectBlocks = blcIds => {
 		{ blocks },
 		[ "blocks", "selectBlocks", blcIds.length ],
 	];
-};
+} );

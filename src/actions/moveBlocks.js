@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.moveBlocks = ( blcIds, whenIncr, trackIncr, get ) => {
+DAWCore.actions.set( "moveBlocks", ( blcIds, whenIncr, trackIncr, get ) => {
 	const blocks = {};
 	const obj = { blocks };
 	const tr = Object.entries( get.tracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
@@ -28,4 +28,4 @@ DAWCore.actions.moveBlocks = ( blcIds, whenIncr, trackIncr, get ) => {
 		obj,
 		[ "blocks", "moveBlocks", blcIds.length ],
 	];
-};
+} );

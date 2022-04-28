@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.openSynth = ( id, get ) => {
+DAWCore.actions.set( "openSynth", ( id, get ) => {
 	if ( id !== get.opened( "synth" ) ) {
 		const pat = Object.entries( get.patterns() ).find( kv => kv[ 1 ].synth === id );
 		const patId = pat ? pat[ 0 ] : null;
@@ -11,4 +11,4 @@ DAWCore.actions.openSynth = ( id, get ) => {
 		}
 		return obj;
 	}
-};
+} );

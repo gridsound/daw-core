@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.openPattern = ( id, get ) => {
+DAWCore.actions.set( "openPattern", ( id, get ) => {
 	const pat = get.pattern( id );
 
 	if ( id !== get.opened( pat.type ) && pat.type !== "buffer" ) {
@@ -11,4 +11,4 @@ DAWCore.actions.openPattern = ( id, get ) => {
 		}
 		return obj;
 	}
-};
+} );

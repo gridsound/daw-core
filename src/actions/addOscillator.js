@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addOscillator = ( synthId, get ) => {
+DAWCore.actions.set( "addOscillator", ( synthId, get ) => {
 	const oscs = get.synth( synthId ).oscillators;
 	const id = DAWCore.actionsCommon.getNextIdOf( oscs );
 	const osc = DAWCore.json.oscillator();
@@ -10,4 +10,4 @@ DAWCore.actions.addOscillator = ( synthId, get ) => {
 		{ synths: { [ synthId ]: { oscillators: { [ id ]: osc } } } },
 		[ "synth", "addOscillator", get.synth( synthId ).name ],
 	];
-};
+} );

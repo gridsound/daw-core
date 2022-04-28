@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.addDrums = ( patternId, rowId, whenFrom, whenTo, get ) => {
+DAWCore.actions.set( "addDrums", ( patternId, rowId, whenFrom, whenTo, get ) => {
 	return DAWCore.actions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, get );
-};
+} );
 
 DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, get ) => {
 	const stepDur = 1 / get.stepsPerBeat();

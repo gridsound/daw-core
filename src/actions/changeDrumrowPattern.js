@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changeDrumrowPattern = ( rowId, pattern, get ) => {
+DAWCore.actions.set( "changeDrumrowPattern", ( rowId, pattern, get ) => {
 	const row = get.drumrow( rowId );
 	const pat = get.pattern( pattern );
 
@@ -12,4 +12,4 @@ DAWCore.actions.changeDrumrowPattern = ( rowId, pattern, get ) => {
 			[ "drumrows", "changeDrumrowPattern", oldPat, pat.name ],
 		];
 	}
-};
+} );

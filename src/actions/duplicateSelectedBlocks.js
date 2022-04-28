@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.duplicateSelectedBlocks = ( whenIncr, get ) => {
+DAWCore.actions.set( "duplicateSelectedBlocks", ( whenIncr, get ) => {
 	const sel = Object.entries( get.blocks() ).filter( kv => kv[ 1 ].selected );
 	const newId = +DAWCore.actionsCommon.getNextIdOf( get.blocks() );
 	const blocks = sel.reduce( ( obj, [ id, blc ], i ) => {
@@ -21,4 +21,4 @@ DAWCore.actions.duplicateSelectedBlocks = ( whenIncr, get ) => {
 		obj,
 		[ "blocks", "duplicateSelectedBlocks", sel.length ],
 	];
-};
+} );

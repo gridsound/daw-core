@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addPatternSlices = get => {
+DAWCore.actions.set( "addPatternSlices", get => {
 	const pats = get.patterns();
 	const slicesId = DAWCore.actionsCommon.getNextIdOf( get.slices() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
@@ -33,4 +33,4 @@ DAWCore.actions.addPatternSlices = get => {
 		obj,
 		[ "patterns", "addPattern", "slices", patName ],
 	];
-};
+} );

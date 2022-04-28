@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.removeChannel = ( id, get ) => {
+DAWCore.actions.set( "removeChannel", ( id, get ) => {
 	if ( id !== "main" ) {
 		const red = DAWCore.actions.removeChannel_redirect;
 		const destMain = { dest: "main" };
@@ -18,7 +18,7 @@ DAWCore.actions.removeChannel = ( id, get ) => {
 			[ "channels", "removeChannel", get.channel( id ).name ],
 		];
 	}
-};
+} );
 
 DAWCore.actions.removeChannel_redirect = ( chanId, list, obj, val ) => {
 	return Object.entries( list ).reduce( ( obj, kv ) => {

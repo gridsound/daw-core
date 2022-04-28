@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addPatternKeys = ( synthId, get ) => {
+DAWCore.actions.set( "addPatternKeys", ( synthId, get ) => {
 	const pats = get.patterns();
 	const keysId = DAWCore.actionsCommon.getNextIdOf( get.keys() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
@@ -31,4 +31,4 @@ DAWCore.actions.addPatternKeys = ( synthId, get ) => {
 		obj,
 		[ "patterns", "addPatternKeys", patName, synName ],
 	];
-};
+} );

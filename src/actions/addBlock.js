@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addBlock = ( pattern, when, track, get ) => {
+DAWCore.actions.set( "addBlock", ( pattern, when, track, get ) => {
 	const nId = DAWCore.actionsCommon.getNextIdOf( get.blocks() );
 	const objBlc = DAWCore.json.block( {
 		pattern,
@@ -18,4 +18,4 @@ DAWCore.actions.addBlock = ( pattern, when, track, get ) => {
 		obj,
 		[ "blocks", "addBlock", get.pattern( pattern ).name ],
 	];
-};
+} );

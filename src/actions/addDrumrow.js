@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addDrumrow = ( pattern, get ) => {
+DAWCore.actions.set( "addDrumrow", ( pattern, get ) => {
 	const pat = get.pattern( pattern );
 
 	if ( pat.type === "buffer" ) {
@@ -14,4 +14,4 @@ DAWCore.actions.addDrumrow = ( pattern, get ) => {
 			[ "drumrows", "addDrumrow", pat.name ],
 		];
 	}
-};
+} );

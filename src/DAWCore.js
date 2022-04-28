@@ -120,7 +120,7 @@ class DAWCore {
 		}
 	}
 	callAction( action, ...args ) {
-		const fn = DAWCore.actions[ action ];
+		const fn = DAWCore.actions.get( action );
 
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
@@ -255,7 +255,7 @@ class DAWCore {
 
 DAWCore.json = { effects: {} };
 DAWCore.utils = {};
-DAWCore.actions = {};
+DAWCore.actions = new Map();
 DAWCore.actionsCommon = {};
 DAWCore.controllers = {};
 DAWCore.controllersFx = {};

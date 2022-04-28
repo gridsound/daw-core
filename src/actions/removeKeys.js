@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.removeKeys = ( patId, keyIds, get ) => {
+DAWCore.actions.set( "removeKeys", ( patId, keyIds, get ) => {
 	const pat = get.pattern( patId );
 	const keys = get.keys( pat.keys );
 	const keysObj = keyIds.reduce( ( obj, id ) => {
@@ -44,4 +44,4 @@ DAWCore.actions.removeKeys = ( patId, keyIds, get ) => {
 			? [ "keys", "removeKeys", pat.name, keyIds.length ]
 			: [ "keys", "unselectAllKeys", pat.name, selLen ],
 	];
-};
+} );

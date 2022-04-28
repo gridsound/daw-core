@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.renameTrack = ( id, newName, get ) => {
+DAWCore.actions.set( "renameTrack", ( id, newName, get ) => {
 	const oldName = get.track( id ).name;
 	const name = DAWCore.utils.trim2( newName );
 
@@ -10,4 +10,4 @@ DAWCore.actions.renameTrack = ( id, newName, get ) => {
 			[ "tracks", "renameTrack", oldName, name ],
 		];
 	}
-};
+} );

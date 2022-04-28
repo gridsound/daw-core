@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
+DAWCore.actions.set( "changeTempo", ( bpm, bPM, sPB, get ) => {
 	const bpmChanged = bpm !== get.bpm();
 	const signChanged =
 			bPM !== get.beatsPerMeasure() ||
@@ -62,4 +62,4 @@ DAWCore.actions.changeTempo = ( bpm, bPM, sPB, get ) => {
 			[ "cmp", "changeTempo", bpm, bPM, sPB ],
 		];
 	}
-};
+} );

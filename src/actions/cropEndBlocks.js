@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.cropEndBlocks = ( blcIds, whenIncr, get ) => {
+DAWCore.actions.set( "cropEndBlocks", ( blcIds, whenIncr, get ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = {
 			duration: get.block( id ).duration + whenIncr,
@@ -18,4 +18,4 @@ DAWCore.actions.cropEndBlocks = ( blcIds, whenIncr, get ) => {
 		obj,
 		[ "blocks", "cropEndBlocks", blcIds.length ],
 	];
-};
+} );

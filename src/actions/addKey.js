@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addKey = ( patId, key, when, duration, get ) => {
+DAWCore.actions.set( "addKey", ( patId, key, when, duration, get ) => {
 	const pat = get.pattern( patId );
 	const keys = get.keys( pat.keys );
 	const id = DAWCore.actionsCommon.getNextIdOf( keys );
@@ -19,4 +19,4 @@ DAWCore.actions.addKey = ( patId, key, when, duration, get ) => {
 		obj,
 		[ "keys", "addKey", pat.name ],
 	];
-};
+} );

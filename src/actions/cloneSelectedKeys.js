@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.cloneSelectedKeys = ( patId, keyIds, whenIncr, get ) => {
+DAWCore.actions.set( "cloneSelectedKeys", ( patId, keyIds, whenIncr, get ) => {
 	const pat = get.pattern( patId );
 	const keys = get.keys( pat.keys );
 	const nextId = DAWCore.actionsCommon.getNextIdOf( keys );
@@ -36,4 +36,4 @@ DAWCore.actions.cloneSelectedKeys = ( patId, keyIds, whenIncr, get ) => {
 		obj,
 		[ "keys", "cloneSelectedKeys", pat.name, keyIds.length ],
 	];
-};
+} );

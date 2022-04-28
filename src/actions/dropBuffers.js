@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.dropBuffers = obj => {
+DAWCore.actions.set( "dropBuffers", obj => {
 	return [
 		obj,
 		[ "patterns", "dropBuffers", Object.keys( obj.patterns ).length ],
 	];
-};
+} );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.unselectAllBlocks = get => {
+DAWCore.actions.set( "unselectAllBlocks", get => {
 	let len = 0;
 	const blocks = Object.entries( get.blocks() ).reduce( ( obj, [ id, blc ] ) => {
 		if ( blc.selected ) {
@@ -14,4 +14,4 @@ DAWCore.actions.unselectAllBlocks = get => {
 		{ blocks },
 		[ "blocks", "unselectAllBlocks", len ],
 	];
-};
+} );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.cropStartBlocks = ( blcIds, whenIncr, get ) => {
+DAWCore.actions.set( "cropStartBlocks", ( blcIds, whenIncr, get ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		const blc = get.block( id );
 
@@ -17,4 +17,4 @@ DAWCore.actions.cropStartBlocks = ( blcIds, whenIncr, get ) => {
 		{ blocks },
 		[ "blocks", "cropStartBlocks", blcIds.length ],
 	];
-};
+} );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
+DAWCore.actions.set( "changePatternBufferInfo", ( id, { name, type, bpm }, get ) => {
 	const pat = get.pattern( id );
 	const obj = {};
 	const objPat = {};
@@ -37,4 +37,4 @@ DAWCore.actions.changePatternBufferInfo = ( id, { name, type, bpm }, get ) => {
 			[ "patterns", "changePatternBufferInfo", name || pat.name ],
 		];
 	}
-};
+} );

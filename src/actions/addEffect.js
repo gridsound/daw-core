@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addEffect = ( dest, type, get ) => {
+DAWCore.actions.set( "addEffect", ( dest, type, get ) => {
 	const fxs = get.effects();
 	const destFxs = Object.values( fxs ).filter( fx => fx.dest === dest );
 	const id = DAWCore.actionsCommon.getNextIdOf( fxs );
@@ -16,4 +16,4 @@ DAWCore.actions.addEffect = ( dest, type, get ) => {
 		{ effects: { [ id ]: fx } },
 		[ "effects", "addEffect", get.channel( dest ).name, type ],
 	];
-};
+} );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addChannel = get => {
+DAWCore.actions.set( "addChannel", get => {
 	const channels = get.channels();
 	const id = DAWCore.actionsCommon.getNextIdOf( channels );
 	const order = DAWCore.actionsCommon.getNextOrderOf( channels );
@@ -11,4 +11,4 @@ DAWCore.actions.addChannel = get => {
 		{ channels: { [ id ]: chanObj } },
 		[ "channels", "addChannel", name ],
 	];
-};
+} );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.changePatternSlices = ( id, prop, val, get ) => {
+DAWCore.actions.set( "changePatternSlices", ( id, prop, val, get ) => {
 	const obj = {};
 	let act;
 
@@ -23,4 +23,4 @@ DAWCore.actions.changePatternSlices = ( id, prop, val, get ) => {
 		obj,
 		[ "slices", act, get.pattern( id ).name, val ],
 	];
-};
+} );

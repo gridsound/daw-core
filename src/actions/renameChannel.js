@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.renameChannel = ( id, newName, get ) => {
+DAWCore.actions.set( "renameChannel", ( id, newName, get ) => {
 	const name = DAWCore.utils.trim2( newName );
 	const chan = get.channel( id );
 
@@ -10,4 +10,4 @@ DAWCore.actions.renameChannel = ( id, newName, get ) => {
 			[ "channels", "renameChannel", chan.name, name ],
 		];
 	}
-};
+} );

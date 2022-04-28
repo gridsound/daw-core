@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.toggleTrack = ( id, get ) => {
+DAWCore.actions.set( "toggleTrack", ( id, get ) => {
 	const track = get.track( id );
 	const toggle = !track.toggle;
 
@@ -8,4 +8,4 @@ DAWCore.actions.toggleTrack = ( id, get ) => {
 		{ tracks: { [ id ]: { toggle } } },
 		[ "tracks", "toggleTrack", track.name, toggle ],
 	];
-};
+} );

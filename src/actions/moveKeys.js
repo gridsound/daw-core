@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.moveKeys = ( patId, keyIds, whenIncr, keyIncr, get ) => {
+DAWCore.actions.set( "moveKeys", ( patId, keyIds, whenIncr, keyIncr, get ) => {
 	const pat = get.pattern( patId );
 	const patKeys = get.keys( pat.keys );
 	const keys = keyIds.reduce( ( obj, id ) => {
@@ -27,4 +27,4 @@ DAWCore.actions.moveKeys = ( patId, keyIds, whenIncr, keyIncr, get ) => {
 		obj,
 		[ "keys", "moveKeys", pat.name, keyIds.length ],
 	];
-};
+} );

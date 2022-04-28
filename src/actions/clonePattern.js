@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.clonePattern = ( patId, get ) => {
+DAWCore.actions.set( "clonePattern", ( patId, get ) => {
 	const pat = get.pattern( patId );
 	const type = pat.type;
 	const newPat = { ...pat };
@@ -24,7 +24,7 @@ DAWCore.actions.clonePattern = ( patId, get ) => {
 		obj,
 		[ "patterns", "clonePattern", newPat.type, newPat.name, pat.name ],
 	];
-};
+} );
 
 DAWCore.actions.clonePattern_filterFn = Object.freeze( {
 	keys: ( newPat, [ , pat ] ) => pat.type === "keys" && pat.order >= newPat.order && pat.synth === newPat.synth,

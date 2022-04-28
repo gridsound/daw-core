@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.addPatternDrums = get => {
+DAWCore.actions.set( "addPatternDrums", get => {
 	const pats = get.patterns();
 	const drumsId = DAWCore.actionsCommon.getNextIdOf( get.drums() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
@@ -26,4 +26,4 @@ DAWCore.actions.addPatternDrums = get => {
 		obj,
 		[ "patterns", "addPattern", "drums", patName ],
 	];
-};
+} );

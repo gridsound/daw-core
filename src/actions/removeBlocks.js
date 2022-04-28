@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.removeBlocks = ( blcIds, get ) => {
+DAWCore.actions.set( "removeBlocks", ( blcIds, get ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = undefined;
 		return obj;
@@ -24,4 +24,4 @@ DAWCore.actions.removeBlocks = ( blcIds, get ) => {
 			? [ "blocks", "removeBlocks", blcIds.length ]
 			: [ "blocks", "unselectAllBlocks", selLen ],
 	];
-};
+} );

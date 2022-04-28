@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.toggleChannel = ( id, get ) => {
+DAWCore.actions.set( "toggleChannel", ( id, get ) => {
 	const chan = get.channel( id );
 	const toggle = !chan.toggle;
 
@@ -8,4 +8,4 @@ DAWCore.actions.toggleChannel = ( id, get ) => {
 		{ channels: { [ id ]: { toggle } } },
 		[ "channels", "toggleChannel", chan.name, toggle ],
 	];
-};
+} );
