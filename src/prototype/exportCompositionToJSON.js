@@ -28,7 +28,7 @@ DAWCore._exportJSONTabs = {
 
 DAWCore.prototype._exportCompositionToJSON = function( cmp ) {
 	const delTabs = DAWCore._exportJSONTabs;
-	const reg = /^\t"(\w*)": {$/;
+	const reg = /^\t"(\w*)": \{$/u;
 	const lines = JSON.stringify( cmp, null, "\t" ).split( "\n" );
 	let regTab;
 	let regTa2;
@@ -42,8 +42,8 @@ DAWCore.prototype._exportCompositionToJSON = function( cmp ) {
 
 		if ( res ) {
 			if ( delTabCurr = delTabs[ res[ 1 ] ] ) {
-				regTab = new RegExp( `^\\t{${ delTabCurr }}` );
-				regTa2 = new RegExp( `^\\t{${ delTabCurr - 1 }}\\}` );
+				regTab = new RegExp( `^\\t{${ delTabCurr }}`, "u" );
+				regTa2 = new RegExp( `^\\t{${ delTabCurr - 1 }}\\}`, "u" );
 			}
 		}
 		if ( delTabCurr ) {
@@ -51,5 +51,5 @@ DAWCore.prototype._exportCompositionToJSON = function( cmp ) {
 		}
 	} );
 	return DAWCore._URLToRevoke = URL.createObjectURL( new Blob( [
-		lines.join( "\n" ).replace( /\n~/g, " " ) ] ) );
+		lines.join( "\n" ).replace( /\n~/ug, " " ) ] ) );
 };
