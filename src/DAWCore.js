@@ -139,6 +139,11 @@ class DAWCore {
 	exportCompositionJSON( saveMode, id ) {
 		return DAWCore.ExportJSON.export( this.get.composition( saveMode, id ) );
 	}
+	abortCompositionWAV() {
+		if ( this.ctx instanceof OfflineAudioContext ) {
+			this.composition.stop();
+		}
+	};
 
 	// ..........................................................................
 	getFocusedObject() {
