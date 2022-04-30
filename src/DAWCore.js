@@ -99,6 +99,7 @@ class DAWCore {
 		this.destination.setGain( this.env.def_appGain );
 	}
 
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
@@ -134,6 +135,9 @@ class DAWCore {
 	}
 	compositionNeedSave() {
 		return !this.composition._saved;
+	}
+	exportCompositionJSON( saveMode, id ) {
+		return DAWCore.ExportJSON.export( this.get.composition( saveMode, id ) );
 	}
 
 	// ..........................................................................
