@@ -92,8 +92,8 @@ class DAWCore {
 
 		this._wadrumrows.getAudioBuffer = this.get.audioBuffer;
 		this._wadrumrows.getChannelInput = this.get.audioChanIn;
-		this._wadrumrows.onstartdrum = rowId => this._call( "onstartdrum", rowId );
-		this._wadrumrows.onstartdrumcut = rowId => this._call( "onstopdrumrow", rowId );
+		this._wadrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
+		this._wadrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destination.setGain( this.env.def_appGain );
@@ -133,6 +133,11 @@ class DAWCore {
 			}
 		}
 	}
+	callCallback( cbName, ...args ) {
+		const fn = this.cb[ cbName ];
+
+		return fn && fn( ...args );
+	}
 	compositionNeedSave() {
 		return !this.composition._saved;
 	}
@@ -161,8 +166,8 @@ class DAWCore {
 			...opt,
 		} );
 		this.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
-		this._call( "compositionAdded", cpy );
-		this._call( "compositionSavedStatus", cpy, true );
+		this.callCallback( "compositionAdded", cpy );
+		this.callCallback( "compositionSavedStatus", cpy, true );
 		return Promise.resolve( cpy );
 	}
 	addCompositionByBlob( blob, opt ) {
@@ -223,7 +228,7 @@ class DAWCore {
 	}
 	_compositionOpened( cmp ) {
 		this.focusOn( "composition" );
-		this._call( "compositionOpened", cmp );
+		this.callCallback( "compositionOpened", cmp );
 		this._startLoop();
 		return cmp;
 	}
@@ -236,7 +241,7 @@ class DAWCore {
 			this.keys.setCurrentTime( 0 );
 			this.composition.setCurrentTime( 0 );
 			this._stopLoop();
-			this._call( "compositionClosed", cmp );
+			this.callCallback( "compositionClosed", cmp );
 			this.composition.unload();
 			this.history.empty();
 			this.buffers.empty();
@@ -259,7 +264,7 @@ class DAWCore {
 			if ( saveMode === "local" ) {
 				DAWCore.LocalStorage.delete( cmp.id );
 			}
-			this._call( "compositionDeleted", cmp );
+			this.callCallback( "compositionDeleted", cmp );
 		}
 	}
 	saveComposition() {
@@ -272,21 +277,21 @@ class DAWCore {
 			if ( this.get.saveMode() === "local" ) {
 				this.cmps.local.set( id, cmp );
 				DAWCore.LocalStorage.put( id, cmp );
-				this._call( "compositionSavedStatus", cmp, true );
+				this.callCallback( "compositionSavedStatus", cmp, true );
 			} else {
 				this.composition._saved = false;
-				this._call( "compositionLoading", cmp, true );
-				( this._call( "compositionSavingPromise", cmp )
+				this.callCallback( "compositionLoading", cmp, true );
+				( this.callCallback( "compositionSavingPromise", cmp )
 				|| Promise.resolve( cmp ) )
-					.finally( this._call.bind( this, "compositionLoading", cmp, false ) )
+					.finally( this.callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
 						this.composition._saved = true;
 						this.cmps.cloud.set( id, cmp );
-						this._call( "compositionSavedStatus", cmp, true );
+						this.callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
 						this.composition._actionSavedOn = actSave;
-						this._call( "compositionSavedStatus", cmp, false );
+						this.callCallback( "compositionSavedStatus", cmp, false );
 						throw err;
 					} );
 			}
@@ -380,7 +385,7 @@ class DAWCore {
 					} );
 					this.buffersSlices.buffersLoaded( buffersLoaded );
 				}
-				this._call( "buffersLoaded", buffersLoaded );
+				this.callCallback( "buffersLoaded", buffersLoaded );
 			}
 			if ( failedBuffers.length > 0 ) {
 				console.log( "failedBuffers", failedBuffers );
@@ -429,7 +434,7 @@ class DAWCore {
 			if ( focusedStr !== "composition" ) {
 				this._focusedSwitch = focusedStr;
 			}
-			this._call( "focusOn", focusedStr );
+			this.callCallback( "focusOn", focusedStr );
 		}
 	}
 
@@ -442,16 +447,16 @@ class DAWCore {
 	}
 	play() {
 		this._focused.play();
-		this._call( "play", this._focusedStr );
+		this.callCallback( "play", this._focusedStr );
 	}
 	pause() {
 		this._focused.pause();
-		this._call( "pause", this._focusedStr );
+		this.callCallback( "pause", this._focusedStr );
 	}
 	stop() {
 		this._focused.stop();
-		this._call( "stop", this._focusedStr );
-		this._call( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
+		this.callCallback( "stop", this._focusedStr );
+		this.callCallback( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
 	}
 	setSampleRate( sr ) {
 		if ( sr !== this.env.sampleRate ) {
@@ -476,21 +481,16 @@ class DAWCore {
 
 		if ( anData ) {
 			this.composition.updateChanAudioData();
-			this._call( "analyserFilled", anData );
+			this.callCallback( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
 			const beat = this._focused.getCurrentTime();
 
-			this._call( "currentTime", beat, this._focusedStr );
+			this.callCallback( "currentTime", beat, this._focusedStr );
 		}
 		this._frameId = this._loopMs < 20
 			? requestAnimationFrame( this._loop )
 			: setTimeout( this._loop, this._loopMs );
-	}
-	_call( cbName, ...args ) {
-		const fn = this.cb[ cbName ];
-
-		return fn && fn( ...args );
 	}
 }
 

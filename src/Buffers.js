@@ -19,7 +19,7 @@ DAWCore.Buffers = class {
 					const pr = this.setBuffer( buf );
 
 					if ( buf.url ) {
-						pr.then( buf => this.#daw._call( "buffersLoaded", { [ id ]: buf } ) );
+						pr.then( buf => this.#daw.callCallback( "buffersLoaded", { [ id ]: buf } ) );
 					}
 				}
 			} );

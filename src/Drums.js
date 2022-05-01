@@ -81,7 +81,7 @@ DAWCore.Drums = class {
 	}
 	setCurrentTime( t ) {
 		this._waDrums.scheduler.setCurrentOffsetBeat( t );
-		this.daw._call( "currentTime", this.getCurrentTime(), "drums" );
+		this.daw.callCallback( "currentTime", this.getCurrentTime(), "drums" );
 	}
 	setBPM( bpm ) {
 		this._waDrums.scheduler.setBPM( bpm );
@@ -106,7 +106,7 @@ DAWCore.Drums = class {
 	}
 	stopLiveDrum( rowId ) {
 		this.daw._wadrumrows.stopLiveDrum( rowId );
-		this.daw._call( "onstopdrumrow", rowId );
+		this.daw.callCallback( "onstopdrumrow", rowId );
 	}
 	play() {
 		if ( !this.playing ) {

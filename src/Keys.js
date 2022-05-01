@@ -71,7 +71,7 @@ DAWCore.Keys = class {
 	}
 	setCurrentTime( t ) {
 		this._waKeys.scheduler.setCurrentOffsetBeat( t );
-		this.daw._call( "currentTime", this.getCurrentTime(), "keys" );
+		this.daw.callCallback( "currentTime", this.getCurrentTime(), "keys" );
 	}
 	setBPM( bpm ) {
 		this._waKeys.scheduler.setBPM( bpm );

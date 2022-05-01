@@ -25,9 +25,9 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 
 	if ( saved !== this._saved ) {
 		this._saved = saved;
-		this.daw._call( "compositionSavedStatus", cmp, saved );
+		this.daw.callCallback( "compositionSavedStatus", cmp, saved );
 	}
-	this.daw._call( "compositionChanged", obj, prevObj );
+	this.daw.callCallback( "compositionChanged", obj, prevObj );
 	return obj;
 };
 

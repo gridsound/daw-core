@@ -62,7 +62,7 @@ DAWCore.Composition = class {
 					.then( buf => {
 						if ( buf.buffer ) {
 							bufLoaded[ kv[ 0 ] ] = buf;
-							this.daw._call( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
+							this.daw.callCallback( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
 						}
 					} ) );
 			} );
@@ -83,7 +83,7 @@ DAWCore.Composition = class {
 			this._actionSavedOn = null;
 			this._saved = cmp.options.saveMode === "cloud" ||
 				DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
-			this.daw._call( "compositionSavedStatus", cmp, this._saved );
+			this.daw.callCallback( "compositionSavedStatus", cmp, this._saved );
 			return cmp;
 		} );
 	}
@@ -100,7 +100,7 @@ DAWCore.Composition = class {
 			this.daw.buffersSlices.clear();
 			this.daw._wadrumrows.clear();
 			this._saved = true;
-			this.daw._call( "compositionSavedStatus", this.cmp, true );
+			this.daw.callCallback( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
 		}
 	}
@@ -114,7 +114,7 @@ DAWCore.Composition = class {
 	}
 	updateChanAudioData() {
 		const mix = this._wamixer;
-		const fn = this.daw._call.bind( this.daw, "channelAnalyserFilled" );
+		const fn = this.daw.callCallback.bind( this.daw, "channelAnalyserFilled" );
 
 		Object.keys( this.daw.get.channels() ).forEach( chanId => {
 			mix.fillAudioData( chanId );
@@ -129,7 +129,7 @@ DAWCore.Composition = class {
 	}
 	setCurrentTime( t ) {
 		this._sched.setCurrentOffsetBeat( t );
-		this.daw._call( "currentTime", this.getCurrentTime(), "composition" );
+		this.daw.callCallback( "currentTime", this.getCurrentTime(), "composition" );
 	}
 	play() {
 		if ( !this.playing ) {

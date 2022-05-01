@@ -12,7 +12,7 @@ DAWCore.History = class {
 
 	empty() {
 		while ( this.#stack.length ) {
-			this.#daw._call( "historyDeleteAction", this.#stack.pop() );
+			this.#daw.callCallback( "historyDeleteAction", this.#stack.pop() );
 		}
 		this.#stackInd = 0;
 	}
@@ -25,7 +25,7 @@ DAWCore.History = class {
 		act.desc = desc.t;
 		act.icon = desc.i;
 		while ( stack.length > this.#stackInd ) {
-			this.#daw._call( "historyDeleteAction", stack.pop() );
+			this.#daw.callCallback( "historyDeleteAction", stack.pop() );
 		}
 		++this.#stackInd;
 		act.index = stack.push( act );
@@ -50,7 +50,7 @@ DAWCore.History = class {
 		const obj = act[ undoredo ];
 		const prevObj = undoredo === "undo" ? act.redo : act.undo;
 
-		this.#daw._call( cbStr, act );
+		this.#daw.callCallback( cbStr, act );
 		this.#daw.composition.change( obj, prevObj );
 		return obj;
 	}
