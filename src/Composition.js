@@ -98,7 +98,7 @@ DAWCore.Composition = class {
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this._synths.clear();
 			this.daw.buffersSlices.clear();
-			this.daw._wadrumrows.clear();
+			this.daw.waDrumrows.clear();
 			this._saved = true;
 			this.daw.callCallback( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
@@ -224,7 +224,7 @@ DAWCore.Composition = class {
 					this._startedSched.set( startedId, [ patId, sch ] );
 					sch.scheduler.setBPM( cmp.bpm );
 					sch.setContext( this.ctx );
-					sch.setDrumrows( this.daw._wadrumrows );
+					sch.setDrumrows( this.daw.waDrumrows );
 					sch.change( cmp.drums[ pat.drums ] );
 					sch.start( when, off, dur );
 				} break;

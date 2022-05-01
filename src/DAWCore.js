@@ -1,37 +1,38 @@
 "use strict";
 
 class DAWCore {
+	cb = {};
+	ctx = null;
+	cmps = Object.freeze( {
+		local: new Map(),
+		cloud: new Map(),
+	} );
+	env = Object.seal( {
+		def_bpm: 120,
+		def_appGain: 1,
+		def_nbTracks: 21,
+		def_stepsPerBeat: 4,
+		def_beatsPerMeasure: 4,
+		sampleRate: 48000,
+		analyserFFTsize: 8192,
+		analyserEnable: true,
+	} );
+	destination = new DAWCore.Destination( this );
+	composition = new DAWCore.Composition( this );
+	history = new DAWCore.History( this );
+	keys = new DAWCore.Keys( this );
+	drums = new DAWCore.Drums( this );
+	slices = new DAWCore.Slices( this );
+	buffers = new DAWCore.Buffers( this );
+	buffersSlices = new DAWCore.BuffersSlices( this );
+	waDrumrows = new gswaDrumrows();
+	#focused = this.composition;
+	#focusedStr = "composition";
+	#focusedSwitch = "keys";
+	#loopBind = this.#loop.bind( this );
+	#loopMs = 1;
+
 	constructor() {
-		this.cb = {};
-		this.env = Object.seal( {
-			def_bpm: 120,
-			def_appGain: 1,
-			def_nbTracks: 21,
-			def_stepsPerBeat: 4,
-			def_beatsPerMeasure: 4,
-			sampleRate: 48000,
-			analyserFFTsize: 8192,
-			analyserEnable: true,
-		} );
-		this.cmps = {
-			local: new Map(),
-			cloud: new Map(),
-		};
-		this.ctx = null;
-		this._wadrumrows = new gswaDrumrows();
-		this.history = new DAWCore.History( this );
-		this.buffers = new DAWCore.Buffers( this );
-		this.buffersSlices = new DAWCore.BuffersSlices( this );
-		this.destination = new DAWCore.Destination( this );
-		this.composition = new DAWCore.Composition( this );
-		this.keys = new DAWCore.Keys( this );
-		this.drums = new DAWCore.Drums( this );
-		this.slices = new DAWCore.Slices( this );
-		this._loop = this._loop.bind( this );
-		this._loopMs = 1;
-		this._focused = this.composition;
-		this._focusedStr = "composition";
-		this._focusedSwitch = "keys";
 		this.get = {
 			saveMode: () => this.composition.cmp.options.saveMode,
 			currentTime: () => this.composition.currentTime,
@@ -89,11 +90,10 @@ class DAWCore {
 						: this.get.beatsPerMeasure();
 			},
 		};
-
-		this._wadrumrows.getAudioBuffer = this.get.audioBuffer;
-		this._wadrumrows.getChannelInput = this.get.audioChanIn;
-		this._wadrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
-		this._wadrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		this.waDrumrows.getAudioBuffer = this.get.audioBuffer;
+		this.waDrumrows.getChannelInput = this.get.audioChanIn;
+		this.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
+		this.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destination.setGain( this.env.def_appGain );
@@ -105,7 +105,7 @@ class DAWCore {
 		this.drums._waDrums.setContext( ctx );
 		this.slices.setContext( ctx );
 		this.keys._waKeys.setContext( ctx );
-		this._wadrumrows.setContext( ctx );
+		this.waDrumrows.setContext( ctx );
 		this.destination.setCtx( ctx );
 		this.composition.setCtx( ctx );
 	}
@@ -156,7 +156,7 @@ class DAWCore {
 
 		return this.addComposition( cmp, opt )
 			.then( cmp => this.composition.load( cmp ) )
-			.then( cmp => this._compositionOpened( cmp ) );
+			.then( cmp => this.#compositionOpened( cmp ) );
 	}
 	addComposition( cmp, opt ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
@@ -223,13 +223,13 @@ class DAWCore {
 				? Promise.resolve( cmp )
 				: this.addNewComposition( { saveMode } ) )
 				.then( cmp => this.composition.load( cmp ) )
-				.then( cmp => this._compositionOpened( cmp ) );
+				.then( cmp => this.#compositionOpened( cmp ) );
 		}
 	}
-	_compositionOpened( cmp ) {
+	#compositionOpened( cmp ) {
 		this.focusOn( "composition" );
 		this.callCallback( "compositionOpened", cmp );
-		this._startLoop();
+		this.#startLoop();
 		return cmp;
 	}
 	closeComposition() {
@@ -240,13 +240,13 @@ class DAWCore {
 			this.keys.clearLoop();
 			this.keys.setCurrentTime( 0 );
 			this.composition.setCurrentTime( 0 );
-			this._stopLoop();
+			this.#stopLoop();
 			this.callCallback( "compositionClosed", cmp );
 			this.composition.unload();
 			this.history.empty();
 			this.buffers.empty();
 			if ( !cmp.savedAt ) {
-				this._deleteComposition( cmp );
+				this.#deleteComposition( cmp );
 			}
 		}
 	}
@@ -254,9 +254,9 @@ class DAWCore {
 		if ( this.composition.cmp && id === this.get.id() ) {
 			this.closeComposition();
 		}
-		this._deleteComposition( this.cmps[ saveMode ].get( id ) );
+		this.#deleteComposition( this.cmps[ saveMode ].get( id ) );
 	}
-	_deleteComposition( cmp ) {
+	#deleteComposition( cmp ) {
 		if ( cmp ) {
 			const saveMode = cmp.options.saveMode;
 
@@ -396,18 +396,18 @@ class DAWCore {
 
 	// ..........................................................................
 	getFocusedObject() {
-		return this._focused;
+		return this.#focused;
 	}
 	getFocusedName() {
-		return this._focusedStr;
+		return this.#focusedStr;
 	}
 	getFocusedDuration() {
-		return this._focusedStr === "composition"
+		return this.#focusedStr === "composition"
 			? this.get.duration()
-			: this.get.patternDuration( this.get.opened( this._focusedStr ) );
+			: this.get.patternDuration( this.get.opened( this.#focusedStr ) );
 	}
 	focusSwitch() {
-		this.focusOn( this._focusedStr === "composition" ? this._focusedSwitch : "composition", "-f" );
+		this.focusOn( this.#focusedStr === "composition" ? this.#focusedSwitch : "composition", "-f" );
 	}
 	focusOn( win, f ) {
 		switch ( win ) {
@@ -415,13 +415,13 @@ class DAWCore {
 			case "drums":
 			case "slices":
 				if ( this.get.opened( win ) !== null ) {
-					if ( this._focused !== this[ win ] ) {
+					if ( this.#focused !== this[ win ] ) {
 						this.#focusOn( win, f );
 					}
 					return;
 				}
 			case "composition":
-				if ( this._focused !== this.composition ) {
+				if ( this.#focused !== this.composition ) {
 					this.#focusOn( "composition", f );
 				}
 		}
@@ -429,10 +429,10 @@ class DAWCore {
 	#focusOn( focusedStr, force ) {
 		if ( force === "-f" || !this.isPlaying() ) {
 			this.pause();
-			this._focused = this[ focusedStr ];
-			this._focusedStr = focusedStr;
+			this.#focused = this[ focusedStr ];
+			this.#focusedStr = focusedStr;
 			if ( focusedStr !== "composition" ) {
-				this._focusedSwitch = focusedStr;
+				this.#focusedSwitch = focusedStr;
 			}
 			this.callCallback( "focusOn", focusedStr );
 		}
@@ -446,17 +446,17 @@ class DAWCore {
 		this.isPlaying() ? this.pause() : this.play();
 	}
 	play() {
-		this._focused.play();
-		this.callCallback( "play", this._focusedStr );
+		this.#focused.play();
+		this.callCallback( "play", this.#focusedStr );
 	}
 	pause() {
-		this._focused.pause();
-		this.callCallback( "pause", this._focusedStr );
+		this.#focused.pause();
+		this.callCallback( "pause", this.#focusedStr );
 	}
 	stop() {
-		this._focused.stop();
-		this.callCallback( "stop", this._focusedStr );
-		this.callCallback( "currentTime", this._focused.getCurrentTime(), this._focusedStr );
+		this.#focused.stop();
+		this.callCallback( "stop", this.#focusedStr );
+		this.callCallback( "currentTime", this.#focused.getCurrentTime(), this.#focusedStr );
 	}
 	setSampleRate( sr ) {
 		if ( sr !== this.env.sampleRate ) {
@@ -465,18 +465,18 @@ class DAWCore {
 		}
 	}
 	setLoopRate( fps ) {
-		this._loopMs = 1000 / fps | 0;
+		this.#loopMs = 1000 / fps | 0;
 	}
 
 	// ..........................................................................
-	_startLoop() {
-		this._loop();
+	#startLoop() {
+		this.#loop();
 	}
-	_stopLoop() {
+	#stopLoop() {
 		clearTimeout( this._frameId );
 		cancelAnimationFrame( this._frameId );
 	}
-	_loop() {
+	#loop() {
 		const anData = this.destination.analyserFillData();
 
 		if ( anData ) {
@@ -484,13 +484,13 @@ class DAWCore {
 			this.callCallback( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
-			const beat = this._focused.getCurrentTime();
+			const beat = this.#focused.getCurrentTime();
 
-			this.callCallback( "currentTime", beat, this._focusedStr );
+			this.callCallback( "currentTime", beat, this.#focusedStr );
 		}
-		this._frameId = this._loopMs < 20
-			? requestAnimationFrame( this._loop )
-			: setTimeout( this._loop, this._loopMs );
+		this._frameId = this.#loopMs < 20
+			? requestAnimationFrame( this.#loopBind )
+			: setTimeout( this.#loopBind, this.#loopMs );
 	}
 }
 

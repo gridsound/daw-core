@@ -10,7 +10,7 @@ DAWCore.Composition.prototype.change = function( obj, prevObj ) {
 	this.daw.buffers.change( obj, prevObj );
 	this.daw.buffersSlices.change( obj );
 	this.daw.slices.change( obj );
-	this.daw._wadrumrows.change( obj );
+	this.daw.waDrumrows.change( obj );
 	this.daw.drums.change( obj );
 	this._waeffects.change( obj );
 	this.change.fn.forEach( ( fn, attr ) => {
