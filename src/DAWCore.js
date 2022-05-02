@@ -44,10 +44,10 @@ class DAWCore {
 			audioDestination: () => this.destination.getDestination(),
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
 			audioSlices: id => this.buffersSlices.getBuffer( id ),
-			audioChanIn: id => this.composition._wamixer.getChanInput( id ),
-			audioChanOut: id => this.composition._wamixer.getChanOutput( id ),
-			audioEffect: id => this.composition._waeffects.getFx( id ),
-			audioSynth: id => this.composition._synths.get( id ),
+			audioChanIn: id => this.composition.waMixer.getChanInput( id ),
+			audioChanOut: id => this.composition.waMixer.getChanOutput( id ),
+			audioEffect: id => this.composition.waEffects.getFx( id ),
+			audioSynth: id => this.composition.waSynths.get( id ),
 			// .................................................................
 			cmp: () => this.composition.cmp,
 			id: () => this.composition.cmp.id,
@@ -139,7 +139,7 @@ class DAWCore {
 		return fn && fn( ...args );
 	}
 	compositionNeedSave() {
-		return !this.composition._saved;
+		return !this.composition.saved;
 	}
 	exportCompositionJSON( saveMode, id ) {
 		return DAWCore.ExportJSON.export( this.get.composition( saveMode, id ) );
@@ -268,7 +268,7 @@ class DAWCore {
 		}
 	}
 	saveComposition() {
-		const actSave = this.composition._actionSavedOn;
+		const actSave = this.composition.actionSavedOn;
 
 		if ( this.composition.save() ) {
 			const cmp = this.get.cmp();
@@ -279,18 +279,18 @@ class DAWCore {
 				DAWCore.LocalStorage.put( id, cmp );
 				this.callCallback( "compositionSavedStatus", cmp, true );
 			} else {
-				this.composition._saved = false;
+				this.composition.saved = false;
 				this.callCallback( "compositionLoading", cmp, true );
 				( this.callCallback( "compositionSavingPromise", cmp )
 				|| Promise.resolve( cmp ) )
 					.finally( this.callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
-						this.composition._saved = true;
+						this.composition.saved = true;
 						this.cmps.cloud.set( id, cmp );
 						this.callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
-						this.composition._actionSavedOn = actSave;
+						this.composition.actionSavedOn = actSave;
 						this.callCallback( "compositionSavedStatus", cmp, false );
 						throw err;
 					} );
@@ -324,13 +324,13 @@ class DAWCore {
 
 	// ..........................................................................
 	liveChangeChannel( id, prop, val ) {
-		this.composition._wamixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
+		this.composition.waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
 	}
 	liveChangeEffect( fxId, prop, val ) {
-		this.composition._waeffects.liveChangeFxProp( fxId, prop, val );
+		this.composition.waEffects.liveChangeFxProp( fxId, prop, val );
 	}
 	liveChangeSynth( id, obj ) {
-		this.composition._synths.get( id ).change( obj );
+		this.composition.waSynths.get( id ).change( obj );
 	}
 
 	// ..........................................................................

@@ -1,30 +1,28 @@
 "use strict";
 
 DAWCore.Composition = class {
-	constructor( daw ) {
-		const sch = new gswaScheduler();
-		const wamix = new gswaMixer();
-		const wafxs = new gswaEffects( {
-			getChanInput: wamix.getChanInput.bind( wamix ),
-			getChanOutput: wamix.getChanOutput.bind( wamix ),
-		} );
+	daw = null;
+	cmp = null;
+	loaded = false;
+	playing = false;
+	saved = true;
+	actionSavedOn = null;
+	waSynths = new Map();
+	waSched = new gswaScheduler();
+	waMixer = new gswaMixer();
+	waEffects = new gswaEffects( {
+		getChanInput: this.waMixer.getChanInput.bind( this.waMixer ),
+		getChanOutput: this.waMixer.getChanOutput.bind( this.waMixer ),
+	} );
+	#startedSched = new Map();
+	#startedBuffers = new Map();
 
+	constructor( daw ) {
 		this.daw = daw;
-		this.cmp = null;
-		this.loaded =
-		this.playing = false;
-		this._saved = true;
-		this._sched = sch;
-		this._wamixer = wamix;
-		this._waeffects = wafxs;
-		this._synths = new Map();
-		this._startedSched = new Map();
-		this._startedBuffers = new Map();
-		this._actionSavedOn = null;
-		sch.delayStopCallback = 4;
-		sch.currentTime = () => this.ctx.currentTime;
-		sch.ondatastart = this._onstartBlock.bind( this );
-		sch.ondatastop = this._onstopBlock.bind( this );
+		this.waSched.delayStopCallback = 4;
+		this.waSched.currentTime = () => this.ctx.currentTime;
+		this.waSched.ondatastart = this.#onstartBlock.bind( this );
+		this.waSched.ondatastop = this.#onstopBlock.bind( this );
 	}
 
 	// un/load, change, save
@@ -32,10 +30,10 @@ DAWCore.Composition = class {
 	setCtx( ctx ) {
 		gswaPeriodicWaves.clearCache();
 		this.ctx = ctx;
-		this._wamixer.setContext( ctx ); // 1.
-		this._wamixer.connect( this.daw.get.audioDestination() );
-		this._waeffects.setContext( ctx );
-		this._synths.forEach( ( syn, synId ) => {
+		this.waMixer.setContext( ctx ); // 1.
+		this.waMixer.connect( this.daw.get.audioDestination() );
+		this.waEffects.setContext( ctx );
+		this.waSynths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.output.disconnect();
 			syn.output.connect( this.daw.get.audioChanIn( this.cmp.synths[ synId ].dest ) );
@@ -80,40 +78,40 @@ DAWCore.Composition = class {
 			Promise.allSettled( proms ).then( () => {
 				this.daw.buffersSlices.buffersLoaded( bufLoaded );
 			} );
-			this._actionSavedOn = null;
-			this._saved = cmp.options.saveMode === "cloud" ||
+			this.actionSavedOn = null;
+			this.saved = cmp.options.saveMode === "cloud" ||
 				DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
-			this.daw.callCallback( "compositionSavedStatus", cmp, this._saved );
+			this.daw.callCallback( "compositionSavedStatus", cmp, this.saved );
 			return cmp;
 		} );
 	}
 	unload() {
 		if ( this.loaded ) {
-			const d = this._sched.data;
+			const d = this.waSched.data;
 
 			this.loaded = false;
-			this._waeffects.clear(); // 1.
-			this._wamixer.clear();
-			this._sched.stop();
+			this.waEffects.clear(); // 1.
+			this.waMixer.clear();
+			this.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
-			this._synths.clear();
+			this.waSynths.clear();
 			this.daw.buffersSlices.clear();
 			this.daw.waDrumrows.clear();
-			this._saved = true;
+			this.saved = true;
 			this.daw.callCallback( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
 		}
 	}
 	save() {
-		if ( !this._saved ) {
-			this._saved = true;
-			this._actionSavedOn = this.daw.history.getCurrentAction();
+		if ( !this.saved ) {
+			this.saved = true;
+			this.actionSavedOn = this.daw.history.getCurrentAction();
 			this.cmp.savedAt = Math.floor( Date.now() / 1000 );
 			return true;
 		}
 	}
 	updateChanAudioData() {
-		const mix = this._wamixer;
+		const mix = this.waMixer;
 		const fn = this.daw.callCallback.bind( this.daw, "channelAnalyserFilled" );
 
 		Object.keys( this.daw.get.channels() ).forEach( chanId => {
@@ -125,22 +123,22 @@ DAWCore.Composition = class {
 	// controls
 	// .........................................................................
 	getCurrentTime() {
-		return this._sched.getCurrentOffsetBeat();
+		return this.waSched.getCurrentOffsetBeat();
 	}
 	setCurrentTime( t ) {
-		this._sched.setCurrentOffsetBeat( t );
+		this.waSched.setCurrentOffsetBeat( t );
 		this.daw.callCallback( "currentTime", this.getCurrentTime(), "composition" );
 	}
 	play() {
 		if ( !this.playing ) {
 			this.playing = true;
-			this._start( this.getCurrentTime() );
+			this.#start( this.getCurrentTime() );
 		}
 	}
 	pause() {
 		if ( this.playing ) {
 			this.playing = false;
-			this._sched.stop();
+			this.waSched.stop();
 		}
 	}
 	stop() {
@@ -153,22 +151,53 @@ DAWCore.Composition = class {
 	}
 
 	// .........................................................................
-	_setLoop( a, b ) {
+	change( obj, prevObj ) {
+		const cmp = this.cmp;
+		const act = this.daw.history.getCurrentAction();
+		const saved = act === this.actionSavedOn && !!cmp.savedAt;
+
+		DAWCore.utils.diffAssign( cmp, obj );
+		this.waMixer.change( obj );
+		this.daw.buffers.change( obj, prevObj );
+		this.daw.buffersSlices.change( obj );
+		this.daw.slices.change( obj );
+		this.daw.waDrumrows.change( obj );
+		this.daw.drums.change( obj );
+		this.waEffects.change( obj );
+		DAWCore.Composition.changeFns.forEach( ( fn, attr ) => {
+			if ( typeof attr === "string" ) {
+				if ( attr in obj ) {
+					fn.call( this, obj, prevObj );
+				}
+			} else if ( attr.some( attr => attr in obj ) ) {
+				fn.call( this, obj, prevObj );
+			}
+		} );
+		if ( saved !== this.saved ) {
+			this.saved = saved;
+			this.daw.callCallback( "compositionSavedStatus", cmp, saved );
+		}
+		this.daw.callCallback( "compositionChanged", obj, prevObj );
+		return obj;
+	}
+
+	// .........................................................................
+	#setLoop( a, b ) {
 		if ( Number.isFinite( a ) ) {
-			this._sched.setLoopBeat( a, b );
+			this.waSched.setLoopBeat( a, b );
 		} else {
-			this._sched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
+			this.waSched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
 		}
 	}
-	_start( offset ) {
-		const sch = this._sched;
+	#start( offset ) {
+		const sch = this.waSched;
 
 		if ( this.ctx instanceof OfflineAudioContext ) {
 			sch.clearLoop();
 			sch.enableStreaming( false );
 			sch.startBeat( 0 );
 		} else {
-			this._setLoop( this.cmp.loopA, this.cmp.loopB );
+			this.#setLoop( this.cmp.loopA, this.cmp.loopB );
 			sch.enableStreaming( true );
 			sch.startBeat( 0, offset );
 		}
@@ -176,14 +205,14 @@ DAWCore.Composition = class {
 
 	// .........................................................................
 	assignPatternChange( patId, obj ) {
-		this._startedSched.forEach( ( [ patId2, sched ] ) => {
+		this.#startedSched.forEach( ( [ patId2, sched ] ) => {
 			if ( patId2 === patId ) {
 				sched.change( obj );
 			}
 		} );
 	}
 	redirectPatternBuffer( patId, chanId ) {
-		this._startedBuffers.forEach( ( [ patId2, absn ] ) => {
+		this.#startedBuffers.forEach( ( [ patId2, absn ] ) => {
 			if ( patId2 === patId ) {
 				absn.disconnect();
 				absn.connect( this.daw.get.audioChanIn( chanId ) );
@@ -192,7 +221,7 @@ DAWCore.Composition = class {
 	}
 
 	// .........................................................................
-	_onstartBlock( startedId, blcs, when, off, dur ) {
+	#onstartBlock( startedId, blcs, when, off, dur ) {
 		const get = this.daw.get;
 		const cmp = this.cmp;
 		const blc = blcs[ 0 ][ 1 ];
@@ -203,15 +232,15 @@ DAWCore.Composition = class {
 
 			switch ( pat.type ) {
 				case "buffer":
-					this._startBufferBlock( startedId, patId, when, off, dur, get.audioBuffer( pat.buffer ), patId, get );
+					this.#startBufferBlock( startedId, patId, when, off, dur, get.audioBuffer( pat.buffer ), patId, get );
 					break;
 				case "slices":
-					this._startBufferBlock( startedId, patId, when, off, dur, get.audioSlices( patId ), get.pattern( patId ).source, get );
+					this.#startBufferBlock( startedId, patId, when, off, dur, get.audioSlices( patId ), get.pattern( patId ).source, get );
 					break;
 				case "keys": {
 					const sch = new gswaKeysScheduler();
 
-					this._startedSched.set( startedId, [ patId, sch ] );
+					this.#startedSched.set( startedId, [ patId, sch ] );
 					sch.scheduler.setBPM( cmp.bpm );
 					sch.setContext( this.ctx );
 					sch.setSynth( get.audioSynth( pat.synth ) );
@@ -221,7 +250,7 @@ DAWCore.Composition = class {
 				case "drums": {
 					const sch = new gswaDrumsScheduler();
 
-					this._startedSched.set( startedId, [ patId, sch ] );
+					this.#startedSched.set( startedId, [ patId, sch ] );
 					sch.scheduler.setBPM( cmp.bpm );
 					sch.setContext( this.ctx );
 					sch.setDrumrows( this.daw.waDrumrows );
@@ -231,7 +260,7 @@ DAWCore.Composition = class {
 			}
 		}
 	}
-	_startBufferBlock( startedId, patId, when, off, dur, buf, patSrcId, get ) {
+	#startBufferBlock( startedId, patId, when, off, dur, buf, patSrcId, get ) {
 		if ( buf ) {
 			const absn = this.ctx.createBufferSource();
 			const pat = get.pattern( patSrcId );
@@ -243,20 +272,102 @@ DAWCore.Composition = class {
 			absn.playbackRate.value = spd;
 			absn.connect( get.audioChanIn( pat.dest ) );
 			absn.start( when, off * spd, dur * spd );
-			this._startedBuffers.set( startedId, [ patId, absn ] );
+			this.#startedBuffers.set( startedId, [ patId, absn ] );
 		}
 	}
-	_onstopBlock( startedId ) {
+	#onstopBlock( startedId ) {
 		const objStarted =
-				this._startedSched.get( startedId ) ||
-				this._startedBuffers.get( startedId );
+				this.#startedSched.get( startedId ) ||
+				this.#startedBuffers.get( startedId );
 
 		if ( objStarted ) {
 			objStarted[ 1 ].stop();
-			this._startedSched.delete( startedId );
-			this._startedBuffers.delete( startedId );
+			this.#startedSched.delete( startedId );
+			this.#startedBuffers.delete( startedId );
 		}
 	}
+
+	// .........................................................................
+	static changeFns = new Map( [
+		[ "bpm", function( { bpm } ) {
+			this.waSched.setBPM( bpm );
+			this.waSynths.forEach( syn => syn.setBPM( bpm ) );
+			this.daw.keys.setBPM( bpm );
+		} ],
+		[ "blocks", function( { blocks } ) {
+			this.waSched.change( blocks );
+		} ],
+		[ [ "loopA", "loopB" ], function() {
+			if ( this.daw.getFocusedObject() === this ) {
+				this.waSched.setLoopBeat(
+					this.cmp.loopA || 0,
+					this.cmp.loopB || this.cmp.duration || this.cmp.beatsPerMeasure );
+			}
+		} ],
+		[ "duration", function() {
+			if ( this.daw.getFocusedObject() === this && this.cmp.loopA === null ) {
+				this.waSched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
+			}
+		} ],
+		[ "synths", function( { synths }, { synths: prevSynths } ) {
+			Object.entries( synths ).forEach( ( [ id, synthObj ] ) => {
+				if ( !synthObj ) {
+					this.waSynths.get( id ).stopAllKeys();
+					this.waSynths.delete( id );
+				} else if ( !prevSynths[ id ] ) {
+					const syn = new gswaSynth();
+
+					syn.setContext( this.ctx );
+					syn.setBPM( this.cmp.bpm );
+					syn.change( synthObj );
+					syn.output.connect( this.waMixer.getChanInput( synthObj.dest ) );
+					this.waSynths.set( id, syn );
+				} else {
+					const syn = this.waSynths.get( id );
+
+					syn.change( synthObj );
+					if ( "dest" in synthObj ) {
+						syn.output.disconnect();
+						syn.output.connect( this.waMixer.getChanInput( synthObj.dest ) );
+					}
+				}
+			} );
+		} ],
+		[ "patterns", function( { patterns } ) {
+			Object.entries( patterns ).forEach( ( [ patId, patObj ] ) => {
+				if ( patObj ) {
+					if ( "dest" in patObj && this.cmp.patterns[ patId ].type === "buffer" ) {
+						this.redirectPatternBuffer( patId, patObj.dest );
+					}
+					if ( patId === this.cmp.patternKeysOpened ) {
+						this.daw.keys.change( patObj );
+					}
+				}
+			} );
+		} ],
+		[ "keys", function( { keys, patterns } ) {
+			const pats = Object.entries( this.cmp.patterns );
+			const patOpened = this.cmp.patternKeysOpened;
+
+			Object.entries( keys ).forEach( ( [ keysId, keysObj ] ) => {
+				pats.some( ( [ patId, patObj ] ) => {
+					if ( patObj.keys === keysId ) {
+						this.assignPatternChange( patId, keysObj );
+						if ( patId === patOpened ) {
+							this.daw.keys.change( patterns && patterns[ patId ], keysObj );
+						}
+						return true;
+					}
+				} );
+			} );
+		} ],
+		[ "patternKeysOpened", function( obj ) {
+			this.daw.keys.openPattern( obj.patternKeysOpened );
+		} ],
+		[ "synthOpened", function( obj ) {
+			this.daw.keys.setSynth( obj.synthOpened );
+		} ],
+	] );
 };
 
 /*
