@@ -10,6 +10,7 @@ DAWCore.History = class {
 		Object.seal( this );
 	}
 
+	// .........................................................................
 	empty() {
 		while ( this.#stack.length ) {
 			this.#daw.callCallback( "historyDeleteAction", this.#stack.pop() );
@@ -20,7 +21,7 @@ DAWCore.History = class {
 		const stack = this.#stack;
 		const undo = DAWCore.utils.composeUndo( this.#daw.composition.cmp, redo );
 		const act = { redo, undo };
-		const desc = this.nameAction( act, msg );
+		const desc = DAWCore.History.#nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
@@ -53,5 +54,15 @@ DAWCore.History = class {
 		this.#daw.callCallback( cbStr, act );
 		this.#daw.composition.change( obj, prevObj );
 		return obj;
+	}
+	static #nameAction( act, msg ) {
+		const [ part, actionName, ...args ] = msg || [];
+		const fn = DAWCore.History.actionsToText[ part ]?.[ actionName ];
+		const [ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
+
+		if ( !fn ) {
+			console.error( `DAWCore: description 404 for "${ part }.${ actionName }"` );
+		}
+		return { i, t };
 	}
 };
