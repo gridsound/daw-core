@@ -17,6 +17,7 @@ class DAWCore {
 		analyserFFTsize: 8192,
 		analyserEnable: true,
 	} );
+	waDrumrows = new gswaDrumrows();
 	destination = new DAWCore.Destination( this );
 	composition = new DAWCore.Composition( this );
 	history = new DAWCore.History( this );
@@ -25,7 +26,6 @@ class DAWCore {
 	slices = new DAWCore.Slices( this );
 	buffers = new DAWCore.Buffers( this );
 	buffersSlices = new DAWCore.BuffersSlices( this );
-	waDrumrows = new gswaDrumrows();
 	#focused = this.composition;
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
