@@ -117,30 +117,30 @@ class DAWCore {
 		return this.#dest.gain;
 	}
 	destinationSetCtx( ctx ) {
-		DAWCore.Destination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
+		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 	}
 	destinationSetGain( v ) {
-		DAWCore.Destination.setGain( this.#dest, v );
+		DAWCoreDestination.setGain( this.#dest, v );
 	}
 	destinationAnalyserFillData() {
-		return DAWCore.Destination.analyserFillData( this.#dest );
+		return DAWCoreDestination.analyserFillData( this.#dest );
 	}
 
 	// ..........................................................................
 	historyEmpty() {
-		DAWCore.History.empty( this, this.#hist );
+		DAWCoreHistory.empty( this, this.#hist );
 	}
 	historyStackChange( redo, msg ) {
-		DAWCore.History.stackChange( this, this.#hist, redo, msg );
+		DAWCoreHistory.stackChange( this, this.#hist, redo, msg );
 	}
 	historyGetCurrentAction() {
-		return DAWCore.History.getCurrentAction( this.#hist );
+		return DAWCoreHistory.getCurrentAction( this.#hist );
 	}
 	historyUndo() {
-		return DAWCore.History.undo( this, this.#hist );
+		return DAWCoreHistory.undo( this, this.#hist );
 	}
 	historyRedo() {
-		return DAWCore.History.redo( this, this.#hist );
+		return DAWCoreHistory.redo( this, this.#hist );
 	}
 
 	// ..........................................................................

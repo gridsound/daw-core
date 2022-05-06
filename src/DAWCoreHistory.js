@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.History = class {
+class DAWCoreHistory {
 	static empty( daw, obj ) {
 		while ( obj.stack.length ) {
 			daw.callCallback( "historyDeleteAction", obj.stack.pop() );
@@ -11,7 +11,7 @@ DAWCore.History = class {
 		const stack = obj.stack;
 		const undo = DAWCore.utils.composeUndo( daw.composition.cmp, redo );
 		const act = { redo, undo };
-		const desc = DAWCore.History.#nameAction( act, msg );
+		const desc = DAWCoreHistory.#nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
@@ -20,19 +20,19 @@ DAWCore.History = class {
 		}
 		++obj.stackInd;
 		act.index = stack.push( act );
-		DAWCore.History.#change( daw, Object.freeze( act ), "redo", "historyAddAction" );
+		DAWCoreHistory.#change( daw, Object.freeze( act ), "redo", "historyAddAction" );
 	}
 	static getCurrentAction( obj ) {
 		return obj.stack[ obj.stackInd - 1 ] || null;
 	}
 	static undo( daw, obj ) {
 		return obj.stackInd > 0
-			? DAWCore.History.#change( daw, obj.stack[ --obj.stackInd ], "undo", "historyUndo" )
+			? DAWCoreHistory.#change( daw, obj.stack[ --obj.stackInd ], "undo", "historyUndo" )
 			: false;
 	}
 	static redo( daw, obj ) {
 		return obj.stackInd < obj.stack.length
-			? DAWCore.History.#change( daw, obj.stack[ obj.stackInd++ ], "redo", "historyRedo" )
+			? DAWCoreHistory.#change( daw, obj.stack[ obj.stackInd++ ], "redo", "historyRedo" )
 			: false;
 	}
 
@@ -47,7 +47,7 @@ DAWCore.History = class {
 	}
 	static #nameAction( act, msg ) {
 		const [ part, actionName, ...args ] = msg || [];
-		const fn = DAWCore.History.actionsToText[ part ]?.[ actionName ];
+		const fn = DAWCoreHistoryTexts.getFn( part, actionName );
 		const [ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
 
 		if ( !fn ) {

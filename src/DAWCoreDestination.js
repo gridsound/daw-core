@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.Destination = Object.freeze( class {
+class DAWCoreDestination {
 	static setGain( obj, v ) {
 		obj.gain = v;
 		if ( obj.ctx instanceof AudioContext ) {
@@ -8,7 +8,7 @@ DAWCore.Destination = Object.freeze( class {
 		}
 	}
 	static setCtx( obj, analyserEnable, analyserFFTsize, ctx ) {
-		DAWCore.Destination.#empty( obj );
+		DAWCoreDestination.#empty( obj );
 		obj.ctx = ctx;
 		obj.gainNode = ctx.createGain();
 		obj.inputNode = ctx.createGain();
@@ -16,10 +16,10 @@ DAWCore.Destination = Object.freeze( class {
 			.connect( obj.gainNode )
 			.connect( ctx.destination );
 		if ( ctx instanceof AudioContext ) {
-			DAWCore.Destination.#toggleAnalyser( obj, analyserFFTsize, analyserEnable );
-			DAWCore.Destination.setGain( obj, obj.gain );
+			DAWCoreDestination.#toggleAnalyser( obj, analyserFFTsize, analyserEnable );
+			DAWCoreDestination.setGain( obj, obj.gain );
 		} else {
-			DAWCore.Destination.#toggleAnalyser( obj, analyserFFTsize, false );
+			DAWCoreDestination.#toggleAnalyser( obj, analyserFFTsize, false );
 		}
 	}
 	static analyserFillData( obj ) {
@@ -60,4 +60,4 @@ DAWCore.Destination = Object.freeze( class {
 			obj.inputNode.connect( obj.gainNode );
 		}
 	}
-} );
+};
