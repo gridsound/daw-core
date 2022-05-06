@@ -25,10 +25,12 @@ class DAWCore {
 		analyserData: null,
 		gain: 1,
 	} );
+	#hist = Object.seal( {
+		stack: [],
+		stackInd: 0,
+	} );
 	waDrumrows = new gswaDrumrows();
-	destination = new DAWCore.Destination( this );
 	composition = new DAWCore.Composition( this );
-	history = new DAWCore.History( this );
 	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
 	slices = new DAWCore.Slices( this );
@@ -125,6 +127,23 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	historyEmpty() {
+		DAWCore.History.empty( this, this.#hist );
+	}
+	historyStackChange( redo, msg ) {
+		DAWCore.History.stackChange( this, this.#hist, redo, msg );
+	}
+	historyGetCurrentAction() {
+		return DAWCore.History.getCurrentAction( this.#hist );
+	}
+	historyUndo() {
+		return DAWCore.History.undo( this, this.#hist );
+	}
+	historyRedo() {
+		return DAWCore.History.redo( this, this.#hist );
+	}
+
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
@@ -150,7 +169,7 @@ class DAWCore {
 			const ret = DAWCore.utils.deepFreeze( fn( ...args, this.get ) );
 
 			if ( Array.isArray( ret ) ) {
-				this.history.stackChange( ...ret );
+				this.historyStackChange( ...ret );
 			} else if ( ret ) {
 				const undo = DAWCore.utils.composeUndo( this.get.cmp(), ret );
 
@@ -268,7 +287,7 @@ class DAWCore {
 			this.#stopLoop();
 			this.callCallback( "compositionClosed", cmp );
 			this.composition.unload();
-			this.history.empty();
+			this.historyEmpty();
 			this.buffers.empty();
 			if ( !cmp.savedAt ) {
 				this.#deleteComposition( cmp );

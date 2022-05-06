@@ -1,58 +1,48 @@
 "use strict";
 
 DAWCore.History = class {
-	#daw = null;
-	#stack = [];
-	#stackInd = 0;
-
-	constructor( daw ) {
-		this.#daw = daw;
-		Object.seal( this );
-	}
-
-	// .........................................................................
-	empty() {
-		while ( this.#stack.length ) {
-			this.#daw.callCallback( "historyDeleteAction", this.#stack.pop() );
+	static empty( daw, obj ) {
+		while ( obj.stack.length ) {
+			daw.callCallback( "historyDeleteAction", obj.stack.pop() );
 		}
-		this.#stackInd = 0;
+		obj.stackInd = 0;
 	}
-	stackChange( redo, msg ) {
-		const stack = this.#stack;
-		const undo = DAWCore.utils.composeUndo( this.#daw.composition.cmp, redo );
+	static stackChange( daw, obj, redo, msg ) {
+		const stack = obj.stack;
+		const undo = DAWCore.utils.composeUndo( daw.composition.cmp, redo );
 		const act = { redo, undo };
 		const desc = DAWCore.History.#nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
-		while ( stack.length > this.#stackInd ) {
-			this.#daw.callCallback( "historyDeleteAction", stack.pop() );
+		while ( stack.length > obj.stackInd ) {
+			daw.callCallback( "historyDeleteAction", stack.pop() );
 		}
-		++this.#stackInd;
+		++obj.stackInd;
 		act.index = stack.push( act );
-		this.#change( Object.freeze( act ), "redo", "historyAddAction" );
+		DAWCore.History.#change( daw, Object.freeze( act ), "redo", "historyAddAction" );
 	}
-	getCurrentAction() {
-		return this.#stack[ this.#stackInd - 1 ] || null;
+	static getCurrentAction( obj ) {
+		return obj.stack[ obj.stackInd - 1 ] || null;
 	}
-	undo() {
-		return this.#stackInd > 0
-			? this.#change( this.#stack[ --this.#stackInd ], "undo", "historyUndo" )
+	static undo( daw, obj ) {
+		return obj.stackInd > 0
+			? DAWCore.History.#change( daw, obj.stack[ --obj.stackInd ], "undo", "historyUndo" )
 			: false;
 	}
-	redo() {
-		return this.#stackInd < this.#stack.length
-			? this.#change( this.#stack[ this.#stackInd++ ], "redo", "historyRedo" )
+	static redo( daw, obj ) {
+		return obj.stackInd < obj.stack.length
+			? DAWCore.History.#change( daw, obj.stack[ obj.stackInd++ ], "redo", "historyRedo" )
 			: false;
 	}
 
 	// .........................................................................
-	#change( act, undoredo, cbStr ) {
+	static #change( daw, act, undoredo, cbStr ) {
 		const obj = act[ undoredo ];
 		const prevObj = undoredo === "undo" ? act.redo : act.undo;
 
-		this.#daw.callCallback( cbStr, act );
-		this.#daw.composition.change( obj, prevObj );
+		daw.callCallback( cbStr, act );
+		daw.composition.change( obj, prevObj );
 		return obj;
 	}
 	static #nameAction( act, msg ) {

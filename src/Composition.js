@@ -105,7 +105,7 @@ DAWCore.Composition = class {
 	save() {
 		if ( !this.saved ) {
 			this.saved = true;
-			this.actionSavedOn = this.daw.history.getCurrentAction();
+			this.actionSavedOn = this.daw.historyGetCurrentAction();
 			this.cmp.savedAt = Math.floor( Date.now() / 1000 );
 			return true;
 		}
@@ -153,7 +153,7 @@ DAWCore.Composition = class {
 	// .........................................................................
 	change( obj, prevObj ) {
 		const cmp = this.cmp;
-		const act = this.daw.history.getCurrentAction();
+		const act = this.daw.historyGetCurrentAction();
 		const saved = act === this.actionSavedOn && !!cmp.savedAt;
 
 		DAWCore.utils.diffAssign( cmp, obj );
