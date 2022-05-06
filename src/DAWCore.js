@@ -17,6 +17,14 @@ class DAWCore {
 		analyserFFTsize: 8192,
 		analyserEnable: true,
 	} );
+	#dest = Object.seal( {
+		ctx: null,
+		gainNode: null,
+		inputNode: null,
+		analyserNode: null,
+		analyserData: null,
+		gain: 1,
+	} );
 	waDrumrows = new gswaDrumrows();
 	destination = new DAWCore.Destination( this );
 	composition = new DAWCore.Composition( this );
@@ -41,7 +49,7 @@ class DAWCore {
 			opened: t => this.composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
 			// .................................................................
 			ctx: () => this.ctx,
-			audioDestination: () => this.destination.getDestination(),
+			audioDestination: () => this.destinationGetOutput(),
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
 			audioSlices: id => this.buffersSlices.getBuffer( id ),
 			audioChanIn: id => this.composition.waMixer.getChanInput( id ),
@@ -96,7 +104,24 @@ class DAWCore {
 		this.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
-		this.destination.setGain( this.env.def_appGain );
+		this.destinationSetGain( this.env.def_appGain );
+	}
+
+	// ..........................................................................
+	destinationGetOutput() {
+		return this.#dest.inputNode;
+	}
+	destinationGetGain() {
+		return this.#dest.gain;
+	}
+	destinationSetCtx( ctx ) {
+		DAWCore.Destination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
+	}
+	destinationSetGain( v ) {
+		DAWCore.Destination.setGain( this.#dest, v );
+	}
+	destinationAnalyserFillData() {
+		return DAWCore.Destination.analyserFillData( this.#dest );
 	}
 
 	// ..........................................................................
@@ -106,7 +131,7 @@ class DAWCore {
 		this.slices.setContext( ctx );
 		this.keys._waKeys.setContext( ctx );
 		this.waDrumrows.setContext( ctx );
-		this.destination.setCtx( ctx );
+		this.destinationSetCtx( ctx );
 		this.composition.setCtx( ctx );
 	}
 	resetAudioContext() {
@@ -477,7 +502,7 @@ class DAWCore {
 		cancelAnimationFrame( this._frameId );
 	}
 	#loop() {
-		const anData = this.destination.analyserFillData();
+		const anData = this.destinationAnalyserFillData();
 
 		if ( anData ) {
 			this.composition.updateChanAudioData();

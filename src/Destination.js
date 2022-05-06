@@ -1,82 +1,63 @@
 "use strict";
 
-DAWCore.Destination = class {
-	#daw = null;
-	#ctx = null;
-	#gainNode = null;
-	#inputNode = null;
-	#analyserNode = null;
-	#analyserData = null;
-	#gain = 1;
-
-	constructor( daw ) {
-		this.#daw = daw;
-		Object.seal( this );
-	}
-
-	getDestination() {
-		return this.#inputNode;
-	}
-	getGain() {
-		return this.#gain;
-	}
-	setGain( v ) {
-		this.#gain = v;
-		if ( this.#ctx instanceof AudioContext ) {
-			this.#gainNode.gain.value = v * v;
+DAWCore.Destination = Object.freeze( class {
+	static setGain( obj, v ) {
+		obj.gain = v;
+		if ( obj.ctx instanceof AudioContext ) {
+			obj.gainNode.gain.value = v * v;
 		}
 	}
-	empty() {
-		this.#gainNode && this.#gainNode.disconnect();
-		this.#inputNode && this.#inputNode.disconnect();
-		this.#analyserNode && this.#analyserNode.disconnect();
-		this.#gainNode =
-		this.#inputNode =
-		this.#analyserNode =
-		this.#analyserData = null;
-	}
-	setCtx( ctx ) {
-		this.empty();
-		this.#ctx = ctx;
-		this.#inputNode = ctx.createGain();
-		this.#gainNode = ctx.createGain();
-		this.#inputNode
-			.connect( this.#gainNode )
+	static setCtx( obj, analyserEnable, analyserFFTsize, ctx ) {
+		DAWCore.Destination.#empty( obj );
+		obj.ctx = ctx;
+		obj.gainNode = ctx.createGain();
+		obj.inputNode = ctx.createGain();
+		obj.inputNode
+			.connect( obj.gainNode )
 			.connect( ctx.destination );
 		if ( ctx instanceof AudioContext ) {
-			this.toggleAnalyser( this.#daw.env.analyserEnable );
-			this.setGain( this.#gain );
+			DAWCore.Destination.#toggleAnalyser( obj, analyserFFTsize, analyserEnable );
+			DAWCore.Destination.setGain( obj, obj.gain );
 		} else {
-			this.toggleAnalyser( false );
+			DAWCore.Destination.#toggleAnalyser( obj, analyserFFTsize, false );
 		}
 	}
-	analyserFillData() {
-		if ( this.#analyserNode ) {
-			this.#analyserNode.getByteFrequencyData( this.#analyserData );
-			return this.#analyserData;
+	static analyserFillData( obj ) {
+		if ( obj.analyserNode ) {
+			obj.analyserNode.getByteFrequencyData( obj.analyserData );
+			return obj.analyserData;
 		}
 	}
-	toggleAnalyser( b ) {
-		if ( this.#analyserNode ) {
-			this.#analyserNode.disconnect();
+
+	// .........................................................................
+	static #empty( obj ) {
+		obj.gainNode && obj.gainNode.disconnect();
+		obj.inputNode && obj.inputNode.disconnect();
+		obj.analyserNode && obj.analyserNode.disconnect();
+		obj.gainNode =
+		obj.inputNode =
+		obj.analyserNode =
+		obj.analyserData = null;
+	}
+	static #toggleAnalyser( obj, analyserFFTsize, b ) {
+		if ( obj.analyserNode ) {
+			obj.analyserNode.disconnect();
 		}
 		if ( b ) {
-			const an = this.#ctx.createAnalyser();
-			const fftSize = this.#daw.env.analyserFFTsize;
+			const an = obj.ctx.createAnalyser();
+			const fftSize = analyserFFTsize;
 
-			this.#analyserNode = an;
-			this.#analyserData = new Uint8Array( fftSize / 2 );
+			obj.analyserNode = an;
+			obj.analyserData = new Uint8Array( fftSize / 2 );
 			an.fftSize = fftSize;
 			an.smoothingTimeConstant = 0;
-			this.#inputNode
+			obj.inputNode
 				.connect( an )
-				.connect( this.#gainNode );
+				.connect( obj.gainNode );
 		} else {
-			this.#analyserNode =
-			this.#analyserData = null;
-			this.#inputNode.connect( this.#gainNode );
+			obj.analyserNode =
+			obj.analyserData = null;
+			obj.inputNode.connect( obj.gainNode );
 		}
 	}
-};
-
-Object.freeze( DAWCore.Destination );
+} );
