@@ -1,6 +1,7 @@
 "use strict";
 
-DAWCore.ExportJSON = class {
+class DAWCoreCompositionExportJSON {
+	static #URLToRevoke = null;
 	static #tabs = Object.freeze( {
 		keys: 4,
 		drums: 4,
@@ -20,22 +21,22 @@ DAWCore.ExportJSON = class {
 
 			return {
 				name: `${ cmp.name || "untitled" }.gs`,
-				url: DAWCore.ExportJSON.#export( cpyFormated ),
+				url: DAWCoreCompositionExportJSON.#export( cpyFormated ),
 			};
 		}
 	}
 
 	// .........................................................................
 	static #export( cmp ) {
-		const delTabs = DAWCore.ExportJSON.#tabs;
+		const delTabs = DAWCoreCompositionExportJSON.#tabs;
 		const reg = /^\t"(\w*)": \{$/u;
 		const lines = JSON.stringify( cmp, null, "\t" ).split( "\n" );
 		let regTab;
 		let regTa2;
 		let delTabCurr;
 
-		if ( DAWCore._URLToRevoke ) {
-			URL.revokeObjectURL( DAWCore._URLToRevoke );
+		if ( DAWCoreCompositionExportJSON.#URLToRevoke ) {
+			URL.revokeObjectURL( DAWCoreCompositionExportJSON.#URLToRevoke );
 		}
 		lines.forEach( ( line, i ) => {
 			const res = reg.exec( line );
@@ -50,7 +51,7 @@ DAWCore.ExportJSON = class {
 				lines[ i ] = lines[ i ].replace( regTab, "~" ).replace( regTa2, "~}" );
 			}
 		} );
-		return DAWCore._URLToRevoke = URL.createObjectURL( new Blob( [
+		return DAWCoreCompositionExportJSON.#URLToRevoke = URL.createObjectURL( new Blob( [
 			lines.join( "\n" ).replace( /\n~/ug, " " ) ] ) );
 	}
 };

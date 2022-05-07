@@ -199,7 +199,7 @@ class DAWCore {
 		return !this.composition.saved;
 	}
 	exportCompositionJSON( saveMode, id ) {
-		return DAWCore.ExportJSON.export( this.get.composition( saveMode, id ) );
+		return DAWCoreCompositionExportJSON.export( this.get.composition( saveMode, id ) );
 	}
 	abortCompositionWAV() {
 		if ( this.ctx instanceof OfflineAudioContext ) {
