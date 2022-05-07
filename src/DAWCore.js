@@ -29,13 +29,13 @@ class DAWCore {
 		stack: [],
 		stackInd: 0,
 	} );
+	#slicesBuffers = new Map();
 	waDrumrows = new gswaDrumrows();
 	composition = new DAWCore.Composition( this );
 	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
 	slices = new DAWCore.Slices( this );
 	buffers = new DAWCore.Buffers( this );
-	buffersSlices = new DAWCore.BuffersSlices( this );
 	#focused = this.composition;
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
@@ -53,7 +53,7 @@ class DAWCore {
 			ctx: () => this.ctx,
 			audioDestination: () => this.destinationGetOutput(),
 			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
-			audioSlices: id => this.buffersSlices.getBuffer( id ),
+			audioSlices: id => this.slicesBuffersGetBuffer( id ),
 			audioChanIn: id => this.composition.waMixer.getChanInput( id ),
 			audioChanOut: id => this.composition.waMixer.getChanOutput( id ),
 			audioEffect: id => this.composition.waEffects.getFx( id ),
@@ -141,6 +141,20 @@ class DAWCore {
 	}
 	historyRedo() {
 		return DAWCoreHistory.redo( this, this.#hist );
+	}
+
+	// ..........................................................................
+	slicesBuffersClear() {
+		this.#slicesBuffers.clear();
+	}
+	slicesBuffersGetBuffer( patId ) {
+		return this.#slicesBuffers.get( patId );
+	}
+	slicesBuffersChange( obj ) {
+		DAWCoreSlicesBuffers.change( this.#slicesBuffers, this.get, obj );
+	}
+	slicesBuffersBuffersLoaded( buffersLoaded ) {
+		DAWCoreSlicesBuffers.buffersLoaded( this.#slicesBuffers, this.get, buffersLoaded );
 	}
 
 	// ..........................................................................
@@ -427,7 +441,7 @@ class DAWCore {
 
 						buffersLoaded[ idBuf ] = this.buffers.getBuffer( buf );
 					} );
-					this.buffersSlices.buffersLoaded( buffersLoaded );
+					this.slicesBuffersBuffersLoaded( buffersLoaded );
 				}
 				this.callCallback( "buffersLoaded", buffersLoaded );
 			}

@@ -76,7 +76,7 @@ DAWCore.Composition = class {
 				patterns: {},
 			} );
 			Promise.allSettled( proms ).then( () => {
-				this.daw.buffersSlices.buffersLoaded( bufLoaded );
+				this.daw.slicesBuffersBuffersLoaded( bufLoaded );
 			} );
 			this.actionSavedOn = null;
 			this.saved = cmp.options.saveMode === "cloud" ||
@@ -95,7 +95,7 @@ DAWCore.Composition = class {
 			this.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this.waSynths.clear();
-			this.daw.buffersSlices.clear();
+			this.daw.slicesBuffersClear();
 			this.daw.waDrumrows.clear();
 			this.saved = true;
 			this.daw.callCallback( "compositionSavedStatus", this.cmp, true );
@@ -159,7 +159,7 @@ DAWCore.Composition = class {
 		DAWCore.utils.diffAssign( cmp, obj );
 		this.waMixer.change( obj );
 		this.daw.buffers.change( obj, prevObj );
-		this.daw.buffersSlices.change( obj );
+		this.daw.slicesBuffersChange( obj );
 		this.daw.slices.change( obj );
 		this.daw.waDrumrows.change( obj );
 		this.daw.drums.change( obj );

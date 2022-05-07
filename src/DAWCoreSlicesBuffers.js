@@ -1,30 +1,14 @@
 "use strict";
 
-DAWCore.BuffersSlices = class {
-	#daw = null;
-	#buffers = new Map();
-
-	constructor( daw ) {
-		this.#daw = daw;
-		Object.seal( this );
-	}
-
-	// .........................................................................
-	getBuffer( patId ) {
-		return this.#buffers.get( patId );
-	}
-	clear() {
-		this.#buffers.clear();
-	}
-	change( obj ) {
+class DAWCoreSlicesBuffers {
+	static change( slicesBuffers, get, obj ) {
 		if ( "patterns" in obj || "slices" in obj  ) {
-			const get = this.#daw.get;
 			const ids = new Set();
 
 			if ( "patterns" in obj ) {
 				Object.entries( obj.patterns ).forEach( ( [ id, objPat ] ) => {
 					if ( !objPat ) {
-						this.#buffers.delete( id );
+						slicesBuffers.delete( id );
 					} else if ( get.pattern( id ).type === "slices" ) {
 						if ( "source" in objPat || "cropA" in objPat || "cropB" in objPat ) {
 							ids.add( id );
@@ -46,13 +30,12 @@ DAWCore.BuffersSlices = class {
 				const buf = src && get.audioBuffer( get.pattern( src ).buffer );
 
 				if ( buf ) {
-					this.#setBuffer( id, buf );
+					DAWCore.BuffersSlices.#setBuffer( slicesBuffers, get, id, buf );
 				}
 			} );
 		}
 	}
-	buffersLoaded( buffersLoaded ) {
-		const get = this.#daw.get;
+	static buffersLoaded( slicesBuffers, get, buffersLoaded ) {
 		const bufToSli = Object.entries( get.patterns() ).reduce( ( map, [ id, pat ] ) => {
 			if ( pat.type === "slices" ) {
 				const bufId = get.pattern( pat.source ).buffer;
@@ -68,19 +51,17 @@ DAWCore.BuffersSlices = class {
 
 		Object.entries( buffersLoaded ).forEach( ( [ id, obj ] ) => {
 			if ( id in bufToSli ) {
-				Object.keys( bufToSli[ id ] ).forEach( patId => this.#setBuffer( patId, obj.buffer ) );
+				Object.keys( bufToSli[ id ] ).forEach( patId =>
+					DAWCore.BuffersSlices.#setBuffer( slicesBuffers, get, patId, obj.buffer ) );
 			}
 		} );
 	}
 
 	// .........................................................................
-	#setBuffer( patSliId, buffer ) {
-		const get = this.#daw.get;
+	static #setBuffer( slicesBuffers, get, patSliId, buffer ) {
 		const pat = get.pattern( patSliId );
 		const bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, 0, 1, get.slices( pat.slices ) );
 
-		this.#buffers.set( patSliId, bufSliced );
+		slicesBuffers.set( patSliId, bufSliced );
 	}
-};
-
-Object.freeze( DAWCore.BuffersSlices );
+}
