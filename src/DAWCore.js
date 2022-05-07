@@ -279,7 +279,7 @@ class DAWCore {
 			if ( this.composition.loaded ) {
 				this.closeComposition();
 			}
-			return ( this.get.composition( saveMode, id ) // 1.
+			return ( this.get.composition( saveMode, id ) // 2.
 				? Promise.resolve( cmp )
 				: this.addNewComposition( { saveMode } ) )
 				.then( cmp => this.composition.load( cmp ) )
@@ -541,4 +541,7 @@ DAWCore.controllersFx = {};
 1. The getter 'keys', 'drums' and 'slices' can't use their singular form like the others getters
    because 'key' and 'drum' are referring to the objects contained in ONE 'keys' or 'drums'.
    So `keys[0]` is a 'keys' not a 'key', a 'key' would be `keys[0][0]`.
+2. Why don't we use `cmp` instead of recalling .get.composition() ?
+   Because the `cmp` could have been delete in .closeComposition()
+   if the composition was a new untitled composition.
 */
