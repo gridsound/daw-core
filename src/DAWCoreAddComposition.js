@@ -2,7 +2,7 @@
 
 class DAWCoreAddComposition {
 	static LS( daw ) {
-		return Promise.all( DAWCore.LocalStorage.getAll().map( cmp => DAWCoreAddComposition.JSObject( cmp ) ) );
+		return Promise.all( DAWCore.LocalStorage.getAll().map( cmp => DAWCoreAddComposition.JSObject( daw, cmp ) ) );
 	}
 	static URL( daw, url, opt ) {
 		return fetch( url )
@@ -13,7 +13,7 @@ class DAWCoreAddComposition {
 				return res.json();
 			} )
 			.then(
-				cmp => DAWCoreAddComposition.JSObject( cmp, opt ),
+				cmp => DAWCoreAddComposition.JSObject( daw, cmp, opt ),
 				e => { throw e; }
 			);
 	}
@@ -39,10 +39,10 @@ class DAWCoreAddComposition {
 		daw.callCallback( "compositionSavedStatus", cpy, true );
 		return Promise.resolve( cpy );
 	}
-	static new( env, opt ) {
-		const cmp = DAWCore.json.composition( env, DAWCore.utils.uuid() );
+	static new( daw, opt ) {
+		const cmp = DAWCore.json.composition( daw.env, DAWCore.utils.uuid() );
 
-		return DAWCoreAddComposition.JSObject( cmp, opt );
+		return DAWCoreAddComposition.JSObject( daw, cmp, opt );
 	}
 
 	// .........................................................................

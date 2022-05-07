@@ -172,7 +172,7 @@ class DAWCore {
 
 	// ..........................................................................
 	newComposition( opt ) {
-		return DAWCoreAddComposition.new( this.env, opt )
+		return DAWCoreAddComposition.new( this, opt )
 	}
 	importCompositionsFromLocalStorage() {
 		return DAWCoreAddComposition.LS( this );
