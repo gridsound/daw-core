@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreCompositionFormat {
-	out( cmp ) {
+	static out( cmp ) {
 		delete cmp.options;
 		if ( cmp.loopA == null || cmp.loopB == null ) {
 			delete cmp.loopA;
@@ -29,7 +29,7 @@ class DAWCoreCompositionFormat {
 		} );
 		return cmp;
 	}
-	in( cmp ) {
+	static in( cmp ) {
 		const blcsValues = Object.values( cmp.blocks );
 		let orderDefault = 0;
 
