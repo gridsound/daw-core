@@ -64,7 +64,7 @@ DAWCore.Buffers = class {
 			let nbDone = 0;
 
 			Array.from( files ).forEach( file => {
-				this.#getBufferFromFile( file )
+				DAWCore.Buffers.#getBufferFromFile( this.#daw.ctx, file )
 					.then( ( [ hash, buffer ] ) => {
 						const buf = {
 							hash,
@@ -98,22 +98,22 @@ DAWCore.Buffers = class {
 	}
 
 	// ..........................................................................
-	#getBufferFromFile( file ) {
+	static #getBufferFromFile( ctx, file ) {
 		return new Promise( ( res, rej ) => {
 			const reader = new FileReader();
 
 			reader.onload = e => {
 				const buf = e.target.result;
-				const hash = this.#hashBufferV1( new Uint8Array( buf ) ); // 1.
+				const hash = DAWCore.Buffers.#hashBufferV1( new Uint8Array( buf ) ); // 1.
 
-				this.#daw.ctx.decodeAudioData( buf ).then( audiobuf => {
+				ctx.decodeAudioData( buf ).then( audiobuf => {
 					res( [ hash, audiobuf ] );
 				}, rej );
 			};
 			reader.readAsArrayBuffer( file );
 		} );
 	}
-	#hashBufferV1( u8buf ) {
+	static #hashBufferV1( u8buf ) {
 		const hash = new Uint8Array( 19 );
 		const len = `${ u8buf.length }`.padStart( 9, "0" );
 		let i = 0;
