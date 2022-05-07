@@ -105,4 +105,4 @@ class DAWCoreHistoryTexts {
 			cloneSelectedKeys: ( pat, len ) => [ "keys", `clone ${ DAWCore.utils.plural( len, "key" ) } in "${ pat }"` ],
 		} ],
 	] );
-};
+}

@@ -54,4 +54,4 @@ class DAWCoreCompositionExportJSON {
 		return DAWCoreCompositionExportJSON.#URLToRevoke = URL.createObjectURL( new Blob( [
 			lines.join( "\n" ).replace( /\n~/ug, " " ) ] ) );
 	}
-};
+}

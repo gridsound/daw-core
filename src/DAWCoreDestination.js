@@ -60,4 +60,4 @@ class DAWCoreDestination {
 			obj.inputNode.connect( obj.gainNode );
 		}
 	}
-};
+}

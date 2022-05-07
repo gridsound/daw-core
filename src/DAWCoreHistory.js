@@ -55,4 +55,4 @@ class DAWCoreHistory {
 		}
 		return { i, t };
 	}
-};
+}
