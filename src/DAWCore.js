@@ -211,13 +211,6 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	newComposition( opt ) {
-		const cmp = DAWCore.json.composition( this.env, DAWCore.utils.uuid() );
-
-		return this.addComposition( cmp, opt )
-			.then( cmp => this.composition.load( cmp ) )
-			.then( cmp => this.#compositionOpened( cmp ) );
-	}
 	addComposition( cmp, opt ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
 
