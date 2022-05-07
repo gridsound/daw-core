@@ -30,7 +30,7 @@ class DAWCoreSlicesBuffers {
 				const buf = src && get.audioBuffer( get.pattern( src ).buffer );
 
 				if ( buf ) {
-					DAWCore.BuffersSlices.#setBuffer( slicesBuffers, get, id, buf );
+					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, get, id, buf );
 				}
 			} );
 		}
@@ -52,7 +52,7 @@ class DAWCoreSlicesBuffers {
 		Object.entries( buffersLoaded ).forEach( ( [ id, obj ] ) => {
 			if ( id in bufToSli ) {
 				Object.keys( bufToSli[ id ] ).forEach( patId =>
-					DAWCore.BuffersSlices.#setBuffer( slicesBuffers, get, patId, obj.buffer ) );
+					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, get, patId, obj.buffer ) );
 			}
 		} );
 	}
