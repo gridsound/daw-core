@@ -10,6 +10,7 @@ DAWCore.Composition = class {
 	waSynths = new Map();
 	waSched = new gswaScheduler();
 	waMixer = new gswaMixer();
+	waDrumrows = new gswaDrumrows();
 	waEffects = new gswaEffects( {
 		getChanInput: this.waMixer.getChanInput.bind( this.waMixer ),
 		getChanOutput: this.waMixer.getChanOutput.bind( this.waMixer ),
@@ -96,7 +97,7 @@ DAWCore.Composition = class {
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			this.waSynths.clear();
 			this.daw.slicesBuffersClear();
-			this.daw.waDrumrows.clear();
+			this.waDrumrows.clear();
 			this.saved = true;
 			this.daw.callCallback( "compositionSavedStatus", this.cmp, true );
 			this.cmp = null;
@@ -161,7 +162,7 @@ DAWCore.Composition = class {
 		this.daw.buffers.change( obj, prevObj );
 		this.daw.slicesBuffersChange( obj );
 		this.daw.slices.change( obj );
-		this.daw.waDrumrows.change( obj );
+		this.waDrumrows.change( obj );
 		this.daw.drums.change( obj );
 		this.waEffects.change( obj );
 		DAWCore.Composition.changeFns.forEach( ( fn, attr ) => {
@@ -253,7 +254,7 @@ DAWCore.Composition = class {
 					this.#startedSched.set( startedId, [ patId, sch ] );
 					sch.scheduler.setBPM( cmp.bpm );
 					sch.setContext( this.ctx );
-					sch.setDrumrows( this.daw.waDrumrows );
+					sch.setDrumrows( this.waDrumrows );
 					sch.change( cmp.drums[ pat.drums ] );
 					sch.start( when, off, dur );
 				} break;

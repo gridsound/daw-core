@@ -30,7 +30,6 @@ class DAWCore {
 		stackInd: 0,
 	} );
 	#slicesBuffers = new Map();
-	waDrumrows = new gswaDrumrows();
 	composition = new DAWCore.Composition( this );
 	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
@@ -100,10 +99,10 @@ class DAWCore {
 						: this.get.beatsPerMeasure();
 			},
 		};
-		this.waDrumrows.getAudioBuffer = this.get.audioBuffer;
-		this.waDrumrows.getChannelInput = this.get.audioChanIn;
-		this.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
-		this.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		this.composition.waDrumrows.getAudioBuffer = this.get.audioBuffer;
+		this.composition.waDrumrows.getChannelInput = this.get.audioChanIn;
+		this.composition.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
+		this.composition.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destinationSetGain( this.env.def_appGain );
@@ -163,7 +162,7 @@ class DAWCore {
 		this.drums._waDrums.setContext( ctx );
 		this.slices.setContext( ctx );
 		this.keys._waKeys.setContext( ctx );
-		this.waDrumrows.setContext( ctx );
+		this.composition.waDrumrows.setContext( ctx );
 		this.destinationSetCtx( ctx );
 		this.composition.setCtx( ctx );
 	}

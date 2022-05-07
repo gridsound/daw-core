@@ -14,7 +14,7 @@ DAWCore.Drums = class {
 		Object.seal( this );
 
 		waDrums.setContext( daw.ctx );
-		waDrums.setDrumrows( daw.waDrumrows );
+		waDrums.setDrumrows( daw.composition.waDrumrows );
 	}
 
 	// .........................................................................
@@ -99,13 +99,13 @@ DAWCore.Drums = class {
 		this._waDrums.scheduler.setLoopBeat( 0, this.duration || this.daw.get.beatsPerMeasure() );
 	}
 	changeLiveDrumrow( rowId, prop, val ) {
-		this.daw.waDrumrows.change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
+		this.daw.composition.waDrumrows.change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
 	}
 	startLiveDrum( rowId ) {
-		this.daw.waDrumrows.startLiveDrum( rowId );
+		this.daw.composition.waDrumrows.startLiveDrum( rowId );
 	}
 	stopLiveDrum( rowId ) {
-		this.daw.waDrumrows.stopLiveDrum( rowId );
+		this.daw.composition.waDrumrows.stopLiveDrum( rowId );
 		this.daw.callCallback( "onstopdrumrow", rowId );
 	}
 	play() {
