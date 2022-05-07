@@ -157,6 +157,11 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	compositionExportJSON( saveMode, id ) {
+		return DAWCoreCompositionExportJSON.export( this.get.composition( saveMode, id ) );
+	}
+
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
@@ -197,9 +202,6 @@ class DAWCore {
 	}
 	compositionNeedSave() {
 		return !this.composition.saved;
-	}
-	exportCompositionJSON( saveMode, id ) {
-		return DAWCoreCompositionExportJSON.export( this.get.composition( saveMode, id ) );
 	}
 	abortCompositionWAV() {
 		if ( this.ctx instanceof OfflineAudioContext ) {
