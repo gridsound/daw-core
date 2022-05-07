@@ -166,6 +166,9 @@ class DAWCore {
 	compositionAbortWAV() {
 		DAWCoreCompositionExportWAV.abort( this );
 	}
+	compositionNeedSave() {
+		return !this.composition.saved;
+	}
 
 	// ..........................................................................
 	newComposition( opt ) {
@@ -185,6 +188,17 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	liveChangeChannel( id, prop, val ) {
+		this.composition.waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
+	}
+	liveChangeEffect( fxId, prop, val ) {
+		this.composition.waEffects.liveChangeFxProp( fxId, prop, val );
+	}
+	liveChangeSynth( id, obj ) {
+		this.composition.waSynths.get( id ).change( obj );
+	}
+
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
@@ -198,9 +212,8 @@ class DAWCore {
 		this.stop();
 		this.setCtx( new AudioContext( { sampleRate: this.env.sampleRate } ) );
 	}
-	envChange( obj ) {
-		Object.assign( this.env, obj );
-	}
+
+	// ..........................................................................
 	callAction( action, ...args ) {
 		const fn = DAWCore.actions.get( action );
 
@@ -222,9 +235,6 @@ class DAWCore {
 		const fn = this.cb[ cbName ];
 
 		return fn && fn( ...args );
-	}
-	compositionNeedSave() {
-		return !this.composition.saved;
 	}
 
 	// ..........................................................................
@@ -312,17 +322,6 @@ class DAWCore {
 					} );
 			}
 		}
-	}
-
-	// ..........................................................................
-	liveChangeChannel( id, prop, val ) {
-		this.composition.waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
-	}
-	liveChangeEffect( fxId, prop, val ) {
-		this.composition.waEffects.liveChangeFxProp( fxId, prop, val );
-	}
-	liveChangeSynth( id, obj ) {
-		this.composition.waSynths.get( id ).change( obj );
 	}
 
 	// ..........................................................................
