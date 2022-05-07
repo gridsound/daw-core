@@ -163,6 +163,11 @@ class DAWCore {
 	compositionExportWAV() {
 		return DAWCoreCompositionExportWAV.export( this );
 	}
+	compositionAbortWAV() {
+		if ( this.ctx instanceof OfflineAudioContext ) {
+			this.composition.stop();
+		}
+	}
 
 	// ..........................................................................
 	setCtx( ctx ) {
@@ -205,11 +210,6 @@ class DAWCore {
 	}
 	compositionNeedSave() {
 		return !this.composition.saved;
-	}
-	abortCompositionWAV() {
-		if ( this.ctx instanceof OfflineAudioContext ) {
-			this.composition.stop();
-		}
 	}
 
 	// ..........................................................................
