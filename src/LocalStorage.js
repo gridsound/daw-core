@@ -4,7 +4,7 @@ DAWCore.LocalStorage = Object.freeze( {
 	put( id, cmp ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
 
-		DAWCore.Composition.epure( cpy );
+		DAWCoreCompositionFormat.out( cpy );
 		localStorage.setItem( id, JSON.stringify( cpy ) );
 	},
 	delete( id ) {

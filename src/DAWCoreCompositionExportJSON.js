@@ -17,7 +17,7 @@ class DAWCoreCompositionExportJSON {
 	static export( cmp ) {
 		if ( cmp ) {
 			const cpy = DAWCore.utils.jsonCopy( cmp );
-			const cpyFormated = DAWCore.Composition.epure( DAWCore.Composition.format( cpy ) );
+			const cpyFormated = DAWCoreCompositionFormat.out( DAWCoreCompositionFormat.in( cpy ) );
 
 			return {
 				name: `${ cmp.name || "untitled" }.gs`,

@@ -44,7 +44,7 @@ DAWCore.Composition = class {
 		return new Promise( ( res, rej ) => {
 			const cmp = DAWCore.utils.jsonCopy( cmpOri );
 
-			if ( DAWCore.Composition.format( cmp ) ) {
+			if ( DAWCoreCompositionFormat.in( cmp ) ) {
 				this.unload();
 				res( cmp );
 			} else {
