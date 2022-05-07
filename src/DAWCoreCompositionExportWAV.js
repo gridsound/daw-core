@@ -3,6 +3,11 @@
 class DAWCoreCompositionExportWAV {
 	static #URLToRevoke = null;
 
+	static abort( daw ) {
+		if ( daw.ctx instanceof OfflineAudioContext ) {
+			daw.composition.stop();
+		}
+	}
 	static export( daw ) {
 		const ctx = daw.ctx;
 		const dur = Math.ceil( daw.get.duration() / daw.get.bps() ) || 1;

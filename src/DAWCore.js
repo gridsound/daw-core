@@ -164,9 +164,7 @@ class DAWCore {
 		return DAWCoreCompositionExportWAV.export( this );
 	}
 	compositionAbortWAV() {
-		if ( this.ctx instanceof OfflineAudioContext ) {
-			this.composition.stop();
-		}
+		DAWCoreCompositionExportWAV.abort( this );
 	}
 
 	// ..........................................................................
