@@ -168,6 +168,23 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	newComposition( opt ) {
+		return DAWCoreAddComposition.new( this.env, opt )
+	}
+	importCompositionsFromLocalStorage() {
+		return DAWCoreAddComposition.LS( this );
+	}
+	addCompositionByURL( url, opt ) {
+		return DAWCoreAddComposition.URL( this, url, opt );
+	}
+	addCompositionByBlob( blob, opt ) {
+		return DAWCoreAddComposition.blob( this, blob, opt );
+	}
+	addCompositionByJSObject( cmp, opt ) {
+		return DAWCoreAddComposition.JSObject( this, blob, opt );
+	}
+
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
@@ -211,60 +228,6 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	addComposition( cmp, opt ) {
-		const cpy = DAWCore.utils.jsonCopy( cmp );
-
-		cpy.options = Object.freeze( {
-			saveMode: "local",
-			...opt,
-		} );
-		this.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
-		this.callCallback( "compositionAdded", cpy );
-		this.callCallback( "compositionSavedStatus", cpy, true );
-		return Promise.resolve( cpy );
-	}
-	addCompositionByBlob( blob, opt ) {
-		return new Promise( ( res, rej ) => {
-			const rd = new FileReader();
-
-			rd.onload = () => {
-				this.addCompositionByJSON( rd.result, opt ).then( res, rej );
-			};
-			rd.readAsText( blob );
-		} );
-	}
-	addCompositionByJSON( json, opt ) {
-		return new Promise( ( res, rej ) => {
-			try {
-				const cmp = JSON.parse( json );
-
-				this.addComposition( cmp, opt ).then( res, rej );
-			} catch ( e ) {
-				rej( e );
-			}
-		} );
-	}
-	addCompositionByURL( url, opt ) {
-		return fetch( url )
-			.then( res => {
-				if ( !res.ok ) {
-					throw `The file is not accessible: ${ url }`;
-				}
-				return res.json();
-			} )
-			.then(
-				cmp => this.addComposition( cmp, opt ),
-				e => { throw e; }
-			);
-	}
-	addCompositionsFromLocalStorage() {
-		return Promise.all( DAWCore.LocalStorage
-			.getAll().map( cmp => this.addComposition( cmp ) ) );
-	}
-	addNewComposition( opt ) {
-		return this.addComposition(
-			DAWCore.json.composition( this.env, DAWCore.utils.uuid() ), opt );
-	}
 	openComposition( saveMode, id ) {
 		const cmp = this.get.composition( saveMode, id );
 
@@ -274,7 +237,7 @@ class DAWCore {
 			}
 			return ( this.get.composition( saveMode, id ) // 2.
 				? Promise.resolve( cmp )
-				: this.addNewComposition( { saveMode } ) )
+				: this.newComposition( { saveMode } ) )
 				.then( cmp => this.composition.load( cmp ) )
 				.then( cmp => this.#compositionOpened( cmp ) );
 		}
