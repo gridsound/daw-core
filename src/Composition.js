@@ -161,7 +161,7 @@ DAWCore.Composition = class {
 		this.waMixer.change( obj );
 		this.daw.buffers.change( obj, prevObj );
 		this.daw.slicesBuffersChange( obj );
-		this.daw.slices.change( obj );
+		this.daw.slicesChange( obj );
 		this.waDrumrows.change( obj );
 		this.daw.drums.change( obj );
 		this.waEffects.change( obj );
@@ -299,14 +299,14 @@ DAWCore.Composition = class {
 			this.waSched.change( blocks );
 		} ],
 		[ [ "loopA", "loopB" ], function() {
-			if ( this.daw.getFocusedObject() === this ) {
+			if ( this.daw.getFocusedName() === "composition" ) {
 				this.waSched.setLoopBeat(
 					this.cmp.loopA || 0,
 					this.cmp.loopB || this.cmp.duration || this.cmp.beatsPerMeasure );
 			}
 		} ],
 		[ "duration", function() {
-			if ( this.daw.getFocusedObject() === this && this.cmp.loopA === null ) {
+			if ( this.daw.getFocusedName() === "composition" && this.cmp.loopA === null ) {
 				this.waSched.setLoopBeat( 0, this.cmp.duration || this.cmp.beatsPerMeasure );
 			}
 		} ],

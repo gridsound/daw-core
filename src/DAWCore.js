@@ -30,12 +30,19 @@ class DAWCore {
 		stackInd: 0,
 	} );
 	#slicesBuffers = new Map();
+	#slices = Object.seal( {
+		waSched: new gswaScheduler(),
+		duration: 4,
+		startedBuffers: new Map(),
+		playing: false,
+		looping: false,
+		loopA: null,
+		loopB: null,
+	} );
 	composition = new DAWCore.Composition( this );
 	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
-	slices = new DAWCore.Slices( this );
 	buffers = new DAWCore.Buffers( this );
-	#focused = this.composition;
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
 	#loopBind = this.#loop.bind( this );
@@ -103,6 +110,7 @@ class DAWCore {
 		this.composition.waDrumrows.getChannelInput = this.get.audioChanIn;
 		this.composition.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
 		this.composition.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		DAWCoreSlices.init( this.get, this.#slices );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destinationSetGain( this.env.def_appGain );
@@ -114,9 +122,6 @@ class DAWCore {
 	}
 	destinationGetGain() {
 		return this.#dest.gain;
-	}
-	destinationSetCtx( ctx ) {
-		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 	}
 	destinationSetGain( v ) {
 		DAWCoreDestination.setGain( this.#dest, v );
@@ -199,13 +204,33 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	slicesChange( obj ) {
+		DAWCoreSlices.change( this, this.#slices, obj );
+	}
+	slicesGetCurrentTime() {
+		return DAWCoreSlices.getCurrentTime( this.#slices );
+	}
+	slicesSetCurrentTime( t ) {
+		DAWCoreSlices.setCurrentTime( this, this.#slices, t );
+	}
+	slicesPlay() {
+		DAWCoreSlices.play( this.#slices );
+	}
+	slicesPause() {
+		DAWCoreSlices.pause( this.#slices );
+	}
+	slicesStop() {
+		DAWCoreSlices.stop( this, this.#slices );
+	}
+
+	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
-		this.slices.setContext( ctx );
+		DAWCoreSlices.setContext( this.#slices, ctx );
 		this.keys._waKeys.setContext( ctx );
 		this.composition.waDrumrows.setContext( ctx );
-		this.destinationSetCtx( ctx );
+		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		this.composition.setCtx( ctx );
 	}
 	resetAudioContext() {
@@ -386,9 +411,6 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	getFocusedObject() {
-		return this.#focused;
-	}
 	getFocusedName() {
 		return this.#focusedStr;
 	}
@@ -406,13 +428,13 @@ class DAWCore {
 			case "drums":
 			case "slices":
 				if ( this.get.opened( win ) !== null ) {
-					if ( this.#focused !== this[ win ] ) {
+					if ( this.#focusedStr !== win ) {
 						this.#focusOn( win, f );
 					}
 					return;
 				}
 			case "composition":
-				if ( this.#focused !== this.composition ) {
+				if ( this.#focusedStr !== "composition" ) {
 					this.#focusOn( "composition", f );
 				}
 		}
@@ -420,7 +442,6 @@ class DAWCore {
 	#focusOn( focusedStr, force ) {
 		if ( force === "-f" || !this.isPlaying() ) {
 			this.pause();
-			this.#focused = this[ focusedStr ];
 			this.#focusedStr = focusedStr;
 			if ( focusedStr !== "composition" ) {
 				this.#focusedSwitch = focusedStr;
@@ -430,24 +451,55 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	getCurrentTime() {
+		switch ( this.#focusedStr ) {
+			case "keys": return this.keys.getCurrentTime();
+			case "drums": return this.drums.getCurrentTime();
+			case "slices": return this.slicesGetCurrentTime();
+			case "composition": return this.composition.getCurrentTime();
+		}
+	}
+	setCurrentTime( t ) {
+		switch ( this.#focusedStr ) {
+			case "keys": this.keys.setCurrentTime( t );
+			case "drums": this.drums.setCurrentTime( t );
+			case "slices": this.slicesSetCurrentTime( t );
+			case "composition": this.composition.setCurrentTime( t );
+		}
+	}
 	isPlaying() {
-		return this.composition.playing || this.keys.playing || this.drums.playing || this.slices.playing;
+		return this.composition.playing || this.keys.playing || this.drums.playing || this.#slices.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();
 	}
 	play() {
-		this.#focused.play();
+		switch ( this.#focusedStr ) {
+			case "keys": this.keys.play(); break;
+			case "drums": this.drums.play(); break;
+			case "slices": this.slicesPlay(); break;
+			case "composition": this.composition.play(); break;
+		}
 		this.callCallback( "play", this.#focusedStr );
 	}
 	pause() {
-		this.#focused.pause();
+		switch ( this.#focusedStr ) {
+			case "keys": this.keys.pause(); break;
+			case "drums": this.drums.pause(); break;
+			case "slices": this.slicesPause(); break;
+			case "composition": this.composition.pause(); break;
+		}
 		this.callCallback( "pause", this.#focusedStr );
 	}
 	stop() {
-		this.#focused.stop();
+		switch ( this.#focusedStr ) {
+			case "keys": this.keys.stop(); break;
+			case "drums": this.drums.stop(); break;
+			case "slices": this.slicesStop(); break;
+			case "composition": this.composition.stop(); break;
+		}
 		this.callCallback( "stop", this.#focusedStr );
-		this.callCallback( "currentTime", this.#focused.getCurrentTime(), this.#focusedStr );
+		this.callCallback( "currentTime", this.getCurrentTime(), this.#focusedStr );
 	}
 	setSampleRate( sr ) {
 		if ( sr !== this.env.sampleRate ) {
@@ -475,7 +527,7 @@ class DAWCore {
 			this.callCallback( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
-			const beat = this.#focused.getCurrentTime();
+			const beat = this.getCurrentTime();
 
 			this.callCallback( "currentTime", beat, this.#focusedStr );
 		}
