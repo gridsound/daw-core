@@ -57,7 +57,7 @@ DAWCore.Composition = class {
 			this.cmp = cmp;
 			this.loaded = true;
 			Object.entries( cmp.buffers ).forEach( kv => {
-				proms.push( this.daw.buffers.setBuffer( kv[ 1 ] )
+				proms.push( this.daw.buffersSetBuffer( kv[ 1 ] )
 					.then( buf => {
 						if ( buf.buffer ) {
 							bufLoaded[ kv[ 0 ] ] = buf;
@@ -159,7 +159,7 @@ DAWCore.Composition = class {
 
 		DAWCore.utils.diffAssign( cmp, obj );
 		this.waMixer.change( obj );
-		this.daw.buffers.change( obj, prevObj );
+		this.daw.buffersChange( obj, prevObj );
 		this.daw.slicesBuffersChange( obj );
 		this.daw.slicesChange( obj );
 		this.waDrumrows.change( obj );

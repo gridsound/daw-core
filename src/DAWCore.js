@@ -29,6 +29,7 @@ class DAWCore {
 		stack: [],
 		stackInd: 0,
 	} );
+	#buffers = new Map();
 	#slicesBuffers = new Map();
 	#slices = Object.seal( {
 		waSched: new gswaScheduler(),
@@ -42,7 +43,6 @@ class DAWCore {
 	composition = new DAWCore.Composition( this );
 	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
-	buffers = new DAWCore.Buffers( this );
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
 	#loopBind = this.#loop.bind( this );
@@ -58,7 +58,7 @@ class DAWCore {
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destinationGetOutput(),
-			audioBuffer: id => this.buffers.getBuffer( this.composition.cmp.buffers[ id ] ).buffer,
+			audioBuffer: id => this.buffersGetBuffer( this.composition.cmp.buffers[ id ] ).buffer,
 			audioSlices: id => this.slicesBuffersGetBuffer( id ),
 			audioChanIn: id => this.composition.waMixer.getChanInput( id ),
 			audioChanOut: id => this.composition.waMixer.getChanOutput( id ),
@@ -145,6 +145,26 @@ class DAWCore {
 	}
 	historyRedo() {
 		return DAWCoreHistory.redo( this, this.#hist );
+	}
+
+	// ..........................................................................
+	buffersChange( obj, prevObj ) {
+		DAWCoreBuffers.change( this, this.#buffers, obj, prevObj );
+	}
+	buffersEmpty() {
+		this.#buffers.clear();
+	}
+	buffersGetSize() {
+		return this.#buffers.size;
+	}
+	buffersGetBuffer( buf ) {
+		return DAWCoreBuffers.getBuffer( this.#buffers, buf );
+	}
+	buffersSetBuffer( objBuf ) {
+		return DAWCoreBuffers.setBuffer( this, this.#buffers, objBuf );
+	}
+	buffersLoadFiles( files ) {
+		return DAWCoreBuffers.loadFiles( this, this.#buffers, files );
 	}
 
 	// ..........................................................................
@@ -295,7 +315,7 @@ class DAWCore {
 			this.callCallback( "compositionClosed", cmp );
 			this.composition.unload();
 			this.historyEmpty();
-			this.buffers.empty();
+			this.buffersEmpty();
 			if ( !cmp.savedAt ) {
 				this.#deleteComposition( cmp );
 			}
@@ -351,9 +371,9 @@ class DAWCore {
 
 	// ..........................................................................
 	dropAudioFiles( files ) {
-		const order = this.buffers.getSize();
+		const order = this.buffersGetSize();
 
-		this.buffers.loadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
+		this.buffersLoadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
 			if ( newBuffers.length || knownBuffers.length ) {
 				const cmpBuffers = this.get.buffers();
 				const bufNextId = +DAWCore.actionsCommon.getNextIdOf( cmpBuffers );
@@ -383,7 +403,7 @@ class DAWCore {
 							name: patname,
 							order: order + i,
 						};
-						buffersLoaded[ bufId ] = this.buffers.getBuffer( buf );
+						buffersLoaded[ bufId ] = this.buffersGetBuffer( buf );
 					} );
 					this.callAction( "dropBuffers", obj );
 				}
@@ -397,7 +417,7 @@ class DAWCore {
 					knownBuffers.forEach( buf => {
 						const idBuf = bufmap.get( buf.hash );
 
-						buffersLoaded[ idBuf ] = this.buffers.getBuffer( buf );
+						buffersLoaded[ idBuf ] = this.buffersGetBuffer( buf );
 					} );
 					this.slicesBuffersBuffersLoaded( buffersLoaded );
 				}

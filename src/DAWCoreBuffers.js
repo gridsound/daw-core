@@ -1,62 +1,42 @@
 "use strict";
 
-DAWCore.Buffers = class {
-	#daw = null;
-	#files = new Map();
-
-	constructor( daw ) {
-		this.#daw = daw;
-		Object.seal( this );
-	}
-
-	// ..........................................................................
-	change( obj, prevObj ) {
+class DAWCoreBuffers {
+	static change( daw, buffers, obj, prevObj ) {
 		if ( "buffers" in obj ) {
 			Object.entries( obj.buffers ).forEach( ( [ id, buf ] ) => {
 				if ( !buf ) {
-					this.removeBuffer( prevObj.buffers[ id ] );
-				} else if ( !this.getBuffer( buf ) ) {
-					const pr = this.setBuffer( buf );
+					DAWCoreBuffers.#removeBuffer( buffers, prevObj.buffers[ id ] );
+				} else if ( !DAWCoreBuffers.getBuffer( buffers, buf ) ) {
+					const pr = DAWCoreBuffers.setBuffer( daw, buffers, buf );
 
 					if ( buf.url ) {
-						pr.then( buf => this.#daw.callCallback( "buffersLoaded", { [ id ]: buf } ) );
+						pr.then( buf => daw.callCallback( "buffersLoaded", { [ id ]: buf } ) );
 					}
 				}
 			} );
 		}
 	}
-
-	// ..........................................................................
-	empty() {
-		this.#files.clear();
+	static getBuffer( buffers, buf ) {
+		return buffers.get( buf.hash || buf.url );
 	}
-	getSize() {
-		return this.#files.size;
-	}
-	getBuffer( buf ) {
-		return this.#files.get( buf.hash || buf.url );
-	}
-	removeBuffer( buf ) {
-		this.#files.delete( buf.hash || buf.url );
-	}
-	setBuffer( obj ) {
-		const buf = { ...obj };
+	static setBuffer( daw, buffers, objBuf ) {
+		const buf = { ...objBuf };
 		const url = buf.url;
 		const key = buf.hash || url;
 
-		this.#files.set( key, buf );
+		buffers.set( key, buf );
 		return !url
 			? Promise.resolve( buf )
 			: fetch( `../assets/samples/${ url }` )
 				.then( res => res.arrayBuffer() )
-				.then( arr => this.#daw.ctx.decodeAudioData( arr ) )
+				.then( arr => daw.ctx.decodeAudioData( arr ) )
 				.then( buffer => {
 					buf.buffer = buffer;
 					buf.duration = +buffer.duration.toFixed( 4 );
 					return buf;
 				} );
 	}
-	loadFiles( files ) {
+	static loadFiles( daw, buffers, files ) {
 		return new Promise( res => {
 			const newBuffers = [];
 			const knownBuffers = [];
@@ -64,7 +44,7 @@ DAWCore.Buffers = class {
 			let nbDone = 0;
 
 			Array.from( files ).forEach( file => {
-				DAWCore.Buffers.#getBufferFromFile( this.#daw.ctx, file )
+				DAWCoreBuffers.#getBufferFromFile( daw.ctx, file )
 					.then( ( [ hash, buffer ] ) => {
 						const buf = {
 							hash,
@@ -73,7 +53,7 @@ DAWCore.Buffers = class {
 							name: file.name,
 							duration: +buffer.duration.toFixed( 4 ),
 						};
-						const old = this.getBuffer( buf );
+						const old = DAWCoreBuffers.getBuffer( buffers, buf );
 
 						if ( !old ) {
 							newBuffers.push( buf );
@@ -88,8 +68,8 @@ DAWCore.Buffers = class {
 					} )
 					.finally( () => {
 						if ( ++nbDone === files.length ) {
-							newBuffers.forEach( this.setBuffer, this );
-							knownBuffers.forEach( this.setBuffer, this );
+							newBuffers.forEach( DAWCoreBuffers.setBuffer.bind( null, daw, buffers ) );
+							knownBuffers.forEach( DAWCoreBuffers.setBuffer.bind( null, daw, buffers ) );
 							res( { newBuffers, knownBuffers, failedBuffers } );
 						}
 					} );
@@ -98,13 +78,16 @@ DAWCore.Buffers = class {
 	}
 
 	// ..........................................................................
+	static #removeBuffer( buffers, buf ) {
+		buffers.delete( buf.hash || buf.url );
+	}
 	static #getBufferFromFile( ctx, file ) {
 		return new Promise( ( res, rej ) => {
 			const reader = new FileReader();
 
 			reader.onload = e => {
 				const buf = e.target.result;
-				const hash = DAWCore.Buffers.#hashBufferV1( new Uint8Array( buf ) ); // 1.
+				const hash = DAWCoreBuffers.#hashBufferV1( new Uint8Array( buf ) ); // 1.
 
 				ctx.decodeAudioData( buf ).then( audiobuf => {
 					res( [ hash, audiobuf ] );
@@ -132,9 +115,7 @@ DAWCore.Buffers = class {
 			.map( u8 => u8.toString( 16 ).padStart( 2, "0" ) )
 			.join( "" ) }`;
 	}
-};
-
-Object.freeze( DAWCore.Buffers );
+}
 
 /*
 1. the hash is calculed before the data decoded
