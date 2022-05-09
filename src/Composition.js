@@ -293,7 +293,7 @@ DAWCore.Composition = class {
 		[ "bpm", function( { bpm } ) {
 			this.waSched.setBPM( bpm );
 			this.waSynths.forEach( syn => syn.setBPM( bpm ) );
-			this.daw.keys.setBPM( bpm );
+			this.daw.keysSetBPM( bpm );
 		} ],
 		[ "blocks", function( { blocks } ) {
 			this.waSched.change( blocks );
@@ -341,7 +341,7 @@ DAWCore.Composition = class {
 						this.redirectPatternBuffer( patId, patObj.dest );
 					}
 					if ( patId === this.cmp.patternKeysOpened ) {
-						this.daw.keys.change( patObj );
+						this.daw.keysChange( patObj );
 					}
 				}
 			} );
@@ -355,7 +355,7 @@ DAWCore.Composition = class {
 					if ( patObj.keys === keysId ) {
 						this.assignPatternChange( patId, keysObj );
 						if ( patId === patOpened ) {
-							this.daw.keys.change( patterns && patterns[ patId ], keysObj );
+							this.daw.keysChange( patterns && patterns[ patId ], keysObj );
 						}
 						return true;
 					}
@@ -363,10 +363,10 @@ DAWCore.Composition = class {
 			} );
 		} ],
 		[ "patternKeysOpened", function( obj ) {
-			this.daw.keys.openPattern( obj.patternKeysOpened );
+			this.daw.keysOpenPattern( obj.patternKeysOpened );
 		} ],
 		[ "synthOpened", function( obj ) {
-			this.daw.keys.setSynth( obj.synthOpened );
+			this.daw.keysSetSynth( obj.synthOpened );
 		} ],
 	] );
 };

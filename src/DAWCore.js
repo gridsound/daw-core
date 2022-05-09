@@ -40,8 +40,17 @@ class DAWCore {
 		loopA: null,
 		loopB: null,
 	} );
+	#keys = Object.seal( {
+		waKeys: new gswaKeysScheduler(),
+		looping: false,
+		playing: false,
+		synth: null,
+		loopA: null,
+		loopB: null,
+		duration: 0,
+		keysStartedLive: {},
+	} );
 	composition = new DAWCore.Composition( this );
-	keys = new DAWCore.Keys( this );
 	drums = new DAWCore.Drums( this );
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
@@ -224,6 +233,47 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	keysChange( patObj, keysObj ) {
+		DAWCoreKeys.change( this.#keys, patObj, keysObj );
+	}
+	keysSetSynth( id ) {
+		DAWCoreKeys.setSynth( this, this.#keys, id );
+	}
+	keysOpenPattern( id ) {
+		DAWCoreKeys.openPattern( this, this.#keys, id );
+	}
+	keysGetCurrentTime() {
+		return DAWCoreKeys.getCurrentTime( this.#keys );
+	}
+	keysSetCurrentTime( t ) {
+		DAWCoreKeys.setCurrentTime( t );
+	}
+	keysSetBPM( bpm ) {
+		this.#keys.waKeys.scheduler.setBPM( bpm );
+	}
+	keysSetLoop( a, b ) {
+		DAWCoreKeys.setLoop( this.#keys, a, b );
+	}
+	keysClearLoop() {
+		DAWCoreKeys.clearLoop( this, this.#keys );
+	}
+	keysLiveKeydown( midi ) {
+		DAWCoreKeys.liveKeydown( this.#keys, midi );
+	}
+	keysLiveKeyup( midi ) {
+		DAWCoreKeys.liveKeyup( this.#keys, midi );
+	}
+	keysPlay() {
+		DAWCoreKeys.play( this.#keys );
+	}
+	keysPause() {
+		DAWCoreKeys.pause( this.#keys );
+	}
+	keysStop() {
+		DAWCoreKeys.stop( this, this.#keys );
+	}
+
+	// ..........................................................................
 	slicesChange( obj ) {
 		DAWCoreSlices.change( this, this.#slices, obj );
 	}
@@ -248,7 +298,7 @@ class DAWCore {
 		this.ctx = ctx;
 		this.drums._waDrums.setContext( ctx );
 		DAWCoreSlices.setContext( this.#slices, ctx );
-		this.keys._waKeys.setContext( ctx );
+		this.#keys.waKeys.setContext( ctx );
 		this.composition.waDrumrows.setContext( ctx );
 		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		this.composition.setCtx( ctx );
@@ -308,8 +358,8 @@ class DAWCore {
 			const cmp = this.cmps[ this.get.saveMode() ].get( this.get.id() );
 
 			this.stop();
-			this.keys.clearLoop();
-			this.keys.setCurrentTime( 0 );
+			this.keysClearLoop();
+			this.keysSetCurrentTime( 0 );
 			this.composition.setCurrentTime( 0 );
 			this.#stopLoop();
 			this.callCallback( "compositionClosed", cmp );
@@ -473,7 +523,7 @@ class DAWCore {
 	// ..........................................................................
 	getCurrentTime() {
 		switch ( this.#focusedStr ) {
-			case "keys": return this.keys.getCurrentTime();
+			case "keys": return this.keysGetCurrentTime();
 			case "drums": return this.drums.getCurrentTime();
 			case "slices": return this.slicesGetCurrentTime();
 			case "composition": return this.composition.getCurrentTime();
@@ -481,21 +531,21 @@ class DAWCore {
 	}
 	setCurrentTime( t ) {
 		switch ( this.#focusedStr ) {
-			case "keys": this.keys.setCurrentTime( t );
+			case "keys": this.keysSetCurrentTime( t );
 			case "drums": this.drums.setCurrentTime( t );
 			case "slices": this.slicesSetCurrentTime( t );
 			case "composition": this.composition.setCurrentTime( t );
 		}
 	}
 	isPlaying() {
-		return this.composition.playing || this.keys.playing || this.drums.playing || this.#slices.playing;
+		return this.composition.playing || this.#keys.playing || this.drums.playing || this.#slices.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();
 	}
 	play() {
 		switch ( this.#focusedStr ) {
-			case "keys": this.keys.play(); break;
+			case "keys": this.keysPlay(); break;
 			case "drums": this.drums.play(); break;
 			case "slices": this.slicesPlay(); break;
 			case "composition": this.composition.play(); break;
@@ -504,7 +554,7 @@ class DAWCore {
 	}
 	pause() {
 		switch ( this.#focusedStr ) {
-			case "keys": this.keys.pause(); break;
+			case "keys": this.keysPause(); break;
 			case "drums": this.drums.pause(); break;
 			case "slices": this.slicesPause(); break;
 			case "composition": this.composition.pause(); break;
@@ -513,7 +563,7 @@ class DAWCore {
 	}
 	stop() {
 		switch ( this.#focusedStr ) {
-			case "keys": this.keys.stop(); break;
+			case "keys": this.keysStop(); break;
 			case "drums": this.drums.stop(); break;
 			case "slices": this.slicesStop(); break;
 			case "composition": this.composition.stop(); break;
