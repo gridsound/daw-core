@@ -1,19 +1,19 @@
 "use strict";
 
-DAWCore.LocalStorage = Object.freeze( {
-	put( id, cmp ) {
+class DAWCoreLocalStorage {
+	static put( id, cmp ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
 
 		DAWCoreCompositionFormat.out( cpy );
 		localStorage.setItem( id, JSON.stringify( cpy ) );
-	},
-	delete( id ) {
+	}
+	static delete( id ) {
 		localStorage.removeItem( id );
-	},
-	has( id ) {
+	}
+	static has( id ) {
 		return id in localStorage;
-	},
-	get( id ) {
+	}
+	static get( id ) {
 		try {
 			const cmp = JSON.parse( localStorage.getItem( id ) );
 
@@ -21,11 +21,11 @@ DAWCore.LocalStorage = Object.freeze( {
 		} catch ( e ) {
 			return null;
 		}
-	},
-	getAll() {
+	}
+	static getAll() {
 		const cmps = Object.keys( localStorage )
 			.reduce( ( arr, id ) => {
-				const cmp = this.get( id );
+				const cmp = DAWCoreLocalStorage.get( id );
 
 				cmp && arr.push( cmp );
 				return arr;
@@ -33,5 +33,5 @@ DAWCore.LocalStorage = Object.freeze( {
 
 		cmps.sort( ( a, b ) => a.savedAt < b.savedAt );
 		return cmps;
-	},
-} );
+	}
+}

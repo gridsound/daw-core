@@ -333,7 +333,7 @@ class DAWCore {
 
 			this.cmps[ saveMode ].delete( cmp.id );
 			if ( saveMode === "local" ) {
-				DAWCore.LocalStorage.delete( cmp.id );
+				DAWCoreLocalStorage.delete( cmp.id );
 			}
 			this.callCallback( "compositionDeleted", cmp );
 		}
@@ -347,7 +347,7 @@ class DAWCore {
 
 			if ( this.get.saveMode() === "local" ) {
 				this.cmps.local.set( id, cmp );
-				DAWCore.LocalStorage.put( id, cmp );
+				DAWCoreLocalStorage.put( id, cmp );
 				this.callCallback( "compositionSavedStatus", cmp, true );
 			} else {
 				this.composition.saved = false;

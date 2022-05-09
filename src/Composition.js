@@ -81,7 +81,7 @@ DAWCore.Composition = class {
 			} );
 			this.actionSavedOn = null;
 			this.saved = cmp.options.saveMode === "cloud" ||
-				DAWCore.LocalStorage.has( cmp.id ) || !cmp.savedAt;
+				DAWCoreLocalStorage.has( cmp.id ) || !cmp.savedAt;
 			this.daw.callCallback( "compositionSavedStatus", cmp, this.saved );
 			return cmp;
 		} );

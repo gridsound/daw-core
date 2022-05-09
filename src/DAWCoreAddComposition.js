@@ -2,7 +2,7 @@
 
 class DAWCoreAddComposition {
 	static LS( daw ) {
-		return Promise.all( DAWCore.LocalStorage.getAll().map( cmp => DAWCoreAddComposition.JSObject( daw, cmp ) ) );
+		return Promise.all( DAWCoreLocalStorage.getAll().map( cmp => DAWCoreAddComposition.JSObject( daw, cmp ) ) );
 	}
 	static URL( daw, url, opt ) {
 		return fetch( url )
