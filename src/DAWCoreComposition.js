@@ -59,7 +59,7 @@ class DAWCoreComposition {
 			const d = store.waSched.data;
 
 			store.loaded = false;
-			store.waEffects.clear(); // 1.
+			daw.get.audioEffects().clear(); // 1.
 			daw.get.audioMixer().clear();
 			store.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
@@ -131,7 +131,7 @@ class DAWCoreComposition {
 		daw.slicesChange( obj );
 		daw.get.audioDrumrows().change( obj );
 		daw.drumsChange( obj );
-		store.waEffects.change( obj );
+		daw.get.audioEffects().change( obj );
 		DAWCoreComposition.#changeFns.forEach( ( fn, attr ) => {
 			if ( attr in obj || attr.some?.( attr => attr in obj ) ) {
 				fn( daw, store, obj, prevObj );
