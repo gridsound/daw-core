@@ -1,63 +1,63 @@
 "use strict";
 
 class DAWCoreDestination {
-	static setGain( obj, v ) {
-		obj.gain = v;
-		if ( obj.ctx instanceof AudioContext ) {
-			obj.gainNode.gain.value = v * v;
+	static setGain( store, v ) {
+		store.gain = v;
+		if ( store.ctx instanceof AudioContext ) {
+			store.gainNode.gain.value = v * v;
 		}
 	}
-	static setCtx( obj, analyserEnable, analyserFFTsize, ctx ) {
-		DAWCoreDestination.#empty( obj );
-		obj.ctx = ctx;
-		obj.gainNode = ctx.createGain();
-		obj.inputNode = ctx.createGain();
-		obj.inputNode
-			.connect( obj.gainNode )
+	static setCtx( store, analyserEnable, analyserFFTsize, ctx ) {
+		DAWCoreDestination.#empty( store );
+		store.ctx = ctx;
+		store.gainNode = ctx.createGain();
+		store.inputNode = ctx.createGain();
+		store.inputNode
+			.connect( store.gainNode )
 			.connect( ctx.destination );
 		if ( ctx instanceof AudioContext ) {
-			DAWCoreDestination.#toggleAnalyser( obj, analyserFFTsize, analyserEnable );
-			DAWCoreDestination.setGain( obj, obj.gain );
+			DAWCoreDestination.#toggleAnalyser( store, analyserFFTsize, analyserEnable );
+			DAWCoreDestination.setGain( store, store.gain );
 		} else {
-			DAWCoreDestination.#toggleAnalyser( obj, analyserFFTsize, false );
+			DAWCoreDestination.#toggleAnalyser( store, analyserFFTsize, false );
 		}
 	}
-	static analyserFillData( obj ) {
-		if ( obj.analyserNode ) {
-			obj.analyserNode.getByteFrequencyData( obj.analyserData );
-			return obj.analyserData;
+	static analyserFillData( store ) {
+		if ( store.analyserNode ) {
+			store.analyserNode.getByteFrequencyData( store.analyserData );
+			return store.analyserData;
 		}
 	}
 
 	// .........................................................................
-	static #empty( obj ) {
-		obj.gainNode && obj.gainNode.disconnect();
-		obj.inputNode && obj.inputNode.disconnect();
-		obj.analyserNode && obj.analyserNode.disconnect();
-		obj.gainNode =
-		obj.inputNode =
-		obj.analyserNode =
-		obj.analyserData = null;
+	static #empty( store ) {
+		store.gainNode && store.gainNode.disconnect();
+		store.inputNode && store.inputNode.disconnect();
+		store.analyserNode && store.analyserNode.disconnect();
+		store.gainNode =
+		store.inputNode =
+		store.analyserNode =
+		store.analyserData = null;
 	}
-	static #toggleAnalyser( obj, analyserFFTsize, b ) {
-		if ( obj.analyserNode ) {
-			obj.analyserNode.disconnect();
+	static #toggleAnalyser( store, analyserFFTsize, b ) {
+		if ( store.analyserNode ) {
+			store.analyserNode.disconnect();
 		}
 		if ( b ) {
-			const an = obj.ctx.createAnalyser();
+			const an = store.ctx.createAnalyser();
 			const fftSize = analyserFFTsize;
 
-			obj.analyserNode = an;
-			obj.analyserData = new Uint8Array( fftSize / 2 );
+			store.analyserNode = an;
+			store.analyserData = new Uint8Array( fftSize / 2 );
 			an.fftSize = fftSize;
 			an.smoothingTimeConstant = 0;
-			obj.inputNode
+			store.inputNode
 				.connect( an )
-				.connect( obj.gainNode );
+				.connect( store.gainNode );
 		} else {
-			obj.analyserNode =
-			obj.analyserData = null;
-			obj.inputNode.connect( obj.gainNode );
+			store.analyserNode =
+			store.analyserData = null;
+			store.inputNode.connect( store.gainNode );
 		}
 	}
 }

@@ -1,49 +1,49 @@
 "use strict";
 
 class DAWCoreDrums {
-	static change( daw, obj, objChange ) {
+	static change( daw, store, obj ) {
 		const get = daw.get;
 		const patId = get.opened( "drums" );
 
-		if ( "bpm" in objChange ) {
-			obj.waDrums.scheduler.setBPM( objChange.bpm );
+		if ( "bpm" in obj ) {
+			store.waDrums.scheduler.setBPM( obj.bpm );
 		}
-		if ( "patternDrumsOpened" in objChange ) {
-			DAWCoreDrums.#openPattern( daw, obj, patId );
+		if ( "patternDrumsOpened" in obj ) {
+			DAWCoreDrums.#openPattern( daw, store, patId );
 		}
-		if ( "drums" in objChange ) {
+		if ( "drums" in obj ) {
 			if ( patId ) {
-				const drums = objChange.drums[ get.pattern( patId ).drums ];
+				const drums = obj.drums[ get.pattern( patId ).drums ];
 
 				if ( drums ) {
-					DAWCoreDrums.#changePattern( obj, objChange.patterns?.[ patId ], drums );
+					DAWCoreDrums.#changePattern( store, obj.patterns?.[ patId ], drums );
 				}
 			}
 		}
-		if ( "patterns" in objChange ) {
-			const pat = objChange.patterns[ patId ];
+		if ( "patterns" in obj ) {
+			const pat = obj.patterns[ patId ];
 
-			DAWCoreDrums.#changePattern( obj, pat );
+			DAWCoreDrums.#changePattern( store, pat );
 		}
 	}
-	static getCurrentTime( obj ) {
-		return obj.waDrums.scheduler.getCurrentOffsetBeat();
+	static getCurrentTime( store ) {
+		return store.waDrums.scheduler.getCurrentOffsetBeat();
 	}
-	static setCurrentTime( daw, obj, t ) {
-		obj.waDrums.scheduler.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreDrums.getCurrentTime( obj ), "drums" );
+	static setCurrentTime( daw, store, t ) {
+		store.waDrums.scheduler.setCurrentOffsetBeat( t );
+		daw.callCallback( "currentTime", DAWCoreDrums.getCurrentTime( store ), "drums" );
 	}
-	static setLoop( obj, a, b ) {
-		obj.loopA = a;
-		obj.loopB = b;
-		obj.looping = true;
-		obj.waDrums.scheduler.setLoopBeat( a, b );
+	static setLoop( store, a, b ) {
+		store.loopA = a;
+		store.loopB = b;
+		store.looping = true;
+		store.waDrums.scheduler.setLoopBeat( a, b );
 	}
-	static clearLoop( daw, obj ) {
-		obj.loopA =
-		obj.loopB = null;
-		obj.looping = false;
-		obj.waDrums.scheduler.setLoopBeat( 0, obj.duration || daw.get.beatsPerMeasure() );
+	static clearLoop( daw, store ) {
+		store.loopA =
+		store.loopB = null;
+		store.looping = false;
+		store.waDrums.scheduler.setLoopBeat( 0, store.duration || daw.get.beatsPerMeasure() );
 	}
 	static liveDrumrowChange( daw, rowId, prop, val ) {
 		daw.get.audioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
@@ -55,56 +55,56 @@ class DAWCoreDrums {
 		daw.get.audioDrumrows().liveDrumStop( rowId );
 		daw.callCallback( "onstopdrumrow", rowId );
 	}
-	static play( obj ) {
-		if ( !obj.playing ) {
-			const a = obj.looping ? obj.loopA : 0;
-			const b = obj.looping ? obj.loopB : obj.duration;
+	static play( store ) {
+		if ( !store.playing ) {
+			const a = store.looping ? store.loopA : 0;
+			const b = store.looping ? store.loopB : store.duration;
 
-			obj.playing = true;
-			obj.waDrums.scheduler.setLoopBeat( a, b );
-			obj.waDrums.scheduler.startBeat( 0, DAWCoreDrums.getCurrentTime( obj ) );
+			store.playing = true;
+			store.waDrums.scheduler.setLoopBeat( a, b );
+			store.waDrums.scheduler.startBeat( 0, DAWCoreDrums.getCurrentTime( store ) );
 		}
 	}
-	static pause( obj ) {
-		if ( obj.playing ) {
-			obj.playing = false;
-			obj.waDrums.stop();
+	static pause( store ) {
+		if ( store.playing ) {
+			store.playing = false;
+			store.waDrums.stop();
 		}
 	}
-	static stop( daw, obj ) {
-		if ( obj.playing ) {
-			DAWCoreDrums.pause( obj );
-			DAWCoreDrums.setCurrentTime( daw, obj, obj.loopA || 0 );
+	static stop( daw, store ) {
+		if ( store.playing ) {
+			DAWCoreDrums.pause( store );
+			DAWCoreDrums.setCurrentTime( daw, store, store.loopA || 0 );
 		} else {
-			DAWCoreDrums.setCurrentTime( daw, obj, 0 );
+			DAWCoreDrums.setCurrentTime( daw, store, 0 );
 		}
 	}
 
 	// .........................................................................
-	static #changePattern( obj, patObj, drumsObj ) {
+	static #changePattern( store, patObj, drumsObj ) {
 		if ( drumsObj ) {
-			obj.waDrums.change( drumsObj );
+			store.waDrums.change( drumsObj );
 		}
 		if ( patObj && "duration" in patObj ) {
-			obj.duration = patObj.duration;
-			if ( !obj.looping && obj.playing ) {
-				obj.waDrums.scheduler.setLoopBeat( 0, obj.duration );
+			store.duration = patObj.duration;
+			if ( !store.looping && store.playing ) {
+				store.waDrums.scheduler.setLoopBeat( 0, store.duration );
 			}
 		}
 	}
-	static #openPattern( daw, obj, id ) {
-		const wasPlaying = obj.playing;
+	static #openPattern( daw, store, id ) {
+		const wasPlaying = store.playing;
 
 		daw.focusOn( "drums" );
 		if ( wasPlaying ) {
 			daw.stop();
 			daw.stop();
 		}
-		obj.waDrums.scheduler.empty();
+		store.waDrums.scheduler.empty();
 		if ( id ) {
 			const pat = daw.get.pattern( id );
 
-			DAWCoreDrums.#changePattern( obj, pat, daw.get.drums( pat.drums ) );
+			DAWCoreDrums.#changePattern( store, pat, daw.get.drums( pat.drums ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}
