@@ -11,7 +11,7 @@ class DAWCoreKeys {
 		}
 	}
 	static setSynth( daw, store, id ) {
-		const syn = id ? daw.get.audioSynth( id ) : null;
+		const syn = id ? daw.$getAudioSynth( id ) : null;
 		const wasPlaying = store.playing;
 
 		if ( syn !== store.synth ) {

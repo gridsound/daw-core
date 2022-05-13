@@ -81,25 +81,25 @@ class DAWCore {
 	#loopMs = 1;
 	#frameId = null;
 
+	$getCtx() { return this.ctx; }
+	$getAudioEffects() { return this.#waEffects; }
+	$getAudioEffect( id ) { return this.#waEffects.getFx( id ); }
+	$getAudioSynths() { return this.#waSynths; }
+	$getAudioSynth( id ) { return this.#waSynths.get( id ); }
+	$getAudioDrumrows() { return this.#waDrumrows; }
+	$getAudioMixer() { return this.#waMixer; }
+	$getAudioChanIn( id ) { return this.#waMixer.getChanInput( id ); }
+	$getAudioChanOut( id ) { return this.#waMixer.getChanOutput( id ); }
+	$getAudioSlices( id ) { return this.slicesBuffersGetBuffer( id ); }
+	$getAudioDestination() { return this.destinationGetOutput(); }
+	$getAudioBuffer( id ) { return this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
+
 	constructor() {
 		this.get = {
 			saveMode: () => this.#composition.cmp.options.saveMode,
 			compositions: saveMode => this.cmps[ saveMode ],
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
 			opened: t => this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
-			// .................................................................
-			ctx: () => this.ctx,
-			audioDestination: () => this.destinationGetOutput(),
-			audioBuffer: id => this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer,
-			audioSlices: id => this.slicesBuffersGetBuffer( id ),
-			audioMixer: () => this.#waMixer,
-			audioChanIn: id => this.#waMixer.getChanInput( id ),
-			audioChanOut: id => this.#waMixer.getChanOutput( id ),
-			audioEffects: () => this.#waEffects,
-			audioEffect: id => this.#waEffects.getFx( id ),
-			audioDrumrows: () => this.#waDrumrows,
-			audioSynths: id => this.#waSynths,
-			audioSynth: id => this.#waSynths.get( id ),
 			// .................................................................
 			cmp: () => this.#composition.cmp,
 			id: () => this.#composition.cmp.id,
@@ -143,12 +143,12 @@ class DAWCore {
 			},
 		};
 		DAWCoreComposition.init( this, this.#composition );
-		this.#waDrumrows.getAudioBuffer = this.get.audioBuffer;
-		this.#waDrumrows.getChannelInput = this.get.audioChanIn;
+		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
+		this.#waDrumrows.getChannelInput = this.$getAudioChanIn.bind( this );
 		this.#waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
 		this.#waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.#drums.waDrums.setDrumrows( this.#waDrumrows );
-		DAWCoreSlices.init( this.get, this.#slices );
+		DAWCoreSlices.init( this, this.#slices );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destinationSetGain( this.env.def_appGain );
@@ -213,10 +213,10 @@ class DAWCore {
 		return this.#slicesBuffers.get( patId );
 	}
 	slicesBuffersChange( obj ) {
-		DAWCoreSlicesBuffers.change( this.#slicesBuffers, this.get, obj );
+		DAWCoreSlicesBuffers.change( this, this.#slicesBuffers, obj );
 	}
 	slicesBuffersBuffersLoaded( buffersLoaded ) {
-		DAWCoreSlicesBuffers.buffersLoaded( this.#slicesBuffers, this.get, buffersLoaded );
+		DAWCoreSlicesBuffers.buffersLoaded( this, this.#slicesBuffers, buffersLoaded );
 	}
 
 	// ..........................................................................
@@ -399,12 +399,12 @@ class DAWCore {
 		DAWCoreDestination.setContext( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#waMixer.setContext( ctx ); // 3.
-		this.#waMixer.connect( this.get.audioDestination() );
+		this.#waMixer.connect( this.$getAudioDestination() );
 		this.#waEffects.setContext( ctx );
 		this.#waSynths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.output.disconnect();
-			syn.output.connect( this.get.audioChanIn( this.get.synth( synId ).dest ) );
+			syn.output.connect( this.$getAudioChanIn( this.get.synth( synId ).dest ) );
 		} );
 	}
 	resetAudioContext() {

@@ -1,8 +1,8 @@
 "use strict";
 
 class DAWCoreSlices {
-	static init( get, store ) {
-		store.waSched.ondatastart = DAWCoreSlices.#onstartBlock.bind( null, store.startedBuffers, get );
+	static init( daw, store ) {
+		store.waSched.ondatastart = DAWCoreSlices.#onstartBlock.bind( null, store.startedBuffers, daw );
 		store.waSched.ondatastop = DAWCoreSlices.#onstopBlock.bind( null, store.startedBuffers );
 		store.waSched.change( { 1: { when: 0, offset: 0, duration: 4 } } );
 	}
@@ -107,18 +107,18 @@ class DAWCoreSlices {
 			waSched.startBeat( 0, waSched.getCurrentOffsetBeat() );
 		}
 	}
-	static #onstartBlock( startedBuffers, get, startedId, _blcs, when, off, dur ) {
-		const buf = get.audioSlices( get.opened( "slices" ) );
-		const pat = get.pattern( get.opened( "slices" ) );
-		const patSrc = get.pattern( pat.source );
+	static #onstartBlock( startedBuffers, daw, startedId, _blcs, when, off, dur ) {
+		const buf = daw.$getAudioSlices( daw.get.opened( "slices" ) );
+		const pat = daw.get.pattern( daw.get.opened( "slices" ) );
+		const patSrc = daw.get.pattern( pat.source );
 
 		if ( buf && patSrc ) {
-			const absn = get.ctx().createBufferSource();
-			const spd = buf.duration / ( patSrc.duration / get.bps() );
+			const absn = daw.$getCtx().createBufferSource();
+			const spd = buf.duration / ( patSrc.duration / daw.get.bps() );
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;
-			absn.connect( get.audioChanIn( patSrc.dest ) );
+			absn.connect( daw.$getAudioChanIn( patSrc.dest ) );
 			absn.start( when, off * spd, dur * spd );
 			startedBuffers.set( startedId, absn );
 		}

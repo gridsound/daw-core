@@ -58,7 +58,7 @@ DAWCore.controllers.slicer = class {
 				this.#patternId = id;
 				this.#slicesId = pat.slices;
 				Object.keys( this.data ).forEach( this.#deleteSlice, this );
-				this.#changeSource( pat.source, get );
+				this.#changeSource( pat.source, this.#dawcore );
 				this.#slicesCrud( get.slices( this.#slicesId ) );
 				this.on.disabled( false );
 			}
@@ -66,7 +66,7 @@ DAWCore.controllers.slicer = class {
 			const objPat = obj.patterns?.[ this.#patternId ];
 
 			if ( objPat && "source" in objPat ) {
-				this.#changeSource( objPat.source, get );
+				this.#changeSource( objPat.source, this.#dawcore );
 			} else {
 				this.#updateSourceDur( obj, get );
 			}
@@ -80,10 +80,10 @@ DAWCore.controllers.slicer = class {
 			this.on.changeDuration( dur );
 		}
 	}
-	#changeSource( srcId, get ) {
+	#changeSource( srcId, daw ) {
 		if ( srcId ) {
-			const patSrc = get.pattern( srcId );
-			const buf = get.audioBuffer( patSrc.buffer );
+			const patSrc = daw.get.pattern( srcId );
+			const buf = daw.$getAudioBuffer( patSrc.buffer );
 
 			this.on.setBuffer( buf );
 			this.on.renameBuffer( patSrc.name );

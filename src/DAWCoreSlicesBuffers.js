@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreSlicesBuffers {
-	static change( slicesBuffers, get, obj ) {
+	static change( daw, slicesBuffers, obj ) {
 		if ( "patterns" in obj || "slices" in obj  ) {
 			const ids = new Set();
 
@@ -9,7 +9,7 @@ class DAWCoreSlicesBuffers {
 				Object.entries( obj.patterns ).forEach( ( [ id, objPat ] ) => {
 					if ( !objPat ) {
 						slicesBuffers.delete( id );
-					} else if ( get.pattern( id ).type === "slices" ) {
+					} else if ( daw.get.pattern( id ).type === "slices" ) {
 						if ( "source" in objPat || "cropA" in objPat || "cropB" in objPat ) {
 							ids.add( id );
 						}
@@ -17,7 +17,7 @@ class DAWCoreSlicesBuffers {
 				} );
 			}
 			if ( "slices" in obj ) {
-				const pats = Object.entries( get.patterns() );
+				const pats = Object.entries( daw.get.patterns() );
 
 				Object.keys( obj.slices ).forEach( id => {
 					if ( obj.slices[ id ] ) {
@@ -26,19 +26,19 @@ class DAWCoreSlicesBuffers {
 				} );
 			}
 			ids.forEach( id => {
-				const src = get.pattern( id ).source;
-				const buf = src && get.audioBuffer( get.pattern( src ).buffer );
+				const src = daw.get.pattern( id ).source;
+				const buf = src && daw.$getAudioBuffer( daw.get.pattern( src ).buffer );
 
 				if ( buf ) {
-					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, get, id, buf );
+					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, daw, id, buf );
 				}
 			} );
 		}
 	}
-	static buffersLoaded( slicesBuffers, get, buffersLoaded ) {
-		const bufToSli = Object.entries( get.patterns() ).reduce( ( map, [ id, pat ] ) => {
+	static buffersLoaded( daw, slicesBuffers, buffersLoaded ) {
+		const bufToSli = Object.entries( daw.get.patterns() ).reduce( ( map, [ id, pat ] ) => {
 			if ( pat.type === "slices" ) {
-				const bufId = get.pattern( pat.source ).buffer;
+				const bufId = daw.get.pattern( pat.source ).buffer;
 
 				if ( bufId in map ) {
 					map[ bufId ][ id ] = true;
@@ -52,15 +52,15 @@ class DAWCoreSlicesBuffers {
 		Object.entries( buffersLoaded ).forEach( ( [ id, obj ] ) => {
 			if ( id in bufToSli ) {
 				Object.keys( bufToSli[ id ] ).forEach( patId =>
-					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, get, patId, obj.buffer ) );
+					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, daw, patId, obj.buffer ) );
 			}
 		} );
 	}
 
 	// .........................................................................
-	static #setBuffer( slicesBuffers, get, patSliId, buffer ) {
+	static #setBuffer( slicesBuffers, daw, patSliId, buffer ) {
 		const pat = get.pattern( patSliId );
-		const bufSliced = gswaSlicer.createBuffer( get.ctx(), buffer, 0, 1, get.slices( pat.slices ) );
+		const bufSliced = gswaSlicer.createBuffer( daw.$getCtx(), buffer, 0, 1, get.slices( pat.slices ) );
 
 		slicesBuffers.set( patSliId, bufSliced );
 	}

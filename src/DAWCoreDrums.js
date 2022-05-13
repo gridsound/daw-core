@@ -46,13 +46,13 @@ class DAWCoreDrums {
 		store.waDrums.scheduler.setLoopBeat( 0, store.duration || daw.get.beatsPerMeasure() );
 	}
 	static liveDrumrowChange( daw, rowId, prop, val ) {
-		daw.get.audioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
+		daw.$getAudioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
 	}
 	static liveDrumStart( daw, rowId ) {
-		daw.get.audioDrumrows().liveDrumStart( rowId );
+		daw.$getAudioDrumrows().liveDrumStart( rowId );
 	}
 	static liveDrumStop( daw, rowId ) {
-		daw.get.audioDrumrows().liveDrumStop( rowId );
+		daw.$getAudioDrumrows().liveDrumStop( rowId );
 		daw.callCallback( "onstopdrumrow", rowId );
 	}
 	static play( store ) {
