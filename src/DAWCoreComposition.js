@@ -63,7 +63,7 @@ class DAWCoreComposition {
 			daw.get.audioMixer().clear();
 			store.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
-			store.waSynths.clear();
+			daw.get.audioSynths().clear();
 			daw.slicesBuffersClear();
 			daw.get.audioDrumrows().clear();
 			store.saved = true;
@@ -254,7 +254,7 @@ class DAWCoreComposition {
 	static #changeFns = new Map( [
 		[ "bpm", ( daw, store, obj ) => {
 			store.waSched.setBPM( obj.bpm );
-			store.waSynths.forEach( syn => syn.setBPM( obj.bpm ) );
+			daw.get.audioSynths().forEach( syn => syn.setBPM( obj.bpm ) );
 			daw.keysSetBPM( obj.bpm );
 		} ],
 		[ "blocks", ( _daw, store, obj ) => {
@@ -275,8 +275,8 @@ class DAWCoreComposition {
 		[ "synths", ( daw, store, obj, prevObj ) => {
 			Object.entries( obj.synths ).forEach( ( [ id, synthObj ] ) => {
 				if ( !synthObj ) {
-					store.waSynths.get( id ).stopAllKeys();
-					store.waSynths.delete( id );
+					daw.get.audioSynth( id ).stopAllKeys();
+					daw.get.audioSynths().delete( id );
 				} else if ( !prevObj.synths[ id ] ) {
 					const syn = new gswaSynth();
 
@@ -284,9 +284,9 @@ class DAWCoreComposition {
 					syn.setBPM( store.cmp.bpm );
 					syn.change( synthObj );
 					syn.output.connect( daw.get.audioMixer().getChanInput( synthObj.dest ) );
-					store.waSynths.set( id, syn );
+					daw.get.audioSynths().set( id, syn );
 				} else {
-					const syn = store.waSynths.get( id );
+					const syn = daw.get.audioSynth( id );
 
 					syn.change( synthObj );
 					if ( "dest" in synthObj ) {

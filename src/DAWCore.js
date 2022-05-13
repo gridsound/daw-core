@@ -5,8 +5,9 @@ class DAWCore {
 	ctx = null;
 	#buffers = new Map();
 	#slicesBuffers = new Map();
-	#waDrumrows = new gswaDrumrows();
 	#waMixer = new gswaMixer();
+	#waSynths = new Map();
+	#waDrumrows = new gswaDrumrows();
 	#waEffects = new gswaEffects( {
 		getChanInput: this.#waMixer.getChanInput.bind( this.#waMixer ),
 		getChanOutput: this.#waMixer.getChanOutput.bind( this.#waMixer ),
@@ -39,8 +40,8 @@ class DAWCore {
 	} );
 	#slices = Object.seal( {
 		waSched: new gswaScheduler(),
-		duration: 4,
 		startedBuffers: new Map(),
+		duration: 4,
 		playing: false,
 		looping: false,
 		loopA: null,
@@ -48,13 +49,13 @@ class DAWCore {
 	} );
 	#keys = Object.seal( {
 		waKeys: new gswaKeysScheduler(),
+		keysStartedLive: {},
 		looping: false,
 		playing: false,
 		synth: null,
 		loopA: null,
 		loopB: null,
 		duration: 0,
-		keysStartedLive: {},
 	} );
 	#drums = Object.seal( {
 		waDrums: new gswaDrumsScheduler(),
@@ -65,15 +66,14 @@ class DAWCore {
 		duration: 0,
 	} );
 	#composition = Object.seal( {
+		waSched: new gswaScheduler(),
+		startedSched: new Map(),
+		startedBuffers: new Map(),
 		cmp: null,
 		loaded: false,
 		playing: false,
 		saved: true,
 		actionSavedOn: null,
-		waSynths: new Map(),
-		waSched: new gswaScheduler(),
-		startedSched: new Map(),
-		startedBuffers: new Map(),
 	} );
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
@@ -88,16 +88,17 @@ class DAWCore {
 			opened: t => this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
 			// .................................................................
 			ctx: () => this.ctx,
+			audioDestination: () => this.destinationGetOutput(),
+			audioBuffer: id => this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer,
+			audioSlices: id => this.slicesBuffersGetBuffer( id ),
 			audioMixer: () => this.#waMixer,
 			audioChanIn: id => this.#waMixer.getChanInput( id ),
 			audioChanOut: id => this.#waMixer.getChanOutput( id ),
 			audioEffects: () => this.#waEffects,
 			audioEffect: id => this.#waEffects.getFx( id ),
 			audioDrumrows: () => this.#waDrumrows,
-			audioDestination: () => this.destinationGetOutput(),
-			audioBuffer: id => this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer,
-			audioSlices: id => this.slicesBuffersGetBuffer( id ),
-			audioSynth: id => this.#composition.waSynths.get( id ),
+			audioSynths: id => this.#waSynths,
+			audioSynth: id => this.#waSynths.get( id ),
 			// .................................................................
 			cmp: () => this.#composition.cmp,
 			id: () => this.#composition.cmp.id,
@@ -288,7 +289,7 @@ class DAWCore {
 		this.#waEffects.liveChangeFxProp( fxId, prop, val );
 	}
 	liveChangeSynth( id, obj ) {
-		this.#composition.waSynths.get( id ).change( obj );
+		this.#waSynths.get( id ).change( obj );
 	}
 	liveKeydown( midi ) {
 		DAWCoreKeys.liveKeydown( this.#keys, midi );
@@ -399,7 +400,7 @@ class DAWCore {
 		this.#waMixer.setContext( ctx ); // 3.
 		this.#waMixer.connect( this.get.audioDestination() );
 		this.#waEffects.setContext( ctx );
-		this.#composition.waSynths.forEach( ( syn, synId ) => {
+		this.#waSynths.forEach( ( syn, synId ) => {
 			syn.setContext( ctx );
 			syn.output.disconnect();
 			syn.output.connect( this.get.audioChanIn( this.get.synth( synId ).dest ) );
