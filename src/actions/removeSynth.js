@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removeSynth", ( synthId, _get, daw ) => {
+DAWCore.actions.set( "removeSynth", ( daw, synthId ) => {
 	const keys = {};
 	const blocks = {};
 	const patterns = {};

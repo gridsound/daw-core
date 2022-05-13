@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "removeOscillator", ( synthId, id, get ) => {
+DAWCore.actions.set( "removeOscillator", ( daw, synthId, id ) => {
 	return [
 		{ synths: { [ synthId ]: { oscillators: { [ id ]: undefined } } } },
-		[ "synth", "removeOscillator", get.synth( synthId ).name ],
+		[ "synth", "removeOscillator", daw.get.synth( synthId ).name ],
 	];
 } );

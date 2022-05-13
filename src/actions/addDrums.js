@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addDrums", ( patternId, rowId, whenFrom, whenTo, _get, daw ) => {
+DAWCore.actions.set( "addDrums", ( daw, patternId, rowId, whenFrom, whenTo ) => {
 	return DAWCore.actions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, daw );
 } );
 
@@ -53,7 +53,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 		const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;
 		const obj = { drums: { [ pat.drums ]: newDrums } };
 
-		DAWCore.actionsCommon.updatePatternDuration( obj, patternId, duration, daw );
+		DAWCore.actionsCommon.updatePatternDuration( daw, obj, patternId, duration );
 		return [
 			obj,
 			[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],

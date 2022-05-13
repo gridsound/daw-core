@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "moveKeys", ( patId, keyIds, whenIncr, keyIncr, _get, daw ) => {
+DAWCore.actions.set( "moveKeys", ( daw, patId, keyIds, whenIncr, keyIncr ) => {
 	const pat = daw.get.pattern( patId );
 	const patKeys = daw.get.keys( pat.keys );
 	const keys = keyIds.reduce( ( obj, id ) => {
@@ -19,9 +19,9 @@ DAWCore.actions.set( "moveKeys", ( patId, keyIds, whenIncr, keyIncr, _get, daw )
 	const obj = { keys: { [ pat.keys ]: keys } };
 
 	if ( whenIncr ) {
-		const duration = DAWCore.actionsCommon.calcNewKeysDuration( pat.keys, keys, daw );
+		const duration = DAWCore.actionsCommon.calcNewKeysDuration( daw, pat.keys, keys );
 
-		DAWCore.actionsCommon.updatePatternDuration( obj, patId, duration, daw );
+		DAWCore.actionsCommon.updatePatternDuration( daw, obj, patId, duration );
 	}
 	return [
 		obj,

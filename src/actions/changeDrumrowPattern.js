@@ -1,11 +1,11 @@
 "use strict";
 
-DAWCore.actions.set( "changeDrumrowPattern", ( rowId, pattern, get ) => {
-	const row = get.drumrow( rowId );
-	const pat = get.pattern( pattern );
+DAWCore.actions.set( "changeDrumrowPattern", ( daw, rowId, pattern ) => {
+	const row = daw.get.drumrow( rowId );
+	const pat = daw.get.pattern( pattern );
 
 	if ( row.pattern !== pattern && pat.type === "buffer" ) {
-		const oldPat = DAWCore.actionsCommon.getDrumrowName( rowId, get );
+		const oldPat = DAWCore.actionsCommon.getDrumrowName( daw, rowId );
 
 		return [
 			{ drumrows: { [ rowId ]: { pattern } } },

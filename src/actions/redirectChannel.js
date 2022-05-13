@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "redirectChannel", ( id, dest, get ) => {
+DAWCore.actions.set( "redirectChannel", ( daw, id, dest ) => {
 	if ( id !== "main" && id !== dest ) {
 		return [
 			{ channels: { [ id ]: { dest } } },
-			[ "channels", "redirectChannel", get.channel( id ).name, get.channel( dest ).name ],
+			[ "channels", "redirectChannel", daw.get.channel( id ).name, daw.get.channel( dest ).name ],
 		];
 	}
 } );

@@ -1,5 +1,5 @@
 "use strict";
 
-DAWCore.actionsCommon.getDrumrowName = ( rowId, get ) => {
-	return get.pattern( get.drumrow( rowId ).pattern ).name;
+DAWCore.actionsCommon.getDrumrowName = ( daw, rowId ) => {
+	return daw.get.pattern( daw.get.drumrow( rowId ).pattern ).name;
 };

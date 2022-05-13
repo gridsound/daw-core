@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "cropEndKeys", ( patId, keyIds, durIncr, _get, daw ) => {
+DAWCore.actions.set( "cropEndKeys", ( daw, patId, keyIds, durIncr ) => {
 	const pat = daw.get.pattern( patId );
 	const patKeys = daw.get.keys( pat.keys );
 	const keys = keyIds.reduce( ( obj, id ) => {
@@ -17,9 +17,9 @@ DAWCore.actions.set( "cropEndKeys", ( patId, keyIds, durIncr, _get, daw ) => {
 		return obj;
 	}, {} );
 	const obj = { keys: { [ pat.keys ]: keys } };
-	const duration = DAWCore.actionsCommon.calcNewKeysDuration( pat.keys, keys, daw );
+	const duration = DAWCore.actionsCommon.calcNewKeysDuration( daw, pat.keys, keys );
 
-	DAWCore.actionsCommon.updatePatternDuration( obj, patId, duration, daw );
+	DAWCore.actionsCommon.updatePatternDuration( daw, obj, patId, duration );
 	return [
 		obj,
 		[ "keys", "cropEndKeys", pat.name, keyIds.length ],

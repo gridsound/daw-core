@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "redirectPatternBuffer", ( id, dest, get ) => {
+DAWCore.actions.set( "redirectPatternBuffer", ( daw, id, dest ) => {
 	return [
 		{ patterns: { [ id ]: { dest } } },
-		[ "patterns", "redirectPatternBuffer", get.pattern( id ).name, get.channel( dest ).name ],
+		[ "patterns", "redirectPatternBuffer", daw.get.pattern( id ).name, daw.get.channel( dest ).name ],
 	];
 } );

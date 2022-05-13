@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "addPatternSlices", get => {
-	const pats = get.patterns();
-	const slicesId = DAWCore.actionsCommon.getNextIdOf( get.slices() );
+DAWCore.actions.set( "addPatternSlices", daw => {
+	const pats = daw.get.patterns();
+	const slicesId = DAWCore.actionsCommon.getNextIdOf( daw.get.slices() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
-	const patName = DAWCore.actionsCommon.createUniqueName( "patterns", "slices", get );
+	const patName = DAWCore.actionsCommon.createUniqueName( daw, "patterns", "slices" );
 	const order = Object.values( pats ).reduce( ( max, pat ) => {
 		return pat.type !== "slices"
 			? max

@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.set( "changeKeysProps", ( patId, prop, arr, get ) => {
-	const pat = get.pattern( patId );
+DAWCore.actions.set( "changeKeysProps", ( daw, patId, prop, arr ) => {
+	const pat = daw.get.pattern( patId );
 	const obj = arr.reduce( ( obj, [ keyId, val ] ) => {
 		obj[ keyId ] = { [ prop ]: val };
 		return obj;

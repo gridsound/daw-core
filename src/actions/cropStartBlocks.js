@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "cropStartBlocks", ( blcIds, whenIncr, get ) => {
+DAWCore.actions.set( "cropStartBlocks", ( daw, blcIds, whenIncr ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
-		const blc = get.block( id );
+		const blc = daw.get.block( id );
 
 		obj[ id ] = {
 			when: blc.when + whenIncr,

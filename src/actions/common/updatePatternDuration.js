@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actionsCommon.updatePatternDuration = ( obj, patId, duration, daw ) => {
+DAWCore.actionsCommon.updatePatternDuration = ( daw, obj, patId, duration ) => {
 	if ( duration !== daw.get.pattern( patId ).duration ) {
 		const objBlocks = Object.entries( daw.get.blocks() )
 			.reduce( ( obj, [ id, blc ] ) => {
@@ -13,7 +13,7 @@ DAWCore.actionsCommon.updatePatternDuration = ( obj, patId, duration, daw ) => {
 		DAWCore.utils.deepAssign( obj, { patterns: { [ patId ]: { duration } } } );
 		DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 		if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-			const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
+			const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
 			if ( dur !== daw.get.duration() ) {
 				obj.duration = dur;

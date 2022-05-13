@@ -1,13 +1,13 @@
 "use strict";
 
-DAWCore.actions.set( "renameTrack", ( id, newName, get ) => {
-	const oldName = get.track( id ).name;
+DAWCore.actions.set( "renameTrack", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
+	const tr = daw.get.track( id );
 
-	if ( name !== oldName ) {
+	if ( name !== tr.name ) {
 		return [
 			{ tracks: { [ id ]: { name } } },
-			[ "tracks", "renameTrack", oldName, name ],
+			[ "tracks", "renameTrack", tr.name, name ],
 		];
 	}
 } );

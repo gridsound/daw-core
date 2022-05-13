@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "renameSynth", ( id, newName, get ) => {
-	const syn = get.synth( id );
+DAWCore.actions.set( "renameSynth", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
+	const syn = daw.get.synth( id );
 
 	if ( name && name !== syn.name ) {
 		return [

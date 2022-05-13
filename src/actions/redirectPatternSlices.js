@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "redirectPatternSlices", ( patId, source, get ) => {
-	if ( source !== get.pattern( patId ).source ) {
+DAWCore.actions.set( "redirectPatternSlices", ( daw, patId, source ) => {
+	if ( source !== daw.get.pattern( patId ).source ) {
 		return [
 			{ patterns: { [ patId ]: { source } } },
-			[ "patterns", "redirectPatternSlices", get.pattern( patId ).name, get.pattern( source ).name ],
+			[ "patterns", "redirectPatternSlices", daw.get.pattern( patId ).name, daw.get.pattern( source ).name ],
 		];
 	}
 } );

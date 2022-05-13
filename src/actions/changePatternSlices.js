@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changePatternSlices", ( id, prop, val, _get, daw ) => {
+DAWCore.actions.set( "changePatternSlices", ( daw, id, prop, val ) => {
 	const obj = {};
 	let act;
 
@@ -12,7 +12,7 @@ DAWCore.actions.set( "changePatternSlices", ( id, prop, val, _get, daw ) => {
 			break;
 		case "duration":
 			act = "changeSlicesDuration";
-			DAWCore.actionsCommon.updatePatternDuration( obj, id, val, daw );
+			DAWCore.actionsCommon.updatePatternDuration( daw, obj, id, val );
 			break;
 		case "slices":
 			act = "changeSlices";

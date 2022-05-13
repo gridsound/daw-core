@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removeKeys", ( patId, keyIds, _get, daw ) => {
+DAWCore.actions.set( "removeKeys", ( daw, patId, keyIds ) => {
 	const pat = daw.get.pattern( patId );
 	const keys = daw.get.keys( pat.keys );
 	const keysObj = keyIds.reduce( ( obj, id ) => {
@@ -28,7 +28,7 @@ DAWCore.actions.set( "removeKeys", ( patId, keyIds, _get, daw ) => {
 		return obj;
 	}, {} );
 	const obj = { keys: { [ pat.keys ]: keysObj } };
-	const patDur = DAWCore.actionsCommon.calcNewKeysDuration( pat.keys, keysObj, daw );
+	const patDur = DAWCore.actionsCommon.calcNewKeysDuration( daw, pat.keys, keysObj );
 	const selLen = Object.entries( keys ).reduce( ( nb, [ id, key ] ) => {
 		if ( key.selected && !( id in keysObj ) ) {
 			keysObj[ id ] = { selected: false };
@@ -37,7 +37,7 @@ DAWCore.actions.set( "removeKeys", ( patId, keyIds, _get, daw ) => {
 		return nb;
 	}, 0 );
 
-	DAWCore.actionsCommon.updatePatternDuration( obj, patId, patDur, daw );
+	DAWCore.actionsCommon.updatePatternDuration( daw, obj, patId, patDur );
 	return [
 		obj,
 		keyIds.length

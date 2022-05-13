@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "duplicateSelectedBlocks", ( whenIncr, _get, daw ) => {
+DAWCore.actions.set( "duplicateSelectedBlocks", ( daw, whenIncr ) => {
 	const sel = Object.entries( daw.get.blocks() ).filter( kv => kv[ 1 ].selected );
 	const newId = +DAWCore.actionsCommon.getNextIdOf( daw.get.blocks() );
 	const blocks = sel.reduce( ( obj, [ id, blc ], i ) => {
@@ -12,7 +12,7 @@ DAWCore.actions.set( "duplicateSelectedBlocks", ( whenIncr, _get, daw ) => {
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
+	const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
 	if ( dur !== daw.get.duration() ) {
 		obj.duration = dur;

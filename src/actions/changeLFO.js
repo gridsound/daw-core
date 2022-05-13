@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "changeLFO", ( synthId, prop, val, get ) => {
+DAWCore.actions.set( "changeLFO", ( daw, synthId, prop, val ) => {
 	return [
 		{ synths: { [ synthId ]: { lfo: { [ prop ]: val } } } },
-		[ "synth", "changeLFO", get.synth( synthId ).name, prop, val ],
+		[ "synth", "changeLFO", daw.get.synth( synthId ).name, prop, val ],
 	];
 } );

@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.set( "selectKeys", ( patId, keyIds, get ) => {
-	const pat = get.pattern( patId );
+DAWCore.actions.set( "selectKeys", ( daw, patId, keyIds ) => {
+	const pat = daw.get.pattern( patId );
 	const keys = keyIds.reduce( ( obj, id ) => {
 		obj[ id ] = { selected: true };
 		return obj;

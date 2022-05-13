@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "renameComposition", ( nameBrut, get ) => {
-	const name = DAWCore.utils.trim2( nameBrut );
-	const oldName = get.name();
+DAWCore.actions.set( "renameComposition", ( daw, newName ) => {
+	const name = DAWCore.utils.trim2( newName );
+	const oldName = daw.get.name();
 
 	if ( name && name !== oldName ) {
 		return [

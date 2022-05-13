@@ -1,12 +1,12 @@
 "use strict";
 
-DAWCore.actions.set( "removeBlocks", ( blcIds, _get, daw ) => {
+DAWCore.actions.set( "removeBlocks", ( daw, blcIds ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = undefined;
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
+	const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 	let selLen = 0;
 
 	Object.entries( daw.get.blocks() ).forEach( ( [ id, blc ] ) => {

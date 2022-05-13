@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changeTempo", ( bpm, bPM, sPB, _get, daw ) => {
+DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 	const bpmChanged = bpm !== daw.get.bpm();
 	const signChanged =
 			bPM !== daw.$getBeatsPerMeasure() ||
@@ -50,7 +50,7 @@ DAWCore.actions.set( "changeTempo", ( bpm, bPM, sPB, _get, daw ) => {
 			} );
 			DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 			if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-				const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
+				const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
 				if ( dur !== daw.get.duration() ) {
 					obj.duration = dur;

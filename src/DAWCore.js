@@ -421,7 +421,7 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = DAWCore.utils.deepFreeze( fn( ...args, this.get, this ) );
+			const ret = DAWCore.utils.deepFreeze( fn( this, ...args ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.historyStackChange( ...ret );

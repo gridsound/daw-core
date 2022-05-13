@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "removeEffect", ( id, get ) => {
-	const fx = get.effect( id );
+DAWCore.actions.set( "removeEffect", ( daw, id ) => {
+	const fx = daw.get.effect( id );
 
 	return [
 		{ effects: { [ id ]: undefined } },
-		[ "effects", "removeEffect", get.channel( fx.dest ).name, fx.type ],
+		[ "effects", "removeEffect", daw.get.channel( fx.dest ).name, fx.type ],
 	];
 } );

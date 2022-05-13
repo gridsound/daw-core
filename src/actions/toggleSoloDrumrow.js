@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "toggleSoloDrumrow", ( rowId, get ) => {
-	const patName = DAWCore.actionsCommon.getDrumrowName( rowId, get );
-	const [ someOn, drumrows ] = DAWCore.actionsCommon.toggleSolo( rowId, get.drumrows() );
+DAWCore.actions.set( "toggleSoloDrumrow", ( daw, rowId ) => {
+	const patName = DAWCore.actionsCommon.getDrumrowName( daw, rowId );
+	const [ someOn, drumrows ] = DAWCore.actionsCommon.toggleSolo( rowId, daw.get.drumrows() );
 
 	return [
 		{ drumrows },

@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "toggleEnv", ( synthId, get ) => {
-	const toggle = !get.synth( synthId ).env.toggle;
+DAWCore.actions.set( "toggleEnv", ( daw, synthId ) => {
+	const toggle = !daw.get.synth( synthId ).env.toggle;
 
 	return [
 		{ synths: { [ synthId ]: { env: { toggle } } } },
-		[ "synth", "toggleEnv", get.synth( synthId ).name, toggle ],
+		[ "synth", "toggleEnv", daw.get.synth( synthId ).name, toggle ],
 	];
 } );

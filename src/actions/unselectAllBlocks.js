@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "unselectAllBlocks", get => {
+DAWCore.actions.set( "unselectAllBlocks", daw => {
 	let len = 0;
-	const blocks = Object.entries( get.blocks() ).reduce( ( obj, [ id, blc ] ) => {
+	const blocks = Object.entries( daw.get.blocks() ).reduce( ( obj, [ id, blc ] ) => {
 		if ( blc.selected ) {
 			++len;
 			obj[ id ] = { selected: false };

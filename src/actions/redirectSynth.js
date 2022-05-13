@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "redirectSynth", ( id, dest, get ) => {
+DAWCore.actions.set( "redirectSynth", ( daw, id, dest ) => {
 	return [
 		{ synths: { [ id ]: { dest } } },
-		[ "synths", "redirectSynth", get.synth( id ).name, get.channel( dest ).name ],
+		[ "synths", "redirectSynth", daw.get.synth( id ).name, daw.get.channel( dest ).name ],
 	];
 } );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removePattern", ( patId, _get, daw ) => {
+DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 	const pat = daw.get.pattern( patId );
 	const type = pat.type;
 	const obj = { patterns: { [ patId ]: undefined } };

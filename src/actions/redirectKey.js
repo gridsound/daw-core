@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "redirectKey", ( patId, keyId, destKeyId, get ) => {
-	const pat = get.pattern( patId );
-	const key = get.keys( pat.keys )[ keyId ];
+DAWCore.actions.set( "redirectKey", ( daw, patId, keyId, destKeyId ) => {
+	const pat = daw.get.pattern( patId );
+	const key = daw.get.keys( pat.keys )[ keyId ];
 	const keys = {};
 
 	if ( destKeyId ) {

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addBlock", ( pattern, when, track, _get, daw ) => {
+DAWCore.actions.set( "addBlock", ( daw, pattern, when, track ) => {
 	const nId = DAWCore.actionsCommon.getNextIdOf( daw.get.blocks() );
 	const objBlc = DAWCore.json.block( {
 		pattern,
@@ -9,7 +9,7 @@ DAWCore.actions.set( "addBlock", ( pattern, when, track, _get, daw ) => {
 		duration: daw.$getPatternDuration( pattern ),
 	} );
 	const obj = { blocks: { [ nId ]: objBlc } };
-	const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
+	const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
 	if ( dur !== daw.get.duration() ) {
 		obj.duration = dur;

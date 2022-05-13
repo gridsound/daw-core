@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.actions.set( "changeDrumrow", ( rowId, prop, val, get ) => {
-	const patName = DAWCore.actionsCommon.getDrumrowName( rowId, get );
+DAWCore.actions.set( "changeDrumrow", ( daw, rowId, prop, val ) => {
+	const patName = DAWCore.actionsCommon.getDrumrowName( daw, rowId );
 
 	return [
 		{ drumrows: { [ rowId ]: { [ prop ]: val } } },

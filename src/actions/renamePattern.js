@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCore.actions.set( "renamePattern", ( id, newName, get ) => {
+DAWCore.actions.set( "renamePattern", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
-	const pat = get.pattern( id );
+	const pat = daw.get.pattern( id );
 
 	if ( name && name !== pat.name ) {
 		return [
