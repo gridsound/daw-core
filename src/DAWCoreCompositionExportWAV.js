@@ -17,14 +17,14 @@ class DAWCoreCompositionExportWAV {
 		if ( DAWCoreCompositionExportWAV.#URLToRevoke ) {
 			URL.revokeObjectURL( DAWCoreCompositionExportWAV.#URLToRevoke );
 		}
-		daw.setCtx( ctxOff );
+		daw.setContext( ctxOff );
 		daw.compositionPlay();
 		return ctxOff.startRendering().then( buffer => {
 			const pcm = gswaEncodeWAV.encode( buffer, { float32: true } );
 			const url = URL.createObjectURL( new Blob( [ pcm ] ) );
 
 			daw.compositionStop();
-			daw.setCtx( ctx );
+			daw.setContext( ctx );
 			DAWCoreCompositionExportWAV.#URLToRevoke = url;
 			return {
 				url,

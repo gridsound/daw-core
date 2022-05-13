@@ -7,7 +7,7 @@ class DAWCoreDestination {
 			store.gainNode.gain.value = v * v;
 		}
 	}
-	static setCtx( store, analyserEnable, analyserFFTsize, ctx ) {
+	static setContext( store, analyserEnable, analyserFFTsize, ctx ) {
 		DAWCoreDestination.#empty( store );
 		store.ctx = ctx;
 		store.gainNode = ctx.createGain();

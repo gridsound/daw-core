@@ -390,13 +390,13 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	setCtx( ctx ) {
+	setContext( ctx ) {
 		this.ctx = ctx;
 		this.#drums.waDrums.setContext( ctx );
 		DAWCoreSlices.setContext( this.#slices, ctx );
 		this.#keys.waKeys.setContext( ctx );
 		this.#waDrumrows.setContext( ctx );
-		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
+		DAWCoreDestination.setContext( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#waMixer.setContext( ctx ); // 3.
 		this.#waMixer.connect( this.get.audioDestination() );
@@ -409,7 +409,7 @@ class DAWCore {
 	}
 	resetAudioContext() {
 		this.stop();
-		this.setCtx( new AudioContext( { sampleRate: this.env.sampleRate } ) );
+		this.setContext( new AudioContext( { sampleRate: this.env.sampleRate } ) );
 	}
 
 	// ..........................................................................
