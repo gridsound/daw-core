@@ -26,7 +26,7 @@ class DAWCoreSlices {
 		}
 		if ( patId ) {
 			if ( "slices" in obj ) {
-				const sliOpened = daw.get.pattern( patId ).slices;
+				const sliOpened = daw.$getPattern( patId ).slices;
 
 				if ( sliOpened in obj.slices ) {
 					bufUpdated = true;
@@ -34,7 +34,7 @@ class DAWCoreSlices {
 			}
 			if ( "patterns" in obj ) {
 				const pat = obj.patterns[ patId ];
-				const patSrcId = daw.get.pattern( patId ).source;
+				const patSrcId = daw.$getPattern( patId ).source;
 				const patSrc = obj.patterns[ patSrcId ];
 
 				if ( pat && "source" in pat ) {
@@ -109,12 +109,12 @@ class DAWCoreSlices {
 	}
 	static #onstartBlock( startedBuffers, daw, startedId, _blcs, when, off, dur ) {
 		const buf = daw.$getAudioSlices( daw.$getOpened( "slices" ) );
-		const pat = daw.get.pattern( daw.$getOpened( "slices" ) );
-		const patSrc = daw.get.pattern( pat.source );
+		const pat = daw.$getPattern( daw.$getOpened( "slices" ) );
+		const patSrc = daw.$getPattern( pat.source );
 
 		if ( buf && patSrc ) {
 			const absn = daw.$getCtx().createBufferSource();
-			const spd = buf.duration / ( patSrc.duration / daw.get.bps() );
+			const spd = buf.duration / ( patSrc.duration / daw.$getBPS() );
 
 			absn.buffer = buf;
 			absn.playbackRate.value = spd;

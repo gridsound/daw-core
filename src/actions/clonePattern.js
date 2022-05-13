@@ -1,10 +1,10 @@
 "use strict";
 
 DAWCore.actions.set( "clonePattern", ( daw, patId ) => {
-	const pat = daw.get.pattern( patId );
+	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const newPat = { ...pat };
-	const newPatId = DAWCore.actionsCommon.getNextIdOf( daw.get.patterns() );
+	const newPatId = DAWCore.actionsCommon.getNextIdOf( daw.$getPatterns() );
 	const obj = { patterns: { [ newPatId ]: newPat } };
 
 	newPat.name = DAWCore.actionsCommon.createUniqueName( daw, "patterns", pat.name );
@@ -16,7 +16,7 @@ DAWCore.actions.set( "clonePattern", ( daw, patId ) => {
 		newPat[ type ] = newCntId;
 		obj[ type ] = { [ newCntId ]: newCnt };
 		obj[ DAWCore.actionsCommon.patternOpenedByType[ type ] ] = newPatId;
-		Object.entries( daw.get.patterns() )
+		Object.entries( daw.$getPatterns() )
 			.filter( DAWCore.actions.clonePattern_filterFn[ type ].bind( null, newPat ) )
 			.forEach( ( [ id, pat ] ) => obj.patterns[ id ] = { order: pat.order + 1 } );
 	}

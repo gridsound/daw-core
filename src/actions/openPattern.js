@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.set( "openPattern", ( daw, id ) => {
-	const pat = daw.get.pattern( id );
+	const pat = daw.$getPattern( id );
 
 	if ( id !== daw.$getOpened( pat.type ) && pat.type !== "buffer" ) {
 		const obj = { [ DAWCore.actionsCommon.patternOpenedByType[ pat.type ] ]: id };

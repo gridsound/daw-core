@@ -10,7 +10,7 @@ class DAWCoreCompositionExportWAV {
 	}
 	static export( daw ) {
 		const ctx = daw.ctx;
-		const dur = Math.ceil( daw.get.duration() / daw.get.bps() ) || 1;
+		const dur = Math.ceil( daw.$getDuration() / daw.$getBPS() ) || 1;
 		const ctxOff = new OfflineAudioContext( 2, dur * ctx.sampleRate | 0, ctx.sampleRate );
 
 		daw.stop();
@@ -28,7 +28,7 @@ class DAWCoreCompositionExportWAV {
 			DAWCoreCompositionExportWAV.#URLToRevoke = url;
 			return {
 				url,
-				name: `${ daw.get.name() || "untitled" }.wav`,
+				name: `${ daw.$getName() || "untitled" }.wav`,
 			};
 		} );
 	}

@@ -53,13 +53,13 @@ DAWCore.controllers.slicer = class {
 			if ( !id ) {
 				this.clear();
 			} else {
-				const pat = daw.get.pattern( id );
+				const pat = daw.$getPattern( id );
 
 				this.#patternId = id;
 				this.#slicesId = pat.slices;
 				Object.keys( this.data ).forEach( this.#deleteSlice, this );
 				this.#changeSource( pat.source, daw );
-				this.#slicesCrud( daw.get.slices( this.#slicesId ) );
+				this.#slicesCrud( daw.$getSlices( this.#slicesId ) );
 				this.on.disabled( false );
 			}
 		} else if ( this.#patternId ) {
@@ -68,13 +68,13 @@ DAWCore.controllers.slicer = class {
 			if ( objPat && "source" in objPat ) {
 				this.#changeSource( objPat.source, daw );
 			} else {
-				this.#updateSourceDur( obj, daw.get );
+				this.#updateSourceDur( obj, daw );
 			}
 			this.#slicesCrud( obj.slices?.[ this.#slicesId ] );
 		}
 	}
-	#updateSourceDur( obj, get ) {
-		const dur = obj.patterns?.[ get.pattern( this.#patternId ).source ]?.duration;
+	#updateSourceDur( obj, daw ) {
+		const dur = obj.patterns?.[ daw.$getPattern( this.#patternId ).source ]?.duration;
 
 		if ( dur ) {
 			this.on.changeDuration( dur );
@@ -82,7 +82,7 @@ DAWCore.controllers.slicer = class {
 	}
 	#changeSource( srcId, daw ) {
 		if ( srcId ) {
-			const patSrc = daw.get.pattern( srcId );
+			const patSrc = daw.$getPattern( srcId );
 			const buf = daw.$getAudioBuffer( patSrc.buffer );
 
 			this.on.setBuffer( buf );

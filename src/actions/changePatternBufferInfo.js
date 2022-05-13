@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } ) => {
-	const pat = daw.get.pattern( id );
+	const pat = daw.$getPattern( id );
 	const obj = {};
 	const objPat = {};
 
@@ -18,13 +18,13 @@ DAWCore.actions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } )
 		objPat.bufferBpm = bpm;
 	}
 	if ( "bufferBpm" in objPat ) {
-		const bufDur = daw.get.buffer( pat.buffer ).duration;
+		const bufDur = daw.$getBuffer( pat.buffer ).duration;
 		const dur = objPat.bufferBpm
 			? Math.round( bufDur * ( objPat.bufferBpm / 60 ) )
-			: Math.ceil( bufDur * daw.get.bps() );
+			: Math.ceil( bufDur * daw.$getBPS() );
 
 		DAWCore.actionsCommon.updatePatternDuration( daw, obj, id, dur );
-		Object.entries( daw.get.patterns() )
+		Object.entries( daw.$getPatterns() )
 			.filter( kv => kv[ 1 ].type === "slices" && kv[ 1 ].source === id )
 			.forEach( kv => DAWCore.actionsCommon.updatePatternDuration( daw, obj, kv[ 0 ], dur ) );
 	}

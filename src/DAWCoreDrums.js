@@ -12,7 +12,7 @@ class DAWCoreDrums {
 		}
 		if ( "drums" in obj ) {
 			if ( patId ) {
-				const drums = obj.drums[ daw.get.pattern( patId ).drums ];
+				const drums = obj.drums[ daw.$getPattern( patId ).drums ];
 
 				if ( drums ) {
 					DAWCoreDrums.#changePattern( store, obj.patterns?.[ patId ], drums );
@@ -101,9 +101,9 @@ class DAWCoreDrums {
 		}
 		store.waDrums.scheduler.empty();
 		if ( id ) {
-			const pat = daw.get.pattern( id );
+			const pat = daw.$getPattern( id );
 
-			DAWCoreDrums.#changePattern( store, pat, daw.get.drums( pat.drums ) );
+			DAWCoreDrums.#changePattern( store, pat, daw.$getDrums( pat.drums ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}

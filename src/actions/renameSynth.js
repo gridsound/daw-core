@@ -2,7 +2,7 @@
 
 DAWCore.actions.set( "renameSynth", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
-	const syn = daw.get.synth( id );
+	const syn = daw.$getSynth( id );
 
 	if ( name && name !== syn.name ) {
 		return [

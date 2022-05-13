@@ -83,7 +83,7 @@ class DAWCoreComposition {
 		const mix = daw.$getAudioMixer();
 		const fn = daw.callCallback.bind( daw, "channelAnalyserFilled" );
 
-		Object.keys( daw.get.channels() ).forEach( chanId => {
+		Object.keys( daw.$getChannels() ).forEach( chanId => {
 			mix.fillAudioData( chanId );
 			fn( chanId, mix.audioDataL, mix.audioDataR );
 		} );
@@ -198,7 +198,7 @@ class DAWCoreComposition {
 					DAWCoreComposition.#startBufferBlock( daw, store, startedId, patId, when, off, dur, daw.$getAudioBuffer( pat.buffer ), patId );
 					break;
 				case "slices":
-					DAWCoreComposition.#startBufferBlock( daw, store, startedId, patId, when, off, dur, daw.$getAudioSlices( patId ), daw.get.pattern( patId ).source );
+					DAWCoreComposition.#startBufferBlock( daw, store, startedId, patId, when, off, dur, daw.$getAudioSlices( patId ), daw.$getPattern( patId ).source );
 					break;
 				case "keys": {
 					const sch = new gswaKeysScheduler();
@@ -226,9 +226,9 @@ class DAWCoreComposition {
 	static #startBufferBlock( daw, store, startedId, patId, when, off, dur, buf, patSrcId ) {
 		if ( buf ) {
 			const absn = daw.$getCtx().createBufferSource();
-			const pat = daw.get.pattern( patSrcId );
+			const pat = daw.$getPattern( patSrcId );
 			const spd = pat.bufferBpm
-				? buf.duration / ( pat.duration / daw.get.bps() )
+				? buf.duration / ( pat.duration / daw.$getBPS() )
 				: 1;
 
 			absn.buffer = buf;

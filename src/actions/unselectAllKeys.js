@@ -2,8 +2,8 @@
 
 DAWCore.actions.set( "unselectAllKeys", ( daw, patId ) => {
 	let len = 0;
-	const pat = daw.get.pattern( patId );
-	const keysObj = Object.entries( daw.get.keys( pat.keys ) ).reduce( ( obj, [ id, key ] ) => {
+	const pat = daw.$getPattern( patId );
+	const keysObj = Object.entries( daw.$getKeys( pat.keys ) ).reduce( ( obj, [ id, key ] ) => {
 		if ( key.selected ) {
 			++len;
 			obj[ id ] = { selected: false };

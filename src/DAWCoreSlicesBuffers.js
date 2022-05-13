@@ -9,7 +9,7 @@ class DAWCoreSlicesBuffers {
 				Object.entries( obj.patterns ).forEach( ( [ id, objPat ] ) => {
 					if ( !objPat ) {
 						slicesBuffers.delete( id );
-					} else if ( daw.get.pattern( id ).type === "slices" ) {
+					} else if ( daw.$getPattern( id ).type === "slices" ) {
 						if ( "source" in objPat || "cropA" in objPat || "cropB" in objPat ) {
 							ids.add( id );
 						}
@@ -17,7 +17,7 @@ class DAWCoreSlicesBuffers {
 				} );
 			}
 			if ( "slices" in obj ) {
-				const pats = Object.entries( daw.get.patterns() );
+				const pats = Object.entries( daw.$getPatterns() );
 
 				Object.keys( obj.slices ).forEach( id => {
 					if ( obj.slices[ id ] ) {
@@ -26,8 +26,8 @@ class DAWCoreSlicesBuffers {
 				} );
 			}
 			ids.forEach( id => {
-				const src = daw.get.pattern( id ).source;
-				const buf = src && daw.$getAudioBuffer( daw.get.pattern( src ).buffer );
+				const src = daw.$getPattern( id ).source;
+				const buf = src && daw.$getAudioBuffer( daw.$getPattern( src ).buffer );
 
 				if ( buf ) {
 					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, daw, id, buf );
@@ -36,9 +36,9 @@ class DAWCoreSlicesBuffers {
 		}
 	}
 	static buffersLoaded( daw, slicesBuffers, buffersLoaded ) {
-		const bufToSli = Object.entries( daw.get.patterns() ).reduce( ( map, [ id, pat ] ) => {
+		const bufToSli = Object.entries( daw.$getPatterns() ).reduce( ( map, [ id, pat ] ) => {
 			if ( pat.type === "slices" ) {
-				const bufId = daw.get.pattern( pat.source ).buffer;
+				const bufId = daw.$getPattern( pat.source ).buffer;
 
 				if ( bufId in map ) {
 					map[ bufId ][ id ] = true;
@@ -59,8 +59,8 @@ class DAWCoreSlicesBuffers {
 
 	// .........................................................................
 	static #setBuffer( slicesBuffers, daw, patSliId, buffer ) {
-		const pat = daw.get.pattern( patSliId );
-		const bufSliced = gswaSlicer.createBuffer( daw.$getCtx(), buffer, 0, 1, daw.get.slices( pat.slices ) );
+		const pat = daw.$getPattern( patSliId );
+		const bufSliced = gswaSlicer.createBuffer( daw.$getCtx(), buffer, 0, 1, daw.$getSlices( pat.slices ) );
 
 		slicesBuffers.set( patSliId, bufSliced );
 	}

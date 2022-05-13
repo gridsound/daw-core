@@ -2,7 +2,7 @@
 
 DAWCore.actions.set( "renameTrack", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
-	const tr = daw.get.track( id );
+	const tr = daw.$getTrack( id );
 
 	if ( name !== tr.name ) {
 		return [

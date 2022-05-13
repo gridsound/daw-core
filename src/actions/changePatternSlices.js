@@ -16,11 +16,11 @@ DAWCore.actions.set( "changePatternSlices", ( daw, id, prop, val ) => {
 			break;
 		case "slices":
 			act = "changeSlices";
-			obj.slices = { [ daw.get.pattern( id ).slices ]: val };
+			obj.slices = { [ daw.$getPattern( id ).slices ]: val };
 			break;
 	}
 	return [
 		obj,
-		[ "slices", act, daw.get.pattern( id ).name, val ],
+		[ "slices", act, daw.$getPattern( id ).name, val ],
 	];
 } );

@@ -3,7 +3,7 @@
 DAWCore.actionsCommon.calcNewDuration = ( daw, changeObj ) => {
 	const blocks = changeObj.blocks || {};
 	const bPM = changeObj.beatsPerMeasure || daw.$getBeatsPerMeasure();
-	const dur = Object.entries( daw.get.blocks() ).reduce( ( max, [ id, blc ] ) => {
+	const dur = Object.entries( daw.$getBlocks() ).reduce( ( max, [ id, blc ] ) => {
 		const blcChange = blocks[ id ];
 
 		if ( blcChange || !( id in blocks ) ) {
@@ -15,7 +15,7 @@ DAWCore.actionsCommon.calcNewDuration = ( daw, changeObj ) => {
 		return max;
 	}, 0 );
 	const dur2 = Object.entries( blocks ).reduce( ( max, [ id, blc ] ) => {
-		return blc && !daw.get.block( id )
+		return blc && !daw.$getBlock( id )
 			? Math.max( max, blc.when + blc.duration )
 			: max;
 	}, dur );

@@ -3,6 +3,6 @@
 DAWCore.actions.set( "reorderChannel", ( daw, chanId, channels ) => {
 	return [
 		{ channels },
-		[ "channels", "reorderChannel", daw.get.channel( chanId ).name ],
+		[ "channels", "reorderChannel", daw.$getChannel( chanId ).name ],
 	];
 } );

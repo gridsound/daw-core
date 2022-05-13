@@ -2,7 +2,7 @@
 
 DAWCore.actionsCommon.calcNewKeysDuration = ( daw, keysId, keysObj ) => {
 	const bPM = daw.$getBeatsPerMeasure();
-	const keys = daw.get.keys( keysId );
+	const keys = daw.$getKeys( keysId );
 	const dur = Object.entries( keys ).reduce( ( max, [ id, key ] ) => {
 		const keyChange = keysObj[ id ];
 

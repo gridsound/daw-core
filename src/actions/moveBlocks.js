@@ -3,10 +3,10 @@
 DAWCore.actions.set( "moveBlocks", ( daw, blcIds, whenIncr, trackIncr ) => {
 	const blocks = {};
 	const obj = { blocks };
-	const tr = Object.entries( daw.get.tracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
+	const tr = Object.entries( daw.$getTracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
 
 	blcIds.forEach( id => {
-		const blc = daw.get.block( id );
+		const blc = daw.$getBlock( id );
 		const obj = {};
 
 		blocks[ id ] = obj;
@@ -20,7 +20,7 @@ DAWCore.actions.set( "moveBlocks", ( daw, blcIds, whenIncr, trackIncr ) => {
 	if ( whenIncr ) {
 		const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
-		if ( dur !== daw.get.duration() ) {
+		if ( dur !== daw.$getDuration() ) {
 			obj.duration = dur;
 		}
 	}

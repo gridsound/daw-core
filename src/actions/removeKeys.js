@@ -1,8 +1,8 @@
 "use strict";
 
 DAWCore.actions.set( "removeKeys", ( daw, patId, keyIds ) => {
-	const pat = daw.get.pattern( patId );
-	const keys = daw.get.keys( pat.keys );
+	const pat = daw.$getPattern( patId );
+	const keys = daw.$getKeys( pat.keys );
 	const keysObj = keyIds.reduce( ( obj, id ) => {
 		const { prev, next } = keys[ id ];
 

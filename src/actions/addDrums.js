@@ -8,10 +8,10 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 	const stepDur = 1 / daw.$getStepsPerBeat();
 	const whenA = Math.round( Math.min( whenFrom, whenTo ) / stepDur );
 	const whenB = Math.round( Math.max( whenFrom, whenTo ) / stepDur );
-	const pat = daw.get.pattern( patternId );
-	const drums = daw.get.drums( pat.drums );
-	const patRowId = daw.get.drumrow( rowId ).pattern;
-	const patRow = daw.get.pattern( patRowId );
+	const pat = daw.$getPattern( patternId );
+	const drums = daw.$getDrums( pat.drums );
+	const patRowId = daw.$getDrumrow( rowId ).pattern;
+	const patRow = daw.$getPattern( patRowId );
 	const drumsEnt = Object.entries( drums );
 	const drumsMap = drumsEnt.reduce( ( map, [ drumId, drum ] ) => {
 		if ( drum.row === rowId && type === "drum" === "gain" in drum ) {

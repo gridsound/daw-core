@@ -1,8 +1,8 @@
 "use strict";
 
 DAWCore.actions.set( "addPatternSlices", daw => {
-	const pats = daw.get.patterns();
-	const slicesId = DAWCore.actionsCommon.getNextIdOf( daw.get.slices() );
+	const pats = daw.$getPatterns();
+	const slicesId = DAWCore.actionsCommon.getNextIdOf( daw.$getSlices() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
 	const patName = DAWCore.actionsCommon.createUniqueName( daw, "patterns", "slices" );
 	const order = Object.values( pats ).reduce( ( max, pat ) => {

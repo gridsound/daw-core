@@ -8,6 +8,6 @@ DAWCore.actions.set( "redirectPatternKeys", ( daw, patId, synthId, patterns ) =>
 	}
 	return [
 		obj,
-		[ "patterns", "redirectPatternKeys", daw.get.pattern( patId ).name, daw.get.synth( synthId ).name ],
+		[ "patterns", "redirectPatternKeys", daw.$getPattern( patId ).name, daw.$getSynth( synthId ).name ],
 	];
 } );

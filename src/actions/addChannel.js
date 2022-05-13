@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.set( "addChannel", daw => {
-	const channels = daw.get.channels();
+	const channels = daw.$getChannels();
 	const id = DAWCore.actionsCommon.getNextIdOf( channels );
 	const order = DAWCore.actionsCommon.getNextOrderOf( channels );
 	const name = `chan ${ id }`;

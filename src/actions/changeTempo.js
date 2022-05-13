@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
-	const bpmChanged = bpm !== daw.get.bpm();
+	const bpmChanged = bpm !== daw.$getBPM();
 	const signChanged =
 			bPM !== daw.$getBeatsPerMeasure() ||
 			sPB !== daw.$getStepsPerBeat();
@@ -9,7 +9,7 @@ DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 	if ( signChanged || bpmChanged ) {
 		const obj = {};
 		const objPatterns = {};
-		const pats = Object.entries( daw.get.patterns() );
+		const pats = Object.entries( daw.$getPatterns() );
 
 		if ( signChanged ) {
 			obj.beatsPerMeasure = bPM;
@@ -28,7 +28,7 @@ DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 			obj.bpm = bpm;
 			pats.forEach( ( [ id, pat ] ) => {
 				if ( pat.type === "buffer" && !pat.bufferBpm ) {
-					const bufDur = daw.get.buffer( pat.buffer ).duration;
+					const bufDur = daw.$getBuffer( pat.buffer ).duration;
 					const duration = Math.ceil( bufDur * ( bpm / 60 ) );
 
 					if ( duration !== pat.duration ) {
@@ -41,7 +41,7 @@ DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 			const objBlocks = {};
 
 			obj.patterns = objPatterns;
-			Object.entries( daw.get.blocks() ).forEach( ( [ id, blc ] ) => {
+			Object.entries( daw.$getBlocks() ).forEach( ( [ id, blc ] ) => {
 				const pat = objPatterns[ blc.pattern ];
 
 				if ( pat && !blc.durationEdited ) {
@@ -52,7 +52,7 @@ DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 			if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
 				const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
 
-				if ( dur !== daw.get.duration() ) {
+				if ( dur !== daw.$getDuration() ) {
 					obj.duration = dur;
 				}
 			}

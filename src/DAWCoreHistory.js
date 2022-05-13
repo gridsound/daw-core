@@ -9,7 +9,7 @@ class DAWCoreHistory {
 	}
 	static stackChange( daw, store, redo, msg ) {
 		const stack = store.stack;
-		const undo = DAWCore.utils.composeUndo( daw.get.cmp(), redo );
+		const undo = DAWCore.utils.composeUndo( daw.$getCmp(), redo );
 		const act = { redo, undo };
 		const desc = DAWCoreHistory.#nameAction( act, msg );
 

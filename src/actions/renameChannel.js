@@ -2,7 +2,7 @@
 
 DAWCore.actions.set( "renameChannel", ( daw, id, newName ) => {
 	const name = DAWCore.utils.trim2( newName );
-	const chan = daw.get.channel( id );
+	const chan = daw.$getChannel( id );
 
 	if ( id !== "main" && name && name !== chan.name ) {
 		return [

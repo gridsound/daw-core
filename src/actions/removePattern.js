@@ -1,10 +1,10 @@
 "use strict";
 
 DAWCore.actions.set( "removePattern", ( daw, patId ) => {
-	const pat = daw.get.pattern( patId );
+	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const obj = { patterns: { [ patId ]: undefined } };
-	const blocks = Object.entries( daw.get.blocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
+	const blocks = Object.entries( daw.$getBlocks() ).reduce( ( blocks, [ blcId, blc ] ) => {
 		if ( blc.pattern === patId ) {
 			blocks[ blcId ] = undefined;
 		}
@@ -12,13 +12,13 @@ DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 	}, {} );
 
 	if ( type === "buffer" ) {
-		Object.entries( daw.get.drumrows() ).forEach( kv => {
+		Object.entries( daw.$getDrumrows() ).forEach( kv => {
 			if ( kv[ 1 ].pattern === patId ) {
 				DAWCore.utils.deepAssign( obj,
 					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], daw ) );
 			}
 		} );
-		Object.entries( daw.get.patterns() ).forEach( kv => {
+		Object.entries( daw.$getPatterns() ).forEach( kv => {
 			if ( kv[ 1 ].type === "slices" && kv[ 1 ].source === patId ) {
 				obj.patterns[ kv[ 0 ] ] = { source: null };
 			}
@@ -28,7 +28,7 @@ DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
 	if ( DAWCore.utils.isntEmpty( blocks ) ) {
-		const realDur = Object.values( daw.get.blocks() )
+		const realDur = Object.values( daw.$getBlocks() )
 			.reduce( ( dur, blc ) => {
 				return blc.pattern === patId
 					? dur
@@ -38,12 +38,12 @@ DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 		const dur = Math.max( 1, Math.ceil( realDur / bPM ) ) * bPM;
 
 		obj.blocks = blocks;
-		if ( dur !== daw.get.duration() ) {
+		if ( dur !== daw.$getDuration() ) {
 			obj.duration = dur;
 		}
 	}
 	if ( patId === daw.$getOpened( type ) ) {
-		const found = Object.entries( daw.get.patterns() )
+		const found = Object.entries( daw.$getPatterns() )
 			.find( ( [ k, v ] ) => k !== patId && v.type === type && v.synth === pat.synth );
 
 		obj[ DAWCore.actionsCommon.patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;

@@ -35,10 +35,10 @@ class DAWCoreKeys {
 		}
 		store.waKeys.scheduler.empty();
 		if ( id ) {
-			const pat = daw.get.pattern( id );
+			const pat = daw.$getPattern( id );
 
 			DAWCoreKeys.setSynth( daw, store, pat.synth );
-			DAWCoreKeys.change( store, pat, daw.get.keys( pat.keys ) );
+			DAWCoreKeys.change( store, pat, daw.$getKeys( pat.keys ) );
 			if ( wasPlaying ) {
 				daw.play();
 			}
