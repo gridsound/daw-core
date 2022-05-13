@@ -331,7 +331,7 @@ class DAWCoreComposition {
 			daw.keysSetSynth( obj.synthOpened );
 		} ],
 	] );
-};
+}
 
 /*
 1. The order between the mixer and the effects is important.

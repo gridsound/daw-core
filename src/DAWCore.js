@@ -100,10 +100,10 @@ class DAWCore {
 	$getAudioDestination() { return this.destinationGetOutput(); }
 	$getAudioBuffer( id ) { return this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
 	// .........................................................................
-	$getName() { return this.#composition.cmp.name; },
-	$getLoopA() { return this.#composition.cmp.loopA; },
-	$getLoopB() { return this.#composition.cmp.loopB; },
-	$getDuration() { return this.#composition.cmp.duration; },
+	$getName() { return this.#composition.cmp.name; }
+	$getLoopA() { return this.#composition.cmp.loopA; }
+	$getLoopB() { return this.#composition.cmp.loopB; }
+	$getDuration() { return this.#composition.cmp.duration; }
 	$getCmp() { return this.#composition.cmp; }
 	$getId() { return this.#composition.cmp.id; }
 	$getBPM() { return this.#composition.cmp.bpm; }
@@ -235,7 +235,7 @@ class DAWCore {
 
 	// ..........................................................................
 	newComposition( opt ) {
-		return DAWCoreAddComposition.new( this, opt )
+		return DAWCoreAddComposition.new( this, opt );
 	}
 	importCompositionsFromLocalStorage() {
 		return DAWCoreAddComposition.LS( this );
