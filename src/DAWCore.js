@@ -50,8 +50,29 @@ class DAWCore {
 		duration: 0,
 		keysStartedLive: {},
 	} );
-	composition = new DAWCore.Composition( this );
-	drums = new DAWCore.Drums( this );
+	#drums = Object.seal( {
+		waDrums: new gswaDrumsScheduler(),
+		looping: false,
+		playing: false,
+		loopA: null,
+		loopB: null,
+		duration: 0,
+	} );
+	#composition = Object.seal( {
+		daw: this,
+		cmp: null,
+		loaded: false,
+		playing: false,
+		saved: true,
+		actionSavedOn: null,
+		waSynths: new Map(),
+		waSched: new gswaScheduler(),
+		waMixer: new gswaMixer(),
+		waDrumrows: new gswaDrumrows(),
+		waEffects: null,
+		startedSched: new Map(),
+		startedBuffers: new Map(),
+	} );
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
 	#loopBind = this.#loop.bind( this );
@@ -59,51 +80,51 @@ class DAWCore {
 
 	constructor() {
 		this.get = {
-			saveMode: () => this.composition.cmp.options.saveMode,
-			currentTime: () => this.composition.currentTime,
+			saveMode: () => this.#composition.cmp.options.saveMode,
 			compositions: saveMode => this.cmps[ saveMode ],
 			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
-			opened: t => this.composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
+			opened: t => this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
 			// .................................................................
 			ctx: () => this.ctx,
 			audioDestination: () => this.destinationGetOutput(),
-			audioBuffer: id => this.buffersGetBuffer( this.composition.cmp.buffers[ id ] ).buffer,
+			audioBuffer: id => this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer,
 			audioSlices: id => this.slicesBuffersGetBuffer( id ),
-			audioChanIn: id => this.composition.waMixer.getChanInput( id ),
-			audioChanOut: id => this.composition.waMixer.getChanOutput( id ),
-			audioEffect: id => this.composition.waEffects.getFx( id ),
-			audioSynth: id => this.composition.waSynths.get( id ),
+			audioChanIn: id => this.#composition.waMixer.getChanInput( id ),
+			audioChanOut: id => this.#composition.waMixer.getChanOutput( id ),
+			audioEffect: id => this.#composition.waEffects.getFx( id ),
+			audioSynth: id => this.#composition.waSynths.get( id ),
+			audioDrumrows: () => this.#composition.waDrumrows,
 			// .................................................................
-			cmp: () => this.composition.cmp,
-			id: () => this.composition.cmp.id,
-			bpm: () => this.composition.cmp.bpm,
-			bps: () => this.composition.cmp.bpm / 60,
-			name: () => this.composition.cmp.name,
-			loopA: () => this.composition.cmp.loopA,
-			loopB: () => this.composition.cmp.loopB,
-			duration: () => this.composition.cmp.duration,
-			beatsPerMeasure: () => this.composition.cmp.beatsPerMeasure,
-			stepsPerBeat: () => this.composition.cmp.stepsPerBeat,
+			cmp: () => this.#composition.cmp,
+			id: () => this.#composition.cmp.id,
+			bpm: () => this.#composition.cmp.bpm,
+			bps: () => this.#composition.cmp.bpm / 60,
+			name: () => this.#composition.cmp.name,
+			loopA: () => this.#composition.cmp.loopA,
+			loopB: () => this.#composition.cmp.loopB,
+			duration: () => this.#composition.cmp.duration,
+			beatsPerMeasure: () => this.#composition.cmp.beatsPerMeasure,
+			stepsPerBeat: () => this.#composition.cmp.stepsPerBeat,
 			// .................................................................
-			block: id => this.composition.cmp.blocks[ id ],
-			blocks: () => this.composition.cmp.blocks,
-			buffer: id => this.composition.cmp.buffers[ id ],
-			buffers: () => this.composition.cmp.buffers,
-			channel: id => this.composition.cmp.channels[ id ],
-			channels: () => this.composition.cmp.channels,
-			slices: id => id ? this.composition.cmp.slices[ id ] : this.composition.cmp.slices, // 1.
-			drumrow: id => this.composition.cmp.drumrows[ id ],
-			drumrows: () => this.composition.cmp.drumrows,
-			drums: id => id ? this.composition.cmp.drums[ id ] : this.composition.cmp.drums, // 1.
-			effect: id => this.composition.cmp.effects[ id ],
-			effects: () => this.composition.cmp.effects,
-			keys: id => id ? this.composition.cmp.keys[ id ] : this.composition.cmp.keys, // 1.
-			pattern: id => this.composition.cmp.patterns[ id ],
-			patterns: () => this.composition.cmp.patterns,
-			synth: id => this.composition.cmp.synths[ id ],
-			synths: () => this.composition.cmp.synths,
-			track: id => this.composition.cmp.tracks[ id ],
-			tracks: () => this.composition.cmp.tracks,
+			block: id => this.#composition.cmp.blocks[ id ],
+			blocks: () => this.#composition.cmp.blocks,
+			buffer: id => this.#composition.cmp.buffers[ id ],
+			buffers: () => this.#composition.cmp.buffers,
+			channel: id => this.#composition.cmp.channels[ id ],
+			channels: () => this.#composition.cmp.channels,
+			slices: id => id ? this.#composition.cmp.slices[ id ] : this.#composition.cmp.slices, // 1.
+			drumrow: id => this.#composition.cmp.drumrows[ id ],
+			drumrows: () => this.#composition.cmp.drumrows,
+			drums: id => id ? this.#composition.cmp.drums[ id ] : this.#composition.cmp.drums, // 1.
+			effect: id => this.#composition.cmp.effects[ id ],
+			effects: () => this.#composition.cmp.effects,
+			keys: id => id ? this.#composition.cmp.keys[ id ] : this.#composition.cmp.keys, // 1.
+			pattern: id => this.#composition.cmp.patterns[ id ],
+			patterns: () => this.#composition.cmp.patterns,
+			synth: id => this.#composition.cmp.synths[ id ],
+			synths: () => this.#composition.cmp.synths,
+			track: id => this.#composition.cmp.tracks[ id ],
+			tracks: () => this.#composition.cmp.tracks,
 			// .................................................................
 			patternDuration: id => {
 				const pat = this.get.pattern( id );
@@ -115,10 +136,16 @@ class DAWCore {
 						: this.get.beatsPerMeasure();
 			},
 		};
-		this.composition.waDrumrows.getAudioBuffer = this.get.audioBuffer;
-		this.composition.waDrumrows.getChannelInput = this.get.audioChanIn;
-		this.composition.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
-		this.composition.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		DAWCoreComposition.init( this, this.#composition );
+		this.#composition.waDrumrows.getAudioBuffer = this.get.audioBuffer;
+		this.#composition.waDrumrows.getChannelInput = this.get.audioChanIn;
+		this.#composition.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
+		this.#composition.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		this.#drums.waDrums.setDrumrows( this.#composition.waDrumrows );
+		this.#composition.waEffects = new gswaEffects( {
+			getChanInput: this.#composition.waMixer.getChanInput.bind( this.#composition.waMixer ),
+			getChanOutput: this.#composition.waMixer.getChanOutput.bind( this.#composition.waMixer ),
+		} ),
 		DAWCoreSlices.init( this.get, this.#slices );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
@@ -201,7 +228,7 @@ class DAWCore {
 		DAWCoreCompositionExportWAV.abort( this );
 	}
 	compositionNeedSave() {
-		return !this.composition.saved;
+		return !this.#composition.saved;
 	}
 
 	// ..........................................................................
@@ -222,14 +249,61 @@ class DAWCore {
 	}
 
 	// ..........................................................................
+	compositionLoad( cmpOri ) {
+		return DAWCoreComposition.load( this, this.#composition, cmpOri );
+	}
+	compositionUnload() {
+		DAWCoreComposition.unload( this, this.#composition );
+	}
+	compositionSave() {
+		return DAWCoreComposition.save( this, this.#composition );
+	}
+	compositionUpdateChanAudioData() {
+		DAWCoreComposition.updateChanAudioData( this, this.#composition );
+	}
+	compositionGetCurrentTime() {
+		return DAWCoreComposition.getCurrentTime( this.#composition );
+	}
+	compositionSetCurrentTime( t ) {
+		DAWCoreComposition.setCurrentTime( this, this.#composition, t );
+	}
+	compositionPlay() {
+		DAWCoreComposition.play( this, this.#composition );
+	}
+	compositionPause() {
+		DAWCoreComposition.pause( this.#composition );
+	}
+	compositionStop() {
+		DAWCoreComposition.stop( this, this.#composition );
+	}
+	compositionChange( obj, prevObj ) {
+		return DAWCoreComposition.change( this, this.#composition, obj, prevObj );
+	}
+
+	// ..........................................................................
 	liveChangeChannel( id, prop, val ) {
-		this.composition.waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
+		this.#composition.waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
 	}
 	liveChangeEffect( fxId, prop, val ) {
-		this.composition.waEffects.liveChangeFxProp( fxId, prop, val );
+		this.#composition.waEffects.liveChangeFxProp( fxId, prop, val );
 	}
 	liveChangeSynth( id, obj ) {
-		this.composition.waSynths.get( id ).change( obj );
+		this.#composition.waSynths.get( id ).change( obj );
+	}
+	liveKeydown( midi ) {
+		DAWCoreKeys.liveKeydown( this.#keys, midi );
+	}
+	liveKeyup( midi ) {
+		DAWCoreKeys.liveKeyup( this.#keys, midi );
+	}
+	liveDrumrowChange( rowId, prop, val ) {
+		DAWCoreDrums.liveDrumrowChange( this, rowId, prop, val );
+	}
+	liveDrumStart( rowId ) {
+		DAWCoreDrums.liveDrumStart( this, rowId );
+	}
+	liveDrumStop( rowId ) {
+		DAWCoreDrums.liveDrumStop( this, rowId );
 	}
 
 	// ..........................................................................
@@ -257,12 +331,6 @@ class DAWCore {
 	keysClearLoop() {
 		DAWCoreKeys.clearLoop( this, this.#keys );
 	}
-	keysLiveKeydown( midi ) {
-		DAWCoreKeys.liveKeydown( this.#keys, midi );
-	}
-	keysLiveKeyup( midi ) {
-		DAWCoreKeys.liveKeyup( this.#keys, midi );
-	}
 	keysPlay() {
 		DAWCoreKeys.play( this.#keys );
 	}
@@ -271,6 +339,32 @@ class DAWCore {
 	}
 	keysStop() {
 		DAWCoreKeys.stop( this, this.#keys );
+	}
+
+	// ..........................................................................
+	drumsChange( objChange ) {
+		DAWCoreDrums.change( this, this.#drums, objChange );
+	}
+	drumsGetCurrentTime() {
+		return DAWCoreDrums.getCurrentTime( this.#drums );
+	}
+	drumsSetCurrentTime( t ) {
+		DAWCoreDrums.setCurrentTime( this, this.#drums, t );
+	}
+	drumsSetLoop( a, b ) {
+		DAWCoreDrums.setLoop( this.#drums, a, b );
+	}
+	drumsClearLoop() {
+		DAWCoreDrums.clearLoop( this, this.#drums );
+	}
+	drumsPlay() {
+		DAWCoreDrums.play( this.#drums );
+	}
+	drumsPause() {
+		DAWCoreDrums.pause( this.#drums );
+	}
+	drumsStop() {
+		DAWCoreDrums.stop( this, this.#drums );
 	}
 
 	// ..........................................................................
@@ -296,12 +390,20 @@ class DAWCore {
 	// ..........................................................................
 	setCtx( ctx ) {
 		this.ctx = ctx;
-		this.drums._waDrums.setContext( ctx );
+		this.#drums.waDrums.setContext( ctx );
 		DAWCoreSlices.setContext( this.#slices, ctx );
 		this.#keys.waKeys.setContext( ctx );
-		this.composition.waDrumrows.setContext( ctx );
+		this.#composition.waDrumrows.setContext( ctx );
 		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
-		this.composition.setCtx( ctx );
+		gswaPeriodicWaves.clearCache();
+		this.#composition.waMixer.setContext( ctx ); // 3.
+		this.#composition.waMixer.connect( this.get.audioDestination() );
+		this.#composition.waEffects.setContext( ctx );
+		this.#composition.waSynths.forEach( ( syn, synId ) => {
+			syn.setContext( ctx );
+			syn.output.disconnect();
+			syn.output.connect( this.get.audioChanIn( this.get.synth( synId ).dest ) );
+		} );
 	}
 	resetAudioContext() {
 		this.stop();
@@ -322,7 +424,7 @@ class DAWCore {
 			} else if ( ret ) {
 				const undo = DAWCore.utils.composeUndo( this.get.cmp(), ret );
 
-				this.composition.change( ret, undo );
+				this.compositionChange( ret, undo );
 			}
 		}
 	}
@@ -337,13 +439,13 @@ class DAWCore {
 		const cmp = this.get.composition( saveMode, id );
 
 		if ( cmp ) {
-			if ( this.composition.loaded ) {
+			if ( this.#composition.loaded ) {
 				this.closeComposition();
 			}
 			return ( this.get.composition( saveMode, id ) // 2.
 				? Promise.resolve( cmp )
 				: this.newComposition( { saveMode } ) )
-				.then( cmp => this.composition.load( cmp ) )
+				.then( cmp => this.compositionLoad( cmp ) )
 				.then( cmp => this.#compositionOpened( cmp ) );
 		}
 	}
@@ -354,16 +456,16 @@ class DAWCore {
 		return cmp;
 	}
 	closeComposition() {
-		if ( this.composition.loaded ) {
+		if ( this.#composition.loaded ) {
 			const cmp = this.cmps[ this.get.saveMode() ].get( this.get.id() );
 
 			this.stop();
 			this.keysClearLoop();
 			this.keysSetCurrentTime( 0 );
-			this.composition.setCurrentTime( 0 );
+			this.compositionSetCurrentTime( 0 );
 			this.#stopLoop();
 			this.callCallback( "compositionClosed", cmp );
-			this.composition.unload();
+			this.compositionUnload();
 			this.historyEmpty();
 			this.buffersEmpty();
 			if ( !cmp.savedAt ) {
@@ -372,7 +474,7 @@ class DAWCore {
 		}
 	}
 	deleteComposition( saveMode, id ) {
-		if ( this.composition.cmp && id === this.get.id() ) {
+		if ( this.#composition.cmp && id === this.get.id() ) {
 			this.closeComposition();
 		}
 		this.#deleteComposition( this.cmps[ saveMode ].get( id ) );
@@ -389,9 +491,9 @@ class DAWCore {
 		}
 	}
 	saveComposition() {
-		const actSave = this.composition.actionSavedOn;
+		const actSave = this.#composition.actionSavedOn;
 
-		if ( this.composition.save() ) {
+		if ( this.compositionSave() ) {
 			const cmp = this.get.cmp();
 			const id = this.get.id();
 
@@ -400,18 +502,18 @@ class DAWCore {
 				DAWCoreLocalStorage.put( id, cmp );
 				this.callCallback( "compositionSavedStatus", cmp, true );
 			} else {
-				this.composition.saved = false;
+				this.#composition.saved = false;
 				this.callCallback( "compositionLoading", cmp, true );
 				( this.callCallback( "compositionSavingPromise", cmp )
 				|| Promise.resolve( cmp ) )
 					.finally( this.callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
-						this.composition.saved = true;
+						this.#composition.saved = true;
 						this.cmps.cloud.set( id, cmp );
 						this.callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
-						this.composition.actionSavedOn = actSave;
+						this.#composition.actionSavedOn = actSave;
 						this.callCallback( "compositionSavedStatus", cmp, false );
 						throw err;
 					} );
@@ -524,21 +626,21 @@ class DAWCore {
 	getCurrentTime() {
 		switch ( this.#focusedStr ) {
 			case "keys": return this.keysGetCurrentTime();
-			case "drums": return this.drums.getCurrentTime();
+			case "drums": return this.drumsGetCurrentTime();
 			case "slices": return this.slicesGetCurrentTime();
-			case "composition": return this.composition.getCurrentTime();
+			case "composition": return this.compositionGetCurrentTime();
 		}
 	}
 	setCurrentTime( t ) {
 		switch ( this.#focusedStr ) {
 			case "keys": this.keysSetCurrentTime( t );
-			case "drums": this.drums.setCurrentTime( t );
+			case "drums": this.drumsSetCurrentTime( t );
 			case "slices": this.slicesSetCurrentTime( t );
-			case "composition": this.composition.setCurrentTime( t );
+			case "composition": this.compositionSetCurrentTime( t );
 		}
 	}
 	isPlaying() {
-		return this.composition.playing || this.#keys.playing || this.drums.playing || this.#slices.playing;
+		return this.#composition.playing || this.#keys.playing || this.#drums.playing || this.#slices.playing;
 	}
 	togglePlay() {
 		this.isPlaying() ? this.pause() : this.play();
@@ -546,27 +648,27 @@ class DAWCore {
 	play() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.keysPlay(); break;
-			case "drums": this.drums.play(); break;
+			case "drums": this.drumsPlay(); break;
 			case "slices": this.slicesPlay(); break;
-			case "composition": this.composition.play(); break;
+			case "composition": this.compositionPlay(); break;
 		}
 		this.callCallback( "play", this.#focusedStr );
 	}
 	pause() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.keysPause(); break;
-			case "drums": this.drums.pause(); break;
+			case "drums": this.drumsPause(); break;
 			case "slices": this.slicesPause(); break;
-			case "composition": this.composition.pause(); break;
+			case "composition": this.compositionPause(); break;
 		}
 		this.callCallback( "pause", this.#focusedStr );
 	}
 	stop() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.keysStop(); break;
-			case "drums": this.drums.stop(); break;
+			case "drums": this.drumsStop(); break;
 			case "slices": this.slicesStop(); break;
-			case "composition": this.composition.stop(); break;
+			case "composition": this.compositionStop(); break;
 		}
 		this.callCallback( "stop", this.#focusedStr );
 		this.callCallback( "currentTime", this.getCurrentTime(), this.#focusedStr );
@@ -593,7 +695,7 @@ class DAWCore {
 		const anData = this.destinationAnalyserFillData();
 
 		if ( anData ) {
-			this.composition.updateChanAudioData();
+			this.compositionUpdateChanAudioData();
 			this.callCallback( "analyserFilled", anData );
 		}
 		if ( this.isPlaying() ) {
@@ -621,4 +723,5 @@ DAWCore.controllersFx = {};
 2. Why don't we use `cmp` instead of recalling .get.composition() ?
    Because the `cmp` could have been delete in .closeComposition()
    if the composition was a new untitled composition.
+3. The order between the mixer and the effects is important.
 */
