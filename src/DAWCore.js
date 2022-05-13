@@ -31,6 +31,7 @@ class DAWCore {
 	} );
 	#buffers = new Map();
 	#slicesBuffers = new Map();
+	#waDrumrows = new gswaDrumrows();
 	#slices = Object.seal( {
 		waSched: new gswaScheduler(),
 		duration: 4,
@@ -59,7 +60,6 @@ class DAWCore {
 		duration: 0,
 	} );
 	#composition = Object.seal( {
-		daw: this,
 		cmp: null,
 		loaded: false,
 		playing: false,
@@ -68,7 +68,6 @@ class DAWCore {
 		waSynths: new Map(),
 		waSched: new gswaScheduler(),
 		waMixer: new gswaMixer(),
-		waDrumrows: new gswaDrumrows(),
 		waEffects: null,
 		startedSched: new Map(),
 		startedBuffers: new Map(),
@@ -93,7 +92,7 @@ class DAWCore {
 			audioChanOut: id => this.#composition.waMixer.getChanOutput( id ),
 			audioEffect: id => this.#composition.waEffects.getFx( id ),
 			audioSynth: id => this.#composition.waSynths.get( id ),
-			audioDrumrows: () => this.#composition.waDrumrows,
+			audioDrumrows: () => this.#waDrumrows,
 			// .................................................................
 			cmp: () => this.#composition.cmp,
 			id: () => this.#composition.cmp.id,
@@ -137,11 +136,11 @@ class DAWCore {
 			},
 		};
 		DAWCoreComposition.init( this, this.#composition );
-		this.#composition.waDrumrows.getAudioBuffer = this.get.audioBuffer;
-		this.#composition.waDrumrows.getChannelInput = this.get.audioChanIn;
-		this.#composition.waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
-		this.#composition.waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
-		this.#drums.waDrums.setDrumrows( this.#composition.waDrumrows );
+		this.#waDrumrows.getAudioBuffer = this.get.audioBuffer;
+		this.#waDrumrows.getChannelInput = this.get.audioChanIn;
+		this.#waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
+		this.#waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		this.#drums.waDrums.setDrumrows( this.#waDrumrows );
 		this.#composition.waEffects = new gswaEffects( {
 			getChanInput: this.#composition.waMixer.getChanInput.bind( this.#composition.waMixer ),
 			getChanOutput: this.#composition.waMixer.getChanOutput.bind( this.#composition.waMixer ),
@@ -393,7 +392,7 @@ class DAWCore {
 		this.#drums.waDrums.setContext( ctx );
 		DAWCoreSlices.setContext( this.#slices, ctx );
 		this.#keys.waKeys.setContext( ctx );
-		this.#composition.waDrumrows.setContext( ctx );
+		this.#waDrumrows.setContext( ctx );
 		DAWCoreDestination.setCtx( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#composition.waMixer.setContext( ctx ); // 3.

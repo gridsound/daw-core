@@ -65,7 +65,7 @@ class DAWCoreComposition {
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			store.waSynths.clear();
 			daw.slicesBuffersClear();
-			store.waDrumrows.clear();
+			daw.get.audioDrumrows().clear();
 			store.saved = true;
 			daw.callCallback( "compositionSavedStatus", store.cmp, true );
 			store.cmp = null;
@@ -129,7 +129,7 @@ class DAWCoreComposition {
 		daw.buffersChange( obj, prevObj );
 		daw.slicesBuffersChange( obj );
 		daw.slicesChange( obj );
-		store.waDrumrows.change( obj );
+		daw.get.audioDrumrows().change( obj );
 		daw.drumsChange( obj );
 		store.waEffects.change( obj );
 		DAWCoreComposition.#changeFns.forEach( ( fn, attr ) => {
@@ -216,7 +216,7 @@ class DAWCoreComposition {
 					store.startedSched.set( startedId, [ patId, sch ] );
 					sch.scheduler.setBPM( cmp.bpm );
 					sch.setContext( get.ctx() );
-					sch.setDrumrows( store.waDrumrows );
+					sch.setDrumrows( daw.get.audioDrumrows() );
 					sch.change( cmp.drums[ pat.drums ] );
 					sch.start( when, off, dur );
 				} break;
