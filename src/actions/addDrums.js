@@ -26,7 +26,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 	let drumWhenMax = pat.duration;
 
 	for ( let w = whenA; w <= whenB; ++w ) {
-		const drmId = drumsMap.daw.get( w );
+		const drmId = drumsMap.get( w );
 
 		if ( drmId ) {
 			if ( !status ) {
