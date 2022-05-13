@@ -60,7 +60,7 @@ class DAWCoreComposition {
 
 			store.loaded = false;
 			store.waEffects.clear(); // 1.
-			store.waMixer.clear();
+			daw.get.audioMixer().clear();
 			store.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			store.waSynths.clear();
@@ -79,8 +79,8 @@ class DAWCoreComposition {
 			return true;
 		}
 	}
-	static updateChanAudioData( daw, store ) {
-		const mix = store.waMixer;
+	static updateChanAudioData( daw ) {
+		const mix = daw.get.audioMixer();
 		const fn = daw.callCallback.bind( daw, "channelAnalyserFilled" );
 
 		Object.keys( daw.get.channels() ).forEach( chanId => {
@@ -125,7 +125,7 @@ class DAWCoreComposition {
 		const saved = act === store.actionSavedOn && !!cmp.savedAt;
 
 		DAWCore.utils.diffAssign( cmp, obj );
-		store.waMixer.change( obj );
+		daw.get.audioMixer().change( obj );
 		daw.buffersChange( obj, prevObj );
 		daw.slicesBuffersChange( obj );
 		daw.slicesChange( obj );
@@ -283,7 +283,7 @@ class DAWCoreComposition {
 					syn.setContext( daw.get.ctx() );
 					syn.setBPM( store.cmp.bpm );
 					syn.change( synthObj );
-					syn.output.connect( store.waMixer.getChanInput( synthObj.dest ) );
+					syn.output.connect( daw.get.audioMixer().getChanInput( synthObj.dest ) );
 					store.waSynths.set( id, syn );
 				} else {
 					const syn = store.waSynths.get( id );
@@ -291,7 +291,7 @@ class DAWCoreComposition {
 					syn.change( synthObj );
 					if ( "dest" in synthObj ) {
 						syn.output.disconnect();
-						syn.output.connect( store.waMixer.getChanInput( synthObj.dest ) );
+						syn.output.connect( daw.get.audioMixer().getChanInput( synthObj.dest ) );
 					}
 				}
 			} );
