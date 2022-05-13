@@ -42,10 +42,10 @@ DAWCore.controllers.slicer = class {
 		Object.keys( this.data ).forEach( this.#deleteSlice, this );
 	}
 	change( obj ) {
-		const get = this.#dawcore.get;
+		const daw = this.#dawcore;
 
 		if ( "beatsPerMeasure" in obj || "stepsPerBeat" in obj ) {
-			this.on.timedivision( `${ get.beatsPerMeasure() }/${ get.stepsPerBeat() }` );
+			this.on.timedivision( `${ daw.$getBeatsPerMeasure() }/${ daw.$getStepsPerBeat() }` );
 		}
 		if ( "patternSlicesOpened" in obj ) {
 			const id = obj.patternSlicesOpened;
@@ -53,22 +53,22 @@ DAWCore.controllers.slicer = class {
 			if ( !id ) {
 				this.clear();
 			} else {
-				const pat = get.pattern( id );
+				const pat = daw.get.pattern( id );
 
 				this.#patternId = id;
 				this.#slicesId = pat.slices;
 				Object.keys( this.data ).forEach( this.#deleteSlice, this );
-				this.#changeSource( pat.source, this.#dawcore );
-				this.#slicesCrud( get.slices( this.#slicesId ) );
+				this.#changeSource( pat.source, daw );
+				this.#slicesCrud( daw.get.slices( this.#slicesId ) );
 				this.on.disabled( false );
 			}
 		} else if ( this.#patternId ) {
 			const objPat = obj.patterns?.[ this.#patternId ];
 
 			if ( objPat && "source" in objPat ) {
-				this.#changeSource( objPat.source, this.#dawcore );
+				this.#changeSource( objPat.source, daw );
 			} else {
-				this.#updateSourceDur( obj, get );
+				this.#updateSourceDur( obj, daw.get );
 			}
 			this.#slicesCrud( obj.slices?.[ this.#slicesId ] );
 		}

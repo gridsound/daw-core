@@ -1,18 +1,18 @@
 "use strict";
 
-DAWCore.actions.set( "removeDrumrow", ( rowId, get ) => {
-	const patName = DAWCore.actionsCommon.getDrumrowName( rowId, get );
+DAWCore.actions.set( "removeDrumrow", ( rowId, _get, daw ) => {
+	const patName = DAWCore.actionsCommon.getDrumrowName( rowId, daw.get );
 
 	return [
-		DAWCore.actions._removeDrumrow( {}, rowId, get ),
+		DAWCore.actions._removeDrumrow( {}, rowId, daw ),
 		[ "drumrows", "removeDrumrow", patName ],
 	];
 } );
 
-DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
-	const bPM = get.beatsPerMeasure();
-	const blocksEnt = Object.entries( get.blocks() );
-	const patternsEnt = Object.entries( get.patterns() );
+DAWCore.actions._removeDrumrow = ( obj, rowId, daw ) => {
+	const bPM = daw.$getBeatsPerMeasure();
+	const blocksEnt = Object.entries( daw.get.blocks() );
+	const patternsEnt = Object.entries( daw.get.patterns() );
 	const objDrums = {};
 	const objBlocks = {};
 	const objPatterns = {};
@@ -22,7 +22,7 @@ DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 	patternsEnt.forEach( ( [ patId, pat ] ) => {
 		if ( pat.type === "drums" ) {
 			const drumsObj = {};
-			const drumWhenMax = Object.entries( get.drums( pat.drums ) )
+			const drumWhenMax = Object.entries( daw.get.drums( pat.drums ) )
 				.reduce( ( max, [ id, { row, when } ] ) => {
 					if ( row === rowId ) {
 						drumsObj[ id ] = undefined;
@@ -49,9 +49,9 @@ DAWCore.actions._removeDrumrow = ( obj, rowId, get ) => {
 	DAWCore.utils.addIfNotEmpty( obj, "blocks", objBlocks );
 	DAWCore.utils.addIfNotEmpty( obj, "patterns", objPatterns );
 	if ( DAWCore.utils.isntEmpty( objBlocks ) ) {
-		const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
+		const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
 
-		if ( dur !== get.duration() ) {
+		if ( dur !== daw.get.duration() ) {
 			obj.duration = dur;
 		}
 	}

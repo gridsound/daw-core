@@ -1,17 +1,17 @@
 "use strict";
 
-DAWCore.actions.set( "addDrums", ( patternId, rowId, whenFrom, whenTo, get ) => {
-	return DAWCore.actions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, get );
+DAWCore.actions.set( "addDrums", ( patternId, rowId, whenFrom, whenTo, _get, daw ) => {
+	return DAWCore.actions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, daw );
 } );
 
-DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, get ) => {
-	const stepDur = 1 / get.stepsPerBeat();
+DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, daw ) => {
+	const stepDur = 1 / daw.$getStepsPerBeat();
 	const whenA = Math.round( Math.min( whenFrom, whenTo ) / stepDur );
 	const whenB = Math.round( Math.max( whenFrom, whenTo ) / stepDur );
-	const pat = get.pattern( patternId );
-	const drums = get.drums( pat.drums );
-	const patRowId = get.drumrow( rowId ).pattern;
-	const patRow = get.pattern( patRowId );
+	const pat = daw.get.pattern( patternId );
+	const drums = daw.get.drums( pat.drums );
+	const patRowId = daw.get.drumrow( rowId ).pattern;
+	const patRow = daw.get.pattern( patRowId );
 	const drumsEnt = Object.entries( drums );
 	const drumsMap = drumsEnt.reduce( ( map, [ drumId, drum ] ) => {
 		if ( drum.row === rowId && type === "drum" === "gain" in drum ) {
@@ -26,7 +26,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 	let drumWhenMax = pat.duration;
 
 	for ( let w = whenA; w <= whenB; ++w ) {
-		const drmId = drumsMap.get( w );
+		const drmId = drumsMap.daw.get( w );
 
 		if ( drmId ) {
 			if ( !status ) {
@@ -49,11 +49,11 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 		}, 0 );
 	}
 	if ( nbDrums > 0 ) {
-		const bPM = get.beatsPerMeasure();
+		const bPM = daw.$getBeatsPerMeasure();
 		const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;
 		const obj = { drums: { [ pat.drums ]: newDrums } };
 
-		DAWCore.actionsCommon.updatePatternDuration( obj, patternId, duration, get );
+		DAWCore.actionsCommon.updatePatternDuration( obj, patternId, duration, daw );
 		return [
 			obj,
 			[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],

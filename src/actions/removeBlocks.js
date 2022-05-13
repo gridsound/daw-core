@@ -1,21 +1,21 @@
 "use strict";
 
-DAWCore.actions.set( "removeBlocks", ( blcIds, get ) => {
+DAWCore.actions.set( "removeBlocks", ( blcIds, _get, daw ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = undefined;
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
+	const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
 	let selLen = 0;
 
-	Object.entries( get.blocks() ).forEach( ( [ id, blc ] ) => {
+	Object.entries( daw.get.blocks() ).forEach( ( [ id, blc ] ) => {
 		if ( blc.selected && !( id in blocks ) ) {
 			++selLen;
 			blocks[ id ] = { selected: false };
 		}
 	} );
-	if ( dur !== get.duration() ) {
+	if ( dur !== daw.get.duration() ) {
 		obj.duration = dur;
 	}
 	return [

@@ -19,7 +19,7 @@ DAWCore.actions.set( "addPatternKeys", ( synthId, _get, daw ) => {
 			name: patName,
 			keys: keysId,
 			synth: synthId,
-			duration: daw.get.beatsPerMeasure(),
+			duration: daw.$getBeatsPerMeasure(),
 		} },
 		patternKeysOpened: patId,
 	};

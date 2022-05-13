@@ -15,7 +15,7 @@ DAWCore.actions.set( "removePattern", ( patId, _get, daw ) => {
 		Object.entries( daw.get.drumrows() ).forEach( kv => {
 			if ( kv[ 1 ].pattern === patId ) {
 				DAWCore.utils.deepAssign( obj,
-					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], daw.get ) );
+					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], daw ) );
 			}
 		} );
 		Object.entries( daw.get.patterns() ).forEach( kv => {
@@ -34,7 +34,7 @@ DAWCore.actions.set( "removePattern", ( patId, _get, daw ) => {
 					? dur
 					: Math.max( dur, blc.when + blc.duration );
 			}, 0 );
-		const bPM = daw.get.beatsPerMeasure();
+		const bPM = daw.$getBeatsPerMeasure();
 		const dur = Math.max( 1, Math.ceil( realDur / bPM ) ) * bPM;
 
 		obj.blocks = blocks;

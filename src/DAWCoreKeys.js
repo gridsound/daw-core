@@ -61,7 +61,7 @@ class DAWCoreKeys {
 		store.loopA =
 		store.loopB = null;
 		store.looping = false;
-		store.waKeys.scheduler.setLoopBeat( 0, store.duration || daw.get.beatsPerMeasure() );
+		store.waKeys.scheduler.setLoopBeat( 0, store.duration || daw.$getBeatsPerMeasure() );
 	}
 	static liveKeydown( store, midi ) {
 		if ( !( midi in store.keysStartedLive ) ) {

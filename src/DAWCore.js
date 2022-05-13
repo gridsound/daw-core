@@ -100,6 +100,18 @@ class DAWCore {
 	$getAudioDestination() { return this.destinationGetOutput(); }
 	$getAudioBuffer( id ) { return this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
 	// .........................................................................
+	$getBeatsPerMeasure() { return this.#composition.cmp.beatsPerMeasure; }
+	$getStepsPerBeat() { return this.#composition.cmp.stepsPerBeat; }
+	// .........................................................................
+	$getPatternDuration( id ) {
+		const pat = this.get.pattern( id );
+
+		return pat.type !== "slices"
+			? pat.duration
+			: pat.source
+				? this.get.pattern( pat.source ).duration
+				: this.$getBeatsPerMeasure();
+	}
 
 	constructor() {
 		this.get = {
@@ -111,8 +123,6 @@ class DAWCore {
 			loopA: () => this.#composition.cmp.loopA,
 			loopB: () => this.#composition.cmp.loopB,
 			duration: () => this.#composition.cmp.duration,
-			beatsPerMeasure: () => this.#composition.cmp.beatsPerMeasure,
-			stepsPerBeat: () => this.#composition.cmp.stepsPerBeat,
 			// .................................................................
 			block: id => this.#composition.cmp.blocks[ id ],
 			blocks: () => this.#composition.cmp.blocks,
@@ -133,16 +143,6 @@ class DAWCore {
 			synths: () => this.#composition.cmp.synths,
 			track: id => this.#composition.cmp.tracks[ id ],
 			tracks: () => this.#composition.cmp.tracks,
-			// .................................................................
-			patternDuration: id => {
-				const pat = this.get.pattern( id );
-
-				return pat.type !== "slices"
-					? pat.duration
-					: pat.source
-						? this.get.pattern( pat.source ).duration
-						: this.get.beatsPerMeasure();
-			},
 		};
 		DAWCoreComposition.init( this, this.#composition );
 		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
@@ -593,7 +593,7 @@ class DAWCore {
 	getFocusedDuration() {
 		return this.#focusedStr === "composition"
 			? this.get.duration()
-			: this.get.patternDuration( this.$getOpened( this.#focusedStr ) );
+			: this.$getPatternDuration( this.$getOpened( this.#focusedStr ) );
 	}
 	focusSwitch() {
 		this.focusOn( this.#focusedStr === "composition" ? this.#focusedSwitch : "composition", "-f" );

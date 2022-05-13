@@ -42,7 +42,7 @@ class DAWCoreDrums {
 		store.loopA =
 		store.loopB = null;
 		store.looping = false;
-		store.waDrums.scheduler.setLoopBeat( 0, store.duration || daw.get.beatsPerMeasure() );
+		store.waDrums.scheduler.setLoopBeat( 0, store.duration || daw.$getBeatsPerMeasure() );
 	}
 	static liveDrumrowChange( daw, rowId, prop, val ) {
 		daw.$getAudioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );

@@ -57,7 +57,7 @@ class DAWCoreSlices {
 			DAWCoreSlices.#bufferUpdated( store );
 		}
 		if ( durUpdated ) {
-			DAWCoreSlices.#changeDuration( store, daw.get.patternDuration( patId ) );
+			DAWCoreSlices.#changeDuration( store, daw.$getPatternDuration( patId ) );
 		}
 	}
 

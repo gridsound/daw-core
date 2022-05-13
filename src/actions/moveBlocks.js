@@ -1,12 +1,12 @@
 "use strict";
 
-DAWCore.actions.set( "moveBlocks", ( blcIds, whenIncr, trackIncr, get ) => {
+DAWCore.actions.set( "moveBlocks", ( blcIds, whenIncr, trackIncr, _get, daw ) => {
 	const blocks = {};
 	const obj = { blocks };
-	const tr = Object.entries( get.tracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
+	const tr = Object.entries( daw.get.tracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
 
 	blcIds.forEach( id => {
-		const blc = get.block( id );
+		const blc = daw.get.block( id );
 		const obj = {};
 
 		blocks[ id ] = obj;
@@ -18,9 +18,9 @@ DAWCore.actions.set( "moveBlocks", ( blcIds, whenIncr, trackIncr, get ) => {
 		}
 	} );
 	if ( whenIncr ) {
-		const dur = DAWCore.actionsCommon.calcNewDuration( obj, get );
+		const dur = DAWCore.actionsCommon.calcNewDuration( obj, daw );
 
-		if ( dur !== get.duration() ) {
+		if ( dur !== daw.get.duration() ) {
 			obj.duration = dur;
 		}
 	}
