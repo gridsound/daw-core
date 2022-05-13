@@ -11,7 +11,7 @@ class DAWCoreSlices {
 		store.waSched.enableStreaming( !( ctx instanceof OfflineAudioContext ) );
 	}
 	static change( daw, store, obj ) {
-		const patId = daw.get.opened( "slices" );
+		const patId = daw.$getOpened( "slices" );
 		let bufUpdated;
 		let durUpdated;
 
@@ -108,8 +108,8 @@ class DAWCoreSlices {
 		}
 	}
 	static #onstartBlock( startedBuffers, daw, startedId, _blcs, when, off, dur ) {
-		const buf = daw.$getAudioSlices( daw.get.opened( "slices" ) );
-		const pat = daw.get.pattern( daw.get.opened( "slices" ) );
+		const buf = daw.$getAudioSlices( daw.$getOpened( "slices" ) );
+		const pat = daw.get.pattern( daw.$getOpened( "slices" ) );
 		const patSrc = daw.get.pattern( pat.source );
 
 		if ( buf && patSrc ) {

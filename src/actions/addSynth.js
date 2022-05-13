@@ -1,14 +1,14 @@
 "use strict";
 
-DAWCore.actions.set( "addSynth", get => {
-	const id = DAWCore.actionsCommon.getNextIdOf( get.synths() );
-	const name = DAWCore.actionsCommon.createUniqueName( "synths", "synth", get );
+DAWCore.actions.set( "addSynth", ( _get, daw ) => {
+	const id = DAWCore.actionsCommon.getNextIdOf( daw.get.synths() );
+	const name = DAWCore.actionsCommon.createUniqueName( "synths", "synth", daw.get );
 	const obj = {
 		synths: { [ id ]: DAWCore.json.synth( { name } ) },
 		synthOpened: id,
 	};
 
-	if ( get.opened( "keys" ) != null ) {
+	if ( daw.$getOpened( "keys" ) != null ) {
 		obj.patternKeysOpened = null;
 	}
 	return [

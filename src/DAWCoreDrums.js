@@ -2,8 +2,7 @@
 
 class DAWCoreDrums {
 	static change( daw, store, obj ) {
-		const get = daw.get;
-		const patId = get.opened( "drums" );
+		const patId = daw.$getOpened( "drums" );
 
 		if ( "bpm" in obj ) {
 			store.waDrums.scheduler.setBPM( obj.bpm );
@@ -13,7 +12,7 @@ class DAWCoreDrums {
 		}
 		if ( "drums" in obj ) {
 			if ( patId ) {
-				const drums = obj.drums[ get.pattern( patId ).drums ];
+				const drums = obj.drums[ daw.get.pattern( patId ).drums ];
 
 				if ( drums ) {
 					DAWCoreDrums.#changePattern( store, obj.patterns?.[ patId ], drums );

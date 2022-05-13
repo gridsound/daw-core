@@ -1,11 +1,11 @@
 "use strict";
 
-DAWCore.actions.set( "addPatternKeys", ( synthId, get ) => {
-	const pats = get.patterns();
-	const keysId = DAWCore.actionsCommon.getNextIdOf( get.keys() );
+DAWCore.actions.set( "addPatternKeys", ( synthId, _get, daw ) => {
+	const pats = daw.get.patterns();
+	const keysId = DAWCore.actionsCommon.getNextIdOf( daw.get.keys() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
-	const patName = DAWCore.actionsCommon.createUniqueName( "patterns", "keys", get );
-	const synName = get.synth( synthId ).name;
+	const patName = DAWCore.actionsCommon.createUniqueName( "patterns", "keys", daw.get );
+	const synName = daw.get.synth( synthId ).name;
 	const order = Object.values( pats ).reduce( ( max, pat ) => {
 		return pat.synth !== synthId
 			? max
@@ -19,12 +19,12 @@ DAWCore.actions.set( "addPatternKeys", ( synthId, get ) => {
 			name: patName,
 			keys: keysId,
 			synth: synthId,
-			duration: get.beatsPerMeasure(),
+			duration: daw.get.beatsPerMeasure(),
 		} },
 		patternKeysOpened: patId,
 	};
 
-	if ( synthId !== get.opened( "synth" ) ) {
+	if ( synthId !== daw.$getOpened( "synth" ) ) {
 		obj.synthOpened = synthId;
 	}
 	return [

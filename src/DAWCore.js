@@ -81,6 +81,12 @@ class DAWCore {
 	#loopMs = 1;
 	#frameId = null;
 
+	// .........................................................................
+	$getCompositions( saveMode ) { return this.cmps[ saveMode ]; }
+	$getComposition( saveMode, id ) { return this.cmps[ saveMode ].get( id ); }
+	$getSaveMode() { return this.#composition.cmp.options.saveMode; }
+	$getOpened( t ) { return this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ]; }
+	// .........................................................................
 	$getCtx() { return this.ctx; }
 	$getAudioEffects() { return this.#waEffects; }
 	$getAudioEffect( id ) { return this.#waEffects.getFx( id ); }
@@ -93,14 +99,10 @@ class DAWCore {
 	$getAudioSlices( id ) { return this.slicesBuffersGetBuffer( id ); }
 	$getAudioDestination() { return this.destinationGetOutput(); }
 	$getAudioBuffer( id ) { return this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
+	// .........................................................................
 
 	constructor() {
 		this.get = {
-			saveMode: () => this.#composition.cmp.options.saveMode,
-			compositions: saveMode => this.cmps[ saveMode ],
-			composition: ( saveMode, id ) => this.cmps[ saveMode ].get( id ),
-			opened: t => this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ],
-			// .................................................................
 			cmp: () => this.#composition.cmp,
 			id: () => this.#composition.cmp.id,
 			bpm: () => this.#composition.cmp.bpm,
@@ -221,7 +223,7 @@ class DAWCore {
 
 	// ..........................................................................
 	compositionExportJSON( saveMode, id ) {
-		return DAWCoreCompositionExportJSON.export( this.get.composition( saveMode, id ) );
+		return DAWCoreCompositionExportJSON.export( this.$getComposition( saveMode, id ) );
 	}
 	compositionExportWAV() {
 		return DAWCoreCompositionExportWAV.export( this );
@@ -419,7 +421,7 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = DAWCore.utils.deepFreeze( fn( ...args, this.get ) );
+			const ret = DAWCore.utils.deepFreeze( fn( ...args, this.get, this ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.historyStackChange( ...ret );
@@ -438,13 +440,13 @@ class DAWCore {
 
 	// ..........................................................................
 	openComposition( saveMode, id ) {
-		const cmp = this.get.composition( saveMode, id );
+		const cmp = this.$getComposition( saveMode, id );
 
 		if ( cmp ) {
 			if ( this.#composition.loaded ) {
 				this.closeComposition();
 			}
-			return ( this.get.composition( saveMode, id ) // 2.
+			return ( this.$getComposition( saveMode, id ) // 2.
 				? Promise.resolve( cmp )
 				: this.newComposition( { saveMode } ) )
 				.then( cmp => this.compositionLoad( cmp ) )
@@ -459,7 +461,7 @@ class DAWCore {
 	}
 	closeComposition() {
 		if ( this.#composition.loaded ) {
-			const cmp = this.cmps[ this.get.saveMode() ].get( this.get.id() );
+			const cmp = this.cmps[ this.$getSaveMode() ].get( this.get.id() );
 
 			this.stop();
 			this.keysClearLoop();
@@ -499,7 +501,7 @@ class DAWCore {
 			const cmp = this.get.cmp();
 			const id = this.get.id();
 
-			if ( this.get.saveMode() === "local" ) {
+			if ( this.$getSaveMode() === "local" ) {
 				this.cmps.local.set( id, cmp );
 				DAWCoreLocalStorage.put( id, cmp );
 				this.callCallback( "compositionSavedStatus", cmp, true );
@@ -591,7 +593,7 @@ class DAWCore {
 	getFocusedDuration() {
 		return this.#focusedStr === "composition"
 			? this.get.duration()
-			: this.get.patternDuration( this.get.opened( this.#focusedStr ) );
+			: this.get.patternDuration( this.$getOpened( this.#focusedStr ) );
 	}
 	focusSwitch() {
 		this.focusOn( this.#focusedStr === "composition" ? this.#focusedSwitch : "composition", "-f" );
@@ -601,7 +603,7 @@ class DAWCore {
 			case "keys":
 			case "drums":
 			case "slices":
-				if ( this.get.opened( win ) !== null ) {
+				if ( this.$getOpened( win ) !== null ) {
 					if ( this.#focusedStr !== win ) {
 						this.#focusOn( win, f );
 					}
@@ -722,7 +724,7 @@ DAWCore.controllersFx = {};
 1. The getter 'keys', 'drums' and 'slices' can't use their singular form like the others getters
    because 'key' and 'drum' are referring to the objects contained in ONE 'keys' or 'drums'.
    So `keys[0]` is a 'keys' not a 'key', a 'key' would be `keys[0][0]`.
-2. Why don't we use `cmp` instead of recalling .get.composition() ?
+2. Why don't we use `cmp` instead of recalling .$getComposition() ?
    Because the `cmp` could have been delete in .closeComposition()
    if the composition was a new untitled composition.
 3. The order between the mixer and the effects is important.
