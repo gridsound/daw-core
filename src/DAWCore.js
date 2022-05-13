@@ -320,7 +320,7 @@ class DAWCore {
 		return DAWCoreKeys.getCurrentTime( this.#keys );
 	}
 	keysSetCurrentTime( t ) {
-		DAWCoreKeys.setCurrentTime( t );
+		DAWCoreKeys.setCurrentTime( this, this.#keys, t );
 	}
 	keysSetBPM( bpm ) {
 		this.#keys.waKeys.scheduler.setBPM( bpm );
