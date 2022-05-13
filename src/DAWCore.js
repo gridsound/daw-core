@@ -79,6 +79,7 @@ class DAWCore {
 	#focusedSwitch = "keys";
 	#loopBind = this.#loop.bind( this );
 	#loopMs = 1;
+	#frameId = null;
 
 	constructor() {
 		this.get = {
@@ -689,8 +690,8 @@ class DAWCore {
 		this.#loop();
 	}
 	#stopLoop() {
-		clearTimeout( this._frameId );
-		cancelAnimationFrame( this._frameId );
+		clearTimeout( this.#frameId );
+		cancelAnimationFrame( this.#frameId );
 	}
 	#loop() {
 		const anData = this.destinationAnalyserFillData();
@@ -704,7 +705,7 @@ class DAWCore {
 
 			this.callCallback( "currentTime", beat, this.#focusedStr );
 		}
-		this._frameId = this.#loopMs < 20
+		this.#frameId = this.#loopMs < 20
 			? requestAnimationFrame( this.#loopBind )
 			: setTimeout( this.#loopBind, this.#loopMs );
 	}
