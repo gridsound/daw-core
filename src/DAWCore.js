@@ -88,6 +88,8 @@ class DAWCore {
 	$getOpened( t ) { return this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ]; }
 	// .........................................................................
 	$getCtx() { return this.ctx; }
+	$getAudioDestination() { return this.#dest.inputNode; }
+	$getAudioDestinationGain() { return this.#dest.gain; }
 	$getAudioEffects() { return this.#waEffects; }
 	$getAudioEffect( id ) { return this.#waEffects.getFx( id ); }
 	$getAudioSynths() { return this.#waSynths; }
@@ -97,7 +99,6 @@ class DAWCore {
 	$getAudioChanIn( id ) { return this.#waMixer.getChanInput( id ); }
 	$getAudioChanOut( id ) { return this.#waMixer.getChanOutput( id ); }
 	$getAudioSlices( id ) { return this.slicesBuffersGetBuffer( id ); }
-	$getAudioDestination() { return this.destinationGetOutput(); }
 	$getAudioBuffer( id ) { return this.buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
 	// .........................................................................
 	$getName() { return this.#composition.cmp.name; }
@@ -155,12 +156,6 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	destinationGetOutput() {
-		return this.#dest.inputNode;
-	}
-	destinationGetGain() {
-		return this.#dest.gain;
-	}
 	destinationSetGain( v ) {
 		DAWCoreDestination.setGain( this.#dest, v );
 	}
