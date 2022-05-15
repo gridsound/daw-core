@@ -242,7 +242,7 @@ class DAWCore {
 		return DAWCoreAddComposition.blob( this, blob, opt );
 	}
 	addCompositionByJSObject( cmp, opt ) {
-		return DAWCoreAddComposition.JSObject( this, blob, opt );
+		return DAWCoreAddComposition.JSObject( this, cmp, opt );
 	}
 
 	// ..........................................................................
