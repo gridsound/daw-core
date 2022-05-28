@@ -131,6 +131,15 @@ class DAWCore {
 	$getSynth( id ) { return this.#composition.cmp.synths[ id ]; }
 	$getTracks() { return this.#composition.cmp.tracks; }
 	$getTrack( id ) { return this.#composition.cmp.tracks[ id ]; }
+	$getItemByType( type, id ) { return this.$getListByType( type )[ id ]; }
+	$getListByType( type ) {
+		switch ( type ) {
+			case "keys": return this.$getKeys();
+			case "drums": return this.$getDrums();
+			case "slices": return this.$getSlices();
+			case "buffer": return this.$getBuffers();
+		}
+	}
 	// .........................................................................
 	$getPatternDuration( id ) {
 		const pat = this.$getPattern( id );
