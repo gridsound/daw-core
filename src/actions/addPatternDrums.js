@@ -4,7 +4,7 @@ DAWCore.actions.set( "addPatternDrums", daw => {
 	const pats = daw.$getPatterns();
 	const drumsId = DAWCore.actionsCommon.getNextIdOf( daw.$getDrums() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
-	const patName = DAWCore.actionsCommon.createUniqueName( daw, "patterns", "drums" );
+	const patName = DAWCore.actionsCommon.createUniqueName( daw.$getPatterns(), "drums" );
 	const order = Object.values( pats ).reduce( ( max, pat ) => {
 		return pat.type !== "drums"
 			? max

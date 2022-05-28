@@ -4,7 +4,7 @@ DAWCore.actions.set( "addPatternKeys", ( daw, synthId ) => {
 	const pats = daw.$getPatterns();
 	const keysId = DAWCore.actionsCommon.getNextIdOf( daw.$getKeys() );
 	const patId = DAWCore.actionsCommon.getNextIdOf( pats );
-	const patName = DAWCore.actionsCommon.createUniqueName( daw, "patterns", "keys" );
+	const patName = DAWCore.actionsCommon.createUniqueName( daw.$getPatterns(), "keys" );
 	const synName = daw.$getSynth( synthId ).name;
 	const order = Object.values( pats ).reduce( ( max, pat ) => {
 		return pat.synth !== synthId

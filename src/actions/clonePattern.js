@@ -7,7 +7,7 @@ DAWCore.actions.set( "clonePattern", ( daw, patId ) => {
 	const newPatId = DAWCore.actionsCommon.getNextIdOf( daw.$getPatterns() );
 	const obj = { patterns: { [ newPatId ]: newPat } };
 
-	newPat.name = DAWCore.actionsCommon.createUniqueName( daw, "patterns", pat.name );
+	newPat.name = DAWCore.actionsCommon.createUniqueName( daw.$getPatterns(), pat.name );
 	++newPat.order;
 	if ( type !== "buffer" ) {
 		const newCnt = DAWCore.utils.jsonCopy( daw.get[ type ]( pat[ type ] ) );
