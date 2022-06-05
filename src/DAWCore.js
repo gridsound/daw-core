@@ -639,10 +639,10 @@ class DAWCore {
 	}
 	setCurrentTime( t ) {
 		switch ( this.#focusedStr ) {
-			case "keys": this.keysSetCurrentTime( t );
-			case "drums": this.drumsSetCurrentTime( t );
-			case "slices": this.slicesSetCurrentTime( t );
-			case "composition": this.compositionSetCurrentTime( t );
+			case "keys": this.keysSetCurrentTime( t ); break;
+			case "drums": this.drumsSetCurrentTime( t ); break;
+			case "slices": this.slicesSetCurrentTime( t ); break;
+			case "composition": this.compositionSetCurrentTime( t ); break;
 		}
 	}
 	isPlaying() {
