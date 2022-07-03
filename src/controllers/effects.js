@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.effects = class {
+DAWCoreControllers.effects = class {
 	on = null;
 	data = {};
 	#effectsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
@@ -160,4 +160,4 @@ DAWCore.controllers.effects = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.effects );
+Object.freeze( DAWCoreControllers.effects );

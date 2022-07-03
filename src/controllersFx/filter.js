@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllersFx.filter = class {
+DAWCoreControllersFx.filter = class {
 	on = null;
 	data = Object.seal( DAWCoreJSON.effects.filter() );
 
@@ -42,4 +42,4 @@ DAWCore.controllersFx.filter = class {
 	}
 };
 
-Object.freeze( DAWCore.controllersFx.filter );
+Object.freeze( DAWCoreControllersFx.filter );

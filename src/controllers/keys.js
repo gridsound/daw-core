@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.keys = class {
+DAWCoreControllers.keys = class {
 	on = null;
 	data = {};
 	#keysCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
@@ -52,8 +52,8 @@ DAWCore.controllers.keys = class {
 		this.on.removeKey( id );
 	}
 	#updateKey( id, obj ) {
-		DAWCore.controllers.keys.#keyProps.forEach(
-			DAWCore.controllers.keys.#setProp.bind( null,
+		DAWCoreControllers.keys.#keyProps.forEach(
+			DAWCoreControllers.keys.#setProp.bind( null,
 				this.data[ id ],
 				this.on.changeKeyProp.bind( null, id ),
 				obj
@@ -70,4 +70,4 @@ DAWCore.controllers.keys = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.keys );
+Object.freeze( DAWCoreControllers.keys );

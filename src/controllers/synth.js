@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.synth = class {
+DAWCoreControllers.synth = class {
 	on = null;
 	data = Object.seal( {
 		name: "",
@@ -113,4 +113,4 @@ DAWCore.controllers.synth = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.synth );
+Object.freeze( DAWCoreControllers.synth );

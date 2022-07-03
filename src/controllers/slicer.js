@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.slicer = class {
+DAWCoreControllers.slicer = class {
 	data = {};
 	#dawcore = null;
 	#patternId = null;
@@ -110,4 +110,4 @@ DAWCore.controllers.slicer = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.slicer );
+Object.freeze( DAWCoreControllers.slicer );

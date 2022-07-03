@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.drumrows = class {
+DAWCoreControllers.drumrows = class {
 	on = null;
 	data = Object.freeze( {
 		patterns: {},
@@ -99,4 +99,4 @@ DAWCore.controllers.drumrows = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.drumrows );
+Object.freeze( DAWCoreControllers.drumrows );

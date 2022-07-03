@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.drums = class {
+DAWCoreControllers.drums = class {
 	on = null;
 	data = {};
 	#drumsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
@@ -58,4 +58,4 @@ DAWCore.controllers.drums = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.drums );
+Object.freeze( DAWCoreControllers.drums );

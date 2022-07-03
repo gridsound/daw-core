@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.blocks = class {
+DAWCoreControllers.blocks = class {
 	on = null;
 	data = {};
 	#blocksCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
@@ -59,4 +59,4 @@ DAWCore.controllers.blocks = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.blocks );
+Object.freeze( DAWCoreControllers.blocks );

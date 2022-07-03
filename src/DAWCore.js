@@ -725,8 +725,8 @@ const DAWCoreJSON = { effects: {} };
 DAWCore.utils = {};
 const DAWCoreActions = new Map();
 const DAWCoreActionsCommon = {};
-DAWCore.controllers = {};
-DAWCore.controllersFx = {};
+const DAWCoreControllers = {};
+const DAWCoreControllersFx = {};
 
 /*
 1. The getter 'keys', 'drums' and 'slices' can't use their singular form like the others getters

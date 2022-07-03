@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.controllers.mixer = class {
+DAWCoreControllers.mixer = class {
 	on = null;
 	data = Object.freeze( { channels: {} } );
 	#chansCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.channels,
@@ -66,4 +66,4 @@ DAWCore.controllers.mixer = class {
 	}
 };
 
-Object.freeze( DAWCore.controllers.mixer );
+Object.freeze( DAWCoreControllers.mixer );
