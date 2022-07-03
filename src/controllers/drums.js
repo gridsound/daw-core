@@ -3,13 +3,13 @@
 DAWCoreControllers.drums = class {
 	on = null;
 	data = {};
-	#drumsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+	#drumsCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data,
 		this.#addDrum.bind( this ),
 		this.#changeDrum.bind( this ),
 		this.#deleteDrum.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCore.utils.mapCallbacks( [
+		this.on = DAWCoreUtils.mapCallbacks( [
 			"addDrum",
 			"removeDrum",
 			"changeDrum",

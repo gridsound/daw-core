@@ -3,13 +3,13 @@
 DAWCoreControllers.mixer = class {
 	on = null;
 	data = Object.freeze( { channels: {} } );
-	#chansCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.channels,
+	#chansCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data.channels,
 		this.#addChannel.bind( this ),
 		this.#updateChannel.bind( this ),
 		this.#deleteChannel.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCore.utils.mapCallbacks( [
+		this.on = DAWCoreUtils.mapCallbacks( [
 			"addChannel",
 			"removeChannel",
 			"toggleChannel",

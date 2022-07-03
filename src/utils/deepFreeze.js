@@ -1,9 +1,9 @@
 "use strict";
 
-DAWCore.utils.deepFreeze = obj => {
-	if ( DAWCore.utils.isObject( obj ) ) {
+DAWCoreUtils.deepFreeze = obj => {
+	if ( DAWCoreUtils.isObject( obj ) ) {
 		Object.freeze( obj );
-		Object.values( obj ).forEach( DAWCore.utils.deepFreeze );
+		Object.values( obj ).forEach( DAWCoreUtils.deepFreeze );
 	}
 	return obj;
 };

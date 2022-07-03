@@ -3,13 +3,13 @@
 DAWCoreControllers.blocks = class {
 	on = null;
 	data = {};
-	#blocksCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+	#blocksCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data,
 		this.#addBlock.bind( this ),
 		this.#updateBlock.bind( this ),
 		this.#deleteBlock.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCore.utils.mapCallbacks( [
+		this.on = DAWCoreUtils.mapCallbacks( [
 			"addBlock",
 			"removeBlock",
 			"changeBlockProp",

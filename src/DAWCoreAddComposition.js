@@ -28,7 +28,7 @@ class DAWCoreAddComposition {
 		} );
 	}
 	static $JSObject( daw, cmp, opt ) {
-		const cpy = DAWCore.utils.jsonCopy( cmp );
+		const cpy = DAWCoreUtils.jsonCopy( cmp );
 
 		cpy.options = Object.freeze( {
 			saveMode: "local",
@@ -40,7 +40,7 @@ class DAWCoreAddComposition {
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {
-		const cmp = DAWCoreJSON.composition( daw.env, DAWCore.utils.uuid() );
+		const cmp = DAWCoreJSON.composition( daw.env, DAWCoreUtils.uuid() );
 
 		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}

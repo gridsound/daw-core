@@ -19,9 +19,9 @@ DAWCoreActions.set( "removeSynth", ( daw, synthId ) => {
 			} );
 		}
 	} );
-	DAWCore.utils.addIfNotEmpty( obj, "keys", keys );
-	DAWCore.utils.addIfNotEmpty( obj, "patterns", patterns );
-	DAWCore.utils.addIfNotEmpty( obj, "blocks", blocks );
+	DAWCoreUtils.addIfNotEmpty( obj, "keys", keys );
+	DAWCoreUtils.addIfNotEmpty( obj, "patterns", patterns );
+	DAWCoreUtils.addIfNotEmpty( obj, "blocks", blocks );
 	if ( synthId === daw.$getOpened( "synth" ) ) {
 		if ( !Object.keys( daw.$getSynths() ).some( k => {
 			if ( k !== synthId ) {

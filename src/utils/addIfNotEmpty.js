@@ -1,9 +1,9 @@
 "use strict";
 
-DAWCore.utils.addIfNotEmpty = ( obj, attr, valObj ) => {
-	if ( DAWCore.utils.isntEmpty( valObj ) ) {
+DAWCoreUtils.addIfNotEmpty = ( obj, attr, valObj ) => {
+	if ( DAWCoreUtils.isntEmpty( valObj ) ) {
 		if ( attr in obj ) {
-			DAWCore.utils.deepAssign( obj[ attr ], valObj );
+			DAWCoreUtils.deepAssign( obj[ attr ], valObj );
 		} else {
 			obj[ attr ] = valObj;
 		}

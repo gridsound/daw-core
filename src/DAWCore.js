@@ -1,5 +1,12 @@
 "use strict";
 
+const DAWCoreJSON = { effects: {} };
+const DAWCoreUtils = {};
+const DAWCoreActions = new Map();
+const DAWCoreActionsCommon = {};
+const DAWCoreControllers = {};
+const DAWCoreControllersFx = {};
+
 class DAWCore {
 	cb = {};
 	ctx = null;
@@ -429,12 +436,12 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = DAWCore.utils.deepFreeze( fn( this, ...args ) );
+			const ret = DAWCoreUtils.deepFreeze( fn( this, ...args ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.historyStackChange( ...ret );
 			} else if ( ret ) {
-				const undo = DAWCore.utils.composeUndo( this.$getCmp(), ret );
+				const undo = DAWCoreUtils.composeUndo( this.$getCmp(), ret );
 
 				this.compositionChange( ret, undo );
 			}
@@ -720,13 +727,6 @@ class DAWCore {
 			: setTimeout( this.#loopBind, this.#loopMs );
 	}
 }
-
-const DAWCoreJSON = { effects: {} };
-DAWCore.utils = {};
-const DAWCoreActions = new Map();
-const DAWCoreActionsCommon = {};
-const DAWCoreControllers = {};
-const DAWCoreControllersFx = {};
 
 /*
 1. The getter 'keys', 'drums' and 'slices' can't use their singular form like the others getters

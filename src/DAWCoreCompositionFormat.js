@@ -165,10 +165,10 @@ class DAWCoreCompositionFormat {
 		}, {} );
 		Object.values( cmp.keys ).forEach( keys => {
 			Object.values( keys ).forEach( k => {
-				k.pan = DAWCore.utils.castToNumber( k.pan, 0, -1, 1, 2 );
-				k.gain = DAWCore.utils.castToNumber( k.gain, .8, 0, 1, 2 );
-				k.lowpass = DAWCore.utils.castToNumber( k.lowpass, 1, 0, 1, 2 );
-				k.highpass = DAWCore.utils.castToNumber( k.highpass, 1, 0, 1, 2 );
+				k.pan = DAWCoreUtils.castToNumber( k.pan, 0, -1, 1, 2 );
+				k.gain = DAWCoreUtils.castToNumber( k.gain, .8, 0, 1, 2 );
+				k.lowpass = DAWCoreUtils.castToNumber( k.lowpass, 1, 0, 1, 2 );
+				k.highpass = DAWCoreUtils.castToNumber( k.highpass, 1, 0, 1, 2 );
 				k.selected = !!k.selected;
 				k.gainLFOAmp = k.lfoAmp ?? k.lfoGainAmp ?? k.gainLFOAmp ?? 1;
 				k.gainLFOSpeed = k.lfoSpeed ?? k.lfoGainSpeed ?? k.gainLFOSpeed ?? 1;

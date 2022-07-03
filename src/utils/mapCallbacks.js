@@ -1,9 +1,9 @@
 "use strict";
 
-DAWCore.utils.mapCallbacks = ( names, fns ) => {
+DAWCoreUtils.mapCallbacks = ( names, fns ) => {
 	const on = {};
 
-	names.forEach( n => on[ n ] = DAWCore.utils.noop );
+	names.forEach( n => on[ n ] = DAWCoreUtils.noop );
 	Object.assign( Object.seal( on ), fns );
 	return Object.freeze( on );
 };

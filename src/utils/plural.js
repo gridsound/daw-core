@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.utils.plural = ( nb, word, s ) => {
+DAWCoreUtils.plural = ( nb, word, s ) => {
 	const w = word[ word.length - 1 ] === "s"
 		? word
 		: `${ word }${ nb > 1 ? "s" : "" }`;

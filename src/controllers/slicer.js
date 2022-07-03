@@ -5,14 +5,14 @@ DAWCoreControllers.slicer = class {
 	#dawcore = null;
 	#patternId = null;
 	#slicesId = null;
-	#slicesCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+	#slicesCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data,
 		this.#addSlice.bind( this ),
 		this.#updateSlice.bind( this ),
 		this.#deleteSlice.bind( this )
 	);
 
 	constructor( fns ) {
-		this.on = DAWCore.utils.mapCallbacks( [
+		this.on = DAWCoreUtils.mapCallbacks( [
 			"disabled",
 			"timedivision",
 			"setBuffer",

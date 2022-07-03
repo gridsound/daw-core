@@ -1,7 +1,7 @@
 "use strict";
 
-DAWCore.utils.uniqueName = ( nameOri, arr ) => {
-	const name = DAWCore.utils.trim2( nameOri );
+DAWCoreUtils.uniqueName = ( nameOri, arr ) => {
+	const name = DAWCoreUtils.trim2( nameOri );
 
 	if ( arr.indexOf( name ) > -1 ) {
 		const name2 = /-\d+$/u.test( name )

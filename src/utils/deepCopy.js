@@ -1,9 +1,9 @@
 "use strict";
 
-DAWCore.utils.deepCopy = obj => {
-	if ( DAWCore.utils.isObject( obj ) ) {
+DAWCoreUtils.deepCopy = obj => {
+	if ( DAWCoreUtils.isObject( obj ) ) {
 		return Object.entries( obj ).reduce( ( cpy, [ k, v ] ) => {
-			cpy[ k ] = DAWCore.utils.deepCopy( v );
+			cpy[ k ] = DAWCoreUtils.deepCopy( v );
 			return cpy;
 		}, {} );
 	}

@@ -2,7 +2,7 @@
 
 class DAWCoreLocalStorage {
 	static $put( id, cmp ) {
-		const cpy = DAWCore.utils.jsonCopy( cmp );
+		const cpy = DAWCoreUtils.jsonCopy( cmp );
 
 		DAWCoreCompositionFormat.$out( cpy );
 		localStorage.setItem( id, JSON.stringify( cpy ) );

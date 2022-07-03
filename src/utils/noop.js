@@ -1,4 +1,4 @@
 "use strict";
 
-DAWCore.utils.noop = () => {};
-DAWCore.utils.isNoop = fn => !fn || fn === DAWCore.utils.noop;
+DAWCoreUtils.noop = () => {};
+DAWCoreUtils.isNoop = fn => !fn || fn === DAWCoreUtils.noop;

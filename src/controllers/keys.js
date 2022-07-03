@@ -3,7 +3,7 @@
 DAWCoreControllers.keys = class {
 	on = null;
 	data = {};
-	#keysCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data,
+	#keysCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data,
 		this.#addKey.bind( this ),
 		this.#updateKey.bind( this ),
 		this.#deleteKey.bind( this ) );
@@ -23,7 +23,7 @@ DAWCoreControllers.keys = class {
 	] );
 
 	constructor( fns ) {
-		this.on = DAWCore.utils.mapCallbacks( [
+		this.on = DAWCoreUtils.mapCallbacks( [
 			"addKey",
 			"removeKey",
 			"changeKeyProp",
