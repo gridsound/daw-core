@@ -69,6 +69,18 @@ class DAWCoreSlices {
 		store.waSched.setCurrentOffsetBeat( t );
 		daw.callCallback( "currentTime", DAWCoreSlices.getCurrentTime( store ), "slices" );
 	}
+	static setLoop( store, a, b ) {
+		store.loopA = a;
+		store.loopB = b;
+		store.looping = true;
+		store.waSched.setLoopBeat( a, b );
+	}
+	static clearLoop( daw, store ) {
+		store.loopA =
+		store.loopB = null;
+		store.looping = false;
+		store.waSched.setLoopBeat( 0, store.duration || daw.$getBeatsPerMeasure() );
+	}
 	static play( store ) {
 		if ( !store.waSched.started ) {
 			const a = store.looping ? store.loopA : 0;
@@ -97,7 +109,9 @@ class DAWCoreSlices {
 	static #changeDuration( store, dur ) {
 		store.duration = dur;
 		store.waSched.change( { 1: { duration: dur } } );
-		store.waSched.setLoopBeat( 0, dur );
+		if ( !store.looping ) {
+			store.waSched.setLoopBeat( 0, dur );
+		}
 	}
 	static #bufferUpdated( store ) {
 		DAWCoreSlices.#restart( store.waSched );

@@ -383,6 +383,12 @@ class DAWCore {
 	slicesSetCurrentTime( t ) {
 		DAWCoreSlices.setCurrentTime( this, this.#slices, t );
 	}
+	slicesSetLoop( a, b ) {
+		DAWCoreSlices.setLoop( this.#slices, a, b );
+	}
+	slicesClearLoop() {
+		DAWCoreSlices.clearLoop( this, this.#slices );
+	}
 	slicesPlay() {
 		DAWCoreSlices.play( this.#slices );
 	}
