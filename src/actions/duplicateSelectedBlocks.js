@@ -2,7 +2,7 @@
 
 DAWCore.actions.set( "duplicateSelectedBlocks", ( daw, whenIncr ) => {
 	const sel = Object.entries( daw.$getBlocks() ).filter( kv => kv[ 1 ].selected );
-	const newId = +DAWCore.actionsCommon.getNextIdOf( daw.$getBlocks() );
+	const newId = +DAWCoreActionsCommon.getNextIdOf( daw.$getBlocks() );
 	const blocks = sel.reduce( ( obj, [ id, blc ], i ) => {
 		const cpy = { ...blc };
 
@@ -12,7 +12,7 @@ DAWCore.actions.set( "duplicateSelectedBlocks", ( daw, whenIncr ) => {
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
+	const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
 
 	if ( dur !== daw.$getDuration() ) {
 		obj.duration = dur;

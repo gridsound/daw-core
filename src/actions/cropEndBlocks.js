@@ -9,7 +9,7 @@ DAWCore.actions.set( "cropEndBlocks", ( daw, blcIds, whenIncr ) => {
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCore.actionsCommon.calcNewDuration( daw, obj );
+	const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
 
 	if ( dur !== daw.$getDuration() ) {
 		obj.duration = dur;

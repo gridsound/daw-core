@@ -46,7 +46,7 @@ DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 		const found = Object.entries( daw.$getPatterns() )
 			.find( ( [ k, v ] ) => k !== patId && v.type === type && v.synth === pat.synth );
 
-		obj[ DAWCore.actionsCommon.patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;
+		obj[ DAWCoreActionsCommon.patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;
 	}
 	return [
 		obj,

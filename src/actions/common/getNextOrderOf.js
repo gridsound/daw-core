@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actionsCommon.getNextOrderOf = obj => {
+DAWCoreActionsCommon.getNextOrderOf = obj => {
 	return Object.values( obj )
 		.reduce( ( max, item ) => Math.max( max, item.order ), -1 ) + 1;
 };

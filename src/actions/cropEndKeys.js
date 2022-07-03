@@ -17,9 +17,9 @@ DAWCore.actions.set( "cropEndKeys", ( daw, patId, keyIds, durIncr ) => {
 		return obj;
 	}, {} );
 	const obj = { keys: { [ pat.keys ]: keys } };
-	const duration = DAWCore.actionsCommon.calcNewKeysDuration( daw, pat.keys, keys );
+	const duration = DAWCoreActionsCommon.calcNewKeysDuration( daw, pat.keys, keys );
 
-	DAWCore.actionsCommon.updatePatternDuration( daw, obj, patId, duration );
+	DAWCoreActionsCommon.updatePatternDuration( daw, obj, patId, duration );
 	return [
 		obj,
 		[ "keys", "cropEndKeys", pat.name, keyIds.length ],

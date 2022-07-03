@@ -85,7 +85,7 @@ class DAWCore {
 	$getCompositions( saveMode ) { return this.cmps[ saveMode ]; }
 	$getComposition( saveMode, id ) { return this.cmps[ saveMode ].get( id ); }
 	$getSaveMode() { return this.#composition.cmp.options.saveMode; }
-	$getOpened( t ) { return this.#composition.cmp[ DAWCore.actionsCommon.patternOpenedByType[ t ] ]; }
+	$getOpened( t ) { return this.#composition.cmp[ DAWCoreActionsCommon.patternOpenedByType[ t ] ]; }
 	// .........................................................................
 	$getCtx() { return this.ctx; }
 	$getAudioDestination() { return this.#dest.inputNode; }
@@ -540,8 +540,8 @@ class DAWCore {
 		this.buffersLoadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
 			if ( newBuffers.length || knownBuffers.length ) {
 				const cmpBuffers = this.$getBuffers();
-				const bufNextId = +DAWCore.actionsCommon.getNextIdOf( cmpBuffers );
-				const patNextId = +DAWCore.actionsCommon.getNextIdOf( this.$getPatterns() );
+				const bufNextId = +DAWCoreActionsCommon.getNextIdOf( cmpBuffers );
+				const patNextId = +DAWCoreActionsCommon.getNextIdOf( this.$getPatterns() );
 				const buffersLoaded = {};
 
 				if ( newBuffers.length ) {
@@ -724,7 +724,7 @@ class DAWCore {
 const DAWCoreJSON = { effects: {} };
 DAWCore.utils = {};
 DAWCore.actions = new Map();
-DAWCore.actionsCommon = {};
+const DAWCoreActionsCommon = {};
 DAWCore.controllers = {};
 DAWCore.controllersFx = {};
 

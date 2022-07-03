@@ -2,8 +2,8 @@
 
 DAWCore.actions.set( "addChannel", daw => {
 	const channels = daw.$getChannels();
-	const id = DAWCore.actionsCommon.getNextIdOf( channels );
-	const order = DAWCore.actionsCommon.getNextOrderOf( channels );
+	const id = DAWCoreActionsCommon.getNextIdOf( channels );
+	const order = DAWCoreActionsCommon.getNextOrderOf( channels );
 	const name = `chan ${ id }`;
 	const chanObj = DAWCoreJSON.channel( { order, name } );
 
