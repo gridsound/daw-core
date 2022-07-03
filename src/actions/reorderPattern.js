@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "reorderPattern", ( daw, patId, patterns ) => {
+DAWCoreActions.set( "reorderPattern", ( daw, patId, patterns ) => {
 	const pat = daw.$getPattern( patId );
 
 	return [

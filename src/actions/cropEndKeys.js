@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "cropEndKeys", ( daw, patId, keyIds, durIncr ) => {
+DAWCoreActions.set( "cropEndKeys", ( daw, patId, keyIds, durIncr ) => {
 	const pat = daw.$getPattern( patId );
 	const patKeys = daw.$getKeys( pat.keys );
 	const keys = keyIds.reduce( ( obj, id ) => {

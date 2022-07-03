@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addPatternSlices", daw => {
+DAWCoreActions.set( "addPatternSlices", daw => {
 	const pats = daw.$getPatterns();
 	const slicesId = DAWCoreActionsCommon.getNextIdOf( daw.$getSlices() );
 	const patId = DAWCoreActionsCommon.getNextIdOf( pats );

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addPatternKeys", ( daw, synthId ) => {
+DAWCoreActions.set( "addPatternKeys", ( daw, synthId ) => {
 	const pats = daw.$getPatterns();
 	const keysId = DAWCoreActionsCommon.getNextIdOf( daw.$getKeys() );
 	const patId = DAWCoreActionsCommon.getNextIdOf( pats );

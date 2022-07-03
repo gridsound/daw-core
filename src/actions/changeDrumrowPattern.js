@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changeDrumrowPattern", ( daw, rowId, pattern ) => {
+DAWCoreActions.set( "changeDrumrowPattern", ( daw, rowId, pattern ) => {
 	const row = daw.$getDrumrow( rowId );
 	const pat = daw.$getPattern( pattern );
 

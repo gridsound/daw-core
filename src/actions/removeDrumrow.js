@@ -1,15 +1,15 @@
 "use strict";
 
-DAWCore.actions.set( "removeDrumrow", ( daw, rowId ) => {
+DAWCoreActions.set( "removeDrumrow", ( daw, rowId ) => {
 	const patName = DAWCoreActionsCommon.getDrumrowName( daw, rowId );
 
 	return [
-		DAWCore.actions._removeDrumrow( {}, rowId, daw ),
+		DAWCoreActions._removeDrumrow( {}, rowId, daw ),
 		[ "drumrows", "removeDrumrow", patName ],
 	];
 } );
 
-DAWCore.actions._removeDrumrow = ( obj, rowId, daw ) => {
+DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 	const bPM = daw.$getBeatsPerMeasure();
 	const blocksEnt = Object.entries( daw.$getBlocks() );
 	const patternsEnt = Object.entries( daw.$getPatterns() );

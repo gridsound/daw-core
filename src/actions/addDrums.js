@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCore.actions.set( "addDrums", ( daw, patternId, rowId, whenFrom, whenTo ) => {
-	return DAWCore.actions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, daw );
+DAWCoreActions.set( "addDrums", ( daw, patternId, rowId, whenFrom, whenTo ) => {
+	return DAWCoreActions._addDrums( "drum", true, patternId, rowId, whenFrom, whenTo, daw );
 } );
 
-DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, daw ) => {
+DAWCoreActions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, daw ) => {
 	const stepDur = 1 / daw.$getStepsPerBeat();
 	const whenA = Math.round( Math.min( whenFrom, whenTo ) / stepDur );
 	const whenB = Math.round( Math.max( whenFrom, whenTo ) / stepDur );

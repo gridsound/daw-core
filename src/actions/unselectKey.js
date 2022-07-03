@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "unselectKey", ( daw, patId, keyId ) => {
+DAWCoreActions.set( "unselectKey", ( daw, patId, keyId ) => {
 	const pat = daw.$getPattern( patId );
 
 	return [

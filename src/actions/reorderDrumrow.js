@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "reorderDrumrow", ( daw, rowId, drumrows ) => {
+DAWCoreActions.set( "reorderDrumrow", ( daw, rowId, drumrows ) => {
 	const patName = DAWCoreActionsCommon.getDrumrowName( daw, rowId );
 
 	return [

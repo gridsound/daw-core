@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removeEffect", ( daw, id ) => {
+DAWCoreActions.set( "removeEffect", ( daw, id ) => {
 	const fx = daw.$getEffect( id );
 
 	return [

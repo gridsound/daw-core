@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removePattern", ( daw, patId ) => {
+DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const obj = { patterns: { [ patId ]: undefined } };
@@ -15,7 +15,7 @@ DAWCore.actions.set( "removePattern", ( daw, patId ) => {
 		Object.entries( daw.$getDrumrows() ).forEach( kv => {
 			if ( kv[ 1 ].pattern === patId ) {
 				DAWCore.utils.deepAssign( obj,
-					DAWCore.actions._removeDrumrow( obj, kv[ 0 ], daw ) );
+					DAWCoreActions._removeDrumrow( obj, kv[ 0 ], daw ) );
 			}
 		} );
 		Object.entries( daw.$getPatterns() ).forEach( kv => {

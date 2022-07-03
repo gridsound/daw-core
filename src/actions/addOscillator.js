@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addOscillator", ( daw, synthId ) => {
+DAWCoreActions.set( "addOscillator", ( daw, synthId ) => {
 	const oscs = daw.$getSynth( synthId ).oscillators;
 	const id = DAWCoreActionsCommon.getNextIdOf( oscs );
 	const osc = DAWCoreJSON.oscillator();

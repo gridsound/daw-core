@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changeLoop", ( _daw, a, b ) => {
+DAWCoreActions.set( "changeLoop", ( _daw, a, b ) => {
 	return Number.isFinite( a )
 		? [
 			{ loopA: a, loopB: b },

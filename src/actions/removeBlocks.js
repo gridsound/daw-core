@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "removeBlocks", ( daw, blcIds ) => {
+DAWCoreActions.set( "removeBlocks", ( daw, blcIds ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = undefined;
 		return obj;

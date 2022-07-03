@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "toggleEffect", ( daw, fxId ) => {
+DAWCoreActions.set( "toggleEffect", ( daw, fxId ) => {
 	const fx = daw.$getEffect( fxId );
 	const toggle = !fx.toggle;
 

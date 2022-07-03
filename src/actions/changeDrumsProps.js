@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changeDrumsProps", ( daw, patId, prop, arr ) => {
+DAWCoreActions.set( "changeDrumsProps", ( daw, patId, prop, arr ) => {
 	const pat = daw.$getPattern( patId );
 	const rowId = daw.$getDrums( pat.drums )[ arr[ 0 ][ 0 ] ].row;
 	const patRowName = DAWCoreActionsCommon.getDrumrowName( daw, rowId );

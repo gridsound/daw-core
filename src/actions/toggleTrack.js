@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "toggleTrack", ( daw, id ) => {
+DAWCoreActions.set( "toggleTrack", ( daw, id ) => {
 	const track = daw.$getTrack( id );
 	const toggle = !track.toggle;
 

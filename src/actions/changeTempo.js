@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
+DAWCoreActions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 	const bpmChanged = bpm !== daw.$getBPM();
 	const signChanged =
 			bPM !== daw.$getBeatsPerMeasure() ||

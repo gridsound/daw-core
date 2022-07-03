@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addDrumrow", ( daw, pattern ) => {
+DAWCoreActions.set( "addDrumrow", ( daw, pattern ) => {
 	const pat = daw.$getPattern( pattern );
 
 	if ( pat.type === "buffer" ) {

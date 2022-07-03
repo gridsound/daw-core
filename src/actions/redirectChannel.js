@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "redirectChannel", ( daw, id, dest ) => {
+DAWCoreActions.set( "redirectChannel", ( daw, id, dest ) => {
 	if ( id !== "main" && id !== dest ) {
 		return [
 			{ channels: { [ id ]: { dest } } },

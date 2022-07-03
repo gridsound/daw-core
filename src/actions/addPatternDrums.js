@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "addPatternDrums", daw => {
+DAWCoreActions.set( "addPatternDrums", daw => {
 	const pats = daw.$getPatterns();
 	const drumsId = DAWCoreActionsCommon.getNextIdOf( daw.$getDrums() );
 	const patId = DAWCoreActionsCommon.getNextIdOf( pats );

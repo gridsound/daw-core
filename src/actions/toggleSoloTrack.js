@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.actions.set( "toggleSoloTrack", ( daw, id ) => {
+DAWCoreActions.set( "toggleSoloTrack", ( daw, id ) => {
 	const [ someOn, tracks ] = DAWCoreActionsCommon.toggleSolo( id, daw.$getTracks() );
 
 	return [
