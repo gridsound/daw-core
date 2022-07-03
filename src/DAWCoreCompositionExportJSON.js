@@ -14,10 +14,10 @@ class DAWCoreCompositionExportJSON {
 		drumrows: 3,
 	} );
 
-	static export( cmp ) {
+	static $export( cmp ) {
 		if ( cmp ) {
 			const cpy = DAWCore.utils.jsonCopy( cmp );
-			const cpyFormated = DAWCoreCompositionFormat.out( DAWCoreCompositionFormat.in( cpy ) );
+			const cpyFormated = DAWCoreCompositionFormat.$out( DAWCoreCompositionFormat.$in( cpy ) );
 
 			return {
 				name: `${ cmp.name || "untitled" }.gs`,

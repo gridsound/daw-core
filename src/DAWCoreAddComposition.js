@@ -1,10 +1,10 @@
 "use strict";
 
 class DAWCoreAddComposition {
-	static LS( daw ) {
-		return Promise.all( DAWCoreLocalStorage.getAll().map( cmp => DAWCoreAddComposition.JSObject( daw, cmp ) ) );
+	static $LS( daw ) {
+		return Promise.all( DAWCoreLocalStorage.$getAll().map( cmp => DAWCoreAddComposition.$JSObject( daw, cmp ) ) );
 	}
-	static URL( daw, url, opt ) {
+	static $URL( daw, url, opt ) {
 		return fetch( url )
 			.then( res => {
 				if ( !res.ok ) {
@@ -13,11 +13,11 @@ class DAWCoreAddComposition {
 				return res.json();
 			} )
 			.then(
-				cmp => DAWCoreAddComposition.JSObject( daw, cmp, opt ),
+				cmp => DAWCoreAddComposition.$JSObject( daw, cmp, opt ),
 				e => { throw e; }
 			);
 	}
-	static blob( daw, blob, opt ) {
+	static $blob( daw, blob, opt ) {
 		return new Promise( ( res, rej ) => {
 			const rd = new FileReader();
 
@@ -27,7 +27,7 @@ class DAWCoreAddComposition {
 			rd.readAsText( blob );
 		} );
 	}
-	static JSObject( daw, cmp, opt ) {
+	static $JSObject( daw, cmp, opt ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
 
 		cpy.options = Object.freeze( {
@@ -39,10 +39,10 @@ class DAWCoreAddComposition {
 		daw.callCallback( "compositionSavedStatus", cpy, true );
 		return Promise.resolve( cpy );
 	}
-	static new( daw, opt ) {
+	static $new( daw, opt ) {
 		const cmp = DAWCore.json.composition( daw.env, DAWCore.utils.uuid() );
 
-		return DAWCoreAddComposition.JSObject( daw, cmp, opt );
+		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}
 
 	// .........................................................................
@@ -51,7 +51,7 @@ class DAWCoreAddComposition {
 			try {
 				const cmp = JSON.parse( json );
 
-				DAWCoreAddComposition.JSObject( cmp, opt ).then( res, rej );
+				DAWCoreAddComposition.$JSObject( cmp, opt ).then( res, rej );
 			} catch ( e ) {
 				rej( e );
 			}

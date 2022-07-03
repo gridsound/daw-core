@@ -1,19 +1,19 @@
 "use strict";
 
 class DAWCoreLocalStorage {
-	static put( id, cmp ) {
+	static $put( id, cmp ) {
 		const cpy = DAWCore.utils.jsonCopy( cmp );
 
-		DAWCoreCompositionFormat.out( cpy );
+		DAWCoreCompositionFormat.$out( cpy );
 		localStorage.setItem( id, JSON.stringify( cpy ) );
 	}
-	static delete( id ) {
+	static $delete( id ) {
 		localStorage.removeItem( id );
 	}
-	static has( id ) {
+	static $has( id ) {
 		return id in localStorage;
 	}
-	static get( id ) {
+	static $get( id ) {
 		try {
 			const cmp = JSON.parse( localStorage.getItem( id ) );
 
@@ -22,10 +22,10 @@ class DAWCoreLocalStorage {
 			return null;
 		}
 	}
-	static getAll() {
+	static $getAll() {
 		const cmps = Object.keys( localStorage )
 			.reduce( ( arr, id ) => {
-				const cmp = DAWCoreLocalStorage.get( id );
+				const cmp = DAWCoreLocalStorage.$get( id );
 
 				cmp && arr.push( cmp );
 				return arr;

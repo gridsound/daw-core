@@ -152,13 +152,13 @@ class DAWCore {
 	}
 
 	constructor() {
-		DAWCoreComposition.init( this, this.#composition );
+		DAWCoreComposition.$init( this, this.#composition );
 		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
 		this.#waDrumrows.getChannelInput = this.$getAudioChanIn.bind( this );
 		this.#waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
 		this.#waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
 		this.#drums.waDrums.setDrumrows( this.#waDrumrows );
-		DAWCoreSlices.init( this, this.#slices );
+		DAWCoreSlices.$init( this, this.#slices );
 		this.setLoopRate( 60 );
 		this.resetAudioContext();
 		this.destinationSetGain( this.env.def_appGain );
@@ -166,32 +166,32 @@ class DAWCore {
 
 	// ..........................................................................
 	destinationSetGain( v ) {
-		DAWCoreDestination.setGain( this.#dest, v );
+		DAWCoreDestination.$setGain( this.#dest, v );
 	}
 	destinationAnalyserFillData() {
-		return DAWCoreDestination.analyserFillData( this.#dest );
+		return DAWCoreDestination.$analyserFillData( this.#dest );
 	}
 
 	// ..........................................................................
 	historyEmpty() {
-		DAWCoreHistory.empty( this, this.#hist );
+		DAWCoreHistory.$empty( this, this.#hist );
 	}
 	historyStackChange( redo, msg ) {
-		DAWCoreHistory.stackChange( this, this.#hist, redo, msg );
+		DAWCoreHistory.$stackChange( this, this.#hist, redo, msg );
 	}
 	historyGetCurrentAction() {
-		return DAWCoreHistory.getCurrentAction( this.#hist );
+		return DAWCoreHistory.$getCurrentAction( this.#hist );
 	}
 	historyUndo() {
-		return DAWCoreHistory.undo( this, this.#hist );
+		return DAWCoreHistory.$undo( this, this.#hist );
 	}
 	historyRedo() {
-		return DAWCoreHistory.redo( this, this.#hist );
+		return DAWCoreHistory.$redo( this, this.#hist );
 	}
 
 	// ..........................................................................
 	buffersChange( obj, prevObj ) {
-		DAWCoreBuffers.change( this, this.#buffers, obj, prevObj );
+		DAWCoreBuffers.$change( this, this.#buffers, obj, prevObj );
 	}
 	buffersEmpty() {
 		this.#buffers.clear();
@@ -200,13 +200,13 @@ class DAWCore {
 		return this.#buffers.size;
 	}
 	buffersGetBuffer( buf ) {
-		return DAWCoreBuffers.getBuffer( this.#buffers, buf );
+		return DAWCoreBuffers.$getBuffer( this.#buffers, buf );
 	}
 	buffersSetBuffer( objBuf ) {
-		return DAWCoreBuffers.setBuffer( this, this.#buffers, objBuf );
+		return DAWCoreBuffers.$setBuffer( this, this.#buffers, objBuf );
 	}
 	buffersLoadFiles( files ) {
-		return DAWCoreBuffers.loadFiles( this, this.#buffers, files );
+		return DAWCoreBuffers.$loadFiles( this, this.#buffers, files );
 	}
 
 	// ..........................................................................
@@ -217,21 +217,21 @@ class DAWCore {
 		return this.#slicesBuffers.get( patId );
 	}
 	slicesBuffersChange( obj ) {
-		DAWCoreSlicesBuffers.change( this, this.#slicesBuffers, obj );
+		DAWCoreSlicesBuffers.$change( this, this.#slicesBuffers, obj );
 	}
 	slicesBuffersBuffersLoaded( buffersLoaded ) {
-		DAWCoreSlicesBuffers.buffersLoaded( this, this.#slicesBuffers, buffersLoaded );
+		DAWCoreSlicesBuffers.$buffersLoaded( this, this.#slicesBuffers, buffersLoaded );
 	}
 
 	// ..........................................................................
 	compositionExportJSON( saveMode, id ) {
-		return DAWCoreCompositionExportJSON.export( this.$getComposition( saveMode, id ) );
+		return DAWCoreCompositionExportJSON.$export( this.$getComposition( saveMode, id ) );
 	}
 	compositionExportWAV() {
-		return DAWCoreCompositionExportWAV.export( this );
+		return DAWCoreCompositionExportWAV.$export( this );
 	}
 	compositionAbortWAV() {
-		DAWCoreCompositionExportWAV.abort( this );
+		DAWCoreCompositionExportWAV.$abort( this );
 	}
 	compositionNeedSave() {
 		return !this.#composition.saved;
@@ -239,51 +239,51 @@ class DAWCore {
 
 	// ..........................................................................
 	newComposition( opt ) {
-		return DAWCoreAddComposition.new( this, opt );
+		return DAWCoreAddComposition.$new( this, opt );
 	}
 	importCompositionsFromLocalStorage() {
-		return DAWCoreAddComposition.LS( this );
+		return DAWCoreAddComposition.$LS( this );
 	}
 	addCompositionByURL( url, opt ) {
-		return DAWCoreAddComposition.URL( this, url, opt );
+		return DAWCoreAddComposition.$URL( this, url, opt );
 	}
 	addCompositionByBlob( blob, opt ) {
-		return DAWCoreAddComposition.blob( this, blob, opt );
+		return DAWCoreAddComposition.$blob( this, blob, opt );
 	}
 	addCompositionByJSObject( cmp, opt ) {
-		return DAWCoreAddComposition.JSObject( this, cmp, opt );
+		return DAWCoreAddComposition.$JSObject( this, cmp, opt );
 	}
 
 	// ..........................................................................
 	compositionLoad( cmpOri ) {
-		return DAWCoreComposition.load( this, this.#composition, cmpOri );
+		return DAWCoreComposition.$load( this, this.#composition, cmpOri );
 	}
 	compositionUnload() {
-		DAWCoreComposition.unload( this, this.#composition );
+		DAWCoreComposition.$unload( this, this.#composition );
 	}
 	compositionSave() {
-		return DAWCoreComposition.save( this, this.#composition );
+		return DAWCoreComposition.$save( this, this.#composition );
 	}
 	compositionUpdateChanAudioData() {
-		DAWCoreComposition.updateChanAudioData( this );
+		DAWCoreComposition.$updateChanAudioData( this );
 	}
 	compositionGetCurrentTime() {
-		return DAWCoreComposition.getCurrentTime( this.#composition );
+		return DAWCoreComposition.$getCurrentTime( this.#composition );
 	}
 	compositionSetCurrentTime( t ) {
-		DAWCoreComposition.setCurrentTime( this, this.#composition, t );
+		DAWCoreComposition.$setCurrentTime( this, this.#composition, t );
 	}
 	compositionPlay() {
-		DAWCoreComposition.play( this, this.#composition );
+		DAWCoreComposition.$play( this, this.#composition );
 	}
 	compositionPause() {
-		DAWCoreComposition.pause( this.#composition );
+		DAWCoreComposition.$pause( this.#composition );
 	}
 	compositionStop() {
-		DAWCoreComposition.stop( this, this.#composition );
+		DAWCoreComposition.$stop( this, this.#composition );
 	}
 	compositionChange( obj, prevObj ) {
-		return DAWCoreComposition.change( this, this.#composition, obj, prevObj );
+		return DAWCoreComposition.$change( this, this.#composition, obj, prevObj );
 	}
 
 	// ..........................................................................
@@ -297,116 +297,116 @@ class DAWCore {
 		this.#waSynths.get( id ).change( obj );
 	}
 	liveKeydown( midi ) {
-		DAWCoreKeys.liveKeydown( this.#keys, midi );
+		DAWCoreKeys.$liveKeydown( this.#keys, midi );
 	}
 	liveKeyup( midi ) {
-		DAWCoreKeys.liveKeyup( this.#keys, midi );
+		DAWCoreKeys.$liveKeyup( this.#keys, midi );
 	}
 	liveDrumrowChange( rowId, prop, val ) {
-		DAWCoreDrums.liveDrumrowChange( this, rowId, prop, val );
+		DAWCoreDrums.$liveDrumrowChange( this, rowId, prop, val );
 	}
 	liveDrumStart( rowId ) {
-		DAWCoreDrums.liveDrumStart( this, rowId );
+		DAWCoreDrums.$liveDrumStart( this, rowId );
 	}
 	liveDrumStop( rowId ) {
-		DAWCoreDrums.liveDrumStop( this, rowId );
+		DAWCoreDrums.$liveDrumStop( this, rowId );
 	}
 
 	// ..........................................................................
 	keysChange( patObj, keysObj ) {
-		DAWCoreKeys.change( this.#keys, patObj, keysObj );
+		DAWCoreKeys.$change( this.#keys, patObj, keysObj );
 	}
 	keysSetSynth( id ) {
-		DAWCoreKeys.setSynth( this, this.#keys, id );
+		DAWCoreKeys.$setSynth( this, this.#keys, id );
 	}
 	keysOpenPattern( id ) {
-		DAWCoreKeys.openPattern( this, this.#keys, id );
+		DAWCoreKeys.$openPattern( this, this.#keys, id );
 	}
 	keysGetCurrentTime() {
-		return DAWCoreKeys.getCurrentTime( this.#keys );
+		return DAWCoreKeys.$getCurrentTime( this.#keys );
 	}
 	keysSetCurrentTime( t ) {
-		DAWCoreKeys.setCurrentTime( this, this.#keys, t );
+		DAWCoreKeys.$setCurrentTime( this, this.#keys, t );
 	}
 	keysSetBPM( bpm ) {
 		this.#keys.waKeys.scheduler.setBPM( bpm );
 	}
 	keysSetLoop( a, b ) {
-		DAWCoreKeys.setLoop( this.#keys, a, b );
+		DAWCoreKeys.$setLoop( this.#keys, a, b );
 	}
 	keysClearLoop() {
-		DAWCoreKeys.clearLoop( this, this.#keys );
+		DAWCoreKeys.$clearLoop( this, this.#keys );
 	}
 	keysPlay() {
-		DAWCoreKeys.play( this.#keys );
+		DAWCoreKeys.$play( this.#keys );
 	}
 	keysPause() {
-		DAWCoreKeys.pause( this.#keys );
+		DAWCoreKeys.$pause( this.#keys );
 	}
 	keysStop() {
-		DAWCoreKeys.stop( this, this.#keys );
+		DAWCoreKeys.$stop( this, this.#keys );
 	}
 
 	// ..........................................................................
 	drumsChange( objChange ) {
-		DAWCoreDrums.change( this, this.#drums, objChange );
+		DAWCoreDrums.$change( this, this.#drums, objChange );
 	}
 	drumsGetCurrentTime() {
-		return DAWCoreDrums.getCurrentTime( this.#drums );
+		return DAWCoreDrums.$getCurrentTime( this.#drums );
 	}
 	drumsSetCurrentTime( t ) {
-		DAWCoreDrums.setCurrentTime( this, this.#drums, t );
+		DAWCoreDrums.$setCurrentTime( this, this.#drums, t );
 	}
 	drumsSetLoop( a, b ) {
-		DAWCoreDrums.setLoop( this.#drums, a, b );
+		DAWCoreDrums.$setLoop( this.#drums, a, b );
 	}
 	drumsClearLoop() {
-		DAWCoreDrums.clearLoop( this, this.#drums );
+		DAWCoreDrums.$clearLoop( this, this.#drums );
 	}
 	drumsPlay() {
-		DAWCoreDrums.play( this.#drums );
+		DAWCoreDrums.$play( this.#drums );
 	}
 	drumsPause() {
-		DAWCoreDrums.pause( this.#drums );
+		DAWCoreDrums.$pause( this.#drums );
 	}
 	drumsStop() {
-		DAWCoreDrums.stop( this, this.#drums );
+		DAWCoreDrums.$stop( this, this.#drums );
 	}
 
 	// ..........................................................................
 	slicesChange( obj ) {
-		DAWCoreSlices.change( this, this.#slices, obj );
+		DAWCoreSlices.$change( this, this.#slices, obj );
 	}
 	slicesGetCurrentTime() {
-		return DAWCoreSlices.getCurrentTime( this.#slices );
+		return DAWCoreSlices.$getCurrentTime( this.#slices );
 	}
 	slicesSetCurrentTime( t ) {
-		DAWCoreSlices.setCurrentTime( this, this.#slices, t );
+		DAWCoreSlices.$setCurrentTime( this, this.#slices, t );
 	}
 	slicesSetLoop( a, b ) {
-		DAWCoreSlices.setLoop( this.#slices, a, b );
+		DAWCoreSlices.$setLoop( this.#slices, a, b );
 	}
 	slicesClearLoop() {
-		DAWCoreSlices.clearLoop( this, this.#slices );
+		DAWCoreSlices.$clearLoop( this, this.#slices );
 	}
 	slicesPlay() {
-		DAWCoreSlices.play( this.#slices );
+		DAWCoreSlices.$play( this.#slices );
 	}
 	slicesPause() {
-		DAWCoreSlices.pause( this.#slices );
+		DAWCoreSlices.$pause( this.#slices );
 	}
 	slicesStop() {
-		DAWCoreSlices.stop( this, this.#slices );
+		DAWCoreSlices.$stop( this, this.#slices );
 	}
 
 	// ..........................................................................
 	setContext( ctx ) {
 		this.ctx = ctx;
 		this.#drums.waDrums.setContext( ctx );
-		DAWCoreSlices.setContext( this.#slices, ctx );
+		DAWCoreSlices.$setContext( this.#slices, ctx );
 		this.#keys.waKeys.setContext( ctx );
 		this.#waDrumrows.setContext( ctx );
-		DAWCoreDestination.setContext( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
+		DAWCoreDestination.$setContext( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#waMixer.setContext( ctx ); // 3.
 		this.#waMixer.connect( this.$getAudioDestination() );
@@ -497,7 +497,7 @@ class DAWCore {
 
 			this.cmps[ saveMode ].delete( cmp.id );
 			if ( saveMode === "local" ) {
-				DAWCoreLocalStorage.delete( cmp.id );
+				DAWCoreLocalStorage.$delete( cmp.id );
 			}
 			this.callCallback( "compositionDeleted", cmp );
 		}
@@ -511,7 +511,7 @@ class DAWCore {
 
 			if ( this.$getSaveMode() === "local" ) {
 				this.cmps.local.set( id, cmp );
-				DAWCoreLocalStorage.put( id, cmp );
+				DAWCoreLocalStorage.$put( id, cmp );
 				this.callCallback( "compositionSavedStatus", cmp, true );
 			} else {
 				this.#composition.saved = false;

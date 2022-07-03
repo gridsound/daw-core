@@ -1,13 +1,13 @@
 "use strict";
 
 class DAWCoreBuffers {
-	static change( daw, buffers, obj, prevObj ) {
+	static $change( daw, buffers, obj, prevObj ) {
 		if ( "buffers" in obj ) {
 			Object.entries( obj.buffers ).forEach( ( [ id, buf ] ) => {
 				if ( !buf ) {
 					DAWCoreBuffers.#removeBuffer( buffers, prevObj.buffers[ id ] );
-				} else if ( !DAWCoreBuffers.getBuffer( buffers, buf ) ) {
-					const pr = DAWCoreBuffers.setBuffer( daw, buffers, buf );
+				} else if ( !DAWCoreBuffers.$getBuffer( buffers, buf ) ) {
+					const pr = DAWCoreBuffers.$setBuffer( daw, buffers, buf );
 
 					if ( buf.url ) {
 						pr.then( buf => daw.callCallback( "buffersLoaded", { [ id ]: buf } ) );
@@ -16,10 +16,10 @@ class DAWCoreBuffers {
 			} );
 		}
 	}
-	static getBuffer( buffers, buf ) {
+	static $getBuffer( buffers, buf ) {
 		return buffers.get( buf.hash || buf.url );
 	}
-	static setBuffer( daw, buffers, objBuf ) {
+	static $setBuffer( daw, buffers, objBuf ) {
 		const buf = { ...objBuf };
 		const url = buf.url;
 		const key = buf.hash || url;
@@ -36,7 +36,7 @@ class DAWCoreBuffers {
 					return buf;
 				} );
 	}
-	static loadFiles( daw, buffers, files ) {
+	static $loadFiles( daw, buffers, files ) {
 		return new Promise( res => {
 			const newBuffers = [];
 			const knownBuffers = [];
@@ -53,7 +53,7 @@ class DAWCoreBuffers {
 							name: file.name,
 							duration: +buffer.duration.toFixed( 4 ),
 						};
-						const old = DAWCoreBuffers.getBuffer( buffers, buf );
+						const old = DAWCoreBuffers.$getBuffer( buffers, buf );
 
 						if ( !old ) {
 							newBuffers.push( buf );
@@ -68,8 +68,8 @@ class DAWCoreBuffers {
 					} )
 					.finally( () => {
 						if ( ++nbDone === files.length ) {
-							newBuffers.forEach( DAWCoreBuffers.setBuffer.bind( null, daw, buffers ) );
-							knownBuffers.forEach( DAWCoreBuffers.setBuffer.bind( null, daw, buffers ) );
+							newBuffers.forEach( DAWCoreBuffers.$setBuffer.bind( null, daw, buffers ) );
+							knownBuffers.forEach( DAWCoreBuffers.$setBuffer.bind( null, daw, buffers ) );
 							res( { newBuffers, knownBuffers, failedBuffers } );
 						}
 					} );

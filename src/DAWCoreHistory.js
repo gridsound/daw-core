@@ -1,13 +1,13 @@
 "use strict";
 
 class DAWCoreHistory {
-	static empty( daw, store ) {
+	static $empty( daw, store ) {
 		while ( store.stack.length ) {
 			daw.callCallback( "historyDeleteAction", store.stack.pop() );
 		}
 		store.stackInd = 0;
 	}
-	static stackChange( daw, store, redo, msg ) {
+	static $stackChange( daw, store, redo, msg ) {
 		const stack = store.stack;
 		const undo = DAWCore.utils.composeUndo( daw.$getCmp(), redo );
 		const act = { redo, undo };
@@ -22,15 +22,15 @@ class DAWCoreHistory {
 		act.index = stack.push( act );
 		DAWCoreHistory.#change( daw, Object.freeze( act ), "redo", "historyAddAction" );
 	}
-	static getCurrentAction( store ) {
+	static $getCurrentAction( store ) {
 		return store.stack[ store.stackInd - 1 ] || null;
 	}
-	static undo( daw, store ) {
+	static $undo( daw, store ) {
 		return store.stackInd > 0
 			? DAWCoreHistory.#change( daw, store.stack[ --store.stackInd ], "undo", "historyUndo" )
 			: false;
 	}
-	static redo( daw, store ) {
+	static $redo( daw, store ) {
 		return store.stackInd < store.stack.length
 			? DAWCoreHistory.#change( daw, store.stack[ store.stackInd++ ], "redo", "historyRedo" )
 			: false;
@@ -47,7 +47,7 @@ class DAWCoreHistory {
 	}
 	static #nameAction( act, msg ) {
 		const [ part, actionName, ...args ] = msg || [];
-		const fn = DAWCoreHistoryTexts.getFn( part, actionName );
+		const fn = DAWCoreHistoryTexts.$getFn( part, actionName );
 		const [ i, t ] = fn ? fn( ...args ) : [ "close", "undefined" ];
 
 		if ( !fn ) {

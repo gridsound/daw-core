@@ -1,16 +1,16 @@
 "use strict";
 
 class DAWCoreSlices {
-	static init( daw, store ) {
+	static $init( daw, store ) {
 		store.waSched.ondatastart = DAWCoreSlices.#onstartBlock.bind( null, store.startedBuffers, daw );
 		store.waSched.ondatastop = DAWCoreSlices.#onstopBlock.bind( null, store.startedBuffers );
 		store.waSched.change( { 1: { when: 0, offset: 0, duration: 4 } } );
 	}
-	static setContext( store, ctx ) {
+	static $setContext( store, ctx ) {
 		store.waSched.currentTime = () => ctx.currentTime;
 		store.waSched.enableStreaming( !( ctx instanceof OfflineAudioContext ) );
 	}
-	static change( daw, store, obj ) {
+	static $change( daw, store, obj ) {
 		const patId = daw.$getOpened( "slices" );
 		let bufUpdated;
 		let durUpdated;
@@ -62,46 +62,46 @@ class DAWCoreSlices {
 	}
 
 	// .........................................................................
-	static getCurrentTime( store ) {
+	static $getCurrentTime( store ) {
 		return store.waSched.getCurrentOffsetBeat();
 	}
-	static setCurrentTime( daw, store, t ) {
+	static $setCurrentTime( daw, store, t ) {
 		store.waSched.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreSlices.getCurrentTime( store ), "slices" );
+		daw.callCallback( "currentTime", DAWCoreSlices.$getCurrentTime( store ), "slices" );
 	}
-	static setLoop( store, a, b ) {
+	static $setLoop( store, a, b ) {
 		store.loopA = a;
 		store.loopB = b;
 		store.looping = true;
 		store.waSched.setLoopBeat( a, b );
 	}
-	static clearLoop( daw, store ) {
+	static $clearLoop( daw, store ) {
 		store.loopA =
 		store.loopB = null;
 		store.looping = false;
 		store.waSched.setLoopBeat( 0, store.duration || daw.$getBeatsPerMeasure() );
 	}
-	static play( store ) {
+	static $play( store ) {
 		if ( !store.waSched.started ) {
 			const a = store.looping ? store.loopA : 0;
 			const b = store.looping ? store.loopB : store.duration;
 
 			store.playing = true;
 			store.waSched.setLoopBeat( a, b );
-			store.waSched.startBeat( 0, DAWCoreSlices.getCurrentTime( store ) );
+			store.waSched.startBeat( 0, DAWCoreSlices.$getCurrentTime( store ) );
 		}
 	}
-	static pause( store ) {
+	static $pause( store ) {
 		store.playing = false;
 		store.waSched.stop();
 	}
-	static stop( daw, store ) {
+	static $stop( daw, store ) {
 		store.playing = false;
 		if ( store.waSched.started ) {
-			DAWCoreSlices.pause( store );
-			DAWCoreSlices.setCurrentTime( daw, store, store.loopA || 0 );
+			DAWCoreSlices.$pause( store );
+			DAWCoreSlices.$setCurrentTime( daw, store, store.loopA || 0 );
 		} else {
-			DAWCoreSlices.setCurrentTime( daw, store, 0 );
+			DAWCoreSlices.$setCurrentTime( daw, store, 0 );
 		}
 	}
 

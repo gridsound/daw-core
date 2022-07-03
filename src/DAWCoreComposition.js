@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreComposition {
-	static init( daw, store ) {
+	static $init( daw, store ) {
 		store.waSched.delayStopCallback = 4;
 		store.waSched.currentTime = () => daw.ctx.currentTime;
 		store.waSched.ondatastart = DAWCoreComposition.#onstartBlock.bind( null, daw, store );
@@ -9,12 +9,12 @@ class DAWCoreComposition {
 	}
 
 	// .........................................................................
-	static load( daw, store, cmpOri ) {
+	static $load( daw, store, cmpOri ) {
 		return new Promise( ( res, rej ) => {
 			const cmp = DAWCore.utils.jsonCopy( cmpOri );
 
-			if ( DAWCoreCompositionFormat.in( cmp ) ) {
-				DAWCoreComposition.unload( daw, store );
+			if ( DAWCoreCompositionFormat.$in( cmp ) ) {
+				DAWCoreComposition.$unload( daw, store );
 				res( cmp );
 			} else {
 				rej();
@@ -34,7 +34,7 @@ class DAWCoreComposition {
 						}
 					} ) );
 			} );
-			DAWCoreComposition.change( daw, store, cmp, {
+			DAWCoreComposition.$change( daw, store, cmp, {
 				keys: {},
 				drums: {},
 				synths: {},
@@ -49,12 +49,12 @@ class DAWCoreComposition {
 				daw.slicesBuffersBuffersLoaded( bufLoaded );
 			} );
 			store.actionSavedOn = null;
-			store.saved = cmp.options.saveMode === "cloud" || DAWCoreLocalStorage.has( cmp.id ) || !cmp.savedAt;
+			store.saved = cmp.options.saveMode === "cloud" || DAWCoreLocalStorage.$has( cmp.id ) || !cmp.savedAt;
 			daw.callCallback( "compositionSavedStatus", cmp, store.saved );
 			return cmp;
 		} );
 	}
-	static unload( daw, store ) {
+	static $unload( daw, store ) {
 		if ( store.loaded ) {
 			const d = store.waSched.data;
 
@@ -71,7 +71,7 @@ class DAWCoreComposition {
 			store.cmp = null;
 		}
 	}
-	static save( daw, store ) {
+	static $save( daw, store ) {
 		if ( !store.saved ) {
 			store.saved = true;
 			store.actionSavedOn = daw.historyGetCurrentAction();
@@ -79,7 +79,7 @@ class DAWCoreComposition {
 			return true;
 		}
 	}
-	static updateChanAudioData( daw ) {
+	static $updateChanAudioData( daw ) {
 		const mix = daw.$getAudioMixer();
 		const fn = daw.callCallback.bind( daw, "channelAnalyserFilled" );
 
@@ -90,36 +90,36 @@ class DAWCoreComposition {
 	}
 
 	// .........................................................................
-	static getCurrentTime( store ) {
+	static $getCurrentTime( store ) {
 		return store.waSched.getCurrentOffsetBeat();
 	}
-	static setCurrentTime( daw, store, t ) {
+	static $setCurrentTime( daw, store, t ) {
 		store.waSched.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreComposition.getCurrentTime( store ), "composition" );
+		daw.callCallback( "currentTime", DAWCoreComposition.$getCurrentTime( store ), "composition" );
 	}
-	static play( daw, store ) {
+	static $play( daw, store ) {
 		if ( !store.playing ) {
 			store.playing = true;
-			DAWCoreComposition.#start( daw, store, DAWCoreComposition.getCurrentTime( store ) );
+			DAWCoreComposition.#start( daw, store, DAWCoreComposition.$getCurrentTime( store ) );
 		}
 	}
-	static pause( store ) {
+	static $pause( store ) {
 		if ( store.playing ) {
 			store.playing = false;
 			store.waSched.stop();
 		}
 	}
-	static stop( daw, store ) {
+	static $stop( daw, store ) {
 		if ( store.playing ) {
-			DAWCoreComposition.pause( store );
-			DAWCoreComposition.setCurrentTime( daw, store, store.cmp.loopA || 0 );
+			DAWCoreComposition.$pause( store );
+			DAWCoreComposition.$setCurrentTime( daw, store, store.cmp.loopA || 0 );
 		} else {
-			DAWCoreComposition.setCurrentTime( daw, store, 0 );
+			DAWCoreComposition.$setCurrentTime( daw, store, 0 );
 		}
 	}
 
 	// .........................................................................
-	static change( daw, store, obj, prevObj ) {
+	static $change( daw, store, obj, prevObj ) {
 		const cmp = store.cmp;
 		const act = daw.historyGetCurrentAction();
 		const saved = act === store.actionSavedOn && !!cmp.savedAt;

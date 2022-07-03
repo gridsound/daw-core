@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreSlicesBuffers {
-	static change( daw, slicesBuffers, obj ) {
+	static $change( daw, slicesBuffers, obj ) {
 		if ( "patterns" in obj || "slices" in obj  ) {
 			const ids = new Set();
 
@@ -35,7 +35,7 @@ class DAWCoreSlicesBuffers {
 			} );
 		}
 	}
-	static buffersLoaded( daw, slicesBuffers, buffersLoaded ) {
+	static $buffersLoaded( daw, slicesBuffers, buffersLoaded ) {
 		const bufToSli = Object.entries( daw.$getPatterns() ).reduce( ( map, [ id, pat ] ) => {
 			if ( pat.type === "slices" ) {
 				const bufId = daw.$getPattern( pat.source ).buffer;

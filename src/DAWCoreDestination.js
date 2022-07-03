@@ -1,13 +1,13 @@
 "use strict";
 
 class DAWCoreDestination {
-	static setGain( store, v ) {
+	static $setGain( store, v ) {
 		store.gain = v;
 		if ( store.ctx instanceof AudioContext ) {
 			store.gainNode.gain.value = v * v;
 		}
 	}
-	static setContext( store, analyserEnable, analyserFFTsize, ctx ) {
+	static $setContext( store, analyserEnable, analyserFFTsize, ctx ) {
 		DAWCoreDestination.#empty( store );
 		store.ctx = ctx;
 		store.gainNode = ctx.createGain();
@@ -17,12 +17,12 @@ class DAWCoreDestination {
 			.connect( ctx.destination );
 		if ( ctx instanceof AudioContext ) {
 			DAWCoreDestination.#toggleAnalyser( store, analyserFFTsize, analyserEnable );
-			DAWCoreDestination.setGain( store, store.gain );
+			DAWCoreDestination.$setGain( store, store.gain );
 		} else {
 			DAWCoreDestination.#toggleAnalyser( store, analyserFFTsize, false );
 		}
 	}
-	static analyserFillData( store ) {
+	static $analyserFillData( store ) {
 		if ( store.analyserNode ) {
 			store.analyserNode.getByteFrequencyData( store.analyserData );
 			return store.analyserData;

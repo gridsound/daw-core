@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreHistoryTexts {
-	static getFn( part, action ) {
+	static $getFn( part, action ) {
 		return DAWCoreHistoryTexts.#texts.get( part )?.[ action ];
 	}
 

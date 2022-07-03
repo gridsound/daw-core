@@ -1,7 +1,7 @@
 "use strict";
 
 class DAWCoreDrums {
-	static change( daw, store, obj ) {
+	static $change( daw, store, obj ) {
 		const patId = daw.$getOpened( "drums" );
 
 		if ( "bpm" in obj ) {
@@ -25,57 +25,57 @@ class DAWCoreDrums {
 			DAWCoreDrums.#changePattern( store, pat );
 		}
 	}
-	static getCurrentTime( store ) {
+	static $getCurrentTime( store ) {
 		return store.waDrums.scheduler.getCurrentOffsetBeat();
 	}
-	static setCurrentTime( daw, store, t ) {
+	static $setCurrentTime( daw, store, t ) {
 		store.waDrums.scheduler.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreDrums.getCurrentTime( store ), "drums" );
+		daw.callCallback( "currentTime", DAWCoreDrums.$getCurrentTime( store ), "drums" );
 	}
-	static setLoop( store, a, b ) {
+	static $setLoop( store, a, b ) {
 		store.loopA = a;
 		store.loopB = b;
 		store.looping = true;
 		store.waDrums.scheduler.setLoopBeat( a, b );
 	}
-	static clearLoop( daw, store ) {
+	static $clearLoop( daw, store ) {
 		store.loopA =
 		store.loopB = null;
 		store.looping = false;
 		store.waDrums.scheduler.setLoopBeat( 0, store.duration || daw.$getBeatsPerMeasure() );
 	}
-	static liveDrumrowChange( daw, rowId, prop, val ) {
+	static $liveDrumrowChange( daw, rowId, prop, val ) {
 		daw.$getAudioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
 	}
-	static liveDrumStart( daw, rowId ) {
+	static $liveDrumStart( daw, rowId ) {
 		daw.$getAudioDrumrows().liveDrumStart( rowId );
 	}
-	static liveDrumStop( daw, rowId ) {
+	static $liveDrumStop( daw, rowId ) {
 		daw.$getAudioDrumrows().liveDrumStop( rowId );
 		daw.callCallback( "onstopdrumrow", rowId );
 	}
-	static play( store ) {
+	static $play( store ) {
 		if ( !store.playing ) {
 			const a = store.looping ? store.loopA : 0;
 			const b = store.looping ? store.loopB : store.duration;
 
 			store.playing = true;
 			store.waDrums.scheduler.setLoopBeat( a, b );
-			store.waDrums.scheduler.startBeat( 0, DAWCoreDrums.getCurrentTime( store ) );
+			store.waDrums.scheduler.startBeat( 0, DAWCoreDrums.$getCurrentTime( store ) );
 		}
 	}
-	static pause( store ) {
+	static $pause( store ) {
 		if ( store.playing ) {
 			store.playing = false;
 			store.waDrums.stop();
 		}
 	}
-	static stop( daw, store ) {
+	static $stop( daw, store ) {
 		if ( store.playing ) {
-			DAWCoreDrums.pause( store );
-			DAWCoreDrums.setCurrentTime( daw, store, store.loopA || 0 );
+			DAWCoreDrums.$pause( store );
+			DAWCoreDrums.$setCurrentTime( daw, store, store.loopA || 0 );
 		} else {
-			DAWCoreDrums.setCurrentTime( daw, store, 0 );
+			DAWCoreDrums.$setCurrentTime( daw, store, 0 );
 		}
 	}
 
