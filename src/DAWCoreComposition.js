@@ -26,7 +26,7 @@ class DAWCoreComposition {
 			store.cmp = cmp;
 			store.loaded = true;
 			Object.entries( cmp.buffers ).forEach( kv => {
-				proms.push( daw.buffersSetBuffer( kv[ 1 ] )
+				proms.push( daw.$buffersSetBuffer( kv[ 1 ] )
 					.then( buf => {
 						if ( buf.buffer ) {
 							bufLoaded[ kv[ 0 ] ] = buf;
@@ -46,7 +46,7 @@ class DAWCoreComposition {
 				patterns: {},
 			} );
 			Promise.allSettled( proms ).then( () => {
-				daw.slicesBuffersBuffersLoaded( bufLoaded );
+				daw.$slicesBuffersBuffersLoaded( bufLoaded );
 			} );
 			store.actionSavedOn = null;
 			store.saved = cmp.options.saveMode === "cloud" || DAWCoreLocalStorage.$has( cmp.id ) || !cmp.savedAt;
@@ -64,7 +64,7 @@ class DAWCoreComposition {
 			store.waSched.stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			daw.$getAudioSynths().clear();
-			daw.slicesBuffersClear();
+			daw.$slicesBuffersClear();
 			daw.$getAudioDrumrows().clear();
 			store.saved = true;
 			daw.callCallback( "compositionSavedStatus", store.cmp, true );
@@ -74,7 +74,7 @@ class DAWCoreComposition {
 	static $save( daw, store ) {
 		if ( !store.saved ) {
 			store.saved = true;
-			store.actionSavedOn = daw.historyGetCurrentAction();
+			store.actionSavedOn = daw.$historyGetCurrentAction();
 			store.cmp.savedAt = Math.floor( Date.now() / 1000 );
 			return true;
 		}
@@ -121,16 +121,16 @@ class DAWCoreComposition {
 	// .........................................................................
 	static $change( daw, store, obj, prevObj ) {
 		const cmp = store.cmp;
-		const act = daw.historyGetCurrentAction();
+		const act = daw.$historyGetCurrentAction();
 		const saved = act === store.actionSavedOn && !!cmp.savedAt;
 
 		DAWCoreUtils.diffAssign( cmp, obj );
 		daw.$getAudioMixer().change( obj );
-		daw.buffersChange( obj, prevObj );
-		daw.slicesBuffersChange( obj );
-		daw.slicesChange( obj );
+		daw.$buffersChange( obj, prevObj );
+		daw.$slicesBuffersChange( obj );
+		daw.$slicesChange( obj );
 		daw.$getAudioDrumrows().change( obj );
-		daw.drumsChange( obj );
+		daw.$drumsChange( obj );
 		daw.$getAudioEffects().change( obj );
 		DAWCoreComposition.#changeFns.forEach( ( fn, attr ) => {
 			if ( attr in obj || attr.some?.( attr => attr in obj ) ) {
@@ -255,7 +255,7 @@ class DAWCoreComposition {
 		[ "bpm", ( daw, store, obj ) => {
 			store.waSched.setBPM( obj.bpm );
 			daw.$getAudioSynths().forEach( syn => syn.setBPM( obj.bpm ) );
-			daw.keysSetBPM( obj.bpm );
+			daw.$keysSetBPM( obj.bpm );
 		} ],
 		[ "blocks", ( _daw, store, obj ) => {
 			store.waSched.change( obj.blocks );
@@ -303,7 +303,7 @@ class DAWCoreComposition {
 						DAWCoreComposition.#redirectPatternBuffer( daw, store, patId, patObj.dest );
 					}
 					if ( patId === store.cmp.patternKeysOpened ) {
-						daw.keysChange( patObj );
+						daw.$keysChange( patObj );
 					}
 				}
 			} );
@@ -317,7 +317,7 @@ class DAWCoreComposition {
 					if ( patObj.keys === keysId ) {
 						DAWCoreComposition.#assignPatternChange( store, patId, keysObj );
 						if ( patId === patOpened ) {
-							daw.keysChange( obj.patterns && obj.patterns[ patId ], keysObj );
+							daw.$keysChange( obj.patterns && obj.patterns[ patId ], keysObj );
 						}
 						return true;
 					}
@@ -325,10 +325,10 @@ class DAWCoreComposition {
 			} );
 		} ],
 		[ "patternKeysOpened", ( daw, _store, obj ) => {
-			daw.keysOpenPattern( obj.patternKeysOpened );
+			daw.$keysOpenPattern( obj.patternKeysOpened );
 		} ],
 		[ "synthOpened", ( daw, _store, obj ) => {
-			daw.keysSetSynth( obj.synthOpened );
+			daw.$keysSetSynth( obj.synthOpened );
 		} ],
 	] );
 }

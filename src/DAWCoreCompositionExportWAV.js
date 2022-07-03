@@ -5,7 +5,7 @@ class DAWCoreCompositionExportWAV {
 
 	static $abort( daw ) {
 		if ( daw.ctx instanceof OfflineAudioContext ) {
-			daw.compositionStop();
+			daw.$compositionStop();
 		}
 	}
 	static $export( daw ) {
@@ -18,12 +18,12 @@ class DAWCoreCompositionExportWAV {
 			URL.revokeObjectURL( DAWCoreCompositionExportWAV.#URLToRevoke );
 		}
 		daw.setContext( ctxOff );
-		daw.compositionPlay();
+		daw.$compositionPlay();
 		return ctxOff.startRendering().then( buffer => {
 			const pcm = gswaEncodeWAV.encode( buffer, { float32: true } );
 			const url = URL.createObjectURL( new Blob( [ pcm ] ) );
 
-			daw.compositionStop();
+			daw.$compositionStop();
 			daw.setContext( ctx );
 			DAWCoreCompositionExportWAV.#URLToRevoke = url;
 			return {

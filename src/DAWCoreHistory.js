@@ -42,7 +42,7 @@ class DAWCoreHistory {
 		const prevObj = undoredo === "undo" ? act.redo : act.undo;
 
 		daw.callCallback( cbStr, act );
-		daw.compositionChange( obj, prevObj );
+		daw.$compositionChange( obj, prevObj );
 		return obj;
 	}
 	static #nameAction( act, msg ) {
