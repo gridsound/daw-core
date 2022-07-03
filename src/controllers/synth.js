@@ -4,8 +4,8 @@ DAWCore.controllers.synth = class {
 	on = null;
 	data = Object.seal( {
 		name: "",
-		env: Object.seal( DAWCore.json.env() ),
-		lfo: Object.seal( DAWCore.json.lfo() ),
+		env: Object.seal( DAWCoreJSON.env() ),
+		lfo: Object.seal( DAWCoreJSON.lfo() ),
 		oscillators: {},
 	} );
 	#oscsCrud = DAWCore.utils.createUpdateDelete.bind( null, this.data.oscillators,

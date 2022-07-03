@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.drum = obj => Object.assign( Object.seal( {
+DAWCoreJSON.drum = obj => Object.assign( Object.seal( {
 	when: 0,
 	row: null,
 	detune: 0,

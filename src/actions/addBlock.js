@@ -2,7 +2,7 @@
 
 DAWCore.actions.set( "addBlock", ( daw, pattern, when, track ) => {
 	const nId = DAWCore.actionsCommon.getNextIdOf( daw.$getBlocks() );
-	const objBlc = DAWCore.json.block( {
+	const objBlc = DAWCoreJSON.block( {
 		pattern,
 		when,
 		track,

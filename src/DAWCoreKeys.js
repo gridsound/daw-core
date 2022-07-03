@@ -66,7 +66,7 @@ class DAWCoreKeys {
 	static $liveKeydown( store, midi ) {
 		if ( !( midi in store.keysStartedLive ) ) {
 			store.keysStartedLive[ midi ] = store.synth.startKey(
-				[ [ null, DAWCore.json.key( { key: midi } ) ] ],
+				[ [ null, DAWCoreJSON.key( { key: midi } ) ] ],
 				store.waKeys.scheduler.currentTime(), 0, Infinity );
 		}
 	}

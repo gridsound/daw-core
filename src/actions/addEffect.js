@@ -9,7 +9,7 @@ DAWCore.actions.set( "addEffect", ( daw, dest, type ) => {
 		type,
 		toggle: true,
 		order: DAWCore.actionsCommon.getNextOrderOf( destFxs ),
-		data: DAWCore.json.effects[ type ](),
+		data: DAWCoreJSON.effects[ type ](),
 	};
 
 	return [

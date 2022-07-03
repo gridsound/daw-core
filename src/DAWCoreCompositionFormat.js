@@ -91,7 +91,7 @@ class DAWCoreCompositionFormat {
 		// channels
 		// ..........................................
 		if ( !cmp.channels ) {
-			cmp.channels = DAWCore.json.channels();
+			cmp.channels = DAWCoreJSON.channels();
 			Object.values( cmp.synths ).forEach( syn => syn.dest = "main" );
 		}
 		if ( ( !cmp.savedAt || cmp.savedAt < 1574550000 ) && cmp.channels.main.gain > .8 ) { // Sun Nov 24 2019 00:00:00 GMT+0100
@@ -136,12 +136,12 @@ class DAWCoreCompositionFormat {
 		// synths
 		// ..........................................
 		if ( !cmp.synths ) {
-			cmp.synths = { 0: DAWCore.json.synth() };
+			cmp.synths = { 0: DAWCoreJSON.synth() };
 		}
 		Object.values( cmp.synths ).forEach( syn => {
 			delete syn.envelopes;
-			syn.env = syn.env || DAWCore.json.env();
-			syn.lfo = syn.lfo || DAWCore.json.lfo();
+			syn.env = syn.env || DAWCoreJSON.env();
+			syn.lfo = syn.lfo || DAWCoreJSON.lfo();
 			delete syn.env.substain;
 			Object.values( syn.oscillators ).forEach( osc => {
 				osc.detune = Math.min( Math.max( -24, Math.round( osc.detune ) ), 24 );

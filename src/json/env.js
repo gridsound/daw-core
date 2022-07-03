@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.env = obj => Object.assign( Object.seal( {
+DAWCoreJSON.env = obj => Object.assign( Object.seal( {
 	toggle: true,
 	attack: .04,
 	hold: 0,

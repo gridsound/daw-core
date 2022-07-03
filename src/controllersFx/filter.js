@@ -2,7 +2,7 @@
 
 DAWCore.controllersFx.filter = class {
 	on = null;
-	data = Object.seal( DAWCore.json.effects.filter() );
+	data = Object.seal( DAWCoreJSON.effects.filter() );
 
 	constructor( fns ) {
 		this.on = DAWCore.utils.mapCallbacks( [

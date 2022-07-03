@@ -5,7 +5,7 @@ DAWCore.actions.set( "addChannel", daw => {
 	const id = DAWCore.actionsCommon.getNextIdOf( channels );
 	const order = DAWCore.actionsCommon.getNextOrderOf( channels );
 	const name = `chan ${ id }`;
-	const chanObj = DAWCore.json.channel( { order, name } );
+	const chanObj = DAWCoreJSON.channel( { order, name } );
 
 	return [
 		{ channels: { [ id ]: chanObj } },

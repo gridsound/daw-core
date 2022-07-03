@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.oscillator = obj => Object.assign( Object.seal( {
+DAWCoreJSON.oscillator = obj => Object.assign( Object.seal( {
 	order: 0,
 	type: "sine",
 	pan: 0,

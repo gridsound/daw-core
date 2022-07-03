@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.block = obj => Object.assign( Object.seal( {
+DAWCoreJSON.block = obj => Object.assign( Object.seal( {
 	pattern: null,
 	duration: 0,
 	durationEdited: false,

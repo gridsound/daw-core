@@ -721,7 +721,7 @@ class DAWCore {
 	}
 }
 
-DAWCore.json = { effects: {} };
+const DAWCoreJSON = { effects: {} };
 DAWCore.utils = {};
 DAWCore.actions = new Map();
 DAWCore.actionsCommon = {};

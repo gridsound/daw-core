@@ -40,7 +40,7 @@ class DAWCoreAddComposition {
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {
-		const cmp = DAWCore.json.composition( daw.env, DAWCore.utils.uuid() );
+		const cmp = DAWCoreJSON.composition( daw.env, DAWCore.utils.uuid() );
 
 		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}

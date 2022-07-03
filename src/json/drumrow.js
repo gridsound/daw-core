@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.drumrow = obj => Object.assign( Object.seal( {
+DAWCoreJSON.drumrow = obj => Object.assign( Object.seal( {
 	order: 0,
 	toggle: true,
 	pattern: null,

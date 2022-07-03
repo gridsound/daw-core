@@ -1,12 +1,12 @@
 "use strict";
 
-DAWCore.json.composition = ( env, id ) => {
+DAWCoreJSON.composition = ( env, id ) => {
 	const tracks = {};
 	const sPB = env.def_stepsPerBeat;
 	const bPM = env.def_beatsPerMeasure;
 
 	for ( let i = 0; i < env.def_nbTracks; ++i ) {
-		tracks[ i ] = DAWCore.json.track( { order: i } );
+		tracks[ i ] = DAWCoreJSON.track( { order: i } );
 	}
 	return {
 		id,
@@ -38,19 +38,19 @@ DAWCore.json.composition = ( env, id ) => {
 			5: { order: 3, type: "buffer", dest: "1", buffer: "3", duration: 1, name: "open hat", bufferType: "drum" },
 			6: { order: 4, type: "buffer", dest: "1", buffer: "4", duration: 1, name: "snare", bufferType: "drum" },
 		},
-		channels: DAWCore.json.channels(),
+		channels: DAWCoreJSON.channels(),
 		tracks,
 		blocks: {
-			0: DAWCore.json.block( { pattern: "0", track: "0", duration: bPM } ),
-			1: DAWCore.json.block( { pattern: "1", track: "1", duration: bPM } ),
+			0: DAWCoreJSON.block( { pattern: "0", track: "0", duration: bPM } ),
+			1: DAWCoreJSON.block( { pattern: "1", track: "1", duration: bPM } ),
 		},
-		synths: { 0: DAWCore.json.synth( { dest: "2" } ) },
+		synths: { 0: DAWCoreJSON.synth( { dest: "2" } ) },
 		drumrows: {
-			0: DAWCore.json.drumrow( { order: 0, pattern: "2" } ),
-			1: DAWCore.json.drumrow( { order: 1, pattern: "3" } ),
-			2: DAWCore.json.drumrow( { order: 2, pattern: "4" } ),
-			3: DAWCore.json.drumrow( { order: 3, pattern: "5" } ),
-			4: DAWCore.json.drumrow( { order: 4, pattern: "6" } ),
+			0: DAWCoreJSON.drumrow( { order: 0, pattern: "2" } ),
+			1: DAWCoreJSON.drumrow( { order: 1, pattern: "3" } ),
+			2: DAWCoreJSON.drumrow( { order: 2, pattern: "4" } ),
+			3: DAWCoreJSON.drumrow( { order: 3, pattern: "5" } ),
+			4: DAWCoreJSON.drumrow( { order: 4, pattern: "6" } ),
 		},
 		slices: {},
 		drums: { 0: {} },

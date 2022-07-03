@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.key = obj => Object.assign( Object.seal( {
+DAWCoreJSON.key = obj => Object.assign( Object.seal( {
 	prev: null,
 	next: null,
 	key: 57,

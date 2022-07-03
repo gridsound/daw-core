@@ -21,7 +21,7 @@ DAWCore.actions._addDrums = ( type, status, patternId, rowId, whenFrom, whenTo, 
 	}, new Map() );
 	const newDrums = {};
 	const nextDrumId = +DAWCore.actionsCommon.getNextIdOf( drums );
-	const jsonType = DAWCore.json[ type ];
+	const jsonType = DAWCoreJSON[ type ];
 	let nbDrums = 0;
 	let drumWhenMax = pat.duration;
 

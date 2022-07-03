@@ -7,7 +7,7 @@ DAWCore.actions.set( "addDrumrow", ( daw, pattern ) => {
 		const drumrows = daw.$getDrumrows();
 		const id = DAWCore.actionsCommon.getNextIdOf( drumrows );
 		const order = DAWCore.actionsCommon.getNextOrderOf( drumrows );
-		const rowObj = DAWCore.json.drumrow( { pattern, order } );
+		const rowObj = DAWCoreJSON.drumrow( { pattern, order } );
 
 		return [
 			{ drumrows: { [ id ]: rowObj } },

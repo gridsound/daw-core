@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.lfo = obj => Object.assign( Object.seal( {
+DAWCoreJSON.lfo = obj => Object.assign( Object.seal( {
 	toggle: false,
 	type: "sine",
 	delay: 0,

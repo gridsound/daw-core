@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCore.json.channel = obj => Object.assign( Object.seal( {
+DAWCoreJSON.channel = obj => Object.assign( Object.seal( {
 	order: 0,
 	toggle: true,
 	name: "chan",

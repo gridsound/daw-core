@@ -4,7 +4,7 @@ DAWCore.actions.set( "addKey", ( daw, patId, key, when, duration ) => {
 	const pat = daw.$getPattern( patId );
 	const keys = daw.$getKeys( pat.keys );
 	const id = DAWCore.actionsCommon.getNextIdOf( keys );
-	const keysObj = { [ id ]: DAWCore.json.key( { key, when, duration } ) };
+	const keysObj = { [ id ]: DAWCoreJSON.key( { key, when, duration } ) };
 	const patDur = DAWCore.actionsCommon.calcNewKeysDuration( daw, pat.keys, keysObj );
 	const obj = { keys: { [ pat.keys ]: keysObj } };
 
