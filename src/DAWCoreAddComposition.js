@@ -35,8 +35,8 @@ class DAWCoreAddComposition {
 			...opt,
 		} );
 		daw.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
-		daw.callCallback( "compositionAdded", cpy );
-		daw.callCallback( "compositionSavedStatus", cpy, true );
+		daw.$callCallback( "compositionAdded", cpy );
+		daw.$callCallback( "compositionSavedStatus", cpy, true );
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {

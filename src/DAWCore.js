@@ -162,12 +162,12 @@ class DAWCore {
 		DAWCoreComposition.$init( this, this.#composition );
 		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
 		this.#waDrumrows.getChannelInput = this.$getAudioChanIn.bind( this );
-		this.#waDrumrows.onstartdrum = rowId => this.callCallback( "onstartdrum", rowId );
-		this.#waDrumrows.onstartdrumcut = rowId => this.callCallback( "onstopdrumrow", rowId );
+		this.#waDrumrows.onstartdrum = rowId => this.$callCallback( "onstartdrum", rowId );
+		this.#waDrumrows.onstartdrumcut = rowId => this.$callCallback( "onstopdrumrow", rowId );
 		this.#drums.waDrums.setDrumrows( this.#waDrumrows );
 		DAWCoreSlices.$init( this, this.#slices );
-		this.setLoopRate( 60 );
-		this.resetAudioContext();
+		this.$setLoopRate( 60 );
+		this.$resetAudioContext();
 		this.$destinationSetGain( this.env.def_appGain );
 	}
 
@@ -407,7 +407,7 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	setContext( ctx ) {
+	$setContext( ctx ) {
 		this.ctx = ctx;
 		this.#drums.waDrums.setContext( ctx );
 		DAWCoreSlices.$setContext( this.#slices, ctx );
@@ -424,13 +424,13 @@ class DAWCore {
 			syn.output.connect( this.$getAudioChanIn( this.$getSynth( synId ).dest ) );
 		} );
 	}
-	resetAudioContext() {
-		this.stop();
-		this.setContext( new AudioContext( { sampleRate: this.env.sampleRate } ) );
+	$resetAudioContext() {
+		this.$stop();
+		this.$setContext( new AudioContext( { sampleRate: this.env.sampleRate } ) );
 	}
 
 	// ..........................................................................
-	callAction( action, ...args ) {
+	$callAction( action, ...args ) {
 		const fn = DAWCoreActions.get( action );
 
 		if ( !fn ) {
@@ -447,19 +447,19 @@ class DAWCore {
 			}
 		}
 	}
-	callCallback( cbName, ...args ) {
+	$callCallback( cbName, ...args ) {
 		const fn = this.cb[ cbName ];
 
 		return fn && fn( ...args );
 	}
 
 	// ..........................................................................
-	openComposition( saveMode, id ) {
+	$openComposition( saveMode, id ) {
 		const cmp = this.$getComposition( saveMode, id );
 
 		if ( cmp ) {
 			if ( this.#composition.loaded ) {
-				this.closeComposition();
+				this.$closeComposition();
 			}
 			return ( this.$getComposition( saveMode, id ) // 2.
 				? Promise.resolve( cmp )
@@ -469,21 +469,21 @@ class DAWCore {
 		}
 	}
 	#compositionOpened( cmp ) {
-		this.focusOn( "composition" );
-		this.callCallback( "compositionOpened", cmp );
+		this.$focusOn( "composition" );
+		this.$callCallback( "compositionOpened", cmp );
 		this.#startLoop();
 		return cmp;
 	}
-	closeComposition() {
+	$closeComposition() {
 		if ( this.#composition.loaded ) {
 			const cmp = this.cmps[ this.$getSaveMode() ].get( this.$getId() );
 
-			this.stop();
+			this.$stop();
 			this.$keysClearLoop();
 			this.$keysSetCurrentTime( 0 );
 			this.$compositionSetCurrentTime( 0 );
 			this.#stopLoop();
-			this.callCallback( "compositionClosed", cmp );
+			this.$callCallback( "compositionClosed", cmp );
 			this.$compositionUnload();
 			this.$historyEmpty();
 			this.$buffersEmpty();
@@ -492,9 +492,9 @@ class DAWCore {
 			}
 		}
 	}
-	deleteComposition( saveMode, id ) {
+	$deleteComposition( saveMode, id ) {
 		if ( this.#composition.cmp && id === this.$getId() ) {
-			this.closeComposition();
+			this.$closeComposition();
 		}
 		this.#deleteComposition( this.cmps[ saveMode ].get( id ) );
 	}
@@ -506,10 +506,10 @@ class DAWCore {
 			if ( saveMode === "local" ) {
 				DAWCoreLocalStorage.$delete( cmp.id );
 			}
-			this.callCallback( "compositionDeleted", cmp );
+			this.$callCallback( "compositionDeleted", cmp );
 		}
 	}
-	saveComposition() {
+	$saveComposition() {
 		const actSave = this.#composition.actionSavedOn;
 
 		if ( this.$compositionSave() ) {
@@ -519,21 +519,21 @@ class DAWCore {
 			if ( this.$getSaveMode() === "local" ) {
 				this.cmps.local.set( id, cmp );
 				DAWCoreLocalStorage.$put( id, cmp );
-				this.callCallback( "compositionSavedStatus", cmp, true );
+				this.$callCallback( "compositionSavedStatus", cmp, true );
 			} else {
 				this.#composition.saved = false;
-				this.callCallback( "compositionLoading", cmp, true );
-				( this.callCallback( "compositionSavingPromise", cmp )
+				this.$callCallback( "compositionLoading", cmp, true );
+				( this.$callCallback( "compositionSavingPromise", cmp )
 				|| Promise.resolve( cmp ) )
-					.finally( this.callCallback.bind( this, "compositionLoading", cmp, false ) )
+					.finally( this.$callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
 						this.#composition.saved = true;
 						this.cmps.cloud.set( id, cmp );
-						this.callCallback( "compositionSavedStatus", cmp, true );
+						this.$callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
 						this.#composition.actionSavedOn = actSave;
-						this.callCallback( "compositionSavedStatus", cmp, false );
+						this.$callCallback( "compositionSavedStatus", cmp, false );
 						throw err;
 					} );
 			}
@@ -541,7 +541,7 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	dropAudioFiles( files ) {
+	$dropAudioFiles( files ) {
 		const order = this.$buffersGetSize();
 
 		this.$buffersLoadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
@@ -576,7 +576,7 @@ class DAWCore {
 						};
 						buffersLoaded[ bufId ] = this.$buffersGetBuffer( buf );
 					} );
-					this.callAction( "dropBuffers", obj );
+					this.$callAction( "dropBuffers", obj );
 				}
 				if ( knownBuffers.length ) {
 					const bufmap = Object.entries( cmpBuffers )
@@ -592,7 +592,7 @@ class DAWCore {
 					} );
 					this.$slicesBuffersBuffersLoaded( buffersLoaded );
 				}
-				this.callCallback( "buffersLoaded", buffersLoaded );
+				this.$callCallback( "buffersLoaded", buffersLoaded );
 			}
 			if ( failedBuffers.length > 0 ) {
 				console.log( "failedBuffers", failedBuffers );
@@ -602,18 +602,18 @@ class DAWCore {
 	}
 
 	// ..........................................................................
-	getFocusedName() {
+	$getFocusedName() {
 		return this.#focusedStr;
 	}
-	getFocusedDuration() {
+	$getFocusedDuration() {
 		return this.#focusedStr === "composition"
 			? this.$getDuration()
 			: this.$getPatternDuration( this.$getOpened( this.#focusedStr ) );
 	}
-	focusSwitch() {
-		this.focusOn( this.#focusedStr === "composition" ? this.#focusedSwitch : "composition", "-f" );
+	$focusSwitch() {
+		this.$focusOn( this.#focusedStr === "composition" ? this.#focusedSwitch : "composition", "-f" );
 	}
-	focusOn( win, f ) {
+	$focusOn( win, f ) {
 		switch ( win ) {
 			case "keys":
 			case "drums":
@@ -631,18 +631,18 @@ class DAWCore {
 		}
 	}
 	#focusOn( focusedStr, force ) {
-		if ( force === "-f" || !this.isPlaying() ) {
-			this.pause();
+		if ( force === "-f" || !this.$isPlaying() ) {
+			this.$pause();
 			this.#focusedStr = focusedStr;
 			if ( focusedStr !== "composition" ) {
 				this.#focusedSwitch = focusedStr;
 			}
-			this.callCallback( "focusOn", focusedStr );
+			this.$callCallback( "focusOn", focusedStr );
 		}
 	}
 
 	// ..........................................................................
-	getCurrentTime() {
+	$getCurrentTime() {
 		switch ( this.#focusedStr ) {
 			case "keys": return this.$keysGetCurrentTime();
 			case "drums": return this.$drumsGetCurrentTime();
@@ -650,7 +650,7 @@ class DAWCore {
 			case "composition": return this.$compositionGetCurrentTime();
 		}
 	}
-	setCurrentTime( t ) {
+	$setCurrentTime( t ) {
 		switch ( this.#focusedStr ) {
 			case "keys": this.$keysSetCurrentTime( t ); break;
 			case "drums": this.$drumsSetCurrentTime( t ); break;
@@ -658,47 +658,47 @@ class DAWCore {
 			case "composition": this.$compositionSetCurrentTime( t ); break;
 		}
 	}
-	isPlaying() {
+	$isPlaying() {
 		return this.#composition.playing || this.#keys.playing || this.#drums.playing || this.#slices.playing;
 	}
-	togglePlay() {
-		this.isPlaying() ? this.pause() : this.play();
+	$togglePlay() {
+		this.$isPlaying() ? this.$pause() : this.$play();
 	}
-	play() {
+	$play() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.$keysPlay(); break;
 			case "drums": this.$drumsPlay(); break;
 			case "slices": this.$slicesPlay(); break;
 			case "composition": this.$compositionPlay(); break;
 		}
-		this.callCallback( "play", this.#focusedStr );
+		this.$callCallback( "play", this.#focusedStr );
 	}
-	pause() {
+	$pause() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.$keysPause(); break;
 			case "drums": this.$drumsPause(); break;
 			case "slices": this.$slicesPause(); break;
 			case "composition": this.$compositionPause(); break;
 		}
-		this.callCallback( "pause", this.#focusedStr );
+		this.$callCallback( "pause", this.#focusedStr );
 	}
-	stop() {
+	$stop() {
 		switch ( this.#focusedStr ) {
 			case "keys": this.$keysStop(); break;
 			case "drums": this.$drumsStop(); break;
 			case "slices": this.$slicesStop(); break;
 			case "composition": this.$compositionStop(); break;
 		}
-		this.callCallback( "stop", this.#focusedStr );
-		this.callCallback( "currentTime", this.getCurrentTime(), this.#focusedStr );
+		this.$callCallback( "stop", this.#focusedStr );
+		this.$callCallback( "currentTime", this.$getCurrentTime(), this.#focusedStr );
 	}
-	setSampleRate( sr ) {
+	$setSampleRate( sr ) {
 		if ( sr !== this.env.sampleRate ) {
 			this.env.sampleRate = sr;
-			this.resetAudioContext();
+			this.$resetAudioContext();
 		}
 	}
-	setLoopRate( fps ) {
+	$setLoopRate( fps ) {
 		this.#loopMs = 1000 / fps | 0;
 	}
 
@@ -715,12 +715,12 @@ class DAWCore {
 
 		if ( anData ) {
 			this.$compositionUpdateChanAudioData();
-			this.callCallback( "analyserFilled", anData );
+			this.$callCallback( "analyserFilled", anData );
 		}
-		if ( this.isPlaying() ) {
-			const beat = this.getCurrentTime();
+		if ( this.$isPlaying() ) {
+			const beat = this.$getCurrentTime();
 
-			this.callCallback( "currentTime", beat, this.#focusedStr );
+			this.$callCallback( "currentTime", beat, this.#focusedStr );
 		}
 		this.#frameId = this.#loopMs < 20
 			? requestAnimationFrame( this.#loopBind )
@@ -733,7 +733,7 @@ class DAWCore {
    because 'key' and 'drum' are referring to the objects contained in ONE 'keys' or 'drums'.
    So `keys[0]` is a 'keys' not a 'key', a 'key' would be `keys[0][0]`.
 2. Why don't we use `cmp` instead of recalling .$getComposition() ?
-   Because the `cmp` could have been delete in .closeComposition()
+   Because the `cmp` could have been delete in .$closeComposition()
    if the composition was a new untitled composition.
 3. The order between the mixer and the effects is important.
 */

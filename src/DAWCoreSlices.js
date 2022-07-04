@@ -19,7 +19,7 @@ class DAWCoreSlices {
 			if ( obj.patternSlicesOpened ) {
 				durUpdated = true;
 			}
-			daw.focusOn( "slices" );
+			daw.$focusOn( "slices" );
 		}
 		if ( "bpm" in obj ) {
 			store.waSched.setBPM( obj.bpm );
@@ -46,8 +46,8 @@ class DAWCoreSlices {
 						durUpdated = true;
 					}
 				} else if ( patSrcId in obj.patterns ) {
-					if ( daw.isPlaying() ) {
-						daw.stop();
+					if ( daw.$isPlaying() ) {
+						daw.$stop();
 						store.waSched.empty();
 					}
 				}
@@ -67,7 +67,7 @@ class DAWCoreSlices {
 	}
 	static $setCurrentTime( daw, store, t ) {
 		store.waSched.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreSlices.$getCurrentTime( store ), "slices" );
+		daw.$callCallback( "currentTime", DAWCoreSlices.$getCurrentTime( store ), "slices" );
 	}
 	static $setLoop( store, a, b ) {
 		store.loopA = a;

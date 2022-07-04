@@ -30,7 +30,7 @@ class DAWCoreComposition {
 					.then( buf => {
 						if ( buf.buffer ) {
 							bufLoaded[ kv[ 0 ] ] = buf;
-							daw.callCallback( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
+							daw.$callCallback( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
 						}
 					} ) );
 			} );
@@ -50,7 +50,7 @@ class DAWCoreComposition {
 			} );
 			store.actionSavedOn = null;
 			store.saved = cmp.options.saveMode === "cloud" || DAWCoreLocalStorage.$has( cmp.id ) || !cmp.savedAt;
-			daw.callCallback( "compositionSavedStatus", cmp, store.saved );
+			daw.$callCallback( "compositionSavedStatus", cmp, store.saved );
 			return cmp;
 		} );
 	}
@@ -67,7 +67,7 @@ class DAWCoreComposition {
 			daw.$slicesBuffersClear();
 			daw.$getAudioDrumrows().clear();
 			store.saved = true;
-			daw.callCallback( "compositionSavedStatus", store.cmp, true );
+			daw.$callCallback( "compositionSavedStatus", store.cmp, true );
 			store.cmp = null;
 		}
 	}
@@ -81,7 +81,7 @@ class DAWCoreComposition {
 	}
 	static $updateChanAudioData( daw ) {
 		const mix = daw.$getAudioMixer();
-		const fn = daw.callCallback.bind( daw, "channelAnalyserFilled" );
+		const fn = daw.$callCallback.bind( daw, "channelAnalyserFilled" );
 
 		Object.keys( daw.$getChannels() ).forEach( chanId => {
 			mix.fillAudioData( chanId );
@@ -95,7 +95,7 @@ class DAWCoreComposition {
 	}
 	static $setCurrentTime( daw, store, t ) {
 		store.waSched.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreComposition.$getCurrentTime( store ), "composition" );
+		daw.$callCallback( "currentTime", DAWCoreComposition.$getCurrentTime( store ), "composition" );
 	}
 	static $play( daw, store ) {
 		if ( !store.playing ) {
@@ -139,9 +139,9 @@ class DAWCoreComposition {
 		} );
 		if ( saved !== store.saved ) {
 			store.saved = saved;
-			daw.callCallback( "compositionSavedStatus", cmp, saved );
+			daw.$callCallback( "compositionSavedStatus", cmp, saved );
 		}
-		daw.callCallback( "compositionChanged", obj, prevObj );
+		daw.$callCallback( "compositionChanged", obj, prevObj );
 		return obj;
 	}
 
@@ -261,14 +261,14 @@ class DAWCoreComposition {
 			store.waSched.change( obj.blocks );
 		} ],
 		[ [ "loopA", "loopB" ], ( daw, store ) => {
-			if ( daw.getFocusedName() === "composition" ) {
+			if ( daw.$getFocusedName() === "composition" ) {
 				store.waSched.setLoopBeat(
 					store.cmp.loopA || 0,
 					store.cmp.loopB || store.cmp.duration || store.cmp.beatsPerMeasure );
 			}
 		} ],
 		[ "duration", ( daw, store ) => {
-			if ( daw.getFocusedName() === "composition" && store.cmp.loopA === null ) {
+			if ( daw.$getFocusedName() === "composition" && store.cmp.loopA === null ) {
 				store.waSched.setLoopBeat( 0, store.cmp.duration || store.cmp.beatsPerMeasure );
 			}
 		} ],

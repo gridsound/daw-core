@@ -28,10 +28,10 @@ class DAWCoreKeys {
 	static $openPattern( daw, store, id ) {
 		const wasPlaying = store.playing;
 
-		daw.focusOn( "keys" );
+		daw.$focusOn( "keys" );
 		if ( wasPlaying ) {
-			daw.stop();
-			daw.stop();
+			daw.$stop();
+			daw.$stop();
 		}
 		store.waKeys.scheduler.empty();
 		if ( id ) {
@@ -40,7 +40,7 @@ class DAWCoreKeys {
 			DAWCoreKeys.$setSynth( daw, store, pat.synth );
 			DAWCoreKeys.$change( store, pat, daw.$getKeys( pat.keys ) );
 			if ( wasPlaying ) {
-				daw.play();
+				daw.$play();
 			}
 		}
 	}
@@ -49,7 +49,7 @@ class DAWCoreKeys {
 	}
 	static $setCurrentTime( daw, store, t ) {
 		store.waKeys.scheduler.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreKeys.$getCurrentTime( store ), "keys" );
+		daw.$callCallback( "currentTime", DAWCoreKeys.$getCurrentTime( store ), "keys" );
 	}
 	static $setLoop( store, a, b ) {
 		store.loopA = a;

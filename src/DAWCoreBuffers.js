@@ -10,7 +10,7 @@ class DAWCoreBuffers {
 					const pr = DAWCoreBuffers.$setBuffer( daw, buffers, buf );
 
 					if ( buf.url ) {
-						pr.then( buf => daw.callCallback( "buffersLoaded", { [ id ]: buf } ) );
+						pr.then( buf => daw.$callCallback( "buffersLoaded", { [ id ]: buf } ) );
 					}
 				}
 			} );

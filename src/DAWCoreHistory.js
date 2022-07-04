@@ -3,7 +3,7 @@
 class DAWCoreHistory {
 	static $empty( daw, store ) {
 		while ( store.stack.length ) {
-			daw.callCallback( "historyDeleteAction", store.stack.pop() );
+			daw.$callCallback( "historyDeleteAction", store.stack.pop() );
 		}
 		store.stackInd = 0;
 	}
@@ -16,7 +16,7 @@ class DAWCoreHistory {
 		act.desc = desc.t;
 		act.icon = desc.i;
 		while ( stack.length > store.stackInd ) {
-			daw.callCallback( "historyDeleteAction", stack.pop() );
+			daw.$callCallback( "historyDeleteAction", stack.pop() );
 		}
 		++store.stackInd;
 		act.index = stack.push( act );
@@ -41,7 +41,7 @@ class DAWCoreHistory {
 		const obj = act[ undoredo ];
 		const prevObj = undoredo === "undo" ? act.redo : act.undo;
 
-		daw.callCallback( cbStr, act );
+		daw.$callCallback( cbStr, act );
 		daw.$compositionChange( obj, prevObj );
 		return obj;
 	}

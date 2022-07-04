@@ -30,7 +30,7 @@ class DAWCoreDrums {
 	}
 	static $setCurrentTime( daw, store, t ) {
 		store.waDrums.scheduler.setCurrentOffsetBeat( t );
-		daw.callCallback( "currentTime", DAWCoreDrums.$getCurrentTime( store ), "drums" );
+		daw.$callCallback( "currentTime", DAWCoreDrums.$getCurrentTime( store ), "drums" );
 	}
 	static $setLoop( store, a, b ) {
 		store.loopA = a;
@@ -52,7 +52,7 @@ class DAWCoreDrums {
 	}
 	static $liveDrumStop( daw, rowId ) {
 		daw.$getAudioDrumrows().liveDrumStop( rowId );
-		daw.callCallback( "onstopdrumrow", rowId );
+		daw.$callCallback( "onstopdrumrow", rowId );
 	}
 	static $play( store ) {
 		if ( !store.playing ) {
@@ -94,10 +94,10 @@ class DAWCoreDrums {
 	static #openPattern( daw, store, id ) {
 		const wasPlaying = store.playing;
 
-		daw.focusOn( "drums" );
+		daw.$focusOn( "drums" );
 		if ( wasPlaying ) {
-			daw.stop();
-			daw.stop();
+			daw.$stop();
+			daw.$stop();
 		}
 		store.waDrums.scheduler.empty();
 		if ( id ) {
@@ -105,7 +105,7 @@ class DAWCoreDrums {
 
 			DAWCoreDrums.#changePattern( store, pat, daw.$getDrums( pat.drums ) );
 			if ( wasPlaying ) {
-				daw.play();
+				daw.$play();
 			}
 		}
 	}
