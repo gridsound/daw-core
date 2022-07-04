@@ -2,37 +2,37 @@
 
 class DAWCoreHistory {
 	static $empty( daw, store ) {
-		while ( store.stack.length ) {
-			daw.$callCallback( "historyDeleteAction", store.stack.pop() );
+		while ( store.$stack.length ) {
+			daw.$callCallback( "historyDeleteAction", store.$stack.pop() );
 		}
-		store.stackInd = 0;
+		store.$stackInd = 0;
 	}
 	static $stackChange( daw, store, redo, msg ) {
-		const stack = store.stack;
+		const stack = store.$stack;
 		const undo = DAWCoreUtils.composeUndo( daw.$getCmp(), redo );
 		const act = { redo, undo };
 		const desc = DAWCoreHistory.#nameAction( act, msg );
 
 		act.desc = desc.t;
 		act.icon = desc.i;
-		while ( stack.length > store.stackInd ) {
+		while ( stack.length > store.$stackInd ) {
 			daw.$callCallback( "historyDeleteAction", stack.pop() );
 		}
-		++store.stackInd;
+		++store.$stackInd;
 		act.index = stack.push( act );
 		DAWCoreHistory.#change( daw, Object.freeze( act ), "redo", "historyAddAction" );
 	}
 	static $getCurrentAction( store ) {
-		return store.stack[ store.stackInd - 1 ] || null;
+		return store.$stack[ store.$stackInd - 1 ] || null;
 	}
 	static $undo( daw, store ) {
-		return store.stackInd > 0
-			? DAWCoreHistory.#change( daw, store.stack[ --store.stackInd ], "undo", "historyUndo" )
+		return store.$stackInd > 0
+			? DAWCoreHistory.#change( daw, store.$stack[ --store.$stackInd ], "undo", "historyUndo" )
 			: false;
 	}
 	static $redo( daw, store ) {
-		return store.stackInd < store.stack.length
-			? DAWCoreHistory.#change( daw, store.stack[ store.stackInd++ ], "redo", "historyRedo" )
+		return store.$stackInd < store.$stack.length
+			? DAWCoreHistory.#change( daw, store.$stack[ store.$stackInd++ ], "redo", "historyRedo" )
 			: false;
 	}
 

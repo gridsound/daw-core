@@ -10,6 +10,8 @@ const DAWCoreControllersFx = {};
 class DAWCore {
 	cb = {};
 	ctx = null;
+	#cmpsLocal = new Map();
+	#cmpsCloud = new Map();
 	#buffers = new Map();
 	#slicesBuffers = new Map();
 	#waMixer = new gswaMixer();
@@ -19,68 +21,64 @@ class DAWCore {
 		getChanInput: this.#waMixer.getChanInput.bind( this.#waMixer ),
 		getChanOutput: this.#waMixer.getChanOutput.bind( this.#waMixer ),
 	} );
-	$cmps = Object.freeze( {
-		local: new Map(),
-		cloud: new Map(),
-	} );
 	$env = Object.seal( {
-		def_bpm: 120,
-		def_appGain: 1,
-		def_nbTracks: 21,
-		def_stepsPerBeat: 4,
-		def_beatsPerMeasure: 4,
-		sampleRate: 48000,
-		analyserFFTsize: 8192,
-		analyserEnable: true,
+		$defBPM: 120,
+		$defAppGain: 1,
+		$defNbTracks: 21,
+		$defStepsPerBeat: 4,
+		$defBeatsPerMeasure: 4,
+		$sampleRate: 48000,
+		$analyserFFTsize: 8192,
+		$analyserEnable: true,
 	} );
 	#dest = Object.seal( {
-		ctx: null,
-		gainNode: null,
-		inputNode: null,
-		analyserNode: null,
-		analyserData: null,
-		gain: 1,
+		$ctx: null,
+		$gainNode: null,
+		$inputNode: null,
+		$analyserNode: null,
+		$analyserData: null,
+		$gain: 1,
 	} );
 	#hist = Object.seal( {
-		stack: [],
-		stackInd: 0,
+		$stack: [],
+		$stackInd: 0,
 	} );
 	#slices = Object.seal( {
-		waSched: new gswaScheduler(),
-		startedBuffers: new Map(),
-		duration: 4,
-		playing: false,
-		looping: false,
-		loopA: null,
-		loopB: null,
+		$waSched: new gswaScheduler(),
+		$startedBuffers: new Map(),
+		$duration: 4,
+		$playing: false,
+		$looping: false,
+		$loopA: null,
+		$loopB: null,
 	} );
 	#keys = Object.seal( {
-		waKeys: new gswaKeysScheduler(),
-		keysStartedLive: {},
-		looping: false,
-		playing: false,
-		synth: null,
-		loopA: null,
-		loopB: null,
-		duration: 0,
+		$waKeys: new gswaKeysScheduler(),
+		$keysStartedLive: {},
+		$looping: false,
+		$playing: false,
+		$synth: null,
+		$loopA: null,
+		$loopB: null,
+		$duration: 0,
 	} );
 	#drums = Object.seal( {
-		waDrums: new gswaDrumsScheduler(),
-		looping: false,
-		playing: false,
-		loopA: null,
-		loopB: null,
-		duration: 0,
+		$waDrums: new gswaDrumsScheduler(),
+		$looping: false,
+		$playing: false,
+		$loopA: null,
+		$loopB: null,
+		$duration: 0,
 	} );
 	#composition = Object.seal( {
-		waSched: new gswaScheduler(),
-		startedSched: new Map(),
-		startedBuffers: new Map(),
-		cmp: null,
-		loaded: false,
-		playing: false,
-		saved: true,
-		actionSavedOn: null,
+		$waSched: new gswaScheduler(),
+		$startedSched: new Map(),
+		$startedBuffers: new Map(),
+		$cmp: null,
+		$loaded: false,
+		$playing: false,
+		$saved: true,
+		$actionSavedOn: null,
 	} );
 	#focusedStr = "composition";
 	#focusedSwitch = "keys";
@@ -89,14 +87,14 @@ class DAWCore {
 	#frameId = null;
 
 	// .........................................................................
-	$getCompositions( saveMode ) { return this.$cmps[ saveMode ]; }
-	$getComposition( saveMode, id ) { return this.$cmps[ saveMode ].get( id ); }
-	$getSaveMode() { return this.#composition.cmp.options.saveMode; }
-	$getOpened( t ) { return this.#composition.cmp[ DAWCoreActionsCommon.patternOpenedByType[ t ] ]; }
+	$getCompositions( saveMode ) { return this.$getCmps( saveMode ); }
+	$getComposition( saveMode, id ) { return this.$getCmps( saveMode ).get( id ); }
+	$getSaveMode() { return this.#composition.$cmp.options.saveMode; }
+	$getOpened( t ) { return this.#composition.$cmp[ DAWCoreActionsCommon.patternOpenedByType[ t ] ]; }
 	// .........................................................................
 	$getCtx() { return this.ctx; }
-	$getAudioDestination() { return this.#dest.inputNode; }
-	$getAudioDestinationGain() { return this.#dest.gain; }
+	$getAudioDestination() { return this.#dest.$inputNode; }
+	$getAudioDestinationGain() { return this.#dest.$gain; }
 	$getAudioEffects() { return this.#waEffects; }
 	$getAudioEffect( id ) { return this.#waEffects.getFx( id ); }
 	$getAudioSynths() { return this.#waSynths; }
@@ -106,38 +104,39 @@ class DAWCore {
 	$getAudioChanIn( id ) { return this.#waMixer.getChanInput( id ); }
 	$getAudioChanOut( id ) { return this.#waMixer.getChanOutput( id ); }
 	$getAudioSlices( id ) { return this.$slicesBuffersGetBuffer( id ); }
-	$getAudioBuffer( id ) { return this.$buffersGetBuffer( this.#composition.cmp.buffers[ id ] ).buffer; }
+	$getAudioBuffer( id ) { return this.$buffersGetBuffer( this.#composition.$cmp.buffers[ id ] ).buffer; }
 	// .........................................................................
-	$getName() { return this.#composition.cmp.name; }
-	$getLoopA() { return this.#composition.cmp.loopA; }
-	$getLoopB() { return this.#composition.cmp.loopB; }
-	$getDuration() { return this.#composition.cmp.duration; }
-	$getCmp() { return this.#composition.cmp; }
-	$getId() { return this.#composition.cmp.id; }
-	$getBPM() { return this.#composition.cmp.bpm; }
-	$getBPS() { return this.#composition.cmp.bpm / 60; }
-	$getBeatsPerMeasure() { return this.#composition.cmp.beatsPerMeasure; }
-	$getStepsPerBeat() { return this.#composition.cmp.stepsPerBeat; }
+	$getCmps( saveMode ) { return saveMode === "local" ? this.#cmpsLocal : this.#cmpsCloud; }
+	$getCmp() { return this.#composition.$cmp; }
+	$getName() { return this.#composition.$cmp.name; }
+	$getLoopA() { return this.#composition.$cmp.loopA; }
+	$getLoopB() { return this.#composition.$cmp.loopB; }
+	$getDuration() { return this.#composition.$cmp.duration; }
+	$getId() { return this.#composition.$cmp.id; }
+	$getBPM() { return this.#composition.$cmp.bpm; }
+	$getBPS() { return this.#composition.$cmp.bpm / 60; }
+	$getBeatsPerMeasure() { return this.#composition.$cmp.beatsPerMeasure; }
+	$getStepsPerBeat() { return this.#composition.$cmp.stepsPerBeat; }
 	// .........................................................................
-	$getBlocks() { return this.#composition.cmp.blocks; }
-	$getBlock( id ) { return this.#composition.cmp.blocks[ id ]; }
-	$getBuffers() { return this.#composition.cmp.buffers; }
-	$getBuffer( id ) { return this.#composition.cmp.buffers[ id ]; }
-	$getChannels() { return this.#composition.cmp.channels; }
-	$getChannel( id ) { return this.#composition.cmp.channels[ id ]; }
-	$getSlices( id ) { return id ? this.#composition.cmp.slices[ id ] : this.#composition.cmp.slices; } // 1.
-	$getDrumrows() { return this.#composition.cmp.drumrows; }
-	$getDrumrow( id ) { return this.#composition.cmp.drumrows[ id ]; }
-	$getDrums( id ) { return id ? this.#composition.cmp.drums[ id ] : this.#composition.cmp.drums; } // 1.
-	$getEffects() { return this.#composition.cmp.effects; }
-	$getEffect( id ) { return this.#composition.cmp.effects[ id ]; }
-	$getKeys( id ) { return id ? this.#composition.cmp.keys[ id ] : this.#composition.cmp.keys; } // 1.
-	$getPatterns() { return this.#composition.cmp.patterns; }
-	$getPattern( id ) { return this.#composition.cmp.patterns[ id ]; }
-	$getSynths() { return this.#composition.cmp.synths; }
-	$getSynth( id ) { return this.#composition.cmp.synths[ id ]; }
-	$getTracks() { return this.#composition.cmp.tracks; }
-	$getTrack( id ) { return this.#composition.cmp.tracks[ id ]; }
+	$getBlocks() { return this.#composition.$cmp.blocks; }
+	$getBlock( id ) { return this.#composition.$cmp.blocks[ id ]; }
+	$getBuffers() { return this.#composition.$cmp.buffers; }
+	$getBuffer( id ) { return this.#composition.$cmp.buffers[ id ]; }
+	$getChannels() { return this.#composition.$cmp.channels; }
+	$getChannel( id ) { return this.#composition.$cmp.channels[ id ]; }
+	$getSlices( id ) { return id ? this.#composition.$cmp.slices[ id ] : this.#composition.$cmp.slices; } // 1.
+	$getDrumrows() { return this.#composition.$cmp.drumrows; }
+	$getDrumrow( id ) { return this.#composition.$cmp.drumrows[ id ]; }
+	$getDrums( id ) { return id ? this.#composition.$cmp.drums[ id ] : this.#composition.$cmp.drums; } // 1.
+	$getEffects() { return this.#composition.$cmp.effects; }
+	$getEffect( id ) { return this.#composition.$cmp.effects[ id ]; }
+	$getKeys( id ) { return id ? this.#composition.$cmp.keys[ id ] : this.#composition.$cmp.keys; } // 1.
+	$getPatterns() { return this.#composition.$cmp.patterns; }
+	$getPattern( id ) { return this.#composition.$cmp.patterns[ id ]; }
+	$getSynths() { return this.#composition.$cmp.synths; }
+	$getSynth( id ) { return this.#composition.$cmp.synths[ id ]; }
+	$getTracks() { return this.#composition.$cmp.tracks; }
+	$getTrack( id ) { return this.#composition.$cmp.tracks[ id ]; }
 	$getItemByType( type, id ) { return this.$getListByType( type )[ id ]; }
 	$getListByType( type ) {
 		switch ( type ) {
@@ -165,11 +164,11 @@ class DAWCore {
 		this.#waDrumrows.getChannelInput = this.$getAudioChanIn.bind( this );
 		this.#waDrumrows.onstartdrum = rowId => this.$callCallback( "onstartdrum", rowId );
 		this.#waDrumrows.onstartdrumcut = rowId => this.$callCallback( "onstopdrumrow", rowId );
-		this.#drums.waDrums.setDrumrows( this.#waDrumrows );
+		this.#drums.$waDrums.setDrumrows( this.#waDrumrows );
 		DAWCoreSlices.$init( this, this.#slices );
 		this.$setLoopRate( 60 );
 		this.$resetAudioContext();
-		this.$destinationSetGain( this.$env.def_appGain );
+		this.$destinationSetGain( this.$env.$defAppGain );
 	}
 
 	// ..........................................................................
@@ -242,7 +241,7 @@ class DAWCore {
 		DAWCoreCompositionExportWAV.$abort( this );
 	}
 	$compositionNeedSave() {
-		return !this.#composition.saved;
+		return !this.#composition.$saved;
 	}
 
 	// ..........................................................................
@@ -337,7 +336,7 @@ class DAWCore {
 		DAWCoreKeys.$setCurrentTime( this, this.#keys, t );
 	}
 	$keysSetBPM( bpm ) {
-		this.#keys.waKeys.scheduler.setBPM( bpm );
+		this.#keys.$waKeys.scheduler.setBPM( bpm );
 	}
 	$keysSetLoop( a, b ) {
 		DAWCoreKeys.$setLoop( this.#keys, a, b );
@@ -410,11 +409,11 @@ class DAWCore {
 	// ..........................................................................
 	$setContext( ctx ) {
 		this.ctx = ctx;
-		this.#drums.waDrums.setContext( ctx );
+		this.#drums.$waDrums.setContext( ctx );
 		DAWCoreSlices.$setContext( this.#slices, ctx );
-		this.#keys.waKeys.setContext( ctx );
+		this.#keys.$waKeys.setContext( ctx );
 		this.#waDrumrows.setContext( ctx );
-		DAWCoreDestination.$setContext( this.#dest, this.$env.analyserEnable, this.$env.analyserFFTsize, ctx );
+		DAWCoreDestination.$setContext( this.#dest, this.$env.$analyserEnable, this.$env.$analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#waMixer.setContext( ctx ); // 3.
 		this.#waMixer.connect( this.$getAudioDestination() );
@@ -427,7 +426,7 @@ class DAWCore {
 	}
 	$resetAudioContext() {
 		this.$stop();
-		this.$setContext( new AudioContext( { sampleRate: this.$env.sampleRate } ) );
+		this.$setContext( new AudioContext( { sampleRate: this.$env.$sampleRate } ) );
 	}
 
 	// ..........................................................................
@@ -459,7 +458,7 @@ class DAWCore {
 		const cmp = this.$getComposition( saveMode, id );
 
 		if ( cmp ) {
-			if ( this.#composition.loaded ) {
+			if ( this.#composition.$loaded ) {
 				this.$closeComposition();
 			}
 			return ( this.$getComposition( saveMode, id ) // 2.
@@ -476,8 +475,8 @@ class DAWCore {
 		return cmp;
 	}
 	$closeComposition() {
-		if ( this.#composition.loaded ) {
-			const cmp = this.$cmps[ this.$getSaveMode() ].get( this.$getId() );
+		if ( this.#composition.$loaded ) {
+			const cmp = this.$getCmps( this.$getSaveMode() ).get( this.$getId() );
 
 			this.$stop();
 			this.$keysClearLoop();
@@ -494,16 +493,16 @@ class DAWCore {
 		}
 	}
 	$deleteComposition( saveMode, id ) {
-		if ( this.#composition.cmp && id === this.$getId() ) {
+		if ( this.#composition.$cmp && id === this.$getId() ) {
 			this.$closeComposition();
 		}
-		this.#deleteComposition( this.$cmps[ saveMode ].get( id ) );
+		this.#deleteComposition( this.$getCmps( saveMode ).get( id ) );
 	}
 	#deleteComposition( cmp ) {
 		if ( cmp ) {
 			const saveMode = cmp.options.saveMode;
 
-			this.$cmps[ saveMode ].delete( cmp.id );
+			this.$getCmps( saveMode ).delete( cmp.id );
 			if ( saveMode === "local" ) {
 				DAWCoreLocalStorage.$delete( cmp.id );
 			}
@@ -511,29 +510,29 @@ class DAWCore {
 		}
 	}
 	$saveComposition() {
-		const actSave = this.#composition.actionSavedOn;
+		const actSave = this.#composition.$actionSavedOn;
 
 		if ( this.$compositionSave() ) {
 			const cmp = this.$getCmp();
 			const id = this.$getId();
 
 			if ( this.$getSaveMode() === "local" ) {
-				this.$cmps.local.set( id, cmp );
+				this.#cmpsLocal.set( id, cmp );
 				DAWCoreLocalStorage.$put( id, cmp );
 				this.$callCallback( "compositionSavedStatus", cmp, true );
 			} else {
-				this.#composition.saved = false;
+				this.#composition.$saved = false;
 				this.$callCallback( "compositionLoading", cmp, true );
 				( this.$callCallback( "compositionSavingPromise", cmp )
 				|| Promise.resolve( cmp ) )
 					.finally( this.$callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
-						this.#composition.saved = true;
-						this.$cmps.cloud.set( id, cmp );
+						this.#composition.$saved = true;
+						this.#cmpsCloud.set( id, cmp );
 						this.$callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
-						this.#composition.actionSavedOn = actSave;
+						this.#composition.$actionSavedOn = actSave;
 						this.$callCallback( "compositionSavedStatus", cmp, false );
 						throw err;
 					} );
@@ -660,7 +659,7 @@ class DAWCore {
 		}
 	}
 	$isPlaying() {
-		return this.#composition.playing || this.#keys.playing || this.#drums.playing || this.#slices.playing;
+		return this.#composition.$playing || this.#keys.$playing || this.#drums.$playing || this.#slices.$playing;
 	}
 	$togglePlay() {
 		this.$isPlaying() ? this.$pause() : this.$play();
@@ -694,8 +693,8 @@ class DAWCore {
 		this.$callCallback( "currentTime", this.$getCurrentTime(), this.#focusedStr );
 	}
 	$setSampleRate( sr ) {
-		if ( sr !== this.$env.sampleRate ) {
-			this.$env.sampleRate = sr;
+		if ( sr !== this.$env.$sampleRate ) {
+			this.$env.$sampleRate = sr;
 			this.$resetAudioContext();
 		}
 	}

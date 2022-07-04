@@ -2,16 +2,16 @@
 
 DAWCoreJSON.composition = ( env, id ) => {
 	const tracks = {};
-	const sPB = env.def_stepsPerBeat;
-	const bPM = env.def_beatsPerMeasure;
+	const sPB = env.$defStepsPerBeat;
+	const bPM = env.$defBeatsPerMeasure;
 
-	for ( let i = 0; i < env.def_nbTracks; ++i ) {
+	for ( let i = 0; i < env.$defNbTracks; ++i ) {
 		tracks[ i ] = DAWCoreJSON.track( { order: i } );
 	}
 	return {
 		id,
 		name: "",
-		bpm: env.def_bpm,
+		bpm: env.$defBPM,
 		stepsPerBeat: sPB,
 		beatsPerMeasure: bPM,
 		duration: bPM,
