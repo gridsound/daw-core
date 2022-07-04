@@ -34,13 +34,13 @@ class DAWCoreAddComposition {
 			saveMode: "local",
 			...opt,
 		} );
-		daw.cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
+		daw.$cmps[ cpy.options.saveMode ].set( cpy.id, cpy );
 		daw.$callCallback( "compositionAdded", cpy );
 		daw.$callCallback( "compositionSavedStatus", cpy, true );
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {
-		const cmp = DAWCoreJSON.composition( daw.env, DAWCoreUtils.uuid() );
+		const cmp = DAWCoreJSON.composition( daw.$env, DAWCoreUtils.uuid() );
 
 		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}

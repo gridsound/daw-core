@@ -19,11 +19,11 @@ class DAWCore {
 		getChanInput: this.#waMixer.getChanInput.bind( this.#waMixer ),
 		getChanOutput: this.#waMixer.getChanOutput.bind( this.#waMixer ),
 	} );
-	cmps = Object.freeze( {
+	$cmps = Object.freeze( {
 		local: new Map(),
 		cloud: new Map(),
 	} );
-	env = Object.seal( {
+	$env = Object.seal( {
 		def_bpm: 120,
 		def_appGain: 1,
 		def_nbTracks: 21,
@@ -89,8 +89,8 @@ class DAWCore {
 	#frameId = null;
 
 	// .........................................................................
-	$getCompositions( saveMode ) { return this.cmps[ saveMode ]; }
-	$getComposition( saveMode, id ) { return this.cmps[ saveMode ].get( id ); }
+	$getCompositions( saveMode ) { return this.$cmps[ saveMode ]; }
+	$getComposition( saveMode, id ) { return this.$cmps[ saveMode ].get( id ); }
 	$getSaveMode() { return this.#composition.cmp.options.saveMode; }
 	$getOpened( t ) { return this.#composition.cmp[ DAWCoreActionsCommon.patternOpenedByType[ t ] ]; }
 	// .........................................................................
@@ -158,6 +158,7 @@ class DAWCore {
 				: this.$getBeatsPerMeasure();
 	}
 
+	// .........................................................................
 	constructor() {
 		DAWCoreComposition.$init( this, this.#composition );
 		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
@@ -168,7 +169,7 @@ class DAWCore {
 		DAWCoreSlices.$init( this, this.#slices );
 		this.$setLoopRate( 60 );
 		this.$resetAudioContext();
-		this.$destinationSetGain( this.env.def_appGain );
+		this.$destinationSetGain( this.$env.def_appGain );
 	}
 
 	// ..........................................................................
@@ -413,7 +414,7 @@ class DAWCore {
 		DAWCoreSlices.$setContext( this.#slices, ctx );
 		this.#keys.waKeys.setContext( ctx );
 		this.#waDrumrows.setContext( ctx );
-		DAWCoreDestination.$setContext( this.#dest, this.env.analyserEnable, this.env.analyserFFTsize, ctx );
+		DAWCoreDestination.$setContext( this.#dest, this.$env.analyserEnable, this.$env.analyserFFTsize, ctx );
 		gswaPeriodicWaves.clearCache();
 		this.#waMixer.setContext( ctx ); // 3.
 		this.#waMixer.connect( this.$getAudioDestination() );
@@ -426,7 +427,7 @@ class DAWCore {
 	}
 	$resetAudioContext() {
 		this.$stop();
-		this.$setContext( new AudioContext( { sampleRate: this.env.sampleRate } ) );
+		this.$setContext( new AudioContext( { sampleRate: this.$env.sampleRate } ) );
 	}
 
 	// ..........................................................................
@@ -476,7 +477,7 @@ class DAWCore {
 	}
 	$closeComposition() {
 		if ( this.#composition.loaded ) {
-			const cmp = this.cmps[ this.$getSaveMode() ].get( this.$getId() );
+			const cmp = this.$cmps[ this.$getSaveMode() ].get( this.$getId() );
 
 			this.$stop();
 			this.$keysClearLoop();
@@ -496,13 +497,13 @@ class DAWCore {
 		if ( this.#composition.cmp && id === this.$getId() ) {
 			this.$closeComposition();
 		}
-		this.#deleteComposition( this.cmps[ saveMode ].get( id ) );
+		this.#deleteComposition( this.$cmps[ saveMode ].get( id ) );
 	}
 	#deleteComposition( cmp ) {
 		if ( cmp ) {
 			const saveMode = cmp.options.saveMode;
 
-			this.cmps[ saveMode ].delete( cmp.id );
+			this.$cmps[ saveMode ].delete( cmp.id );
 			if ( saveMode === "local" ) {
 				DAWCoreLocalStorage.$delete( cmp.id );
 			}
@@ -517,7 +518,7 @@ class DAWCore {
 			const id = this.$getId();
 
 			if ( this.$getSaveMode() === "local" ) {
-				this.cmps.local.set( id, cmp );
+				this.$cmps.local.set( id, cmp );
 				DAWCoreLocalStorage.$put( id, cmp );
 				this.$callCallback( "compositionSavedStatus", cmp, true );
 			} else {
@@ -528,7 +529,7 @@ class DAWCore {
 					.finally( this.$callCallback.bind( this, "compositionLoading", cmp, false ) )
 					.then( res => {
 						this.#composition.saved = true;
-						this.cmps.cloud.set( id, cmp );
+						this.$cmps.cloud.set( id, cmp );
 						this.$callCallback( "compositionSavedStatus", cmp, true );
 						return res;
 					}, err => {
@@ -693,8 +694,8 @@ class DAWCore {
 		this.$callCallback( "currentTime", this.$getCurrentTime(), this.#focusedStr );
 	}
 	$setSampleRate( sr ) {
-		if ( sr !== this.env.sampleRate ) {
-			this.env.sampleRate = sr;
+		if ( sr !== this.$env.sampleRate ) {
+			this.$env.sampleRate = sr;
 			this.$resetAudioContext();
 		}
 	}
