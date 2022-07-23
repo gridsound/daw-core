@@ -60,7 +60,7 @@ class DAWCoreSlicesBuffers {
 	// .........................................................................
 	static #setBuffer( slicesBuffers, daw, patSliId, buffer ) {
 		const pat = daw.$getPattern( patSliId );
-		const bufSliced = gswaSlicer.createBuffer( daw.$getCtx(), buffer, 0, 1, daw.$getSlices( pat.slices ) );
+		const bufSliced = gswaSlicer.$createBuffer( daw.$getCtx(), buffer, 0, 1, daw.$getSlices( pat.slices ) );
 
 		slicesBuffers.set( patSliId, bufSliced );
 	}

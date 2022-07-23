@@ -59,13 +59,13 @@ class DAWCoreComposition {
 			const d = store.$waSched.data;
 
 			store.$loaded = false;
-			daw.$getAudioEffects().clear(); // 1.
-			daw.$getAudioMixer().clear();
-			store.$waSched.stop();
+			daw.$getAudioEffects().$clear(); // 1.
+			daw.$getAudioMixer().$clear();
+			store.$waSched.$stop();
 			Object.keys( d ).forEach( id => delete d[ id ] );
 			daw.$getAudioSynths().clear();
 			daw.$slicesBuffersClear();
-			daw.$getAudioDrumrows().clear();
+			daw.$getAudioDrumrows().$clear();
 			store.$saved = true;
 			daw.$callCallback( "compositionSavedStatus", store.$cmp, true );
 			store.$cmp = null;
@@ -84,17 +84,17 @@ class DAWCoreComposition {
 		const fn = daw.$callCallback.bind( daw, "channelAnalyserFilled" );
 
 		Object.keys( daw.$getChannels() ).forEach( chanId => {
-			mix.fillAudioData( chanId );
-			fn( chanId, mix.audioDataL, mix.audioDataR );
+			mix.$fillAudioData( chanId );
+			fn( chanId, mix.$audioDataL, mix.$audioDataR );
 		} );
 	}
 
 	// .........................................................................
 	static $getCurrentTime( store ) {
-		return store.$waSched.getCurrentOffsetBeat();
+		return store.$waSched.$getCurrentOffsetBeat();
 	}
 	static $setCurrentTime( daw, store, t ) {
-		store.$waSched.setCurrentOffsetBeat( t );
+		store.$waSched.$setCurrentOffsetBeat( t );
 		daw.$callCallback( "currentTime", DAWCoreComposition.$getCurrentTime( store ), "composition" );
 	}
 	static $play( daw, store ) {
@@ -106,7 +106,7 @@ class DAWCoreComposition {
 	static $pause( store ) {
 		if ( store.$playing ) {
 			store.$playing = false;
-			store.$waSched.stop();
+			store.$waSched.$stop();
 		}
 	}
 	static $stop( daw, store ) {
@@ -125,13 +125,13 @@ class DAWCoreComposition {
 		const saved = act === store.$actionSavedOn && !!cmp.savedAt;
 
 		DAWCoreUtils.diffAssign( cmp, obj );
-		daw.$getAudioMixer().change( obj );
+		daw.$getAudioMixer().$change( obj );
 		daw.$buffersChange( obj, prevObj );
 		daw.$slicesBuffersChange( obj );
 		daw.$slicesChange( obj );
-		daw.$getAudioDrumrows().change( obj );
+		daw.$getAudioDrumrows().$change( obj );
 		daw.$drumsChange( obj );
-		daw.$getAudioEffects().change( obj );
+		daw.$getAudioEffects().$change( obj );
 		DAWCoreComposition.#changeFns.forEach( ( fn, attr ) => {
 			if ( attr in obj || attr.some?.( attr => attr in obj ) ) {
 				fn( daw, store, obj, prevObj );
@@ -150,20 +150,20 @@ class DAWCoreComposition {
 		const sch = store.$waSched;
 
 		if ( daw.$getCtx() instanceof OfflineAudioContext ) {
-			sch.clearLoop();
-			sch.enableStreaming( false );
-			sch.startBeat( 0 );
+			sch.$clearLoop();
+			sch.$enableStreaming( false );
+			sch.$startBeat( 0 );
 		} else {
 			DAWCoreComposition.#setLoop( store, store.$cmp.loopA, store.$cmp.loopB );
-			sch.enableStreaming( true );
-			sch.startBeat( 0, offset );
+			sch.$enableStreaming( true );
+			sch.$startBeat( 0, offset );
 		}
 	}
 	static #setLoop( store, a, b ) {
 		if ( Number.isFinite( a ) ) {
-			store.$waSched.setLoopBeat( a, b );
+			store.$waSched.$setLoopBeat( a, b );
 		} else {
-			store.$waSched.setLoopBeat( 0, store.$cmp.duration || store.$cmp.beatsPerMeasure );
+			store.$waSched.$setLoopBeat( 0, store.$cmp.duration || store.$cmp.beatsPerMeasure );
 		}
 	}
 
@@ -171,7 +171,7 @@ class DAWCoreComposition {
 	static #assignPatternChange( store, patId, obj ) {
 		store.$startedSched.forEach( ( [ patId2, sched ] ) => {
 			if ( patId2 === patId ) {
-				sched.change( obj );
+				sched.$change( obj );
 			}
 		} );
 	}
@@ -204,21 +204,21 @@ class DAWCoreComposition {
 					const sch = new gswaKeysScheduler();
 
 					store.$startedSched.set( startedId, [ patId, sch ] );
-					sch.scheduler.setBPM( cmp.bpm );
-					sch.setContext( daw.$getCtx() );
-					sch.setSynth( daw.$getAudioSynth( pat.synth ) );
-					sch.change( cmp.keys[ pat.keys ] );
-					sch.start( when, off, dur );
+					sch.scheduler.$setBPM( cmp.bpm );
+					sch.$setContext( daw.$getCtx() );
+					sch.$setSynth( daw.$getAudioSynth( pat.synth ) );
+					sch.$change( cmp.keys[ pat.keys ] );
+					sch.$start( when, off, dur );
 				} break;
 				case "drums": {
 					const sch = new gswaDrumsScheduler();
 
 					store.$startedSched.set( startedId, [ patId, sch ] );
-					sch.scheduler.setBPM( cmp.bpm );
-					sch.setContext( daw.$getCtx() );
-					sch.setDrumrows( daw.$getAudioDrumrows() );
-					sch.change( cmp.drums[ pat.drums ] );
-					sch.start( when, off, dur );
+					sch.scheduler.$setBPM( cmp.bpm );
+					sch.$setContext( daw.$getCtx() );
+					sch.$setDrumrows( daw.$getAudioDrumrows() );
+					sch.$change( cmp.drums[ pat.drums ] );
+					sch.$start( when, off, dur );
 				} break;
 			}
 		}
@@ -239,59 +239,61 @@ class DAWCoreComposition {
 		}
 	}
 	static #onstopBlock( store, startedId ) {
-		const objStarted =
-				store.$startedSched.get( startedId ) ||
-				store.$startedBuffers.get( startedId );
+		const absn = store.$startedBuffers.get( startedId );
+		const sch = store.$startedSched.get( startedId );
 
-		if ( objStarted ) {
-			objStarted[ 1 ].stop();
-			store.$startedSched.delete( startedId );
+		if ( absn ) {
+			absn[ 1 ].stop();
 			store.$startedBuffers.delete( startedId );
+		}
+		if ( sch ) {
+			sch[ 1 ].$stop();
+			store.$startedSched.delete( startedId );
 		}
 	}
 
 	// .........................................................................
 	static #changeFns = new Map( [
 		[ "bpm", ( daw, store, obj ) => {
-			store.$waSched.setBPM( obj.bpm );
-			daw.$getAudioSynths().forEach( syn => syn.setBPM( obj.bpm ) );
+			store.$waSched.$setBPM( obj.bpm );
+			daw.$getAudioSynths().forEach( syn => syn.$setBPM( obj.bpm ) );
 			daw.$keysSetBPM( obj.bpm );
 		} ],
 		[ "blocks", ( _daw, store, obj ) => {
-			store.$waSched.change( obj.blocks );
+			store.$waSched.$change( obj.blocks );
 		} ],
 		[ [ "loopA", "loopB" ], ( daw, store ) => {
 			if ( daw.$getFocusedName() === "composition" ) {
-				store.$waSched.setLoopBeat(
+				store.$waSched.$setLoopBeat(
 					store.$cmp.loopA || 0,
 					store.$cmp.loopB || store.$cmp.duration || store.$cmp.beatsPerMeasure );
 			}
 		} ],
 		[ "duration", ( daw, store ) => {
 			if ( daw.$getFocusedName() === "composition" && store.$cmp.loopA === null ) {
-				store.$waSched.setLoopBeat( 0, store.$cmp.duration || store.$cmp.beatsPerMeasure );
+				store.$waSched.$setLoopBeat( 0, store.$cmp.duration || store.$cmp.beatsPerMeasure );
 			}
 		} ],
 		[ "synths", ( daw, store, obj, prevObj ) => {
 			Object.entries( obj.synths ).forEach( ( [ id, synthObj ] ) => {
 				if ( !synthObj ) {
-					daw.$getAudioSynth( id ).stopAllKeys();
+					daw.$getAudioSynth( id ).$stopAllKeys();
 					daw.$getAudioSynths().delete( id );
 				} else if ( !prevObj.synths[ id ] ) {
 					const syn = new gswaSynth();
 
-					syn.setContext( daw.$getCtx() );
-					syn.setBPM( store.$cmp.bpm );
-					syn.change( synthObj );
-					syn.output.connect( daw.$getAudioMixer().getChanInput( synthObj.dest ) );
+					syn.$setContext( daw.$getCtx() );
+					syn.$setBPM( store.$cmp.bpm );
+					syn.$change( synthObj );
+					syn.$output.connect( daw.$getAudioMixer().$getChanInput( synthObj.dest ) );
 					daw.$getAudioSynths().set( id, syn );
 				} else {
 					const syn = daw.$getAudioSynth( id );
 
-					syn.change( synthObj );
+					syn.$change( synthObj );
 					if ( "dest" in synthObj ) {
-						syn.output.disconnect();
-						syn.output.connect( daw.$getAudioMixer().getChanInput( synthObj.dest ) );
+						syn.$output.disconnect();
+						syn.$output.connect( daw.$getAudioMixer().$getChanInput( synthObj.dest ) );
 					}
 				}
 			} );

@@ -5,7 +5,7 @@ class DAWCoreDrums {
 		const patId = daw.$getOpened( "drums" );
 
 		if ( "bpm" in obj ) {
-			store.$waDrums.scheduler.setBPM( obj.bpm );
+			store.$waDrums.scheduler.$setBPM( obj.bpm );
 		}
 		if ( "patternDrumsOpened" in obj ) {
 			DAWCoreDrums.#openPattern( daw, store, patId );
@@ -26,32 +26,32 @@ class DAWCoreDrums {
 		}
 	}
 	static $getCurrentTime( store ) {
-		return store.$waDrums.scheduler.getCurrentOffsetBeat();
+		return store.$waDrums.scheduler.$getCurrentOffsetBeat();
 	}
 	static $setCurrentTime( daw, store, t ) {
-		store.$waDrums.scheduler.setCurrentOffsetBeat( t );
+		store.$waDrums.scheduler.$setCurrentOffsetBeat( t );
 		daw.$callCallback( "currentTime", DAWCoreDrums.$getCurrentTime( store ), "drums" );
 	}
 	static $setLoop( store, a, b ) {
 		store.$loopA = a;
 		store.$loopB = b;
 		store.$looping = true;
-		store.$waDrums.scheduler.setLoopBeat( a, b );
+		store.$waDrums.scheduler.$setLoopBeat( a, b );
 	}
 	static $clearLoop( daw, store ) {
 		store.$loopA =
 		store.$loopB = null;
 		store.$looping = false;
-		store.$waDrums.scheduler.setLoopBeat( 0, store.$duration || daw.$getBeatsPerMeasure() );
+		store.$waDrums.scheduler.$setLoopBeat( 0, store.$duration || daw.$getBeatsPerMeasure() );
 	}
 	static $liveDrumrowChange( daw, rowId, prop, val ) {
-		daw.$getAudioDrumrows().change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
+		daw.$getAudioDrumrows().$change( { drumrows: { [ rowId ]: { [ prop ]: val } } } );
 	}
 	static $liveDrumStart( daw, rowId ) {
-		daw.$getAudioDrumrows().liveDrumStart( rowId );
+		daw.$getAudioDrumrows().$liveDrumStart( rowId );
 	}
 	static $liveDrumStop( daw, rowId ) {
-		daw.$getAudioDrumrows().liveDrumStop( rowId );
+		daw.$getAudioDrumrows().$liveDrumStop( rowId );
 		daw.$callCallback( "onstopdrumrow", rowId );
 	}
 	static $play( store ) {
@@ -60,14 +60,14 @@ class DAWCoreDrums {
 			const b = store.$looping ? store.$loopB : store.$duration;
 
 			store.$playing = true;
-			store.$waDrums.scheduler.setLoopBeat( a, b );
-			store.$waDrums.scheduler.startBeat( 0, DAWCoreDrums.$getCurrentTime( store ) );
+			store.$waDrums.scheduler.$setLoopBeat( a, b );
+			store.$waDrums.scheduler.$startBeat( 0, DAWCoreDrums.$getCurrentTime( store ) );
 		}
 	}
 	static $pause( store ) {
 		if ( store.$playing ) {
 			store.$playing = false;
-			store.$waDrums.stop();
+			store.$waDrums.$stop();
 		}
 	}
 	static $stop( daw, store ) {
@@ -82,12 +82,12 @@ class DAWCoreDrums {
 	// .........................................................................
 	static #changePattern( store, patObj, drumsObj ) {
 		if ( drumsObj ) {
-			store.$waDrums.change( drumsObj );
+			store.$waDrums.$change( drumsObj );
 		}
 		if ( patObj && "duration" in patObj ) {
 			store.$duration = patObj.duration;
 			if ( !store.$looping && store.$playing ) {
-				store.$waDrums.scheduler.setLoopBeat( 0, store.$duration );
+				store.$waDrums.scheduler.$setLoopBeat( 0, store.$duration );
 			}
 		}
 	}
@@ -99,7 +99,7 @@ class DAWCoreDrums {
 			daw.$stop();
 			daw.$stop();
 		}
-		store.$waDrums.scheduler.empty();
+		store.$waDrums.scheduler.$empty();
 		if ( id ) {
 			const pat = daw.$getPattern( id );
 

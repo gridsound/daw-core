@@ -18,8 +18,8 @@ class DAWCore {
 	#waSynths = new Map();
 	#waDrumrows = new gswaDrumrows();
 	#waEffects = new gswaEffects( {
-		getChanInput: this.#waMixer.getChanInput.bind( this.#waMixer ),
-		getChanOutput: this.#waMixer.getChanOutput.bind( this.#waMixer ),
+		getChanInput: this.#waMixer.$getChanInput.bind( this.#waMixer ),
+		getChanOutput: this.#waMixer.$getChanOutput.bind( this.#waMixer ),
 	} );
 	$env = Object.seal( {
 		$defBPM: 120,
@@ -96,13 +96,13 @@ class DAWCore {
 	$getAudioDestination() { return this.#dest.$inputNode; }
 	$getAudioDestinationGain() { return this.#dest.$gain; }
 	$getAudioEffects() { return this.#waEffects; }
-	$getAudioEffect( id ) { return this.#waEffects.getFx( id ); }
+	$getAudioEffect( id ) { return this.#waEffects.$getFx( id ); }
 	$getAudioSynths() { return this.#waSynths; }
 	$getAudioSynth( id ) { return this.#waSynths.get( id ); }
 	$getAudioDrumrows() { return this.#waDrumrows; }
 	$getAudioMixer() { return this.#waMixer; }
-	$getAudioChanIn( id ) { return this.#waMixer.getChanInput( id ); }
-	$getAudioChanOut( id ) { return this.#waMixer.getChanOutput( id ); }
+	$getAudioChanIn( id ) { return this.#waMixer.$getChanInput( id ); }
+	$getAudioChanOut( id ) { return this.#waMixer.$getChanOutput( id ); }
 	$getAudioSlices( id ) { return this.$slicesBuffersGetBuffer( id ); }
 	$getAudioBuffer( id ) { return this.$buffersGetBuffer( this.#composition.$cmp.buffers[ id ] ).buffer; }
 	// .........................................................................
@@ -160,11 +160,11 @@ class DAWCore {
 	// .........................................................................
 	constructor() {
 		DAWCoreComposition.$init( this, this.#composition );
-		this.#waDrumrows.getAudioBuffer = this.$getAudioBuffer.bind( this );
-		this.#waDrumrows.getChannelInput = this.$getAudioChanIn.bind( this );
-		this.#waDrumrows.onstartdrum = rowId => this.$callCallback( "onstartdrum", rowId );
-		this.#waDrumrows.onstartdrumcut = rowId => this.$callCallback( "onstopdrumrow", rowId );
-		this.#drums.$waDrums.setDrumrows( this.#waDrumrows );
+		this.#waDrumrows.$getAudioBuffer = this.$getAudioBuffer.bind( this );
+		this.#waDrumrows.$getChannelInput = this.$getAudioChanIn.bind( this );
+		this.#waDrumrows.$onstartdrum = rowId => this.$callCallback( "onstartdrum", rowId );
+		this.#waDrumrows.$onstartdrumcut = rowId => this.$callCallback( "onstopdrumrow", rowId );
+		this.#drums.$waDrums.$setDrumrows( this.#waDrumrows );
 		DAWCoreSlices.$init( this, this.#slices );
 		this.$setLoopRate( 60 );
 		this.$resetAudioContext();
@@ -295,13 +295,13 @@ class DAWCore {
 
 	// ..........................................................................
 	$liveChangeChannel( id, prop, val ) {
-		this.#waMixer.change( { channels: { [ id ]: { [ prop ]: val } } } );
+		this.#waMixer.$change( { channels: { [ id ]: { [ prop ]: val } } } );
 	}
 	$liveChangeEffect( fxId, prop, val ) {
-		this.#waEffects.liveChangeFxProp( fxId, prop, val );
+		this.#waEffects.$liveChangeFxProp( fxId, prop, val );
 	}
 	$liveChangeSynth( id, obj ) {
-		this.#waSynths.get( id ).change( obj );
+		this.#waSynths.get( id ).$change( obj );
 	}
 	$liveKeydown( midi ) {
 		DAWCoreKeys.$liveKeydown( this.#keys, midi );
@@ -336,7 +336,7 @@ class DAWCore {
 		DAWCoreKeys.$setCurrentTime( this, this.#keys, t );
 	}
 	$keysSetBPM( bpm ) {
-		this.#keys.$waKeys.scheduler.setBPM( bpm );
+		this.#keys.$waKeys.scheduler.$setBPM( bpm );
 	}
 	$keysSetLoop( a, b ) {
 		DAWCoreKeys.$setLoop( this.#keys, a, b );
@@ -409,19 +409,19 @@ class DAWCore {
 	// ..........................................................................
 	$setContext( ctx ) {
 		this.ctx = ctx;
-		this.#drums.$waDrums.setContext( ctx );
+		this.#drums.$waDrums.$setContext( ctx );
 		DAWCoreSlices.$setContext( this.#slices, ctx );
-		this.#keys.$waKeys.setContext( ctx );
-		this.#waDrumrows.setContext( ctx );
+		this.#keys.$waKeys.$setContext( ctx );
+		this.#waDrumrows.$setContext( ctx );
 		DAWCoreDestination.$setContext( this.#dest, this.$env.$analyserEnable, this.$env.$analyserFFTsize, ctx );
-		gswaPeriodicWaves.clearCache();
-		this.#waMixer.setContext( ctx ); // 3.
-		this.#waMixer.connect( this.$getAudioDestination() );
-		this.#waEffects.setContext( ctx );
+		gswaPeriodicWaves.$clearCache();
+		this.#waMixer.$setContext( ctx ); // 3.
+		this.#waMixer.$connect( this.$getAudioDestination() );
+		this.#waEffects.$setContext( ctx );
 		this.#waSynths.forEach( ( syn, synId ) => {
-			syn.setContext( ctx );
-			syn.output.disconnect();
-			syn.output.connect( this.$getAudioChanIn( this.$getSynth( synId ).dest ) );
+			syn.$setContext( ctx );
+			syn.$output.disconnect();
+			syn.$output.connect( this.$getAudioChanIn( this.$getSynth( synId ).dest ) );
 		} );
 	}
 	$resetAudioContext() {

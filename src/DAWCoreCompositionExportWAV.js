@@ -20,7 +20,7 @@ class DAWCoreCompositionExportWAV {
 		daw.$setContext( ctxOff );
 		daw.$compositionPlay();
 		return ctxOff.startRendering().then( buffer => {
-			const pcm = gswaEncodeWAV.encode( buffer, { float32: true } );
+			const pcm = gswaEncodeWAV.$encode( buffer, { float32: true } );
 			const url = URL.createObjectURL( new Blob( [ pcm ] ) );
 
 			daw.$compositionStop();
