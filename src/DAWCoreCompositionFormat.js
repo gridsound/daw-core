@@ -133,6 +133,17 @@ class DAWCoreCompositionFormat {
 			}
 		} );
 
+		// ..........................................
+		Object.values( cmp.buffers ).forEach( buf => {
+			switch ( buf.url ) {
+				case "kick-00.wav": buf.url = "1/kick-001"; break;
+				case "clap-00.wav": buf.url = "1/clap-001"; break;
+				case "hat-00.wav": buf.url = "1/hat-001"; break;
+				case "snare-00.wav": buf.url = "1/openhat-001"; break;
+				case "hat-open-00.wav": buf.url = "1/snare-001"; break;
+			}
+		} );
+
 		// synths
 		// ..........................................
 		if ( !cmp.synths ) {
