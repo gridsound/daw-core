@@ -59,6 +59,7 @@ class DAWCoreHistoryTexts {
 			changePatternBufferInfo: pat => [ "pen", `edit info of the buffer "${ pat }"` ],
 			addPattern: ( type, pat ) => [ "plus", `add new ${ type } "${ pat }"` ],
 			addPatternKeys: ( pat, syn ) => [ "plus", `add new keys "${ pat }" of synth "${ syn }"` ],
+			addPatternBuffer: buf => [ "plus", `use "${ buf }" from the library` ],
 			renamePattern: ( type, old, neww ) => [ "pen", `rename ${ type } "${ old }" -> "${ neww }"` ],
 			removePattern: ( type, pat ) => [ "minus", `remove ${ type } "${ pat }"` ],
 			reorderPattern: ( type, pat ) => [ "sort", `reorder ${ type } "${ pat }"` ],
