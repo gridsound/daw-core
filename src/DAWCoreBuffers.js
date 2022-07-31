@@ -82,8 +82,8 @@ class DAWCoreBuffers {
 		buffers.delete( buf.hash || buf.url );
 	}
 	static #getBufferFromFile( ctx, file ) {
-		DAWCoreUtils.getFileContent( file, "array" ).then( buf => {
-			const hash = DAWCoreUtils.hashBufferV1( new Uint8Array( buf ) ); // 1.
+		DAWCoreUtils.$getFileContent( file, "array" ).then( buf => {
+			const hash = DAWCoreUtils.$hashBufferV1( new Uint8Array( buf ) ); // 1.
 
 			ctx.decodeAudioData( buf ).then( audiobuf => {
 				res( [ hash, audiobuf ] );

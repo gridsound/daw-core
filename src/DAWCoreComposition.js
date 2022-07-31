@@ -11,7 +11,7 @@ class DAWCoreComposition {
 	// .........................................................................
 	static $load( daw, store, cmpOri ) {
 		return new Promise( ( res, rej ) => {
-			const cmp = DAWCoreUtils.jsonCopy( cmpOri );
+			const cmp = DAWCoreUtils.$jsonCopy( cmpOri );
 
 			if ( DAWCoreCompositionFormat.$in( cmp ) ) {
 				DAWCoreComposition.$unload( daw, store );
@@ -124,7 +124,7 @@ class DAWCoreComposition {
 		const act = daw.$historyGetCurrentAction();
 		const saved = act === store.$actionSavedOn && !!cmp.savedAt;
 
-		DAWCoreUtils.diffAssign( cmp, obj );
+		DAWCoreUtils.$diffAssign( cmp, obj );
 		daw.$getAudioMixer().$change( obj );
 		daw.$buffersChange( obj, prevObj );
 		daw.$slicesBuffersChange( obj );

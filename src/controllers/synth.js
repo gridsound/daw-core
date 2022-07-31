@@ -8,13 +8,13 @@ DAWCoreControllers.synth = class {
 		lfo: Object.seal( DAWCoreJSON.lfo() ),
 		oscillators: {},
 	} );
-	#oscsCrud = DAWCoreUtils.createUpdateDelete.bind( null, this.data.oscillators,
+	#oscsCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data.oscillators,
 		this.#addOsc.bind( this ),
 		this.#updateOsc.bind( this ),
 		this.#deleteOsc.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.mapCallbacks( [
+		this.on = DAWCoreUtils.$mapCallbacks( [
 			"addOsc",
 			"removeOsc",
 			"changeOsc",

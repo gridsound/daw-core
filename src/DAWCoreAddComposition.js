@@ -18,11 +18,11 @@ class DAWCoreAddComposition {
 			);
 	}
 	static $blob( daw, blob, opt ) {
-		return DAWCoreUtils.getFileContent( blob, "text" )
+		return DAWCoreUtils.$getFileContent( blob, "text" )
 			.then( txt => DAWCoreAddComposition.#JSON( daw, txt, opt ) );
 	}
 	static $JSObject( daw, cmp, opt ) {
-		const cpy = DAWCoreUtils.jsonCopy( cmp );
+		const cpy = DAWCoreUtils.$jsonCopy( cmp );
 
 		cpy.options = Object.freeze( {
 			saveMode: "local",
@@ -34,7 +34,7 @@ class DAWCoreAddComposition {
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {
-		const cmp = DAWCoreJSON.composition( daw.$env, DAWCoreUtils.uuid() );
+		const cmp = DAWCoreJSON.composition( daw.$env, DAWCoreUtils.$uuid() );
 
 		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}

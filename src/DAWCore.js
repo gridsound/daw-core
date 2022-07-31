@@ -436,12 +436,12 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = DAWCoreUtils.deepFreeze( fn( this, ...args ) );
+			const ret = DAWCoreUtils.$deepFreeze( fn( this, ...args ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.$historyStackChange( ...ret );
 			} else if ( ret ) {
-				const undo = DAWCoreUtils.composeUndo( this.$getCmp(), ret );
+				const undo = DAWCoreUtils.$composeUndo( this.$getCmp(), ret );
 
 				this.$compositionChange( ret, undo );
 			}

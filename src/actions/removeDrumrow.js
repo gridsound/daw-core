@@ -30,7 +30,7 @@ DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 					return row in obj.drumrows ? max : Math.max( max, when + .001 );
 				}, 0 );
 
-			if ( DAWCoreUtils.isntEmpty( drumsObj ) ) {
+			if ( DAWCoreUtils.$isntEmpty( drumsObj ) ) {
 				const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;
 
 				objDrums[ pat.drums ] = drumsObj;
@@ -45,10 +45,10 @@ DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 			}
 		}
 	} );
-	DAWCoreUtils.addIfNotEmpty( obj, "drums", objDrums );
-	DAWCoreUtils.addIfNotEmpty( obj, "blocks", objBlocks );
-	DAWCoreUtils.addIfNotEmpty( obj, "patterns", objPatterns );
-	if ( DAWCoreUtils.isntEmpty( objBlocks ) ) {
+	DAWCoreUtils.$addIfNotEmpty( obj, "drums", objDrums );
+	DAWCoreUtils.$addIfNotEmpty( obj, "blocks", objBlocks );
+	DAWCoreUtils.$addIfNotEmpty( obj, "patterns", objPatterns );
+	if ( DAWCoreUtils.$isntEmpty( objBlocks ) ) {
 		const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
 
 		if ( dur !== daw.$getDuration() ) {

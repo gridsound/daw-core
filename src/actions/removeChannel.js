@@ -10,9 +10,9 @@ DAWCoreActions.set( "removeChannel", ( daw, id ) => {
 		const synths = red( id, daw.$getSynths(), {}, destMain );
 		const obj = { channels };
 
-		DAWCoreUtils.addIfNotEmpty( obj, "synths", synths );
-		DAWCoreUtils.addIfNotEmpty( obj, "effects", effects );
-		DAWCoreUtils.addIfNotEmpty( obj, "patterns", patterns );
+		DAWCoreUtils.$addIfNotEmpty( obj, "synths", synths );
+		DAWCoreUtils.$addIfNotEmpty( obj, "effects", effects );
+		DAWCoreUtils.$addIfNotEmpty( obj, "patterns", patterns );
 		return [
 			obj,
 			[ "channels", "removeChannel", daw.$getChannel( id ).name ],

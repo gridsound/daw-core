@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreUtils.createUpdateDelete = ( dataSrc, fnCreate, fnUpdate, fnDelete, dataChange ) => {
+DAWCoreUtils.$createUpdateDelete = ( dataSrc, fnCreate, fnUpdate, fnDelete, dataChange ) => {
 	if ( dataChange ) {
 		Object.entries( dataChange ).forEach( ( [ id, obj ] ) => {
 			if ( !obj ) {

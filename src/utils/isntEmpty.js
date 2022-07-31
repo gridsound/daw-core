@@ -1,3 +1,3 @@
 "use strict";
 
-DAWCoreUtils.isntEmpty = obj => !DAWCoreUtils.isEmpty( obj );
+DAWCoreUtils.$isntEmpty = obj => !DAWCoreUtils.$isEmpty( obj );

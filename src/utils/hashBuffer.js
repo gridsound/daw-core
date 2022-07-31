@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreUtils.hashBufferV1 = u8buf => {
+DAWCoreUtils.$hashBufferV1 = u8buf => {
 	const hash = new Uint8Array( 19 );
 	const len = `${ u8buf.length }`.padStart( 9, "0" );
 	let i = 0;

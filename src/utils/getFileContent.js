@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreUtils.getFileContent = ( file, format ) => {
+DAWCoreUtils.$getFileContent = ( file, format ) => {
 	return new Promise( res => {
 		const rd = new FileReader();
 

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreUtils.uuid = () => {
+DAWCoreUtils.$uuid = () => {
 	const rnd = crypto.getRandomValues( new Uint8Array( 36 ) );
 	const uuid = rnd.reduce( ( arr, n ) => {
 		arr.push( ( n % 16 ).toString( 16 ) );

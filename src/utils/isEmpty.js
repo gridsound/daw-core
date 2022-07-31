@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreUtils.isEmpty = obj => {
+DAWCoreUtils.$isEmpty = obj => {
 	for ( const a in obj ) {
 		return false;
 	}

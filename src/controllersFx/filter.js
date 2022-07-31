@@ -5,7 +5,7 @@ DAWCoreControllersFx.filter = class {
 	data = Object.seal( DAWCoreJSON.effects.filter() );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.mapCallbacks( [
+		this.on = DAWCoreUtils.$mapCallbacks( [
 			"type",
 			"Q",
 			"gain",
