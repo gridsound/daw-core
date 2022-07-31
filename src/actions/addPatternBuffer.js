@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addPatternBuffer", ( daw, bufURL, bufDur ) => {
+DAWCoreActions.set( "addPatternBuffer", ( daw, fromLib, bufURL, bufDur ) => {
 	const buffs = daw.$getBuffers();
 
 	if ( !Object.values( buffs ).find( b => b.url === bufURL ) ) {
