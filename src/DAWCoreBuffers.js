@@ -82,18 +82,12 @@ class DAWCoreBuffers {
 		buffers.delete( buf.hash || buf.url );
 	}
 	static #getBufferFromFile( ctx, file ) {
-		return new Promise( ( res, rej ) => {
-			const reader = new FileReader();
+		DAWCoreUtils.getFileContent( file, "array" ).then( buf => {
+			const hash = DAWCoreUtils.hashBufferV1( new Uint8Array( buf ) ); // 1.
 
-			reader.onload = e => {
-				const buf = e.target.result;
-				const hash = DAWCoreUtils.hashBufferV1( new Uint8Array( buf ) ); // 1.
-
-				ctx.decodeAudioData( buf ).then( audiobuf => {
-					res( [ hash, audiobuf ] );
-				}, rej );
-			};
-			reader.readAsArrayBuffer( file );
+			ctx.decodeAudioData( buf ).then( audiobuf => {
+				res( [ hash, audiobuf ] );
+			}, rej );
 		} );
 	}
 }

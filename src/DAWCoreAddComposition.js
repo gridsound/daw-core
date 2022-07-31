@@ -18,14 +18,8 @@ class DAWCoreAddComposition {
 			);
 	}
 	static $blob( daw, blob, opt ) {
-		return new Promise( ( res, rej ) => {
-			const rd = new FileReader();
-
-			rd.onload = () => {
-				DAWCoreAddComposition.#JSON( daw, rd.result, opt ).then( res, rej );
-			};
-			rd.readAsText( blob );
-		} );
+		return DAWCoreUtils.getFileContent( blob, "text" )
+			.then( txt => DAWCoreAddComposition.#JSON( daw, txt, opt ) );
 	}
 	static $JSObject( daw, cmp, opt ) {
 		const cpy = DAWCoreUtils.jsonCopy( cmp );
