@@ -1,9 +1,12 @@
 "use strict";
 
-DAWCoreActions.set( "addPatternBuffer", ( daw, fromLib, bufURL, bufDur ) => {
+DAWCoreActions.set( "addPatternBuffer", ( daw, fromLib, bufURL, audioBuf ) => {
 	const buffs = daw.$getBuffers();
+	const buffsArr = Object.values( buffs );
+	const [ bufHash, bufName ] = bufURL.split( ":" );
+	const notThere = !buffsArr.find( b => b.url === bufHash || b.hash === bufHash );
 
-	if ( !Object.values( buffs ).find( b => b.url === bufURL ) ) {
+	if ( notThere ) {
 		const pats = daw.$getPatterns();
 		const chans = daw.$getChannels();
 		const patId = DAWCoreActionsCommon.getNextIdOf( pats );
@@ -13,27 +16,31 @@ DAWCoreActions.set( "addPatternBuffer", ( daw, fromLib, bufURL, bufDur ) => {
 				? max
 				: Math.max( max, pat.order );
 		}, -1 ) + 1;
-		const dest = Object.entries( chans ).find( ( [ id, ch ] ) => ch.name === "drums" )?.[ 0 ] || "main";
-		const obj = {
-			buffers: {
-				[ bufId ]: { MIME: "audio/wav", duration: bufDur, url: bufURL },
-			},
-			patterns: {
-				[ patId ]: {
-					order,
-					dest,
-					type: "buffer",
-					buffer: bufId,
-					duration: Math.ceil( bufDur * daw.$getBPS() ),
-					name: bufURL,
-					bufferType: "drum",
-				},
-			}
-		};
+		const drumChan = fromLib === "default" && Object.entries( chans ).find( ( [ id, ch ] ) => ch.name === "drums" )?.[ 0 ];
+		const dest = drumChan || "main";
+		const buf = { duration: audioBuf.duration };
+		const pat = {
+			order,
+			dest,
+			type: "buffer",
+			buffer: bufId,
+			duration: Math.ceil( audioBuf.duration * daw.$getBPS() ),
+			name: bufName,
+		}
 
+		if ( fromLib === "default" ) {
+			pat.bufferType = "drum";
+			buf.url = bufHash;
+		} else {
+			buf.hash = bufHash;
+			daw.$buffersSetBuffer( { ...buf, buffer: audioBuf } );
+		}
 		return [
-			obj,
-			[ "patterns", "addPatternBuffer", bufURL ],
+			{
+				buffers: { [ bufId ]: buf },
+				patterns: { [ patId ]: pat },
+			},
+			[ "patterns", "addPatternBuffer", bufName ],
 		];
 	}
 } );
