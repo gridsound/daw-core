@@ -440,10 +440,11 @@ class DAWCore {
 
 			if ( Array.isArray( ret ) ) {
 				this.$historyStackChange( ...ret );
-			} else if ( ret ) {
-				const undo = DAWCoreUtils.$composeUndo( this.$getCmp(), ret );
-
-				this.$compositionChange( ret, undo );
+				return ret[ 0 ];
+			}
+			if ( ret ) {
+				this.$compositionChange( ret, DAWCoreUtils.$composeUndo( this.$getCmp(), ret ) );
+				return ret;
 			}
 		}
 	}
