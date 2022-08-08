@@ -45,7 +45,7 @@ class DAWCoreAddComposition {
 			try {
 				const cmp = JSON.parse( json );
 
-				DAWCoreAddComposition.$JSObject( cmp, opt ).then( res, rej );
+				DAWCoreAddComposition.$JSObject( daw, cmp, opt ).then( res, rej );
 			} catch ( e ) {
 				rej( e );
 			}
