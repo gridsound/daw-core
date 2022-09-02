@@ -8,11 +8,11 @@ const DAWCoreControllers = {};
 const DAWCoreControllersFx = {};
 
 class DAWCore {
+	static #dropExtensions = Object.freeze( { gs: true, txt: true, json: true } );
 	cb = {};
 	ctx = null;
 	#cmpsLocal = new Map();
 	#cmpsCloud = new Map();
-	#buffers = new Map();
 	#slicesBuffers = new Map();
 	#waMixer = new gswaMixer();
 	#waSynths = new Map();
@@ -42,6 +42,11 @@ class DAWCore {
 	#hist = Object.seal( {
 		$stack: [],
 		$stackInd: 0,
+	} );
+	#buffers = Object.seal( {
+		$absn: null,
+		$objs: new Map(),
+		$buffers: new Map(),
 	} );
 	#slices = Object.seal( {
 		$waSched: new gswaScheduler(),
@@ -104,7 +109,7 @@ class DAWCore {
 	$getAudioChanIn( id ) { return this.#waMixer.$getChanInput( id ); }
 	$getAudioChanOut( id ) { return this.#waMixer.$getChanOutput( id ); }
 	$getAudioSlices( id ) { return this.$slicesBuffersGetBuffer( id ); }
-	$getAudioBuffer( id ) { return this.$buffersGetBuffer( this.#composition.$cmp.buffers[ id ] ).buffer; }
+	$getAudioBuffer( id ) { return this.#buffers.$buffers.get( this.$getBuffer( id ).url || this.$getBuffer( id ).hash ); }
 	// .........................................................................
 	$getCmps( saveMode ) { return saveMode === "local" ? this.#cmpsLocal : this.#cmpsCloud; }
 	$getCmp() { return this.#composition.$cmp; }
@@ -171,7 +176,7 @@ class DAWCore {
 		this.$destinationSetGain( this.$env.$defAppGain );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$destinationSetGain( v ) {
 		DAWCoreDestination.$setGain( this.#dest, v );
 	}
@@ -179,7 +184,7 @@ class DAWCore {
 		return DAWCoreDestination.$analyserFillData( this.#dest );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$historyEmpty() {
 		DAWCoreHistory.$empty( this, this.#hist );
 	}
@@ -196,27 +201,34 @@ class DAWCore {
 		return DAWCoreHistory.$redo( this, this.#hist );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$buffersChange( obj, prevObj ) {
 		DAWCoreBuffers.$change( this, this.#buffers, obj, prevObj );
 	}
 	$buffersEmpty() {
-		this.#buffers.clear();
+		this.#buffers.$objs.clear();
+		this.#buffers.$buffers.clear();
 	}
 	$buffersGetSize() {
-		return this.#buffers.size;
+		return this.#buffers.$objs.size;
 	}
-	$buffersGetBuffer( buf ) {
-		return DAWCoreBuffers.$getBuffer( this.#buffers, buf );
+	$buffersLoadURLBuffer( url ) {
+		return DAWCoreBuffers.$loadURLBuffer( this, this.#buffers, url );
+	}
+	$buffersGetAudioBuffer( hash ) {
+		return DAWCoreBuffers.$getAudioBuffer( this, this.#buffers, hash );
 	}
 	$buffersSetBuffer( objBuf ) {
 		return DAWCoreBuffers.$setBuffer( this, this.#buffers, objBuf );
 	}
-	$buffersLoadFiles( files ) {
-		return DAWCoreBuffers.$loadFiles( this, this.#buffers, files );
+	$buffersPlayBuffer( hash ) {
+		return DAWCoreBuffers.$playBuffer( this, this.#buffers, hash );
+	}
+	$buffersStopBuffer() {
+		return DAWCoreBuffers.$stopBuffer( this.#buffers );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$slicesBuffersClear() {
 		this.#slicesBuffers.clear();
 	}
@@ -230,7 +242,7 @@ class DAWCore {
 		DAWCoreSlicesBuffers.$buffersLoaded( this, this.#slicesBuffers, buffersLoaded );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$compositionExportJSON( saveMode, id ) {
 		return DAWCoreCompositionExportJSON.$export( this.$getComposition( saveMode, id ) );
 	}
@@ -244,7 +256,7 @@ class DAWCore {
 		return !this.#composition.$saved;
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$newComposition( opt ) {
 		return DAWCoreAddComposition.$new( this, opt );
 	}
@@ -261,7 +273,7 @@ class DAWCore {
 		return DAWCoreAddComposition.$JSObject( this, cmp, opt );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$compositionLoad( cmpOri ) {
 		return DAWCoreComposition.$load( this, this.#composition, cmpOri );
 	}
@@ -293,7 +305,7 @@ class DAWCore {
 		return DAWCoreComposition.$change( this, this.#composition, obj, prevObj );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$liveChangeChannel( id, prop, val ) {
 		this.#waMixer.$change( { channels: { [ id ]: { [ prop ]: val } } } );
 	}
@@ -319,7 +331,7 @@ class DAWCore {
 		DAWCoreDrums.$liveDrumStop( this, rowId );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$keysChange( patObj, keysObj ) {
 		DAWCoreKeys.$change( this.#keys, patObj, keysObj );
 	}
@@ -406,7 +418,7 @@ class DAWCore {
 		DAWCoreSlices.$stop( this, this.#slices );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$setContext( ctx ) {
 		this.ctx = ctx;
 		this.#drums.$waDrums.$setContext( ctx );
@@ -429,7 +441,7 @@ class DAWCore {
 		this.$setContext( new AudioContext( { sampleRate: this.$env.$sampleRate } ) );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$callAction( action, ...args ) {
 		const fn = DAWCoreActions.get( action );
 
@@ -454,7 +466,7 @@ class DAWCore {
 		return fn && fn( ...args );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$openComposition( saveMode, id ) {
 		const cmp = this.$getComposition( saveMode, id );
 
@@ -541,68 +553,22 @@ class DAWCore {
 		}
 	}
 
-	// ..........................................................................
-	$dropAudioFiles( files ) {
-		const order = this.$buffersGetSize();
+	// .........................................................................
+	$dropFiles( promFiles ) {
+		DAWCoreBuffers.$dropBuffers( this, this.#buffers, promFiles )
+			.then( arr => {
+				this.$callCallback( "buffersDropped", arr );
+				return promFiles;
+			} )
+			.then( files => {
+				const file = files.find( f => f.name.split( "." ).pop().toLowerCase() in DAWCore.#dropExtensions );
 
-		this.$buffersLoadFiles( files ).then( ( { newBuffers, knownBuffers, failedBuffers } ) => {
-			if ( newBuffers.length || knownBuffers.length ) {
-				const cmpBuffers = this.$getBuffers();
-				const bufNextId = +DAWCoreActionsCommon.getNextIdOf( cmpBuffers );
-				const patNextId = +DAWCoreActionsCommon.getNextIdOf( this.$getPatterns() );
-				const buffersLoaded = {};
-
-				if ( newBuffers.length ) {
-					const obj = {};
-
-					obj.buffers = {};
-					obj.patterns = {};
-					newBuffers.forEach( ( buf, i ) => {
-						const dotind = buf.name.lastIndexOf( "." );
-						const patname = dotind > -1 ? buf.name.substr( 0, dotind ) : buf.name;
-						const bufId = bufNextId + i;
-
-						obj.buffers[ bufId ] = {
-							MIME: buf.MIME,
-							duration: buf.duration,
-							hash: buf.hash,
-						};
-						obj.patterns[ patNextId + i ] = {
-							type: "buffer",
-							dest: "main",
-							buffer: `${ bufId }`,
-							duration: Math.ceil( buf.duration * this.$getBPS() ),
-							name: patname,
-							order: order + i,
-						};
-						buffersLoaded[ bufId ] = this.$buffersGetBuffer( buf );
-					} );
-					this.$callAction( "dropBuffers", obj );
-				}
-				if ( knownBuffers.length ) {
-					const bufmap = Object.entries( cmpBuffers )
-						.reduce( ( map, [ idBuf, buf ] ) => {
-							map.set( buf.hash, idBuf );
-							return map;
-						}, new Map() );
-
-					knownBuffers.forEach( buf => {
-						const idBuf = bufmap.get( buf.hash );
-
-						buffersLoaded[ idBuf ] = this.$buffersGetBuffer( buf );
-					} );
-					this.$slicesBuffersBuffersLoaded( buffersLoaded );
-				}
-				this.$callCallback( "buffersLoaded", buffersLoaded );
-			}
-			if ( failedBuffers.length > 0 ) {
-				console.log( "failedBuffers", failedBuffers );
-				// show a popup
-			}
-		} );
+				return file && this.$addCompositionByBlob( file );
+			} )
+			.then( cmp => cmp && this.$openComposition( "local", cmp.id ) );
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$getFocusedName() {
 		return this.#focusedStr;
 	}
@@ -642,7 +608,7 @@ class DAWCore {
 		}
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	$getCurrentTime() {
 		switch ( this.#focusedStr ) {
 			case "keys": return this.$keysGetCurrentTime();
@@ -690,6 +656,7 @@ class DAWCore {
 			case "slices": this.$slicesStop(); break;
 			case "composition": this.$compositionStop(); break;
 		}
+		this.$buffersStopBuffer();
 		this.$callCallback( "stop", this.#focusedStr );
 		this.$callCallback( "currentTime", this.$getCurrentTime(), this.#focusedStr );
 	}
@@ -703,7 +670,7 @@ class DAWCore {
 		this.#loopMs = 1000 / fps | 0;
 	}
 
-	// ..........................................................................
+	// .........................................................................
 	#startLoop() {
 		this.#loop();
 	}

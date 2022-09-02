@@ -25,15 +25,6 @@ class DAWCoreComposition {
 
 			store.$cmp = cmp;
 			store.$loaded = true;
-			Object.entries( cmp.buffers ).forEach( kv => {
-				proms.push( daw.$buffersSetBuffer( kv[ 1 ] )
-					.then( buf => {
-						if ( buf.buffer ) {
-							bufLoaded[ kv[ 0 ] ] = buf;
-							daw.$callCallback( "buffersLoaded", { [ kv[ 0 ] ]: buf } );
-						}
-					} ) );
-			} );
 			DAWCoreComposition.$change( daw, store, cmp, {
 				keys: {},
 				drums: {},

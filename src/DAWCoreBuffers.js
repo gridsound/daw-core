@@ -1,94 +1,128 @@
 "use strict";
 
 class DAWCoreBuffers {
-	static $change( daw, buffers, obj, prevObj ) {
+	static #audioMIMEs = [ "audio/wav", "audio/wave", "audio/flac", "audio/webm", "audio/ogg", "audio/mpeg", "audio/mp3", "audio/mp4" ];
+
+	static $change( daw, store, obj, prevObj ) {
 		if ( "buffers" in obj ) {
 			Object.entries( obj.buffers ).forEach( ( [ id, buf ] ) => {
 				if ( !buf ) {
-					DAWCoreBuffers.#removeBuffer( buffers, prevObj.buffers[ id ] );
-				} else if ( !DAWCoreBuffers.$getBuffer( buffers, buf ) ) {
-					const pr = DAWCoreBuffers.$setBuffer( daw, buffers, buf );
+					const bufprev = prevObj.buffers[ id ];
+
+					store.$objs.delete( bufprev.hash || bufprev.url );
+				} else if ( !DAWCoreBuffers.$getBuffer( store, buf ) ) {
+					const pr = DAWCoreBuffers.$setBuffer( daw, store, buf );
 
 					if ( buf.url ) {
-						pr.then( buf => daw.$callCallback( "buffersLoaded", { [ id ]: buf } ) );
+						pr.then( buf => daw.$callCallback( "buffersLoaded", id, buf ) );
 					}
 				}
 			} );
 		}
 	}
-	static $getBuffer( buffers, buf ) {
-		return buffers.get( buf.hash || buf.url );
-	}
-	static $setBuffer( daw, buffers, objBuf ) {
-		const buf = { ...objBuf };
-		const url = buf.url;
-		const key = buf.hash || url;
 
-		buffers.set( key, buf );
-		return !url
-			? Promise.resolve( buf )
-			: fetch( `/🥁/${ url }.wav` )
-				.then( res => res.arrayBuffer() )
-				.then( arr => daw.ctx.decodeAudioData( arr ) )
-				.then( buffer => {
-					buf.buffer = buffer;
-					buf.duration = +buffer.duration.toFixed( 4 );
-					return buf;
+	// .........................................................................
+	static $getBuffer( store, objBuf ) {
+		return store.$objs.get( objBuf.hash || objBuf.url );
+	}
+	static $getAudioBuffer( daw, store, hash ) {
+		return store.$buffers.has( hash )
+			? Promise.resolve( store.$buffers.get( hash ) )
+			: DAWCoreBuffers.$loadURLBuffer( daw, store, hash );
+	}
+	static $setBuffer( daw, store, objBuf ) {
+		const cpy = { ...objBuf };
+
+		store.$objs.set( cpy.hash || cpy.url, cpy );
+		return !cpy.url
+			? Promise.resolve( cpy )
+			: DAWCoreBuffers.$loadURLBuffer( daw, store, cpy.url )
+				.then( buf => {
+					cpy.buffer = buf;
+					cpy.duration = +buf.duration.toFixed( 4 );
+					return cpy;
 				} );
 	}
-	static $loadFiles( daw, buffers, files ) {
-		return new Promise( res => {
-			const newBuffers = [];
-			const knownBuffers = [];
-			const failedBuffers = [];
-			let nbDone = 0;
-
-			Array.from( files ).forEach( file => {
-				DAWCoreBuffers.#getBufferFromFile( daw.ctx, file )
-					.then( ( [ hash, buffer ] ) => {
-						const buf = {
-							hash,
-							buffer,
-							MIME: file.type,
-							name: file.name,
-							duration: +buffer.duration.toFixed( 4 ),
-						};
-						const old = DAWCoreBuffers.$getBuffer( buffers, buf );
-
-						if ( !old ) {
-							newBuffers.push( buf );
-						} else if ( !old.buffer ) {
-							knownBuffers.push( buf );
-						}
-					}, () => {
-						failedBuffers.push( {
-							MIME: file.type,
-							name: file.name,
-						} );
-					} )
-					.finally( () => {
-						if ( ++nbDone === files.length ) {
-							newBuffers.forEach( DAWCoreBuffers.$setBuffer.bind( null, daw, buffers ) );
-							knownBuffers.forEach( DAWCoreBuffers.$setBuffer.bind( null, daw, buffers ) );
-							res( { newBuffers, knownBuffers, failedBuffers } );
-						}
-					} );
+	static $loadURLBuffer( daw, store, url ) {
+		return fetch( `/🥁/${ url }.wav` )
+			.then( res => res.arrayBuffer() )
+			.then( arr => daw.$getCtx().decodeAudioData( arr ) )
+			.then( buf => {
+				store.$buffers.set( url, buf );
+				return buf;
 			} );
-		} );
+	}
+	static $playBuffer( daw, store, hash ) {
+		const buf = store.$buffers.get( hash );
+		const absn = daw.$getCtx().createBufferSource();
+
+		DAWCoreBuffers.$stopBuffer( store );
+		store.$absn = absn;
+		absn.buffer = buf;
+		absn.connect( daw.$getAudioDestination() );
+		absn.start();
+		return buf;
+	}
+	static $stopBuffer( store ) {
+		store.$absn?.stop();
 	}
 
-	// ..........................................................................
-	static #removeBuffer( buffers, buf ) {
-		buffers.delete( buf.hash || buf.url );
+	// .........................................................................
+	static $dropBuffers( daw, store, promFiles ) {
+		return promFiles
+			.then( files => DAWCoreBuffers.#dropBuffersHashmap( files ) )
+			.then( hashs => DAWCoreBuffers.#dropBuffersFilterNew( store.$buffers, hashs ) )
+			.then( hashs => DAWCoreBuffers.#dropBuffersDecode( daw.$getCtx(), hashs ) )
+			.then( buffs => DAWCoreBuffers.#dropBuffersSave( daw, store.$buffers, buffs ) );
 	}
-	static #getBufferFromFile( ctx, file ) {
-		DAWCoreUtils.$getFileContent( file, "array" ).then( buf => {
-			const hash = DAWCoreUtils.$hashBufferV1( new Uint8Array( buf ) ); // 1.
+	static #dropBuffersHashmap( files ) {
+		let currFold;
 
-			ctx.decodeAudioData( buf ).then( audiobuf => {
-				res( [ hash, audiobuf ] );
-			}, rej );
+		return Promise.all( files
+			.filter( file => DAWCoreBuffers.#audioMIMEs.includes( file.type ) )
+			.reduce( ( arr, file ) => {
+				const path = file.filepath.split( "/" );
+				const fold = ( path.pop(), path.pop() ) || "";
+				const prom = DAWCoreUtils.$getFileContent( file, "array" )
+					.then( arr => [ DAWCoreUtils.$hashBufferV1( new Uint8Array( arr ) ), arr, file.name ] ); // 1.
+
+				if ( fold !== currFold ) {
+					currFold = fold;
+					arr.push( fold );
+				}
+				arr.push( prom );
+				return arr;
+			}, [] ) );
+	}
+	static #dropBuffersFilterNew( bufferMap, hashs ) {
+		return hashs
+			.filter( h => !Array.isArray( h ) || !bufferMap.has( h[ 0 ] ) )
+			.filter( ( h, i, arr ) => Array.isArray( h ) || Array.isArray( arr[ i + 1 ] ) );
+	}
+	static #dropBuffersDecode( ctx, hashs ) {
+		return Promise.all( hashs.map( h => !Array.isArray( h )
+			? h
+			: ctx.decodeAudioData( h[ 1 ] ).then( buf => [ h[ 0 ], buf, h[ 2 ] ] ) ) );
+	}
+	static #dropBuffersSave( daw, bufferMap, arr ) {
+		const bufSlices = {};
+		const idSlices = daw.$getOpened( "slices" );
+
+		arr.forEach( smp => {
+			if ( Array.isArray( smp ) ) {
+				const bufs = Object.entries( daw.$getBuffers() );
+				const fnd = bufs.find( b => b[ 1 ].hash === smp[ 0 ] );
+
+				bufferMap.set( smp[ 0 ], smp[ 1 ] );
+				if ( fnd ) {
+					fnd[ 1 ].buffer = smp[ 1 ]; // ?
+					bufSlices[ fnd[ 0 ] ] = fnd[ 1 ];
+					daw.$callCallback( "buffersLoaded", fnd[ 0 ], fnd[ 1 ] );
+				}
+			}
 		} );
+		daw.$slicesBuffersBuffersLoaded( bufSlices );
+		return arr;
 	}
 }
 
