@@ -60,7 +60,7 @@ class DAWCoreCompositionFormat {
 		// ..........................................
 		cmp.buffers = cmp.buffers || {};
 		Object.values( cmp.buffers ).forEach( buf => {
-			buf.MIME = buf.type || buf.MIME;
+			delete buf.MIME;
 			delete buf.type;
 		} );
 

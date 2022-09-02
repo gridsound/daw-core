@@ -23,11 +23,11 @@ DAWCoreJSON.composition = ( env, id ) => {
 		patternSlicesOpened: null,
 		patternBufferOpened: null,
 		buffers: {
-			0: { MIME: "audio/wav", duration: .1529, url: "kick-017" },
-			1: { MIME: "audio/wav", duration: .2560, url: "clap-013" },
-			2: { MIME: "audio/wav", duration: .0357, url: "hat-024" },
-			3: { MIME: "audio/wav", duration: .7000, url: "openhat-012" },
-			4: { MIME: "audio/wav", duration: .1151, url: "snare-018" },
+			0: { duration: .1529, url: "kick-017" },
+			1: { duration: .2560, url: "clap-013" },
+			2: { duration: .0357, url: "hat-024" },
+			3: { duration: .7000, url: "openhat-012" },
+			4: { duration: .1151, url: "snare-018" },
 		},
 		patterns: {
 			0: { order: 0, type: "keys", name: "keys", keys: "0", synth: "0", duration: bPM, },
