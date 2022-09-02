@@ -37,7 +37,7 @@ class DAWCoreSlicesBuffers {
 	}
 	static $buffersLoaded( daw, slicesBuffers, buffersLoaded ) {
 		const bufToSli = Object.entries( daw.$getPatterns() ).reduce( ( map, [ id, pat ] ) => {
-			if ( pat.type === "slices" ) {
+			if ( pat.type === "slices" && pat.source ) {
 				const bufId = daw.$getPattern( pat.source ).buffer;
 
 				if ( bufId in map ) {
