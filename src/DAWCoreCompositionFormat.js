@@ -33,6 +33,15 @@ class DAWCoreCompositionFormat {
 		const blcsValues = Object.values( cmp.blocks );
 		let orderDefault = 0;
 
+		// time division
+		if ( !cmp.timedivision ) {
+			cmp.timedivision = cmp.beatsPerMeasure && cmp.beatsPerMeasure
+				? `${ cmp.beatsPerMeasure }/${ cmp.stepsPerBeat }`
+				: "4/4";
+		}
+		delete cmp.beatsPerMeasure;
+		delete cmp.stepsPerBeat;
+
 		// loopA/B
 		// ..........................................
 		if ( Number.isFinite( cmp.loopA ) && Number.isFinite( cmp.loopB ) ) {

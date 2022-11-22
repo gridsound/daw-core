@@ -44,8 +44,8 @@ DAWCoreControllers.slicer = class {
 	change( obj ) {
 		const daw = this.#dawcore;
 
-		if ( "beatsPerMeasure" in obj || "stepsPerBeat" in obj ) {
-			this.on.timedivision( `${ daw.$getBeatsPerMeasure() }/${ daw.$getStepsPerBeat() }` );
+		if ( obj.timedivision ) {
+			this.on.timedivision( obj.timedivision );
 		}
 		if ( "patternSlicesOpened" in obj ) {
 			const id = obj.patternSlicesOpened;

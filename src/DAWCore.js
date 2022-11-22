@@ -120,8 +120,9 @@ class DAWCore {
 	$getId() { return this.#composition.$cmp.id; }
 	$getBPM() { return this.#composition.$cmp.bpm; }
 	$getBPS() { return this.#composition.$cmp.bpm / 60; }
-	$getBeatsPerMeasure() { return this.#composition.$cmp.beatsPerMeasure; }
-	$getStepsPerBeat() { return this.#composition.$cmp.stepsPerBeat; }
+	$getTimedivision() { return this.#composition.$cmp.timedivision; }
+	$getBeatsPerMeasure() { return +this.#composition.$cmp.timedivision.split( "/" )[ 0 ]; }
+	$getStepsPerBeat() { return +this.#composition.$cmp.timedivision.split( "/" )[ 1 ]; }
 	// .........................................................................
 	$getBlocks() { return this.#composition.$cmp.blocks; }
 	$getBlock( id ) { return this.#composition.$cmp.blocks[ id ]; }

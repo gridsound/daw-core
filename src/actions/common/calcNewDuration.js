@@ -2,7 +2,7 @@
 
 DAWCoreActionsCommon.calcNewDuration = ( daw, changeObj ) => {
 	const blocks = changeObj.blocks || {};
-	const bPM = changeObj.beatsPerMeasure || daw.$getBeatsPerMeasure();
+	const bPM = changeObj.timedivision ? changeObj.timedivision.split( "/" )[ 0 ] : daw.$getBeatsPerMeasure();
 	const dur = Object.entries( daw.$getBlocks() ).reduce( ( max, [ id, blc ] ) => {
 		const blcChange = blocks[ id ];
 

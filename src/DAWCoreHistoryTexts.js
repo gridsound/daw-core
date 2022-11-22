@@ -9,7 +9,7 @@ class DAWCoreHistoryTexts {
 	static #texts = new Map( [
 		[ "cmp", {
 			renameComposition: ( old, neww ) => [ "pen", `rename compo "${ old || "untitled" }" to "${ neww }"` ],
-			changeTempo: ( bpm, bPM, sPB ) => [ "clock", `new tempo ${ bpm } (${ bPM }/${ sPB })` ],
+			changeTempo: ( bpm, timediv ) => [ "clock", `new tempo ${ bpm } (${ timediv })` ],
 			changeLoop: ( a, b ) => [ "loop", `change loop ${ a } -> ${ b }` ],
 			removeLoop: () => [ "loop", "remove loop" ],
 		} ],

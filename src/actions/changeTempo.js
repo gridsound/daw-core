@@ -1,10 +1,8 @@
 "use strict";
 
-DAWCoreActions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
+DAWCoreActions.set( "changeTempo", ( daw, bpm, timedivision ) => {
+	const signChanged = timedivision !== daw.$getTimedivision();
 	const bpmChanged = bpm !== daw.$getBPM();
-	const signChanged =
-			bPM !== daw.$getBeatsPerMeasure() ||
-			sPB !== daw.$getStepsPerBeat();
 
 	if ( signChanged || bpmChanged ) {
 		const obj = {};
@@ -12,8 +10,9 @@ DAWCoreActions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 		const pats = Object.entries( daw.$getPatterns() );
 
 		if ( signChanged ) {
-			obj.beatsPerMeasure = bPM;
-			obj.stepsPerBeat = sPB;
+			const bPM = timedivision.split( "/" )[ 0 ];
+
+			obj.timedivision = timedivision;
 			pats.forEach( ( [ id, pat ] ) => {
 				if ( pat.type === "keys" || pat.type === "drums" ) {
 					const duration = Math.max( 1, Math.ceil( pat.duration / bPM ) ) * bPM;
@@ -59,7 +58,7 @@ DAWCoreActions.set( "changeTempo", ( daw, bpm, bPM, sPB ) => {
 		}
 		return [
 			obj,
-			[ "cmp", "changeTempo", bpm, bPM, sPB ],
+			[ "cmp", "changeTempo", bpm, timedivision ],
 		];
 	}
 } );
