@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCoreJSON.effects.delay = obj => Object.assign( Object.seal( {
-	time: .25,
-	gain: .2,
-	pan: .75,
+	time: .5,
+	gain: .5,
+	pan: -.5,
 } ), obj );
