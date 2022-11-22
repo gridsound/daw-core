@@ -15,6 +15,7 @@ DAWCoreControllers.effects = class {
 	constructor( fns ) {
 		this.on = DAWCoreUtils.$mapCallbacks( [
 			"changeBPM",
+			"changeTimedivision",
 			"addEffect",
 			"removeEffect",
 			"changeEffect",
@@ -39,6 +40,9 @@ DAWCoreControllers.effects = class {
 	change( obj ) {
 		if ( obj.bpm ) {
 			this.on.changeBPM( obj.bpm );
+		}
+		if ( obj.timedivision ) {
+			this.on.changeTimedivision( obj.timedivision );
 		}
 		if ( obj.effects ) {
 			this.#effectsCrud( obj.effects );
