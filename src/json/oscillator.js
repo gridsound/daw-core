@@ -6,4 +6,5 @@ DAWCoreJSON.oscillator = obj => Object.assign( Object.seal( {
 	pan: 0,
 	gain: 1,
 	detune: 0,
+	detunefine: 0,
 } ), obj );
