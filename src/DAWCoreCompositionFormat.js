@@ -165,6 +165,7 @@ class DAWCoreCompositionFormat {
 			delete syn.env.substain;
 			Object.values( syn.oscillators ).forEach( osc => {
 				osc.detune = Math.min( Math.max( -24, Math.round( osc.detune ) ), 24 );
+				osc.detunefine = Math.min( Math.max( -1, osc.detunefine || 0 ), 1 );
 			} );
 		} );
 
