@@ -152,6 +152,19 @@ class DAWCore {
 			case "buffer": return this.$getBuffers();
 		}
 	}
+	$getBlocksOrderedByTracks() {
+		const blcs = this.$getBlocks();
+		const trcks = {};
+
+		Object.entries( blcs ).forEach( ( [ idBlc, blc ] ) => {
+			if ( blc.track in trcks ) {
+				trcks[ blc.track ][ idBlc ] = blc;
+			} else {
+				trcks[ blc.track ] = { [ idBlc ]: blc };
+			}
+		} );
+		return trcks;
+	}
 	// .........................................................................
 	$getPatternDuration( id ) {
 		const pat = this.$getPattern( id );
