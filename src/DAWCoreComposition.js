@@ -265,6 +265,19 @@ class DAWCoreComposition {
 				store.$waSched.$setLoopBeat( 0, store.$cmp.duration || store.$cmp.beatsPerMeasure );
 			}
 		} ],
+		[ "tracks", ( daw, store, obj ) => {
+			const blcs = daw.$getBlocksOrderedByTracks();
+			const objChg = {};
+
+			Object.entries( obj.tracks ).forEach( ( [ trId, trObj ] ) => {
+				if ( "toggle" in trObj && trId in blcs ) {
+					trObj.toggle
+						? Object.assign( objChg, blcs[ trId ] )
+						: Object.keys( blcs[ trId ] ).forEach( id => objChg[ id ] = undefined );
+				}
+			} );
+			store.$waSched.$change( objChg );
+		} ],
 		[ "synths", ( daw, store, obj, prevObj ) => {
 			Object.entries( obj.synths ).forEach( ( [ id, synthObj ] ) => {
 				if ( !synthObj ) {
