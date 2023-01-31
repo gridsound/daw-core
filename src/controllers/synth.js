@@ -77,6 +77,9 @@ DAWCoreControllers.synth = class {
 		this.#setProp( dataOsc, cb, "gain", obj.gain );
 		this.#setProp( dataOsc, cb, "detune", obj.detune );
 		this.#setProp( dataOsc, cb, "detunefine", obj.detunefine );
+		this.#setProp( dataOsc, cb, "unisonvoices", obj.unisonvoices );
+		this.#setProp( dataOsc, cb, "unisondetune", obj.unisondetune );
+		this.#setProp( dataOsc, cb, "unisonblend", obj.unisonblend );
 		this.on.updateOscWave( id );
 		this.on.changeOsc( id, obj );
 	}
