@@ -31,6 +31,7 @@ DAWCoreControllers.mixer = class {
 
 	// .........................................................................
 	clear() {
+		Object.keys( this.data.effects ).forEach( id => this.#deleteEffect( id ) );
 		Object.keys( this.data.channels ).forEach( id => {
 			if ( id !== "main" ) {
 				this.#deleteChannel( id );
