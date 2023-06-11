@@ -101,6 +101,7 @@ class DAWCoreHistoryTexts {
 			redirectKey: ( pat, b ) => [ "glissando", `${ b ? "add" : "remove" } a glissando in "${ pat }"` ],
 			unselectKey: pat => [ "mouse", `keys: unselect ${ DAWCoreUtils.$plural( 1, "key" ) } in "${ pat }"` ],
 			unselectAllKeys: ( pat, len ) => [ "mouse", `unselect ${ DAWCoreUtils.$plural( len, "key" ) } in "${ pat }"` ],
+			dropMidiOnKeys: name => [ "file-music", `keys: drop midi "${ name }"` ],
 			changeKeysProps: ( pat, prop, len ) => [ "keys", `keys: change ${ DAWCoreUtils.$plural( len, "key", "'s" ) } ${ prop } in "${ pat }"` ],
 			cloneSelectedKeys: ( pat, len ) => [ "keys", `clone ${ DAWCoreUtils.$plural( len, "key" ) } in "${ pat }"` ],
 		} ],
