@@ -14,7 +14,7 @@ DAWCoreActions.set( "dropMidiOnKeys", ( daw, patId, midiRaw ) => {
 		keys0[ k ] = DAWCoreJSON.key( keys0[ k ] );
 	}
 
-	const keysDiff = GSUI.$diffObjects( keysOri, keys0 );
+	const keysDiff = GSUdiffObjects( keysOri, keys0 );
 
 	if ( keysDiff ) {
 		obj.keys = { [ pat.keys ]: keysDiff };
@@ -30,7 +30,7 @@ DAWCoreActions.set( "dropMidiOnKeys", ( daw, patId, midiRaw ) => {
 			DAWCoreActionsCommon.updatePatternDuration( daw, obj, patId, newDur );
 		}
 	}
-	if ( DAWCoreUtils.$isntEmpty( obj ) ) {
+	if ( GSUisntEmpty( obj ) ) {
 		return [
 			obj,
 			[ "keys", "dropMidiOnKeys", newName ],

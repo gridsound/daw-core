@@ -16,7 +16,7 @@ class DAWCoreCompositionExportJSON {
 
 	static $export( cmp ) {
 		if ( cmp ) {
-			const cpy = DAWCoreUtils.$jsonCopy( cmp );
+			const cpy = GSUjsonCopy( cmp );
 			const cpyFormated = DAWCoreCompositionFormat.$out( DAWCoreCompositionFormat.$in( cpy ) );
 
 			return {

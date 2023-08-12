@@ -3,17 +3,17 @@
 DAWCoreControllers.mixer = class {
 	on = null;
 	data = Object.freeze( { channels: {}, effects: {} } );
-	#chansCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data.channels,
+	#chansCrud = GSUcreateUpdateDelete.bind( null, this.data.channels,
 		this.#addChannel.bind( this ),
 		this.#updateChannel.bind( this ),
 		this.#deleteChannel.bind( this ) );
-	#effectsCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data.effects,
+	#effectsCrud = GSUcreateUpdateDelete.bind( null, this.data.effects,
 		this.#addEffect.bind( this ),
 		this.#updateEffect.bind( this ),
 		this.#deleteEffect.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.$mapCallbacks( [
+		this.on = GSUmapCallbacks( [
 			"addChannel",
 			"removeChannel",
 			"toggleChannel",
@@ -89,7 +89,7 @@ DAWCoreControllers.mixer = class {
 		}
 	}
 	#updateEffect( id, obj ) {
-		DAWCoreUtils.$deepAssign( this.data.effects[ id ], obj );
+		GSUdeepAssign( this.data.effects[ id ], obj );
 		this.on.updateEffect( this.data.effects[ id ].dest, id, obj );
 	}
 };

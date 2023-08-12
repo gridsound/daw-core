@@ -3,7 +3,7 @@
 DAWCoreControllers.effects = class {
 	on = null;
 	data = {};
-	#effectsCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data,
+	#effectsCrud = GSUcreateUpdateDelete.bind( null, this.data,
 		this.#addEffect.bind( this ),
 		this.#updateEffect.bind( this ),
 		this.#deleteEffect.bind( this ) );
@@ -13,7 +13,7 @@ DAWCoreControllers.effects = class {
 	} );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.$mapCallbacks( [
+		this.on = GSUmapCallbacks( [
 			"changeBPM",
 			"changeTimedivision",
 			"addEffect",
@@ -65,7 +65,7 @@ DAWCoreControllers.effects = class {
 
 	// .........................................................................
 	#addEffect( id, obj, diffObj ) {
-		const fx = Object.seal( DAWCoreUtils.$jsonCopy( obj ) );
+		const fx = Object.seal( GSUjsonCopy( obj ) );
 
 		this.data[ id ] = fx;
 		if ( this.#fxDestOk( fx ) ) {
@@ -77,7 +77,7 @@ DAWCoreControllers.effects = class {
 		this.on.changeEffect( id, "toggle", fx.toggle );
 		this.on.changeEffect( id, "order", fx.order );
 		this.on.changeEffectData( id, fx.data );
-		if ( !DAWCoreUtils.$isNoop( this.on.connectEffectTo ) ) {
+		if ( !GSUisNoop( this.on.connectEffectTo ) ) {
 			const [ prevId, nextId ] = this.#findSiblingFxIds( id, diffObj );
 
 			this.on.connectEffectTo( fx.dest, id, nextId );
@@ -93,7 +93,7 @@ DAWCoreControllers.effects = class {
 		delete this.data[ id ];
 	}
 	#deleteEffect2( id, diffObj ) {
-		if ( !this.values.resetting && !DAWCoreUtils.$isNoop( this.on.connectEffectTo ) ) {
+		if ( !this.values.resetting && !GSUisNoop( this.on.connectEffectTo ) ) {
 			const [ prevId, nextId ] = this.#findSiblingFxIds( id, diffObj );
 
 			this.on.connectEffectTo( this.data[ id ].dest, prevId, nextId );
@@ -111,13 +111,13 @@ DAWCoreControllers.effects = class {
 			}
 		}
 		if ( "data" in fx ) {
-			DAWCoreUtils.$diffAssign( dataObj.data, fx.data );
+			GSUdiffAssign( dataObj.data, fx.data );
 			if ( destOk ) {
 				this.on.changeEffectData( id, fx.data );
 			}
 		}
 		if ( "order" in fx ) {
-			if ( destOk && !DAWCoreUtils.$isNoop( this.on.connectEffectTo ) ) {
+			if ( destOk && !GSUisNoop( this.on.connectEffectTo ) ) {
 				const [ prevId, nextId ] = this.#findSiblingFxIds( id, diffObj );
 
 				this.on.connectEffectTo( dataObj.dest, prevId, nextId );
@@ -125,7 +125,7 @@ DAWCoreControllers.effects = class {
 			dataObj.order = fx.order;
 			if ( destOk ) {
 				this.on.changeEffect( id, "order", fx.order );
-				if ( !DAWCoreUtils.$isNoop( this.on.connectEffectTo ) ) {
+				if ( !GSUisNoop( this.on.connectEffectTo ) ) {
 					const [ prevId, nextId ] = this.#findSiblingFxIds( id, diffObj );
 
 					this.on.connectEffectTo( dataObj.dest, prevId, id );

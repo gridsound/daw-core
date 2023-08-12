@@ -462,14 +462,14 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = DAWCoreUtils.$deepFreeze( fn( this, ...args ) );
+			const ret = GSUdeepFreeze( fn( this, ...args ) );
 
 			if ( Array.isArray( ret ) ) {
 				this.$historyStackChange( ...ret );
 				return ret[ 0 ];
 			}
 			if ( ret ) {
-				this.$compositionChange( ret, DAWCoreUtils.$composeUndo( this.$getCmp(), ret ) );
+				this.$compositionChange( ret, GSUcomposeUndo( this.$getCmp(), ret ) );
 				return ret;
 			}
 		}

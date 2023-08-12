@@ -3,7 +3,7 @@
 DAWCoreControllers.keys = class {
 	on = null;
 	data = {};
-	#keysCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data,
+	#keysCrud = GSUcreateUpdateDelete.bind( null, this.data,
 		this.#addKey.bind( this ),
 		this.#updateKey.bind( this ),
 		this.#deleteKey.bind( this ) );
@@ -23,7 +23,7 @@ DAWCoreControllers.keys = class {
 	] );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.$mapCallbacks( [
+		this.on = GSUmapCallbacks( [
 			"addKey",
 			"removeKey",
 			"changeKeyProp",

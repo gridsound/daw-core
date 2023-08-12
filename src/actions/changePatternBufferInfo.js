@@ -28,10 +28,10 @@ DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } ) 
 			.filter( kv => kv[ 1 ].type === "slices" && kv[ 1 ].source === id )
 			.forEach( kv => DAWCoreActionsCommon.updatePatternDuration( daw, obj, kv[ 0 ], dur ) );
 	}
-	if ( DAWCoreUtils.$isntEmpty( objPat ) ) {
-		DAWCoreUtils.$deepAssign( obj, { patterns: { [ id ]: objPat } } );
+	if ( GSUisntEmpty( objPat ) ) {
+		GSUdeepAssign( obj, { patterns: { [ id ]: objPat } } );
 	}
-	if ( DAWCoreUtils.$isntEmpty( obj ) ) {
+	if ( GSUisntEmpty( obj ) ) {
 		return [
 			obj,
 			[ "patterns", "changePatternBufferInfo", name || pat.name ],

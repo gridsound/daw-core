@@ -3,13 +3,13 @@
 DAWCoreControllers.tracks = class {
 	on = null;
 	data = {};
-	#tracksCrud = DAWCoreUtils.$createUpdateDelete.bind( null, this.data,
+	#tracksCrud = GSUcreateUpdateDelete.bind( null, this.data,
 		this.#addTrack.bind( this ),
 		this.#changeTrack.bind( this ),
 		this.#deleteTrack.bind( this ) );
 
 	constructor( fns ) {
-		this.on = DAWCoreUtils.$mapCallbacks( [
+		this.on = GSUmapCallbacks( [
 			"addTrack",
 			"removeTrack",
 			"toggleTrack",

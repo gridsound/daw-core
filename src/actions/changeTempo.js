@@ -36,7 +36,7 @@ DAWCoreActions.set( "changeTempo", ( daw, bpm, timedivision ) => {
 				}
 			} );
 		}
-		if ( DAWCoreUtils.$isntEmpty( objPatterns ) ) {
+		if ( GSUisntEmpty( objPatterns ) ) {
 			const objBlocks = {};
 
 			obj.patterns = objPatterns;
@@ -47,8 +47,8 @@ DAWCoreActions.set( "changeTempo", ( daw, bpm, timedivision ) => {
 					objBlocks[ id ] = { duration: pat.duration };
 				}
 			} );
-			DAWCoreUtils.$addIfNotEmpty( obj, "blocks", objBlocks );
-			if ( DAWCoreUtils.$isntEmpty( objBlocks ) ) {
+			GSUaddIfNotEmpty( obj, "blocks", objBlocks );
+			if ( GSUisntEmpty( objBlocks ) ) {
 				const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
 
 				if ( dur !== daw.$getDuration() ) {

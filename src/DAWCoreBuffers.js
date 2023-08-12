@@ -83,8 +83,8 @@ class DAWCoreBuffers {
 			.reduce( ( arr, file ) => {
 				const path = file.filepath.split( "/" );
 				const fold = ( path.pop(), path.pop() ) || "";
-				const prom = DAWCoreUtils.$getFileContent( file, "array" )
-					.then( arr => [ DAWCoreUtils.$hashBufferV1( new Uint8Array( arr ) ), arr, file.name ] ); // 1.
+				const prom = GSUgetFileContent( file, "array" )
+					.then( arr => [ GSUhashBufferV1( new Uint8Array( arr ) ), arr, file.name ] ); // 1.
 
 				if ( fold !== currFold ) {
 					currFold = fold;

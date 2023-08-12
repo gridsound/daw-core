@@ -14,8 +14,7 @@ DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 	if ( type === "buffer" ) {
 		Object.entries( daw.$getDrumrows() ).forEach( kv => {
 			if ( kv[ 1 ].pattern === patId ) {
-				DAWCoreUtils.$deepAssign( obj,
-					DAWCoreActions._removeDrumrow( obj, kv[ 0 ], daw ) );
+				GSUdeepAssign( obj, DAWCoreActions._removeDrumrow( obj, kv[ 0 ], daw ) );
 			}
 		} );
 		Object.entries( daw.$getPatterns() ).forEach( kv => {
@@ -27,7 +26,7 @@ DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 	} else {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	}
-	if ( DAWCoreUtils.$isntEmpty( blocks ) ) {
+	if ( GSUisntEmpty( blocks ) ) {
 		const realDur = Object.values( daw.$getBlocks() )
 			.reduce( ( dur, blc ) => {
 				return blc.pattern === patId
