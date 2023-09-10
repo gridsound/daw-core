@@ -19,7 +19,6 @@ DAWCoreControllers.synth = class {
 			"removeOsc",
 			"changeOsc",
 			"changeOscProp",
-			"updateOscWave",
 			"changeLFO",
 			"changeLFOProp",
 			"updateLFOWave",
@@ -80,7 +79,6 @@ DAWCoreControllers.synth = class {
 		this.#setProp( dataOsc, cb, "unisonvoices", obj.unisonvoices );
 		this.#setProp( dataOsc, cb, "unisondetune", obj.unisondetune );
 		this.#setProp( dataOsc, cb, "unisonblend", obj.unisonblend );
-		this.on.updateOscWave( id );
 		this.on.changeOsc( id, obj );
 	}
 	#updateEnv( obj ) {
