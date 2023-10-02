@@ -169,6 +169,10 @@ class DAWCoreCompositionFormat {
 				osc.unisonvoices = Math.min( Math.max( 1, Math.round( osc.unisonvoices ?? 1 ) ), 9 );
 				osc.unisondetune = Math.min( Math.max( 0, osc.unisondetune ?? 0 ), 12 );
 				osc.unisonblend = Math.min( Math.max( 0, osc.unisonblend ?? 0 ), 1 );
+				if ( !osc.wave && !osc.source ) {
+					osc.wave = osc.type || "sine";
+				}
+				delete osc.type;
 			} );
 		} );
 

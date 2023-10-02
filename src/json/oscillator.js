@@ -2,7 +2,8 @@
 
 DAWCoreJSON.oscillator = obj => Object.assign( Object.seal( {
 	order: 0,
-	type: "sine",
+	wave: "sine",
+	source: null,
 	pan: 0,
 	gain: 1,
 	detune: 0,
