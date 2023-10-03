@@ -71,7 +71,8 @@ DAWCoreControllers.synth = class {
 		const cb = this.on.changeOscProp.bind( null, id );
 
 		this.#setProp( dataOsc, cb, "order", obj.order );
-		this.#setProp( dataOsc, cb, "type", obj.type );
+		this.#setProp( dataOsc, cb, "wave", obj.wave );
+		this.#setProp( dataOsc, cb, "source", obj.source );
 		this.#setProp( dataOsc, cb, "pan", obj.pan );
 		this.#setProp( dataOsc, cb, "gain", obj.gain );
 		this.#setProp( dataOsc, cb, "detune", obj.detune );
