@@ -286,6 +286,7 @@ class DAWCoreComposition {
 				} else if ( !prevObj.synths[ id ] ) {
 					const syn = new gswaSynth();
 
+					syn.$getAudioBuffer = id => daw.$getAudioBuffer( daw.$getPattern( id ).buffer );
 					syn.$setContext( daw.$getCtx() );
 					syn.$setBPM( store.$cmp.bpm );
 					syn.$change( synthObj );
