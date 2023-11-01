@@ -156,7 +156,12 @@ class DAWCoreCompositionFormat {
 		// synths
 		// ..........................................
 		if ( !cmp.synths ) {
-			cmp.synths = { 0: DAWCoreJSON.synth() };
+			cmp.synths = { 0: DAWCoreJSON.synth( {
+				oscillators: {
+					0: DAWCoreJSON.oscillator( { gain: .75 } ),
+					1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
+				},
+			} ) };
 		}
 		Object.values( cmp.synths ).forEach( syn => {
 			delete syn.envelopes;

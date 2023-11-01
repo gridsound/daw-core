@@ -44,7 +44,13 @@ DAWCoreJSON.composition = ( env, id ) => {
 			0: DAWCoreJSON.block( { pattern: "0", track: "0", duration: bPM } ),
 			1: DAWCoreJSON.block( { pattern: "1", track: "1", duration: bPM } ),
 		},
-		synths: { 0: DAWCoreJSON.synth( { dest: "2" } ) },
+		synths: { 0: DAWCoreJSON.synth( {
+			dest: "2",
+			oscillators: {
+				0: DAWCoreJSON.oscillator( { gain: .75 } ),
+				1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
+			},
+		} ) },
 		drumrows: {
 			0: DAWCoreJSON.drumrow( { order: 0, pattern: "2" } ),
 			1: DAWCoreJSON.drumrow( { order: 1, pattern: "3" } ),

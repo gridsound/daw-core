@@ -4,8 +4,14 @@ DAWCoreActions.set( "addSynth", daw => {
 	const id = DAWCoreActionsCommon.getNextIdOf( daw.$getSynths() );
 	const name = DAWCoreActionsCommon.createUniqueName( daw.$getSynths(), "synth" );
 	const obj = {
-		synths: { [ id ]: DAWCoreJSON.synth( { name } ) },
 		synthOpened: id,
+		synths: { [ id ]: DAWCoreJSON.synth( {
+			name,
+			oscillators: {
+				0: DAWCoreJSON.oscillator( { gain: .75 } ),
+				1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
+			},
+		} ) },
 	};
 
 	if ( daw.$getOpened( "keys" ) != null ) {
