@@ -47,13 +47,12 @@ class DAWCoreComposition {
 	}
 	static $unload( daw, store ) {
 		if ( store.$loaded ) {
-			const d = store.$waSched.data;
-
 			store.$loaded = false;
 			daw.$getAudioEffects().$clear(); // 1.
 			daw.$getAudioMixer().$clear();
 			store.$waSched.$stop();
-			Object.keys( d ).forEach( id => delete d[ id ] );
+			store.$waSched.$empty();
+			daw.$keysOpenPattern( null );
 			daw.$getAudioSynths().clear();
 			daw.$slicesBuffersClear();
 			daw.$getAudioDrumrows().$clear();
