@@ -44,10 +44,14 @@ DAWCoreControllers.synth = class {
 			this.data.name = obj.name;
 		}
 		if ( obj.env ) {
-			this.#updateEnv( obj.env );
+			GSUforEach( obj.env, DAWCoreControllers.synth.#setProp.bind( null, this.data.env, this.on.changeEnvProp ) );
+			this.on.updateEnvWave();
+			this.on.changeEnv( obj.env );
 		}
 		if ( obj.lfo ) {
-			this.#updateLFO( obj.lfo );
+			GSUforEach( obj.lfo, DAWCoreControllers.synth.#setProp.bind( null, this.data.lfo, this.on.changeLFOProp ) );
+			this.on.updateLFOWave();
+			this.on.changeLFO( obj.lfo );
 		}
 		if ( obj.oscillators ) {
 			this.#oscsCrud( obj.oscillators );
@@ -60,55 +64,16 @@ DAWCoreControllers.synth = class {
 
 		this.data.oscillators[ id ] = osc;
 		this.on.addOsc( id, osc );
-		this.#updateOsc( id, osc );
 	}
 	#deleteOsc( id ) {
 		delete this.data.oscillators[ id ];
 		this.on.removeOsc( id );
 	}
 	#updateOsc( id, obj ) {
-		const dataOsc = this.data.oscillators[ id ];
-		const cb = this.on.changeOscProp.bind( null, id );
-
-		this.#setProp( dataOsc, cb, "order", obj.order );
-		this.#setProp( dataOsc, cb, "wave", obj.wave );
-		this.#setProp( dataOsc, cb, "source", obj.source );
-		this.#setProp( dataOsc, cb, "pan", obj.pan );
-		this.#setProp( dataOsc, cb, "gain", obj.gain );
-		this.#setProp( dataOsc, cb, "detune", obj.detune );
-		this.#setProp( dataOsc, cb, "detunefine", obj.detunefine );
-		this.#setProp( dataOsc, cb, "unisonvoices", obj.unisonvoices );
-		this.#setProp( dataOsc, cb, "unisondetune", obj.unisondetune );
-		this.#setProp( dataOsc, cb, "unisonblend", obj.unisonblend );
+		GSUforEach( obj, DAWCoreControllers.synth.#setProp.bind( null, this.data.oscillators[ id ], this.on.changeOscProp.bind( null, id ) ) );
 		this.on.changeOsc( id, obj );
 	}
-	#updateEnv( obj ) {
-		const dataEnv = this.data.env;
-		const cb = this.on.changeEnvProp;
-
-		this.#setProp( dataEnv, cb, "toggle", obj.toggle );
-		this.#setProp( dataEnv, cb, "attack", obj.attack );
-		this.#setProp( dataEnv, cb, "hold", obj.hold );
-		this.#setProp( dataEnv, cb, "decay", obj.decay );
-		this.#setProp( dataEnv, cb, "sustain", obj.sustain );
-		this.#setProp( dataEnv, cb, "release", obj.release );
-		this.on.updateEnvWave();
-		this.on.changeEnv( obj );
-	}
-	#updateLFO( obj ) {
-		const dataLFO = this.data.lfo;
-		const cb = this.on.changeLFOProp;
-
-		this.#setProp( dataLFO, cb, "toggle", obj.toggle );
-		this.#setProp( dataLFO, cb, "type", obj.type );
-		this.#setProp( dataLFO, cb, "delay", obj.delay );
-		this.#setProp( dataLFO, cb, "attack", obj.attack );
-		this.#setProp( dataLFO, cb, "speed", obj.speed );
-		this.#setProp( dataLFO, cb, "amp", obj.amp );
-		this.on.updateLFOWave();
-		this.on.changeLFO( obj );
-	}
-	#setProp( data, cb, prop, val ) {
+	static #setProp( data, cb, prop, val ) {
 		if ( val !== undefined ) {
 			data[ prop ] = val;
 			cb( prop, val );
