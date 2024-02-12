@@ -463,16 +463,25 @@ class DAWCore {
 		if ( !fn ) {
 			console.error( `DAWCore: undefined action "${ action }"` );
 		} else {
-			const ret = GSUdeepFreeze( fn( this, ...args ) );
+			const ret = fn( this, ...args );
 
-			if ( Array.isArray( ret ) ) {
-				this.$historyStackChange( ...ret );
-				return ret[ 0 ];
-			}
 			if ( ret ) {
-				this.$compositionChange( ret, GSUcomposeUndo( this.$getCmp(), ret ) );
-				return ret;
+				return !ret.then
+					? this.#callAction( ret )
+					: ret.then( ret2 => this.#callAction( ret2 ) );
 			}
+		}
+	}
+	#callAction( actRet ) {
+		const ret = GSUdeepFreeze( actRet );
+
+		if ( Array.isArray( ret ) ) {
+			this.$historyStackChange( ...ret );
+			return ret[ 0 ];
+		}
+		if ( ret ) {
+			this.$compositionChange( ret, GSUcomposeUndo( this.$getCmp(), ret ) );
+			return ret;
 		}
 	}
 	$callCallback( cbName, ...args ) {
