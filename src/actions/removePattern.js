@@ -11,20 +11,29 @@ DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 		return blocks;
 	}, {} );
 
-	if ( type === "buffer" ) {
-		Object.entries( daw.$getDrumrows() ).forEach( kv => {
-			if ( kv[ 1 ].pattern === patId ) {
-				GSUdeepAssign( obj, DAWCoreActions._removeDrumrow( obj, kv[ 0 ], daw ) );
-			}
-		} );
-		Object.entries( daw.$getPatterns() ).forEach( kv => {
-			if ( kv[ 1 ].type === "slices" && kv[ 1 ].source === patId ) {
-				obj.patterns[ kv[ 0 ] ] = { source: null };
-			}
-		} );
-		obj.buffers = { [ pat.buffer ]: undefined };
-	} else {
+	if ( type !== "buffer" ) {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
+	} else {
+		GSUforEach( daw.$getDrumrows(), ( rowId, row ) => {
+			if ( row.pattern === patId ) {
+				GSUdeepAssign( obj, DAWCoreActions._removeDrumrow( obj, rowId, daw ) );
+			}
+		} );
+		GSUforEach( daw.$getPatterns(), ( patSliId, patSli ) => {
+			if ( patSli.type === "slices" && patSli.source === patId ) {
+				obj.patterns[ patSliId ] = { source: null };
+			}
+		} );
+		GSUaddIfNotEmpty( obj, "synths", GSUreduce( daw.$getSynths(), ( syns, synId, syn ) => {
+			GSUforEach( syn.oscillators, ( oscId, osc ) => {
+				if ( osc.source === patId ) {
+					syns[ synId ] ||= { oscillators: {} };
+					syns[ synId ].oscillators[ oscId ] = undefined;
+				}
+			} );
+			return syns;
+		}, {} ) );
+		obj.buffers = { [ pat.buffer ]: undefined };
 	}
 	if ( GSUisntEmpty( blocks ) ) {
 		const realDur = Object.values( daw.$getBlocks() )
