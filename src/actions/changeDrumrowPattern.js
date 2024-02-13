@@ -1,15 +1,17 @@
 "use strict";
 
-DAWCoreActions.set( "changeDrumrowPattern", ( daw, rowId, pattern ) => {
-	const row = daw.$getDrumrow( rowId );
-	const pat = daw.$getPattern( pattern );
+DAWCoreActions.set( "changeDrumrowPattern", ( daw, rowId, patType, patId ) => {
+	return DAWCoreActionsCommon.addPatternBuffer( daw, patType, patId )
+		.then( ( [ patId, patName, patObj ] ) => {
+			const row = daw.$getDrumrow( rowId );
 
-	if ( row.pattern !== pattern && pat.type === "buffer" ) {
-		const oldPat = DAWCoreActionsCommon.getDrumrowName( daw, rowId );
+			if ( row.pattern !== patId ) {
+				const oldPat = DAWCoreActionsCommon.getDrumrowName( daw, rowId );
 
-		return [
-			{ drumrows: { [ rowId ]: { pattern } } },
-			[ "drumrows", "changeDrumrowPattern", oldPat, pat.name ],
-		];
-	}
+				return [
+					Object.assign( { drumrows: { [ rowId ]: { pattern: patId } } }, patObj ),
+					[ "drumrows", "changeDrumrowPattern", oldPat, patName ],
+				];
+			}
+		} );
 } );
