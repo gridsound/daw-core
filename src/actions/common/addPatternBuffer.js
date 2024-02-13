@@ -3,11 +3,14 @@
 /**
  * srcType can be:
  * - "pattern-buffer"
+ * - "pattern-slices"
+ * - "pattern-drums"
+ * - "pattern-keys"
  * - "library-buffer:default"
  * - "library-buffer:local"
 */
 DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
-	if ( srcType === "pattern-buffer" ) {
+	if ( !srcType.includes( ':' ) ) {
 		return Promise.resolve( [ srcPatId, daw.$getPattern( srcPatId ).name, null ] );
 	}
 
