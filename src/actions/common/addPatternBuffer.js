@@ -44,6 +44,8 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 			duration: Math.ceil( audioBuf.duration * daw.$getBPS() ),
 			name: bufName,
 		};
+		const nameParsed = /(^|[^a-z\d])((\d{2,3})[ _-]?bpm|bpm[ _-]?(\d{2,3}))([^a-z\d]|$)/ui.exec( bufName );
+		const bpm = +( nameParsed?.[ 3 ] || nameParsed?.[ 4 ] || 0 );
 
 		if ( lib === "default" ) {
 			const drumChan = Object.entries( daw.$getChannels() ).find( ( [ id, ch ] ) => ch.name === "drums" )?.[ 0 ];
@@ -54,6 +56,11 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 		} else {
 			buf.hash = bufHash;
 			daw.$buffersSetBuffer( { ...buf, buffer: audioBuf } );
+		}
+		if ( bpm ) {
+			pat.bufferType = "loop";
+			pat.bufferBpm = bpm;
+			pat.duration = Math.round( audioBuf.duration * ( bpm / 60 ) );
 		}
 		return [ patId, bufName, {
 			buffers: { [ bufId ]: buf },
