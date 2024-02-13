@@ -28,7 +28,6 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 	}
 	return daw.$buffersGetAudioBuffer( bufHash ).then( audioBuf => {
 		const lib = srcType.split( ":" )[ 1 ];
-		const chans = daw.$getChannels();
 		const patId = DAWCoreActionsCommon.getNextIdOf( pats );
 		const bufId = DAWCoreActionsCommon.getNextIdOf( buffs );
 		const order = Object.values( pats ).reduce( ( max, pat ) => {
@@ -36,11 +35,10 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 				? max
 				: Math.max( max, pat.order );
 		}, -1 ) + 1;
-		const drumChan = lib === "default" && Object.entries( chans ).find( ( [ id, ch ] ) => ch.name === "drums" )?.[ 0 ];
 		const buf = { duration: audioBuf.duration };
 		const pat = {
 			order,
-			dest: drumChan || "main",
+			dest: "main",
 			type: "buffer",
 			buffer: bufId,
 			duration: Math.ceil( audioBuf.duration * daw.$getBPS() ),
@@ -48,7 +46,10 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 		};
 
 		if ( lib === "default" ) {
+			const drumChan = Object.entries( daw.$getChannels() ).find( ( [ id, ch ] ) => ch.name === "drums" )?.[ 0 ];
+
 			pat.bufferType = "drum";
+			pat.dest = drumChan || "main";
 			buf.url = bufHash;
 		} else {
 			buf.hash = bufHash;
