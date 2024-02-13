@@ -1,10 +1,13 @@
 "use strict";
 
-DAWCoreActions.set( "redirectPatternSlices", ( daw, patId, source ) => {
-	if ( source !== daw.$getPattern( patId ).source ) {
-		return [
-			{ patterns: { [ patId ]: { source } } },
-			[ "patterns", "redirectPatternSlices", daw.$getPattern( patId ).name, daw.$getPattern( source ).name ],
-		];
-	}
+DAWCoreActions.set( "redirectPatternSlices", ( daw, patId, srcType, srcId ) => {
+	return DAWCoreActionsCommon.addPatternBuffer( daw, srcType, srcId )
+		.then( ( [ srcId, srcName, srcObj ] ) => {
+			if ( srcId !== daw.$getPattern( patId ).source ) {
+				return [
+					GSUdeepAssign( { patterns: { [ patId ]: { source: srcId } } }, srcObj ),
+					[ "patterns", "redirectPatternSlices", daw.$getPattern( patId ).name, srcName ],
+				];
+			}
+		} );
 } );
