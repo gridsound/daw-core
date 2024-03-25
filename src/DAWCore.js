@@ -329,8 +329,8 @@ class DAWCore {
 	$liveChangeSynth( id, obj ) {
 		this.#waSynths.get( id ).$change( obj );
 	}
-	$liveKeydown( midi ) {
-		DAWCoreKeys.$liveKeydown( this.#keys, midi );
+	$liveKeydown( midi, keyObj ) {
+		DAWCoreKeys.$liveKeydown( this.#keys, midi, keyObj );
 	}
 	$liveKeyup( midi ) {
 		DAWCoreKeys.$liveKeyup( this.#keys, midi );

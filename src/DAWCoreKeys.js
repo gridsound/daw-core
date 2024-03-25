@@ -63,11 +63,14 @@ class DAWCoreKeys {
 		store.$looping = false;
 		store.$waKeys.scheduler.$setLoopBeat( 0, store.$duration || daw.$getBeatsPerMeasure() );
 	}
-	static $liveKeydown( store, midi ) {
+	static $liveKeydown( store, midi, keyObj ) {
 		if ( !( midi in store.$keysStartedLive ) ) {
-			store.$keysStartedLive[ midi ] = store.$synth.$startKey(
-				[ [ null, DAWCoreJSON.key( { key: midi } ) ] ],
-				store.$waKeys.scheduler.currentTime(), 0, Infinity );
+			const now = store.$waKeys.scheduler.currentTime();
+			const keyObj2 = keyObj
+				? { ...keyObj, key: midi }
+				: DAWCoreJSON.key( { key: midi } );
+
+			store.$keysStartedLive[ midi ] = store.$synth.$startKey( [ [ null, keyObj2 ] ], now, 0, Infinity );
 		}
 	}
 	static $liveKeyup( store, midi ) {
