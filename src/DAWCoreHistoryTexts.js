@@ -27,7 +27,7 @@ class DAWCoreHistoryTexts {
 			cropStartBlocks: len => [ "crop", `crop-start ${ GSUplural( len, "block" ) }` ],
 			unselectBlock: () => [ "mouse", `unselect ${ GSUplural( 1, "block" ) }` ],
 			unselectAllBlocks: len => [ "mouse", `unselect ${ GSUplural( len, "block" ) }` ],
-			duplicateSelectedBlocks: len => [ "plus", `duplicate ${ GSUplural( len, "block" ) }` ],
+			cloneSelectedBlocks: len => [ "plus", `clone ${ GSUplural( len, "block" ) }` ],
 		} ],
 		[ "synth", {
 			addOscillator: syn => [ "oscillator", `${ syn }: add osc` ],

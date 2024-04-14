@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "duplicateSelectedBlocks", ( daw, whenIncr ) => {
+DAWCoreActions.set( "cloneSelectedBlocks", ( daw, whenIncr ) => {
 	const sel = Object.entries( daw.$getBlocks() ).filter( kv => kv[ 1 ].selected );
 	const newId = +DAWCoreActionsCommon.getNextIdOf( daw.$getBlocks() );
 	const blocks = sel.reduce( ( obj, [ id, blc ], i ) => {
@@ -19,6 +19,6 @@ DAWCoreActions.set( "duplicateSelectedBlocks", ( daw, whenIncr ) => {
 	}
 	return [
 		obj,
-		[ "blocks", "duplicateSelectedBlocks", sel.length ],
+		[ "blocks", "cloneSelectedBlocks", sel.length ],
 	];
 } );
