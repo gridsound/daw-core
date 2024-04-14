@@ -3,7 +3,7 @@
 DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
 	const pat = daw.$getPattern( patId );
 	const keys = daw.$getKeys( pat.keys );
-	const nextId = DAWCoreActionsCommon.getNextIdOf( keys );
+	const nextId = +DAWCoreActionsCommon.getNextIdOf( keys );
 	const keysObj = {};
 	const obj = { keys: { [ pat.keys ]: keysObj } };
 	const mapIds = keyIds.reduce( ( map, id, i ) => {
