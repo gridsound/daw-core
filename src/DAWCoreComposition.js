@@ -20,9 +20,6 @@ class DAWCoreComposition {
 				rej();
 			}
 		} ).then( cmp => {
-			const proms = [];
-			const bufLoaded = {};
-
 			store.$cmp = cmp;
 			store.$loaded = true;
 			DAWCoreComposition.$change( daw, store, cmp, {
@@ -35,9 +32,6 @@ class DAWCoreComposition {
 				drumrows: {},
 				channels: {},
 				patterns: {},
-			} );
-			Promise.allSettled( proms ).then( () => {
-				daw.$slicesBuffersBuffersLoaded( bufLoaded );
 			} );
 			store.$actionSavedOn = null;
 			store.$saved = cmp.options.saveMode === "cloud" || DAWCoreLocalStorage.$has( cmp.id ) || !cmp.savedAt;
