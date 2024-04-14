@@ -49,10 +49,10 @@ class DAWCoreSlicesBuffers {
 			return map;
 		}, {} );
 
-		Object.entries( buffersLoaded ).forEach( ( [ id, obj ] ) => {
+		Object.entries( buffersLoaded ).forEach( ( [ id, buf ] ) => {
 			if ( id in bufToSli ) {
 				Object.keys( bufToSli[ id ] ).forEach( patId =>
-					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, daw, patId, obj.buffer ) );
+					DAWCoreSlicesBuffers.#setBuffer( slicesBuffers, daw, patId, buf ) );
 			}
 		} );
 	}

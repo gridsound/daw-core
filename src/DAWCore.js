@@ -45,8 +45,8 @@ class DAWCore {
 	} );
 	#buffers = Object.seal( {
 		$absn: null,
-		$objs: new Map(),
 		$buffers: new Map(),
+		$buffersCustom: new Map(),
 	} );
 	#slices = Object.seal( {
 		$waSched: new gswaScheduler(),
@@ -109,7 +109,8 @@ class DAWCore {
 	$getAudioChanIn( id ) { return this.#waMixer.$getChanInput( id ); }
 	$getAudioChanOut( id ) { return this.#waMixer.$getChanOutput( id ); }
 	$getAudioSlices( id ) { return this.$slicesBuffersGetBuffer( id ); }
-	$getAudioBuffer( id ) { return this.#buffers.$buffers.get( this.$getBuffer( id ).url || this.$getBuffer( id ).hash ); }
+	$getAudioBuffer( id ) { return this.#buffers.$buffersCustom.get( id ); }
+	$getAudioBufferSource( hash ) { return DAWCoreBuffers.$getAudioBufferSource( this, this.#buffers, hash ); }
 	// .........................................................................
 	$getCmps( saveMode ) { return saveMode === "local" ? this.#cmpsLocal : this.#cmpsCloud; }
 	$getCmp() { return this.#composition.$cmp; }
@@ -220,20 +221,11 @@ class DAWCore {
 		DAWCoreBuffers.$change( this, this.#buffers, obj, prevObj );
 	}
 	$buffersEmpty() {
-		this.#buffers.$objs.clear();
 		this.#buffers.$buffers.clear();
-	}
-	$buffersGetSize() {
-		return this.#buffers.$objs.size;
+		this.#buffers.$buffersCustom.clear();
 	}
 	$buffersLoadURLBuffer( url ) {
 		return DAWCoreBuffers.$loadURLBuffer( this, this.#buffers, url );
-	}
-	$buffersGetAudioBuffer( hash ) {
-		return DAWCoreBuffers.$getAudioBuffer( this, this.#buffers, hash );
-	}
-	$buffersSetBuffer( objBuf ) {
-		return DAWCoreBuffers.$setBuffer( this, this.#buffers, objBuf );
 	}
 	$buffersPlayBuffer( hash ) {
 		return DAWCoreBuffers.$playBuffer( this, this.#buffers, hash );

@@ -1,9 +1,11 @@
 "use strict";
 
-DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } ) => {
+DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm, reverse } ) => {
 	const pat = daw.$getPattern( id );
+	const buf = daw.$getBuffer( pat.buffer );
 	const obj = {};
 	const objPat = {};
+	const objBuf = {};
 
 	if ( name !== pat.name ) {
 		objPat.name = name;
@@ -17,11 +19,13 @@ DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } ) 
 	if ( bpm !== pat.bufferBpm && type === "loop" ) {
 		objPat.bufferBpm = bpm;
 	}
+	if ( reverse !== buf.reverse ) {
+		objBuf.reverse = reverse;
+	}
 	if ( "bufferBpm" in objPat ) {
-		const bufDur = daw.$getBuffer( pat.buffer ).duration;
 		const dur = objPat.bufferBpm
-			? Math.round( bufDur * ( objPat.bufferBpm / 60 ) )
-			: Math.ceil( bufDur * daw.$getBPS() );
+			? Math.round( buf.duration * ( objPat.bufferBpm / 60 ) )
+			: Math.ceil( buf.duration * daw.$getBPS() );
 
 		DAWCoreActionsCommon.updatePatternDuration( daw, obj, id, dur );
 		Object.entries( daw.$getPatterns() )
@@ -30,6 +34,9 @@ DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm } ) 
 	}
 	if ( GSUisntEmpty( objPat ) ) {
 		GSUdeepAssign( obj, { patterns: { [ id ]: objPat } } );
+	}
+	if ( GSUisntEmpty( objBuf ) ) {
+		GSUdeepAssign( obj, { buffers: { [ pat.buffer ]: objBuf } } );
 	}
 	if ( GSUisntEmpty( obj ) ) {
 		return [

@@ -7,6 +7,9 @@ class DAWCoreCompositionFormat {
 			delete cmp.loopA;
 			delete cmp.loopB;
 		}
+		Object.values( cmp.buffers ).forEach( buf => {
+			if ( !buf.reverse ) { delete buf.reverse; }
+		} );
 		Object.values( cmp.drumrows ).forEach( row => {
 			if ( row.toggle ) { delete row.toggle; }
 		} );
@@ -71,6 +74,7 @@ class DAWCoreCompositionFormat {
 		Object.values( cmp.buffers ).forEach( buf => {
 			delete buf.MIME;
 			delete buf.type;
+			buf.reverse = !!buf.reverse;
 		} );
 
 		// slices

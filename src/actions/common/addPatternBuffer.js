@@ -26,7 +26,7 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 
 		return Promise.resolve( [ pat[ 0 ], pat[ 1 ].name, null ] );
 	}
-	return daw.$buffersGetAudioBuffer( bufHash ).then( audioBuf => {
+	return daw.$getAudioBufferSource( bufHash ).then( audioBuf => {
 		const lib = srcType.split( ":" )[ 1 ];
 		const patId = DAWCoreActionsCommon.getNextIdOf( pats );
 		const bufId = DAWCoreActionsCommon.getNextIdOf( buffs );
@@ -55,7 +55,6 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 			buf.url = bufHash;
 		} else {
 			buf.hash = bufHash;
-			daw.$buffersSetBuffer( { ...buf, buffer: audioBuf } );
 		}
 		if ( bpm ) {
 			pat.bufferType = "loop";
