@@ -67,7 +67,7 @@ class DAWCoreCompositionFormat {
 
 		// buffers
 		// ..........................................
-		cmp.buffers = cmp.buffers || {};
+		cmp.buffers ||= {};
 		Object.values( cmp.buffers ).forEach( buf => {
 			delete buf.MIME;
 			delete buf.type;
@@ -75,24 +75,24 @@ class DAWCoreCompositionFormat {
 
 		// slices
 		// ..........................................
-		cmp.slices = cmp.slices || {};
+		cmp.slices ||= {};
 
 		// drumrows
 		// ..........................................
-		cmp.drumrows = cmp.drumrows || {};
+		cmp.drumrows ||= {};
 		Object.values( cmp.drumrows ).forEach( row => {
 			row.toggle = row.toggle !== false;
-			row.detune = row.detune ?? 0;
+			row.detune ??= 0;
 		} );
 
 		// drums
 		// ..........................................
-		cmp.drums = cmp.drums || {};
+		cmp.drums ||= {};
 		Object.values( cmp.drums ).forEach( drums => {
 			Object.values( drums ).forEach( drum => {
 				if ( "gain" in drum ) {
-					drum.pan = drum.pan ?? 0;
-					drum.detune = drum.detune ?? 0;
+					drum.pan ??= 0;
+					drum.detune ??= 0;
 				}
 			} );
 		} );
@@ -110,7 +110,7 @@ class DAWCoreCompositionFormat {
 
 		// effects
 		// ..........................................
-		cmp.effects = cmp.effects || {};
+		cmp.effects ||= {};
 
 		// patterns
 		// ..........................................
@@ -155,18 +155,16 @@ class DAWCoreCompositionFormat {
 
 		// synths
 		// ..........................................
-		if ( !cmp.synths ) {
-			cmp.synths = { 0: DAWCoreJSON.synth( {
-				oscillators: {
-					0: DAWCoreJSON.oscillator( { gain: .75 } ),
-					1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
-				},
-			} ) };
-		}
+		cmp.synths ||= { 0: DAWCoreJSON.synth( {
+			oscillators: {
+				0: DAWCoreJSON.oscillator( { gain: .75 } ),
+				1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
+			},
+		} ) };
 		Object.values( cmp.synths ).forEach( syn => {
 			delete syn.envelopes;
-			syn.env = syn.env || DAWCoreJSON.env();
-			syn.lfo = syn.lfo || DAWCoreJSON.lfo();
+			syn.env ||= DAWCoreJSON.env();
+			syn.lfo ||= DAWCoreJSON.lfo();
 			delete syn.env.substain;
 			Object.values( syn.oscillators ).forEach( osc => {
 				osc.detune = Math.min( Math.max( -24, Math.round( osc.detune ) ), 24 );
@@ -190,7 +188,7 @@ class DAWCoreCompositionFormat {
 		}, 0 );
 		blcsValues.sort( ( a, b ) => a.when - b.when );
 		cmp.blocks = blcsValues.reduce( ( obj, blc, i ) => {
-			blc.offset = blc.offset || 0;
+			blc.offset ||= 0;
 			blc.selected = !!blc.selected;
 			blc.durationEdited = !!blc.durationEdited;
 			obj[ i ] = blc;
@@ -207,8 +205,8 @@ class DAWCoreCompositionFormat {
 				k.gainLFOSpeed = k.lfoSpeed ?? k.lfoGainSpeed ?? k.gainLFOSpeed ?? 1;
 				if ( typeof k.prev === "number" ) { k.prev += ""; }
 				if ( typeof k.next === "number" ) { k.next += ""; }
-				k.prev = k.prev || null;
-				k.next = k.next || null;
+				k.prev ||= null;
+				k.next ||= null;
 				delete k.attack;
 				delete k.release;
 				delete k.lfoAmp;
