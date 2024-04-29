@@ -76,7 +76,7 @@ DAWCoreControllers.effects = class {
 		this.on.addEffect( id, fx );
 		this.on.changeEffect( id, "toggle", fx.toggle );
 		this.on.changeEffect( id, "order", fx.order );
-		this.on.changeEffectData( id, fx.data );
+		this.on.changeEffectData( id, fx.data, fx.type );
 		if ( !GSUisNoop( this.on.connectEffectTo ) ) {
 			const [ prevId, nextId ] = this.#findSiblingFxIds( id, diffObj );
 
@@ -113,7 +113,7 @@ DAWCoreControllers.effects = class {
 		if ( "data" in fx ) {
 			GSUdiffAssign( dataObj.data, fx.data );
 			if ( destOk ) {
-				this.on.changeEffectData( id, fx.data );
+				this.on.changeEffectData( id, fx.data, dataObj.type );
 			}
 		}
 		if ( "order" in fx ) {
