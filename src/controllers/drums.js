@@ -1,48 +1,42 @@
 "use strict";
 
-DAWCoreControllers.drums = class {
-	on = null;
-	data = {};
-	#drumsCrud = GSUcreateUpdateDelete.bind( null, this.data,
+class DAWCoreControllerDrums {
+	$on = {};
+	$data = {};
+	#drumsCrud = GSUcreateUpdateDelete.bind( null, this.$data,
 		this.#addDrum.bind( this ),
 		this.#changeDrum.bind( this ),
 		this.#deleteDrum.bind( this ) );
 
 	constructor( fns ) {
-		this.on = GSUmapCallbacks( [
-			"addDrum",
-			"removeDrum",
-			"changeDrum",
-			"addDrumcut",
-			"removeDrumcut",
-		], fns.dataCallbacks );
+		this.$on = { ...fns };
 		Object.freeze( this );
 	}
-	change( obj ) {
+	$change( obj ) {
 		this.#drumsCrud( obj );
 	}
-	clear() {
-		Object.keys( this.data ).forEach( this.#deleteDrum, this );
+	$clear() {
+		Object.keys( this.$data ).forEach( this.#deleteDrum, this );
 	}
 
 	// .........................................................................
 	#addDrum( id, obj ) {
 		const cpy = { ...obj };
 
-		this.data[ id ] = cpy;
+		this.$data[ id ] = cpy;
 		if ( "gain" in cpy ) {
-			this.on.addDrum( id, cpy );
+			this.$on.$addDrum( id, cpy );
 			this.#changeDrum( id, cpy );
 		} else {
-			this.on.addDrumcut( id, cpy );
+			this.$on.$addDrumcut( id, cpy );
 		}
 	}
 	#deleteDrum( id ) {
-		const fn = "gain" in this.data[ id ]
-			? this.on.removeDrum
-			: this.on.removeDrumcut;
+		const fn = "gain" in this.$data[ id ]
+			? this.$on.$removeDrum
+			: this.$on.$removeDrumcut;
 
-		delete this.data[ id ];
+		delete this.$data[ id ];
 		fn( id );
 	}
 	#changeDrum( id, obj ) {
@@ -52,10 +46,10 @@ DAWCoreControllers.drums = class {
 	}
 	#changeDrumProp( id, prop, val ) {
 		if ( val !== undefined ) {
-			this.data[ id ][ prop ] = val;
-			this.on.changeDrum( id, prop, val );
+			this.$data[ id ][ prop ] = val;
+			this.$on.$changeDrum( id, prop, val );
 		}
 	}
-};
+}
 
-Object.freeze( DAWCoreControllers.drums );
+Object.freeze( DAWCoreControllerDrums );

@@ -48,4 +48,4 @@ DAWCoreControllers.tracks = class {
 	}
 };
 
-Object.freeze( DAWCoreControllers.drums );
+Object.freeze( DAWCoreControllers.tracks );
