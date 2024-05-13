@@ -3,6 +3,8 @@
 class DAWCoreControllerDrums {
 	$on = {};
 	$data = {};
+	#duration = 0;
+	#beatsPerMeasure = 4;
 	#drumsCrud = GSUcreateUpdateDelete.bind( null, this.$data,
 		this.#addDrum.bind( this ),
 		this.#changeDrum.bind( this ),
@@ -11,6 +13,9 @@ class DAWCoreControllerDrums {
 	constructor( fns ) {
 		this.$on = { ...fns };
 		Object.freeze( this );
+	}
+	$setTimedivision( timediv ) {
+		this.#beatsPerMeasure = GSUsplitNums( timediv, "/" )[ 1 ];
 	}
 	$change( obj ) {
 		this.#drumsCrud( obj );
@@ -24,6 +29,7 @@ class DAWCoreControllerDrums {
 		const cpy = { ...obj };
 
 		this.$data[ id ] = cpy;
+		this.#updateDuration();
 		if ( "gain" in cpy ) {
 			this.$on.$addDrum( id, cpy );
 			this.#changeDrum( id, cpy );
@@ -37,6 +43,7 @@ class DAWCoreControllerDrums {
 			: this.$on.$removeDrumcut;
 
 		delete this.$data[ id ];
+		this.#updateDuration();
 		fn( id );
 	}
 	#changeDrum( id, obj ) {
@@ -48,6 +55,15 @@ class DAWCoreControllerDrums {
 		if ( val !== undefined ) {
 			this.$data[ id ][ prop ] = val;
 			this.$on.$changeDrum( id, prop, val );
+		}
+	}
+	#updateDuration() {
+		const dur = Object.values( this.$data ).reduce( ( dur, blc ) => Math.max( dur, blc.when ), 0 );
+		const dur2 = ( Math.floor( dur / this.#beatsPerMeasure ) + 1 ) * this.#beatsPerMeasure;
+
+		if ( dur2 !== this.#duration ) {
+			this.#duration = dur2;
+			this.$on.$changeDuration( dur2 );
 		}
 	}
 }
