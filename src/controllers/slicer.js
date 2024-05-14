@@ -1,51 +1,42 @@
 "use strict";
 
-DAWCoreControllers.slicer = class {
-	data = {};
+class DAWCoreControllerSlicer {
+	$on = null;
+	$data = {};
 	#dawcore = null;
 	#patternId = null;
 	#slicesId = null;
-	#slicesCrud = GSUcreateUpdateDelete.bind( null, this.data,
+	#slicesCrud = GSUcreateUpdateDelete.bind( null, this.$data,
 		this.#addSlice.bind( this ),
 		this.#updateSlice.bind( this ),
 		this.#deleteSlice.bind( this )
 	);
 
 	constructor( fns ) {
-		this.on = GSUmapCallbacks( [
-			"disabled",
-			"timedivision",
-			"setBuffer",
-			"renameBuffer",
-			"removeBuffer",
-			"changeDuration",
-			"addSlice",
-			"removeSlice",
-			"changeSlice",
-		], fns.dataCallbacks );
+		this.$on = { ...fns };
 		Object.freeze( this );
 	}
 
 	// .........................................................................
-	getPatternId() {
+	$getPatternId() {
 		return this.#patternId;
 	}
-	setDAWCore( core ) {
+	$setDAWCore( core ) {
 		this.#dawcore = core;
 	}
-	clear() {
+	$clear() {
 		this.#patternId =
 		this.#slicesId = null;
-		this.on.disabled( true );
-		this.on.removeBuffer();
-		this.on.changeDuration( 4 );
-		Object.keys( this.data ).forEach( this.#deleteSlice, this );
+		this.$on.$disabled?.( true );
+		this.$on.$removeBuffer?.();
+		this.$on.$changeDuration?.( 4 );
+		Object.keys( this.$data ).forEach( this.#deleteSlice, this );
 	}
-	change( obj ) {
+	$change( obj ) {
 		const daw = this.#dawcore;
 
 		if ( obj.timedivision ) {
-			this.on.timedivision( obj.timedivision );
+			this.$on.$timedivision?.( obj.timedivision );
 		}
 		if ( "patternSlicesOpened" in obj ) {
 			const id = obj.patternSlicesOpened;
@@ -57,10 +48,10 @@ DAWCoreControllers.slicer = class {
 
 				this.#patternId = id;
 				this.#slicesId = pat.slices;
-				Object.keys( this.data ).forEach( this.#deleteSlice, this );
+				Object.keys( this.$data ).forEach( this.#deleteSlice, this );
 				this.#changeSource( pat.source, daw );
 				this.#slicesCrud( daw.$getSlices( this.#slicesId ) );
-				this.on.disabled( false );
+				this.$on.$disabled?.( false );
 			}
 		} else if ( this.#patternId ) {
 			const objPat = obj.patterns?.[ this.#patternId ];
@@ -77,7 +68,7 @@ DAWCoreControllers.slicer = class {
 		const dur = obj.patterns?.[ daw.$getPattern( this.#patternId ).source ]?.duration;
 
 		if ( dur ) {
-			this.on.changeDuration( dur );
+			this.$on.$changeDuration?.( dur );
 		}
 	}
 	#changeSource( srcId, daw ) {
@@ -85,11 +76,11 @@ DAWCoreControllers.slicer = class {
 			const patSrc = daw.$getPattern( srcId );
 			const buf = daw.$getAudioBuffer( patSrc.buffer );
 
-			this.on.setBuffer( buf );
-			this.on.renameBuffer( patSrc.name );
-			this.on.changeDuration( patSrc.duration );
+			this.$on.$setBuffer?.( buf );
+			this.$on.$renameBuffer?.( patSrc.name );
+			this.$on.$changeDuration?.( patSrc.duration );
 		} else {
-			this.on.removeBuffer();
+			this.$on.$removeBuffer?.();
 		}
 	}
 
@@ -97,17 +88,17 @@ DAWCoreControllers.slicer = class {
 	#addSlice( id, obj ) {
 		const sli = { ...obj };
 
-		this.data[ id ] = sli;
-		this.on.addSlice( id, sli );
+		this.$data[ id ] = sli;
+		this.$on.$addSlice?.( id, sli );
 	}
 	#deleteSlice( id ) {
-		delete this.data[ id ];
-		this.on.removeSlice( id );
+		delete this.$data[ id ];
+		this.$on.$removeSlice?.( id );
 	}
 	#updateSlice( id, obj ) {
-		Object.assign( this.data[ id ], obj );
-		this.on.changeSlice( id, obj );
+		Object.assign( this.$data[ id ], obj );
+		this.$on.$changeSlice?.( id, obj );
 	}
-};
+}
 
-Object.freeze( DAWCoreControllers.slicer );
+Object.freeze( DAWCoreControllerSlicer );
