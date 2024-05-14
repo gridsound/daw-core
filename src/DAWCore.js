@@ -5,7 +5,6 @@ const DAWCoreUtils = {};
 const DAWCoreActions = new Map();
 const DAWCoreActionsCommon = {};
 const DAWCoreControllers = {};
-const DAWCoreControllersFx = {};
 
 class DAWCore {
 	static #dropExtensions = Object.freeze( { gs: true, txt: true, json: true } );
