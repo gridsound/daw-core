@@ -60,8 +60,8 @@ class DAWCoreControllerDrums {
 		}
 	}
 	#updateDuration() {
-		const dur = Object.values( this.$data ).reduce( ( dur, blc ) => Math.max( dur, blc.when ), 0 );
-		const dur2 = ( Math.floor( dur / this.#beatsPerMeasure ) + 1 ) * this.#beatsPerMeasure;
+		const dur = Object.values( this.$data ).reduce( ( dur, blc ) => Math.max( dur, blc.when + .001 ), 0 );
+		const dur2 = Math.max( 1, Math.ceil( dur / this.#beatsPerMeasure ) ) * this.#beatsPerMeasure;
 
 		if ( dur2 !== this.#duration ) {
 			this.#duration = dur2;
