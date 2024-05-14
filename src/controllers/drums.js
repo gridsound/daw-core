@@ -14,6 +14,8 @@ class DAWCoreControllerDrums {
 		this.$on = { ...fns };
 		Object.freeze( this );
 	}
+
+	// .........................................................................
 	$setTimedivision( timediv ) {
 		this.#beatsPerMeasure = GSUsplitNums( timediv, "/" )[ 1 ];
 	}

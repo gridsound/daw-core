@@ -1,9 +1,9 @@
 "use strict";
 
-DAWCoreControllers.keys = class {
-	on = null;
-	data = {};
-	#keysCrud = GSUcreateUpdateDelete.bind( null, this.data,
+class DAWCoreControllerKeys {
+	$on = null;
+	$data = {};
+	#keysCrud = GSUcreateUpdateDelete.bind( null, this.$data,
 		this.#addKey.bind( this ),
 		this.#updateKey.bind( this ),
 		this.#deleteKey.bind( this ) );
@@ -23,19 +23,15 @@ DAWCoreControllers.keys = class {
 	] );
 
 	constructor( fns ) {
-		this.on = GSUmapCallbacks( [
-			"addKey",
-			"removeKey",
-			"changeKeyProp",
-		], fns.dataCallbacks );
+		this.$on = { ...fns };
 		Object.freeze( this );
 	}
 
 	// .........................................................................
-	clear() {
-		Object.keys( this.data ).forEach( this.#deleteKey, this );
+	$clear() {
+		Object.keys( this.$data ).forEach( this.#deleteKey, this );
 	}
-	change( keysObj ) {
+	$change( keysObj ) {
 		this.#keysCrud( keysObj );
 	}
 
@@ -43,19 +39,19 @@ DAWCoreControllers.keys = class {
 	#addKey( id, obj ) {
 		const key = { ...obj };
 
-		this.data[ id ] = key;
-		this.on.addKey( id, key );
+		this.$data[ id ] = key;
+		this.$on.$addKey( id, key );
 		this.#updateKey( id, key );
 	}
 	#deleteKey( id ) {
-		delete this.data[ id ];
-		this.on.removeKey( id );
+		delete this.$data[ id ];
+		this.$on.$removeKey( id );
 	}
 	#updateKey( id, obj ) {
-		DAWCoreControllers.keys.#keyProps.forEach(
-			DAWCoreControllers.keys.#setProp.bind( null,
-				this.data[ id ],
-				this.on.changeKeyProp.bind( null, id ),
+		DAWCoreControllerKeys.#keyProps.forEach(
+			DAWCoreControllerKeys.#setProp.bind( null,
+				this.$data[ id ],
+				this.$on.$changeKeyProp.bind( null, id ),
 				obj
 			)
 		);
@@ -68,6 +64,6 @@ DAWCoreControllers.keys = class {
 			cb( prop, val );
 		}
 	}
-};
+}
 
-Object.freeze( DAWCoreControllers.keys );
+Object.freeze( DAWCoreControllerKeys );
