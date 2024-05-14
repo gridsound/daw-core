@@ -1,57 +1,46 @@
 "use strict";
 
-DAWCoreControllers.synth = class {
-	on = null;
-	data = Object.seal( {
+class DAWCoreControllerSynth {
+	$on = null;
+	$data = Object.seal( {
 		name: "",
 		env: Object.seal( DAWCoreJSON.env() ),
 		lfo: Object.seal( DAWCoreJSON.lfo() ),
 		oscillators: {},
 	} );
-	#oscsCrud = GSUcreateUpdateDelete.bind( null, this.data.oscillators,
+	#oscsCrud = GSUcreateUpdateDelete.bind( null, this.$data.oscillators,
 		this.#addOsc.bind( this ),
 		this.#updateOsc.bind( this ),
 		this.#deleteOsc.bind( this ) );
 
 	constructor( fns ) {
-		this.on = GSUmapCallbacks( [
-			"addOsc",
-			"removeOsc",
-			"changeOsc",
-			"changeOscProp",
-			"changeLFO",
-			"changeLFOProp",
-			"updateLFOWave",
-			"changeEnv",
-			"changeEnvProp",
-			"updateEnvWave",
-		], fns.dataCallbacks );
+		this.$on = { ...fns };
 		Object.freeze( this );
 	}
 
 	// .........................................................................
-	clear() {
-		Object.keys( this.data.oscillators ).forEach( this.#deleteOsc, this );
+	$clear() {
+		Object.keys( this.$data.oscillators ).forEach( this.#deleteOsc, this );
 	}
-	recall() {
-		const oscs = Object.entries( this.data.oscillators );
+	$recall() {
+		const oscs = Object.entries( this.$data.oscillators );
 
-		oscs.forEach( kv => this.on.removeOsc( kv[ 0 ] ) );
-		oscs.forEach( kv => this.on.addOsc( kv[ 0 ], kv[ 1 ] ) );
+		oscs.forEach( kv => this.$on.$removeOsc( kv[ 0 ] ) );
+		oscs.forEach( kv => this.$on.$addOsc( kv[ 0 ], kv[ 1 ] ) );
 	}
-	change( obj ) {
+	$change( obj ) {
 		if ( "name" in obj ) {
-			this.data.name = obj.name;
+			this.$data.name = obj.name;
 		}
 		if ( obj.env ) {
-			GSUforEach( obj.env, DAWCoreControllers.synth.#setProp.bind( null, this.data.env, this.on.changeEnvProp ) );
-			this.on.updateEnvWave();
-			this.on.changeEnv( obj.env );
+			GSUforEach( obj.env, DAWCoreControllerSynth.#setProp.bind( null, this.$data.env, this.$on.$changeEnvProp ) );
+			this.$on.$updateEnvWave();
+			this.$on.$changeEnv?.( obj.env );
 		}
 		if ( obj.lfo ) {
-			GSUforEach( obj.lfo, DAWCoreControllers.synth.#setProp.bind( null, this.data.lfo, this.on.changeLFOProp ) );
-			this.on.updateLFOWave();
-			this.on.changeLFO( obj.lfo );
+			GSUforEach( obj.lfo, DAWCoreControllerSynth.#setProp.bind( null, this.$data.lfo, this.$on.$changeLFOProp ) );
+			this.$on.$updateLFOWave();
+			this.$on.$changeLFO?.( obj.lfo );
 		}
 		if ( obj.oscillators ) {
 			this.#oscsCrud( obj.oscillators );
@@ -62,16 +51,16 @@ DAWCoreControllers.synth = class {
 	#addOsc( id, obj ) {
 		const osc = { ...obj };
 
-		this.data.oscillators[ id ] = osc;
-		this.on.addOsc( id, osc );
+		this.$data.oscillators[ id ] = osc;
+		this.$on.$addOsc( id, osc );
 	}
 	#deleteOsc( id ) {
-		delete this.data.oscillators[ id ];
-		this.on.removeOsc( id );
+		delete this.$data.oscillators[ id ];
+		this.$on.$removeOsc( id );
 	}
 	#updateOsc( id, obj ) {
-		GSUforEach( obj, DAWCoreControllers.synth.#setProp.bind( null, this.data.oscillators[ id ], this.on.changeOscProp.bind( null, id ) ) );
-		this.on.changeOsc( id, obj );
+		GSUforEach( obj, DAWCoreControllerSynth.#setProp.bind( null, this.$data.oscillators[ id ], this.$on.$changeOscProp.bind( null, id ) ) );
+		this.$on.$changeOsc?.( id, obj );
 	}
 	static #setProp( data, cb, prop, val ) {
 		if ( val !== undefined ) {
@@ -79,6 +68,6 @@ DAWCoreControllers.synth = class {
 			cb( prop, val );
 		}
 	}
-};
+}
 
-Object.freeze( DAWCoreControllers.synth );
+Object.freeze( DAWCoreControllerSynth );
