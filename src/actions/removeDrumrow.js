@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCoreActions.set( "removeDrumrow", ( daw, rowId ) => {
-	const patName = DAWCoreActionsCommon.getDrumrowName( daw, rowId );
+	const patName = DAWCoreActionsCommon_getDrumrowName( daw, rowId );
 
 	return [
 		DAWCoreActions._removeDrumrow( {}, rowId, daw ),
@@ -49,7 +49,7 @@ DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 	GSUaddIfNotEmpty( obj, "blocks", objBlocks );
 	GSUaddIfNotEmpty( obj, "patterns", objPatterns );
 	if ( GSUisntEmpty( objBlocks ) ) {
-		const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+		const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 
 		if ( dur !== daw.$getDuration() ) {
 			obj.duration = dur;

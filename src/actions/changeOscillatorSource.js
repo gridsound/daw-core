@@ -1,7 +1,7 @@
 "use strict";
 
 DAWCoreActions.set( "changeOscillatorSource", ( daw, synthId, oscId, srcType, srcPatId, resetOsc ) => {
-	return DAWCoreActionsCommon.addPatternBuffer( daw, srcType, srcPatId )
+	return DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcPatId )
 		.then( ( [ newSrcPatId, newSrcPatName, newPatObj ] ) => {
 			const syn = daw.$getSynth( synthId );
 			const oscOri = syn.oscillators[ oscId ];

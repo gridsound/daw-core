@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActionsCommon.patternOpenedByType = Object.freeze( {
+const DAWCoreActionsCommon_patternOpenedByType = Object.freeze( {
 	synth: "synthOpened",
 	keys: "patternKeysOpened",
 	drums: "patternDrumsOpened",

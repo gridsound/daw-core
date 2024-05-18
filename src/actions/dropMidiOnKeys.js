@@ -27,7 +27,7 @@ DAWCoreActions.set( "dropMidiOnKeys", ( daw, patId, midiRaw ) => {
 			patObj.name = newName;
 		}
 		if ( pat.duration !== newDur ) {
-			DAWCoreActionsCommon.updatePatternDuration( daw, obj, patId, newDur );
+			DAWCoreActionsCommon_updatePatternDuration( daw, obj, patId, newDur );
 		}
 	}
 	if ( GSUisntEmpty( obj ) ) {

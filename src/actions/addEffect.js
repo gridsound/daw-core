@@ -3,12 +3,12 @@
 DAWCoreActions.set( "addEffect", ( daw, dest, type ) => {
 	const fxs = daw.$getEffects();
 	const destFxs = Object.values( fxs ).filter( fx => fx.dest === dest );
-	const id = DAWCoreActionsCommon.getNextIdOf( fxs );
+	const id = DAWCoreActionsCommon_getNextIdOf( fxs );
 	const fx = {
 		dest,
 		type,
 		toggle: true,
-		order: DAWCoreActionsCommon.getNextOrderOf( destFxs ),
+		order: DAWCoreActionsCommon_getNextOrderOf( destFxs ),
 		data: DAWCoreJSON.effects[ type ](),
 	};
 

@@ -2,9 +2,9 @@
 
 DAWCoreActions.set( "addPatternSlices", daw => {
 	const pats = daw.$getPatterns();
-	const slicesId = DAWCoreActionsCommon.getNextIdOf( daw.$getSlices() );
-	const patId = DAWCoreActionsCommon.getNextIdOf( pats );
-	const patName = DAWCoreActionsCommon.createUniqueName( daw.$getPatterns(), "slices" );
+	const slicesId = DAWCoreActionsCommon_getNextIdOf( daw.$getSlices() );
+	const patId = DAWCoreActionsCommon_getNextIdOf( pats );
+	const patName = DAWCoreActionsCommon_createUniqueName( daw.$getPatterns(), "slices" );
 	const order = Object.values( pats ).reduce( ( max, pat ) => {
 		return pat.type !== "slices"
 			? max

@@ -54,7 +54,7 @@ DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 		const found = Object.entries( daw.$getPatterns() )
 			.find( ( [ k, v ] ) => k !== patId && v.type === type && v.synth === pat.synth );
 
-		obj[ DAWCoreActionsCommon.patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;
+		obj[ DAWCoreActionsCommon_patternOpenedByType[ type ] ] = found ? found[ 0 ] : null;
 	}
 	return [
 		obj,

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActionsCommon.calcNewDuration = ( daw, changeObj ) => {
+function DAWCoreActionsCommon_calcNewDuration( daw, changeObj ) {
 	const blocks = changeObj.blocks || {};
 	const bPM = changeObj.timedivision ? changeObj.timedivision.split( "/" )[ 0 ] : daw.$getBeatsPerMeasure();
 	const dur = Object.entries( daw.$getBlocks() ).reduce( ( max, [ id, blc ] ) => {
@@ -21,4 +21,4 @@ DAWCoreActionsCommon.calcNewDuration = ( daw, changeObj ) => {
 	}, dur );
 
 	return Math.ceil( dur2 / bPM ) * bPM;
-};
+}

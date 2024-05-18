@@ -2,7 +2,7 @@
 
 DAWCoreActions.set( "cloneSelectedBlocks", ( daw, whenIncr ) => {
 	const sel = Object.entries( daw.$getBlocks() ).filter( kv => kv[ 1 ].selected );
-	const newId = +DAWCoreActionsCommon.getNextIdOf( daw.$getBlocks() );
+	const newId = +DAWCoreActionsCommon_getNextIdOf( daw.$getBlocks() );
 	const blocks = sel.reduce( ( obj, [ id, blc ], i ) => {
 		const cpy = { ...blc };
 
@@ -12,7 +12,7 @@ DAWCoreActions.set( "cloneSelectedBlocks", ( daw, whenIncr ) => {
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+	const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 
 	if ( dur !== daw.$getDuration() ) {
 		obj.duration = dur;

@@ -11,7 +11,7 @@ DAWCoreActions._addDrums = ( type, status, patternId, rowId, arr, daw ) => {
 	const drums = daw.$getDrums( pat.drums );
 	const patRowId = daw.$getDrumrow( rowId ).pattern;
 	const patRow = daw.$getPattern( patRowId );
-	const nextDrumId = +DAWCoreActionsCommon.getNextIdOf( drums );
+	const nextDrumId = +DAWCoreActionsCommon_getNextIdOf( drums );
 	const jsonType = DAWCoreJSON[ type ];
 	const newDrums = {};
 	const obj = { drums: { [ pat.drums ]: newDrums } };
@@ -34,7 +34,7 @@ DAWCoreActions._addDrums = ( type, status, patternId, rowId, arr, daw ) => {
 
 	const duration = Math.max( 1, Math.ceil( drumWhenMax / bPM ) ) * bPM;
 
-	DAWCoreActionsCommon.updatePatternDuration( daw, obj, patternId, duration );
+	DAWCoreActionsCommon_updatePatternDuration( daw, obj, patternId, duration );
 	return [
 		obj,
 		[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],

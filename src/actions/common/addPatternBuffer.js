@@ -9,7 +9,7 @@
  * - "library-buffer:default"
  * - "library-buffer:local"
 */
-DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
+function DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcPatId ) {
 	if ( !srcType.includes( ':' ) ) {
 		return Promise.resolve( [ srcPatId, daw.$getPattern( srcPatId ).name, null ] );
 	}
@@ -28,8 +28,8 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 	}
 	return daw.$getAudioBufferSource( bufHash ).then( audioBuf => {
 		const lib = srcType.split( ":" )[ 1 ];
-		const patId = DAWCoreActionsCommon.getNextIdOf( pats );
-		const bufId = DAWCoreActionsCommon.getNextIdOf( buffs );
+		const patId = DAWCoreActionsCommon_getNextIdOf( pats );
+		const bufId = DAWCoreActionsCommon_getNextIdOf( buffs );
 		const order = Object.values( pats ).reduce( ( max, pat ) => {
 			return pat.type !== "buffer"
 				? max
@@ -66,4 +66,4 @@ DAWCoreActionsCommon.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 			patterns: { [ patId ]: pat },
 		} ];
 	} );
-};
+}

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActionsCommon.updatePatternDuration = ( daw, obj, patId, duration ) => {
+function DAWCoreActionsCommon_updatePatternDuration( daw, obj, patId, duration ) {
 	if ( duration !== daw.$getPattern( patId ).duration ) {
 		const objBlocks = Object.entries( daw.$getBlocks() )
 			.reduce( ( obj, [ id, blc ] ) => {
@@ -13,11 +13,11 @@ DAWCoreActionsCommon.updatePatternDuration = ( daw, obj, patId, duration ) => {
 		GSUdeepAssign( obj, { patterns: { [ patId ]: { duration } } } );
 		GSUaddIfNotEmpty( obj, "blocks", objBlocks );
 		if ( GSUisntEmpty( objBlocks ) ) {
-			const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+			const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 
 			if ( dur !== daw.$getDuration() ) {
 				obj.duration = dur;
 			}
 		}
 	}
-};
+}

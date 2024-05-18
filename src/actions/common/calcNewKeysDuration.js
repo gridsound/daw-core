@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActionsCommon.calcNewKeysDuration = ( daw, keysId, keysObj ) => {
+function DAWCoreActionsCommon_calcNewKeysDuration( daw, keysId, keysObj ) {
 	const bPM = daw.$getBeatsPerMeasure();
 	const keys = daw.$getKeys( keysId );
 	const dur = Object.entries( keys ).reduce( ( max, [ id, key ] ) => {
@@ -21,4 +21,4 @@ DAWCoreActionsCommon.calcNewKeysDuration = ( daw, keysId, keysObj ) => {
 	}, dur );
 
 	return Math.max( 1, Math.ceil( dur2 / bPM ) ) * bPM;
-};
+}

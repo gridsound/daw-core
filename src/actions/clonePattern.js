@@ -4,18 +4,18 @@ DAWCoreActions.set( "clonePattern", ( daw, patId ) => {
 	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const newPat = { ...pat };
-	const newPatId = DAWCoreActionsCommon.getNextIdOf( daw.$getPatterns() );
+	const newPatId = DAWCoreActionsCommon_getNextIdOf( daw.$getPatterns() );
 	const obj = { patterns: { [ newPatId ]: newPat } };
 
-	newPat.name = DAWCoreActionsCommon.createUniqueName( daw.$getPatterns(), pat.name );
+	newPat.name = DAWCoreActionsCommon_createUniqueName( daw.$getPatterns(), pat.name );
 	++newPat.order;
 	const newCnt = GSUjsonCopy( daw.$getItemByType( type, pat[ type ] ) );
-	const newCntId = DAWCoreActionsCommon.getNextIdOf( daw.$getListByType( type ) );
+	const newCntId = DAWCoreActionsCommon_getNextIdOf( daw.$getListByType( type ) );
 
 	newPat[ type ] = newCntId;
 	if ( type !== "buffer" ) {
 		obj[ type ] = { [ newCntId ]: newCnt };
-		obj[ DAWCoreActionsCommon.patternOpenedByType[ type ] ] = newPatId;
+		obj[ DAWCoreActionsCommon_patternOpenedByType[ type ] ] = newPatId;
 	} else {
 		obj.buffers = { [ newCntId ]: newCnt };
 	}

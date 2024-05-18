@@ -2,9 +2,9 @@
 
 DAWCoreActions.set( "addOscillator", ( daw, synthId ) => {
 	const syn = daw.$getSynth( synthId );
-	const id = DAWCoreActionsCommon.getNextIdOf( syn.oscillators );
+	const id = DAWCoreActionsCommon_getNextIdOf( syn.oscillators );
 	const osc = DAWCoreJSON.oscillator( {
-		order: DAWCoreActionsCommon.getNextOrderOf( syn.oscillators ),
+		order: DAWCoreActionsCommon_getNextOrderOf( syn.oscillators ),
 	} );
 
 	return [

@@ -1,10 +1,7 @@
 "use strict";
 
 const DAWCoreJSON = { effects: {} };
-const DAWCoreUtils = {};
 const DAWCoreActions = new Map();
-const DAWCoreActionsCommon = {};
-const DAWCoreControllers = {};
 
 class DAWCore {
 	static #dropExtensions = Object.freeze( { gs: true, txt: true, json: true } );
@@ -94,7 +91,7 @@ class DAWCore {
 	$getCompositions( saveMode ) { return this.$getCmps( saveMode ); }
 	$getComposition( saveMode, id ) { return this.$getCmps( saveMode ).get( id ); }
 	$getSaveMode() { return this.#composition.$cmp.options.saveMode; }
-	$getOpened( t ) { return this.#composition.$cmp[ DAWCoreActionsCommon.patternOpenedByType[ t ] ]; }
+	$getOpened( t ) { return this.#composition.$cmp[ DAWCoreActionsCommon_patternOpenedByType[ t ] ]; }
 	// .........................................................................
 	$getCtx() { return this.ctx; }
 	$getAudioDestination() { return this.#dest.$inputNode; }

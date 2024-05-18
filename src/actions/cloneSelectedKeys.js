@@ -3,7 +3,7 @@
 DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
 	const pat = daw.$getPattern( patId );
 	const keys = daw.$getKeys( pat.keys );
-	const nextId = +DAWCoreActionsCommon.getNextIdOf( keys );
+	const nextId = +DAWCoreActionsCommon_getNextIdOf( keys );
 	const keysObj = {};
 	const obj = { keys: { [ pat.keys ]: keysObj } };
 	const mapIds = keyIds.reduce( ( map, id, i ) => {
@@ -18,7 +18,7 @@ DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
 		map.set( id, nId );
 		return map;
 	}, new Map() );
-	const dur = DAWCoreActionsCommon.calcNewKeysDuration( daw, pat.keys, keysObj );
+	const dur = DAWCoreActionsCommon_calcNewKeysDuration( daw, pat.keys, keysObj );
 
 	keyIds.forEach( id => {
 		const keyNext = keys[ id ].next;
@@ -31,7 +31,7 @@ DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
 			keysObj[ nIdNext ].prev = nId;
 		}
 	} );
-	DAWCoreActionsCommon.updatePatternDuration( daw, obj, patId, dur );
+	DAWCoreActionsCommon_updatePatternDuration( daw, obj, patId, dur );
 	return [
 		obj,
 		[ "keys", "cloneSelectedKeys", pat.name, keyIds.length ],

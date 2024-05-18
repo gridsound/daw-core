@@ -1,5 +1,5 @@
 "use strict";
 
-DAWCoreActionsCommon.getDrumrowName = ( daw, rowId ) => {
+function DAWCoreActionsCommon_getDrumrowName( daw, rowId ) {
 	return daw.$getPattern( daw.$getDrumrow( rowId ).pattern ).name;
-};
+}

@@ -19,9 +19,9 @@ DAWCoreActions.set( "moveKeys", ( daw, patId, keyIds, whenIncr, keyIncr ) => {
 	const obj = { keys: { [ pat.keys ]: keys } };
 
 	if ( whenIncr ) {
-		const duration = DAWCoreActionsCommon.calcNewKeysDuration( daw, pat.keys, keys );
+		const duration = DAWCoreActionsCommon_calcNewKeysDuration( daw, pat.keys, keys );
 
-		DAWCoreActionsCommon.updatePatternDuration( daw, obj, patId, duration );
+		DAWCoreActionsCommon_updatePatternDuration( daw, obj, patId, duration );
 	}
 	return [
 		obj,

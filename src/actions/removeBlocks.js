@@ -6,7 +6,7 @@ DAWCoreActions.set( "removeBlocks", ( daw, blcIds ) => {
 		return obj;
 	}, {} );
 	const obj = { blocks };
-	const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+	const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 	let selLen = 0;
 
 	Object.entries( daw.$getBlocks() ).forEach( ( [ id, blc ] ) => {

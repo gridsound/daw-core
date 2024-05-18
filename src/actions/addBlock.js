@@ -1,9 +1,9 @@
 "use strict";
 
 DAWCoreActions.set( "addBlock", ( daw, patType, patId, when, track ) => {
-	return DAWCoreActionsCommon.addPatternBuffer( daw, patType, patId )
+	return DAWCoreActionsCommon_addPatternBuffer( daw, patType, patId )
 		.then( ( [ patId, patName, patObj ] ) => {
-			const nId = DAWCoreActionsCommon.getNextIdOf( daw.$getBlocks() );
+			const nId = DAWCoreActionsCommon_getNextIdOf( daw.$getBlocks() );
 			const objBlc = DAWCoreJSON.block( {
 				pattern: patId,
 				when,
@@ -13,7 +13,7 @@ DAWCoreActions.set( "addBlock", ( daw, patType, patId, when, track ) => {
 					: daw.$getPatternDuration( patId ),
 			} );
 			const obj = { blocks: { [ nId ]: objBlc } };
-			const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+			const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 
 			if ( dur !== daw.$getDuration() ) {
 				obj.duration = dur;

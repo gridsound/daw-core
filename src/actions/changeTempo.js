@@ -49,7 +49,7 @@ DAWCoreActions.set( "changeTempo", ( daw, bpm, timedivision ) => {
 			} );
 			GSUaddIfNotEmpty( obj, "blocks", objBlocks );
 			if ( GSUisntEmpty( objBlocks ) ) {
-				const dur = DAWCoreActionsCommon.calcNewDuration( daw, obj );
+				const dur = DAWCoreActionsCommon_calcNewDuration( daw, obj );
 
 				if ( dur !== daw.$getDuration() ) {
 					obj.duration = dur;

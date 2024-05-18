@@ -2,14 +2,14 @@
 
 DAWCoreActions.set( "addOscillatorSource", ( daw, synthId, srcType, srcPatId ) => {
 	const syn = daw.$getSynth( synthId );
-	const newOscId = DAWCoreActionsCommon.getNextIdOf( syn.oscillators );
+	const newOscId = DAWCoreActionsCommon_getNextIdOf( syn.oscillators );
 
-	return DAWCoreActionsCommon.addPatternBuffer( daw, srcType, srcPatId )
+	return DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcPatId )
 		.then( ( [ newSrcPatId, newSrcPatName, newPatObj ] ) => {
 			const newOsc = DAWCoreJSON.oscillator( {
 				wave: null,
 				source: newSrcPatId,
-				order: DAWCoreActionsCommon.getNextOrderOf( syn.oscillators ),
+				order: DAWCoreActionsCommon_getNextOrderOf( syn.oscillators ),
 			} );
 
 			return [
