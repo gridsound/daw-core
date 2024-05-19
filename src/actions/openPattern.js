@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "openPattern", ( daw, id ) => {
+DAWCoreActions.openPattern = ( daw, id ) => {
 	const pat = daw.$getPattern( id );
 
 	if ( id !== daw.$getOpened( pat.type ) && pat.type !== "buffer" ) {
@@ -11,4 +11,4 @@ DAWCoreActions.set( "openPattern", ( daw, id ) => {
 		}
 		return obj;
 	}
-} );
+};

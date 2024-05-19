@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm, reverse } ) => {
+DAWCoreActions.changePatternBufferInfo = ( daw, id, { name, type, bpm, reverse } ) => {
 	const pat = daw.$getPattern( id );
 	const buf = daw.$getBuffer( pat.buffer );
 	const obj = {};
@@ -44,4 +44,4 @@ DAWCoreActions.set( "changePatternBufferInfo", ( daw, id, { name, type, bpm, rev
 			[ "patterns", "changePatternBufferInfo", name || pat.name ],
 		];
 	}
-} );
+};

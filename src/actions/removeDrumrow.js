@@ -1,13 +1,13 @@
 "use strict";
 
-DAWCoreActions.set( "removeDrumrow", ( daw, rowId ) => {
+DAWCoreActions.removeDrumrow = ( daw, rowId ) => {
 	const patName = DAWCoreActionsCommon_getDrumrowName( daw, rowId );
 
 	return [
 		DAWCoreActions._removeDrumrow( {}, rowId, daw ),
 		[ "drumrows", "removeDrumrow", patName ],
 	];
-} );
+};
 
 DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 	const bPM = daw.$getBeatsPerMeasure();

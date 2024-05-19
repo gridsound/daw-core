@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "moveKeys", ( daw, patId, keyIds, whenIncr, keyIncr ) => {
+DAWCoreActions.moveKeys = ( daw, patId, keyIds, whenIncr, keyIncr ) => {
 	const pat = daw.$getPattern( patId );
 	const patKeys = daw.$getKeys( pat.keys );
 	const keys = keyIds.reduce( ( obj, id ) => {
@@ -27,4 +27,4 @@ DAWCoreActions.set( "moveKeys", ( daw, patId, keyIds, whenIncr, keyIncr ) => {
 		obj,
 		[ "keys", "moveKeys", pat.name, keyIds.length ],
 	];
-} );
+};

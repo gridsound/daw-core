@@ -1,7 +1,7 @@
 "use strict";
 
 const DAWCoreJSON = { effects: {} };
-const DAWCoreActions = new Map();
+const DAWCoreActions = {};
 
 class DAWCore {
 	static #dropExtensions = Object.freeze( { gs: true, txt: true, json: true } );
@@ -446,10 +446,10 @@ class DAWCore {
 
 	// .........................................................................
 	$callAction( action, ...args ) {
-		const fn = DAWCoreActions.get( action );
+		const fn = typeof action === "function" ? action : DAWCoreActions[ action ];
 
 		if ( !fn ) {
-			console.error( `DAWCore: undefined action "${ action }"` );
+			console.error( "DAWCore: undefined action", action );
 		} else {
 			const ret = fn( this, ...args );
 

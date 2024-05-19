@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "clonePattern", ( daw, patId ) => {
+DAWCoreActions.clonePattern = ( daw, patId ) => {
 	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const newPat = { ...pat };
@@ -26,7 +26,7 @@ DAWCoreActions.set( "clonePattern", ( daw, patId ) => {
 		obj,
 		[ "patterns", "clonePattern", newPat.type, newPat.name, pat.name ],
 	];
-} );
+};
 
 DAWCoreActions.clonePattern_filterFn = Object.freeze( {
 	keys: ( newPat, [ , pat ] ) => pat.type === "keys" && pat.order >= newPat.order && pat.synth === newPat.synth,

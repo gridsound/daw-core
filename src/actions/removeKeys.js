@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "removeKeys", ( daw, patId, keyIds ) => {
+DAWCoreActions.removeKeys = ( daw, patId, keyIds ) => {
 	const pat = daw.$getPattern( patId );
 	const keys = daw.$getKeys( pat.keys );
 	const keysObj = keyIds.reduce( ( obj, id ) => {
@@ -44,4 +44,4 @@ DAWCoreActions.set( "removeKeys", ( daw, patId, keyIds ) => {
 			? [ "keys", "removeKeys", pat.name, keyIds.length ]
 			: [ "keys", "unselectAllKeys", pat.name, selLen ],
 	];
-} );
+};

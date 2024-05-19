@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "openSynth", ( daw, id ) => {
+DAWCoreActions.openSynth = ( daw, id ) => {
 	if ( id !== daw.$getOpened( "synth" ) ) {
 		const pat = Object.entries( daw.$getPatterns() ).find( kv => kv[ 1 ].synth === id );
 		const patId = pat ? pat[ 0 ] : null;
@@ -11,4 +11,4 @@ DAWCoreActions.set( "openSynth", ( daw, id ) => {
 		}
 		return obj;
 	}
-} );
+};

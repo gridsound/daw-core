@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "selectBlocks", ( _daw, blcIds ) => {
+DAWCoreActions.selectBlocks = ( _daw, blcIds ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = { selected: true };
 		return obj;
@@ -10,4 +10,4 @@ DAWCoreActions.set( "selectBlocks", ( _daw, blcIds ) => {
 		{ blocks },
 		[ "blocks", "selectBlocks", blcIds.length ],
 	];
-} );
+};

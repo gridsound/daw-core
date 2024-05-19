@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addPatternBuffer", ( daw, srcType, srcPatId ) => {
+DAWCoreActions.addPatternBuffer = ( daw, srcType, srcPatId ) => {
 	return DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcPatId )
 		.then( ( [ newSrcPatId, newSrcPatName, newPatObj ] ) => {
 			if ( newPatObj ) {
@@ -10,4 +10,4 @@ DAWCoreActions.set( "addPatternBuffer", ( daw, srcType, srcPatId ) => {
 				];
 			}
 		} );
-} );
+};

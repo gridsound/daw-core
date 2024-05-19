@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "removePattern", ( daw, patId ) => {
+DAWCoreActions.removePattern = ( daw, patId ) => {
 	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const obj = { patterns: { [ patId ]: undefined } };
@@ -60,4 +60,4 @@ DAWCoreActions.set( "removePattern", ( daw, patId ) => {
 		obj,
 		[ "patterns", "removePattern", pat.type, pat.name ],
 	];
-} );
+};

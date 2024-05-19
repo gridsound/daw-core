@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "redirectKey", ( daw, patId, keyId, destKeyId ) => {
+DAWCoreActions.redirectKey = ( daw, patId, keyId, destKeyId ) => {
 	const pat = daw.$getPattern( patId );
 	const key = daw.$getKeys( pat.keys )[ keyId ];
 	const keys = {};
@@ -19,4 +19,4 @@ DAWCoreActions.set( "redirectKey", ( daw, patId, keyId, destKeyId ) => {
 		{ keys: { [ pat.keys ]: keys } },
 		[ "keys", "redirectKey", pat.name, !!destKeyId ],
 	];
-} );
+};

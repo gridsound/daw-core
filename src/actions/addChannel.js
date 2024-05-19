@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addChannel", daw => {
+DAWCoreActions.addChannel = daw => {
 	const channels = daw.$getChannels();
 	const id = DAWCoreActionsCommon_getNextIdOf( channels );
 	const order = DAWCoreActionsCommon_getNextOrderOf( channels );
@@ -11,4 +11,4 @@ DAWCoreActions.set( "addChannel", daw => {
 		{ channels: { [ id ]: chanObj } },
 		[ "channels", "addChannel", name ],
 	];
-} );
+};

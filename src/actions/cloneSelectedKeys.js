@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
+DAWCoreActions.cloneSelectedKeys = ( daw, patId, keyIds, whenIncr ) => {
 	const pat = daw.$getPattern( patId );
 	const keys = daw.$getKeys( pat.keys );
 	const nextId = +DAWCoreActionsCommon_getNextIdOf( keys );
@@ -36,4 +36,4 @@ DAWCoreActions.set( "cloneSelectedKeys", ( daw, patId, keyIds, whenIncr ) => {
 		obj,
 		[ "keys", "cloneSelectedKeys", pat.name, keyIds.length ],
 	];
-} );
+};

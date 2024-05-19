@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCoreActions.set( "addDrums", ( daw, patternId, rowId, arr ) => {
+DAWCoreActions.addDrums = ( daw, patternId, rowId, arr ) => {
 	return DAWCoreActions._addDrums( "drum", true, patternId, rowId, arr, daw );
-} );
+};
 
 DAWCoreActions._addDrums = ( type, status, patternId, rowId, arr, daw ) => {
 	const bPM = daw.$getBeatsPerMeasure();

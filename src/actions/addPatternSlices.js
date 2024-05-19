@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addPatternSlices", daw => {
+DAWCoreActions.addPatternSlices = daw => {
 	const pats = daw.$getPatterns();
 	const slicesId = DAWCoreActionsCommon_getNextIdOf( daw.$getSlices() );
 	const patId = DAWCoreActionsCommon_getNextIdOf( pats );
@@ -33,4 +33,4 @@ DAWCoreActions.set( "addPatternSlices", daw => {
 		obj,
 		[ "patterns", "addPattern", "slices", patName ],
 	];
-} );
+};

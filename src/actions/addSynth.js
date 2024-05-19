@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addSynth", daw => {
+DAWCoreActions.addSynth = daw => {
 	const id = DAWCoreActionsCommon_getNextIdOf( daw.$getSynths() );
 	const name = DAWCoreActionsCommon_createUniqueName( daw.$getSynths(), "synth" );
 	const obj = {
@@ -21,4 +21,4 @@ DAWCoreActions.set( "addSynth", daw => {
 		obj,
 		[ "synths", "addSynth", name ],
 	];
-} );
+};

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "toggleTrack", ( daw, id ) => {
+DAWCoreActions.toggleTrack = ( daw, id ) => {
 	const track = daw.$getTrack( id );
 	const toggle = !track.toggle;
 
@@ -8,4 +8,4 @@ DAWCoreActions.set( "toggleTrack", ( daw, id ) => {
 		{ tracks: { [ id ]: { toggle } } },
 		[ "tracks", "toggleTrack", track.name, toggle ],
 	];
-} );
+};

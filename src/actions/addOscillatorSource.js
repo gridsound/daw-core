@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addOscillatorSource", ( daw, synthId, srcType, srcPatId ) => {
+DAWCoreActions.addOscillatorSource = ( daw, synthId, srcType, srcPatId ) => {
 	const syn = daw.$getSynth( synthId );
 	const newOscId = DAWCoreActionsCommon_getNextIdOf( syn.oscillators );
 
@@ -17,4 +17,4 @@ DAWCoreActions.set( "addOscillatorSource", ( daw, synthId, srcType, srcPatId ) =
 				[ "synth", "addOscillatorSource", syn.name, newSrcPatName ],
 			];
 		} );
-} );
+};

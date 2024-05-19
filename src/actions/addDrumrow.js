@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addDrumrow", ( daw, patType, patId ) => {
+DAWCoreActions.addDrumrow = ( daw, patType, patId ) => {
 	return DAWCoreActionsCommon_addPatternBuffer( daw, patType, patId )
 		.then( ( [ patId, patName, patObj ] ) => {
 			const drumrows = daw.$getDrumrows();
@@ -13,4 +13,4 @@ DAWCoreActions.set( "addDrumrow", ( daw, patType, patId ) => {
 				[ "drumrows", "addDrumrow", patName ],
 			];
 		} );
-} );
+};

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "cropStartBlocks", ( daw, blcIds, whenIncr ) => {
+DAWCoreActions.cropStartBlocks = ( daw, blcIds, whenIncr ) => {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		const blc = daw.$getBlock( id );
 
@@ -17,4 +17,4 @@ DAWCoreActions.set( "cropStartBlocks", ( daw, blcIds, whenIncr ) => {
 		{ blocks },
 		[ "blocks", "cropStartBlocks", blcIds.length ],
 	];
-} );
+};

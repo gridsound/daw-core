@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "addEffect", ( daw, dest, type ) => {
+DAWCoreActions.addEffect = ( daw, dest, type ) => {
 	const fxs = daw.$getEffects();
 	const destFxs = Object.values( fxs ).filter( fx => fx.dest === dest );
 	const id = DAWCoreActionsCommon_getNextIdOf( fxs );
@@ -16,4 +16,4 @@ DAWCoreActions.set( "addEffect", ( daw, dest, type ) => {
 		{ effects: { [ id ]: fx } },
 		[ "effects", "addEffect", daw.$getChannel( dest ).name, type ],
 	];
-} );
+};

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "toggleEffect", ( daw, fxId ) => {
+DAWCoreActions.toggleEffect = ( daw, fxId ) => {
 	const fx = daw.$getEffect( fxId );
 	const toggle = !fx.toggle;
 
@@ -8,4 +8,4 @@ DAWCoreActions.set( "toggleEffect", ( daw, fxId ) => {
 		{ effects: { [ fxId ]: { toggle } } },
 		[ "effects", "toggleEffect", daw.$getChannel( fx.dest ).name, fx.type, toggle ],
 	];
-} );
+};

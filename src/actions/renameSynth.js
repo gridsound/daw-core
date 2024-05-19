@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.set( "renameSynth", ( daw, id, newName ) => {
+DAWCoreActions.renameSynth = ( daw, id, newName ) => {
 	const name = GSUtrim2( newName );
 	const syn = daw.$getSynth( id );
 
@@ -10,4 +10,4 @@ DAWCoreActions.set( "renameSynth", ( daw, id, newName ) => {
 			[ "synths", "renameSynth", syn.name, name ],
 		];
 	}
-} );
+};
