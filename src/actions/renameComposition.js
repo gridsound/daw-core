@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.renameComposition = ( daw, newName ) => {
+function DAWCoreActions_renameComposition( daw, newName ) {
 	const name = GSUtrim2( newName );
 	const oldName = daw.$getName();
 
@@ -10,4 +10,4 @@ DAWCoreActions.renameComposition = ( daw, newName ) => {
 			[ "cmp", "renameComposition", oldName, name ],
 		];
 	}
-};
+}

@@ -1,5 +1,5 @@
 "use strict";
 
-DAWCoreActions.addDrumcuts = ( daw, patternId, rowId, arr ) => {
-	return DAWCoreActions._addDrums( "drumcut", true, patternId, rowId, arr, daw );
-};
+function DAWCoreActions_addDrumcuts( daw, patternId, rowId, arr ) {
+	return DAWCoreActions__addDrums( "drumcut", true, patternId, rowId, arr, daw );
+}

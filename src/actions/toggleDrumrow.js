@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.toggleDrumrow = ( daw, rowId ) => {
+function DAWCoreActions_toggleDrumrow( daw, rowId ) {
 	const patName = DAWCoreActionsCommon_getDrumrowName( daw, rowId );
 	const toggle = !daw.$getDrumrow( rowId ).toggle;
 
@@ -8,4 +8,4 @@ DAWCoreActions.toggleDrumrow = ( daw, rowId ) => {
 		{ drumrows: { [ rowId ]: { toggle } } },
 		[ "drumrows", "toggleDrumrow", patName, toggle ],
 	];
-};
+}

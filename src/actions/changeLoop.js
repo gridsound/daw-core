@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.changeLoop = ( _daw, a, b ) => {
+function DAWCoreActions_changeLoop( _daw, a, b ) {
 	return Number.isFinite( a )
 		? [
 			{ loopA: a, loopB: b },
@@ -9,4 +9,4 @@ DAWCoreActions.changeLoop = ( _daw, a, b ) => {
 			{ loopA: null, loopB: null },
 			[ "cmp", "removeLoop" ]
 		];
-};
+}

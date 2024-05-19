@@ -1,10 +1,10 @@
 "use strict";
 
-DAWCoreActions.addDrums = ( daw, patternId, rowId, arr ) => {
-	return DAWCoreActions._addDrums( "drum", true, patternId, rowId, arr, daw );
-};
+function DAWCoreActions_addDrums( daw, patternId, rowId, arr ) {
+	return DAWCoreActions__addDrums( "drum", true, patternId, rowId, arr, daw );
+}
 
-DAWCoreActions._addDrums = ( type, status, patternId, rowId, arr, daw ) => {
+function DAWCoreActions__addDrums( type, status, patternId, rowId, arr, daw ) {
 	const bPM = daw.$getBeatsPerMeasure();
 	const stepDur = 1 / daw.$getStepsPerBeat();
 	const pat = daw.$getPattern( patternId );
@@ -39,4 +39,4 @@ DAWCoreActions._addDrums = ( type, status, patternId, rowId, arr, daw ) => {
 		obj,
 		[ "drums", status ? "addDrums" : "removeDrums", pat.name, patRow.name, nbDrums ],
 	];
-};
+}

@@ -1,15 +1,15 @@
 "use strict";
 
-DAWCoreActions.removeDrumrow = ( daw, rowId ) => {
+function DAWCoreActions_removeDrumrow( daw, rowId ) {
 	const patName = DAWCoreActionsCommon_getDrumrowName( daw, rowId );
 
 	return [
-		DAWCoreActions._removeDrumrow( {}, rowId, daw ),
+		DAWCoreActions__removeDrumrow( {}, rowId, daw ),
 		[ "drumrows", "removeDrumrow", patName ],
 	];
-};
+}
 
-DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
+function DAWCoreActions__removeDrumrow( obj, rowId, daw ) {
 	const bPM = daw.$getBeatsPerMeasure();
 	const blocksEnt = Object.entries( daw.$getBlocks() );
 	const patternsEnt = Object.entries( daw.$getPatterns() );
@@ -56,4 +56,4 @@ DAWCoreActions._removeDrumrow = ( obj, rowId, daw ) => {
 		}
 	}
 	return obj;
-};
+}

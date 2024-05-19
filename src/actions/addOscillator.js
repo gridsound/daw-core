@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.addOscillator = ( daw, synthId ) => {
+function DAWCoreActions_addOscillator( daw, synthId ) {
 	const syn = daw.$getSynth( synthId );
 	const id = DAWCoreActionsCommon_getNextIdOf( syn.oscillators );
 	const osc = DAWCoreJSON.oscillator( {
@@ -11,4 +11,4 @@ DAWCoreActions.addOscillator = ( daw, synthId ) => {
 		{ synths: { [ synthId ]: { oscillators: { [ id ]: osc } } } },
 		[ "synth", "addOscillator", syn.name ],
 	];
-};
+}

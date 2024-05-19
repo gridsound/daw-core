@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.renameTrack = ( daw, id, newName ) => {
+function DAWCoreActions_renameTrack( daw, id, newName ) {
 	const name = GSUtrim2( newName );
 	const tr = daw.$getTrack( id );
 
@@ -10,4 +10,4 @@ DAWCoreActions.renameTrack = ( daw, id, newName ) => {
 			[ "tracks", "renameTrack", tr.name, name ],
 		];
 	}
-};
+}

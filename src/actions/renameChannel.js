@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.renameChannel = ( daw, id, newName ) => {
+function DAWCoreActions_renameChannel( daw, id, newName ) {
 	const name = GSUtrim2( newName );
 	const chan = daw.$getChannel( id );
 
@@ -10,4 +10,4 @@ DAWCoreActions.renameChannel = ( daw, id, newName ) => {
 			[ "channels", "renameChannel", chan.name, name ],
 		];
 	}
-};
+}

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.removeBlocks = ( daw, blcIds ) => {
+function DAWCoreActions_removeBlocks( daw, blcIds ) {
 	const blocks = blcIds.reduce( ( obj, id ) => {
 		obj[ id ] = undefined;
 		return obj;
@@ -24,4 +24,4 @@ DAWCoreActions.removeBlocks = ( daw, blcIds ) => {
 			? [ "blocks", "removeBlocks", blcIds.length ]
 			: [ "blocks", "unselectAllBlocks", selLen ],
 	];
-};
+}

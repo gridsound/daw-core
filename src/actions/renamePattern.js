@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.renamePattern = ( daw, id, newName ) => {
+function DAWCoreActions_renamePattern( daw, id, newName ) {
 	const name = GSUtrim2( newName );
 	const pat = daw.$getPattern( id );
 
@@ -10,4 +10,4 @@ DAWCoreActions.renamePattern = ( daw, id, newName ) => {
 			[ "patterns", "renamePattern", pat.type, pat.name, name ],
 		];
 	}
-};
+}

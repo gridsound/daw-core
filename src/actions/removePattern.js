@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.removePattern = ( daw, patId ) => {
+function DAWCoreActions_removePattern( daw, patId ) {
 	const pat = daw.$getPattern( patId );
 	const type = pat.type;
 	const obj = { patterns: { [ patId ]: undefined } };
@@ -16,7 +16,7 @@ DAWCoreActions.removePattern = ( daw, patId ) => {
 	} else {
 		GSUforEach( daw.$getDrumrows(), ( rowId, row ) => {
 			if ( row.pattern === patId ) {
-				GSUdeepAssign( obj, DAWCoreActions._removeDrumrow( obj, rowId, daw ) );
+				GSUdeepAssign( obj, DAWCoreActions__removeDrumrow( obj, rowId, daw ) );
 			}
 		} );
 		GSUforEach( daw.$getPatterns(), ( patSliId, patSli ) => {
@@ -60,4 +60,4 @@ DAWCoreActions.removePattern = ( daw, patId ) => {
 		obj,
 		[ "patterns", "removePattern", pat.type, pat.name ],
 	];
-};
+}

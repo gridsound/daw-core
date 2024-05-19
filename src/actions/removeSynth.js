@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.removeSynth = ( daw, synthId ) => {
+function DAWCoreActions_removeSynth( daw, synthId ) {
 	const keys = {};
 	const blocks = {};
 	const patterns = {};
@@ -44,4 +44,4 @@ DAWCoreActions.removeSynth = ( daw, synthId ) => {
 		obj,
 		[ "synths", "removeSynth", daw.$getSynth( synthId ).name ],
 	];
-};
+}

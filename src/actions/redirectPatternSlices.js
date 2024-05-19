@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.redirectPatternSlices = ( daw, patId, srcType, srcId ) => {
+function DAWCoreActions_redirectPatternSlices( daw, patId, srcType, srcId ) {
 	return DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcId )
 		.then( ( [ srcId, srcName, srcObj ] ) => {
 			if ( srcId !== daw.$getPattern( patId ).source ) {
@@ -10,4 +10,4 @@ DAWCoreActions.redirectPatternSlices = ( daw, patId, srcType, srcId ) => {
 				];
 			}
 		} );
-};
+}

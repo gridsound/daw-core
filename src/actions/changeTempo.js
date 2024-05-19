@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.changeTempo = ( daw, bpm, timedivision ) => {
+function DAWCoreActions_changeTempo( daw, bpm, timedivision ) {
 	const signChanged = timedivision !== daw.$getTimedivision();
 	const bpmChanged = bpm !== daw.$getBPM();
 
@@ -61,4 +61,4 @@ DAWCoreActions.changeTempo = ( daw, bpm, timedivision ) => {
 			[ "cmp", "changeTempo", bpm, timedivision ],
 		];
 	}
-};
+}

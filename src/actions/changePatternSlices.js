@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.changePatternSlices = ( daw, id, prop, val ) => {
+function DAWCoreActions_changePatternSlices( daw, id, prop, val ) {
 	const obj = {};
 	let act;
 
@@ -23,4 +23,4 @@ DAWCoreActions.changePatternSlices = ( daw, id, prop, val ) => {
 		obj,
 		[ "slices", act, daw.$getPattern( id ).name, val ],
 	];
-};
+}

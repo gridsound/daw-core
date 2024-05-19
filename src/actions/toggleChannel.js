@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.toggleChannel = ( daw, id ) => {
+function DAWCoreActions_toggleChannel( daw, id ) {
 	const chan = daw.$getChannel( id );
 	const toggle = !chan.toggle;
 
@@ -8,4 +8,4 @@ DAWCoreActions.toggleChannel = ( daw, id ) => {
 		{ channels: { [ id ]: { toggle } } },
 		[ "channels", "toggleChannel", chan.name, toggle ],
 	];
-};
+}

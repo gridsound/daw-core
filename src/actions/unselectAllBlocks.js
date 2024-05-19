@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.unselectAllBlocks = daw => {
+function DAWCoreActions_unselectAllBlocks( daw ) {
 	let len = 0;
 	const blocks = Object.entries( daw.$getBlocks() ).reduce( ( obj, [ id, blc ] ) => {
 		if ( blc.selected ) {
@@ -14,4 +14,4 @@ DAWCoreActions.unselectAllBlocks = daw => {
 		{ blocks },
 		[ "blocks", "unselectAllBlocks", len ],
 	];
-};
+}

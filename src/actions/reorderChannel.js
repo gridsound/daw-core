@@ -1,8 +1,8 @@
 "use strict";
 
-DAWCoreActions.reorderChannel = ( daw, chanId, channels ) => {
+function DAWCoreActions_reorderChannel( daw, chanId, channels ) {
 	return [
 		{ channels },
 		[ "channels", "reorderChannel", daw.$getChannel( chanId ).name ],
 	];
-};
+}

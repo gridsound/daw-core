@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.moveBlocks = ( daw, blcIds, whenIncr, trackIncr ) => {
+function DAWCoreActions_moveBlocks( daw, blcIds, whenIncr, trackIncr ) {
 	const blocks = {};
 	const obj = { blocks };
 	const tr = Object.entries( daw.$getTracks() ).sort( ( a, b ) => a[ 1 ].order < b[ 1 ].order );
@@ -28,4 +28,4 @@ DAWCoreActions.moveBlocks = ( daw, blcIds, whenIncr, trackIncr ) => {
 		obj,
 		[ "blocks", "moveBlocks", blcIds.length ],
 	];
-};
+}

@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.unselectAllKeys = ( daw, patId ) => {
+function DAWCoreActions_unselectAllKeys( daw, patId ) {
 	let len = 0;
 	const pat = daw.$getPattern( patId );
 	const keysObj = Object.entries( daw.$getKeys( pat.keys ) ).reduce( ( obj, [ id, key ] ) => {
@@ -15,4 +15,4 @@ DAWCoreActions.unselectAllKeys = ( daw, patId ) => {
 		{ keys: { [ pat.keys ]: keysObj } },
 		[ "keys", "unselectAllKeys", pat.name, len ],
 	];
-};
+}

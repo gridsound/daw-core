@@ -1,6 +1,6 @@
 "use strict";
 
-DAWCoreActions.dropMidiOnKeys = ( daw, patId, midiRaw ) => {
+function DAWCoreActions_dropMidiOnKeys( daw, patId, midiRaw ) {
 	const mid = gswaMIDIParser.$parse( midiRaw );
 	const keys = gswaMIDIToKeys.$convert( mid );
 	const keys0 = keys.keys[ 0 ];
@@ -36,4 +36,4 @@ DAWCoreActions.dropMidiOnKeys = ( daw, patId, midiRaw ) => {
 			[ "keys", "dropMidiOnKeys", newName ],
 		];
 	}
-};
+}
