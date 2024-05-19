@@ -9,7 +9,7 @@ function DAWCoreActions_addEffect( daw, dest, type ) {
 		type,
 		toggle: true,
 		order: DAWCoreActionsCommon_getNextOrderOf( destFxs ),
-		data: DAWCoreJSON.effects[ type ](),
+		data: DAWCoreJSON_effects[ type ](),
 	};
 
 	return [

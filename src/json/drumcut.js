@@ -1,6 +1,8 @@
 "use strict";
 
-DAWCoreJSON.drumcut = obj => Object.assign( Object.seal( {
-	when: 0,
-	row: null,
-} ), obj );
+function DAWCoreJSON_drumcut( obj ) {
+	return Object.assign( Object.seal( {
+		when: 0,
+		row: null,
+	} ), obj );
+}

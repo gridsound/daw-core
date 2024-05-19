@@ -4,8 +4,8 @@ class DAWCoreControllerSynth {
 	$on = null;
 	$data = Object.seal( {
 		name: "",
-		env: Object.seal( DAWCoreJSON.env() ),
-		lfo: Object.seal( DAWCoreJSON.lfo() ),
+		env: Object.seal( DAWCoreJSON_env() ),
+		lfo: Object.seal( DAWCoreJSON_lfo() ),
 		oscillators: {},
 	} );
 	#oscsCrud = GSUcreateUpdateDelete.bind( null, this.$data.oscillators,

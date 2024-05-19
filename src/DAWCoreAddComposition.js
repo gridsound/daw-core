@@ -34,7 +34,7 @@ class DAWCoreAddComposition {
 		return Promise.resolve( cpy );
 	}
 	static $new( daw, opt ) {
-		const cmp = DAWCoreJSON.composition( daw.$env, GSUuuid() );
+		const cmp = DAWCoreJSON_composition( daw.$env, GSUuuid() );
 
 		return DAWCoreAddComposition.$JSObject( daw, cmp, opt );
 	}

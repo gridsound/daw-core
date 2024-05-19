@@ -1,6 +1,10 @@
 "use strict";
 
-const DAWCoreJSON = { effects: {} };
+const DAWCoreJSON_effects = {
+	delay: DAWCoreJSON_effects_delay,
+	filter: DAWCoreJSON_effects_filter,
+	waveshaper: DAWCoreJSON_effects_waveshaper,
+};
 
 class DAWCore {
 	static #dropExtensions = Object.freeze( { gs: true, txt: true, json: true } );

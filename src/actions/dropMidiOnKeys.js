@@ -11,7 +11,7 @@ function DAWCoreActions_dropMidiOnKeys( daw, patId, midiRaw ) {
 	const obj = {};
 
 	for ( let k in keys0 ) {
-		keys0[ k ] = DAWCoreJSON.key( keys0[ k ] );
+		keys0[ k ] = DAWCoreJSON_key( keys0[ k ] );
 	}
 
 	const keysDiff = GSUdiffObjects( keysOri, keys0 );

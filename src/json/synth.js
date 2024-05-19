@@ -1,9 +1,11 @@
 "use strict";
 
-DAWCoreJSON.synth = obj => Object.assign( Object.seal( {
-	name: "synth",
-	dest: "main",
-	env: DAWCoreJSON.env(),
-	lfo: DAWCoreJSON.lfo(),
-	oscillators: {},
-} ), obj );
+function DAWCoreJSON_synth( obj ) {
+	return Object.assign( Object.seal( {
+		name: "synth",
+		dest: "main",
+		env: DAWCoreJSON_env(),
+		lfo: DAWCoreJSON_lfo(),
+		oscillators: {},
+	} ), obj );
+}

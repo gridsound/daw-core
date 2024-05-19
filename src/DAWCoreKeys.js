@@ -68,7 +68,7 @@ class DAWCoreKeys {
 			const now = store.$waKeys.scheduler.currentTime();
 			const keyObj2 = keyObj
 				? { ...keyObj, key: midi }
-				: DAWCoreJSON.key( { key: midi } );
+				: DAWCoreJSON_key( { key: midi } );
 
 			store.$keysStartedLive[ midi ] = store.$synth.$startKey( [ [ null, keyObj2 ] ], now, 0, Infinity );
 		}

@@ -6,7 +6,7 @@ function DAWCoreActions_addOscillatorSource( daw, synthId, srcType, srcPatId ) {
 
 	return DAWCoreActionsCommon_addPatternBuffer( daw, srcType, srcPatId )
 		.then( ( [ newSrcPatId, newSrcPatName, newPatObj ] ) => {
-			const newOsc = DAWCoreJSON.oscillator( {
+			const newOsc = DAWCoreJSON_oscillator( {
 				wave: null,
 				source: newSrcPatId,
 				order: DAWCoreActionsCommon_getNextOrderOf( syn.oscillators ),

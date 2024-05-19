@@ -1,12 +1,12 @@
 "use strict";
 
-DAWCoreJSON.composition = ( env, id ) => {
+function DAWCoreJSON_composition( env, id ) {
 	const tracks = {};
 	const sPB = env.$defStepsPerBeat;
 	const bPM = env.$defBeatsPerMeasure;
 
 	for ( let i = 0; i < env.$defNbTracks; ++i ) {
-		tracks[ i ] = DAWCoreJSON.track( { order: i } );
+		tracks[ i ] = DAWCoreJSON_track( { order: i } );
 	}
 	return {
 		id,
@@ -38,28 +38,28 @@ DAWCoreJSON.composition = ( env, id ) => {
 			5: { order: 3, type: "buffer", dest: "1", buffer: "3", duration: 1, name: "openhat-012", bufferType: "drum" },
 			6: { order: 4, type: "buffer", dest: "1", buffer: "4", duration: 1, name: "snare-018", bufferType: "drum" },
 		},
-		channels: DAWCoreJSON.channels(),
+		channels: DAWCoreJSON_channels(),
 		tracks,
 		blocks: {
-			0: DAWCoreJSON.block( { pattern: "0", track: "0", duration: bPM } ),
-			1: DAWCoreJSON.block( { pattern: "1", track: "1", duration: bPM } ),
+			0: DAWCoreJSON_block( { pattern: "0", track: "0", duration: bPM } ),
+			1: DAWCoreJSON_block( { pattern: "1", track: "1", duration: bPM } ),
 		},
-		synths: { 0: DAWCoreJSON.synth( {
+		synths: { 0: DAWCoreJSON_synth( {
 			dest: "2",
 			oscillators: {
-				0: DAWCoreJSON.oscillator( { gain: .75 } ),
-				1: DAWCoreJSON.oscillator( { order: 1, gain: .2, detune: -24 } ),
+				0: DAWCoreJSON_oscillator( { gain: .75 } ),
+				1: DAWCoreJSON_oscillator( { order: 1, gain: .2, detune: -24 } ),
 			},
 		} ) },
 		drumrows: {
-			0: DAWCoreJSON.drumrow( { order: 0, pattern: "2" } ),
-			1: DAWCoreJSON.drumrow( { order: 1, pattern: "3" } ),
-			2: DAWCoreJSON.drumrow( { order: 2, pattern: "4" } ),
-			3: DAWCoreJSON.drumrow( { order: 3, pattern: "5" } ),
-			4: DAWCoreJSON.drumrow( { order: 4, pattern: "6" } ),
+			0: DAWCoreJSON_drumrow( { order: 0, pattern: "2" } ),
+			1: DAWCoreJSON_drumrow( { order: 1, pattern: "3" } ),
+			2: DAWCoreJSON_drumrow( { order: 2, pattern: "4" } ),
+			3: DAWCoreJSON_drumrow( { order: 3, pattern: "5" } ),
+			4: DAWCoreJSON_drumrow( { order: 4, pattern: "6" } ),
 		},
 		slices: {},
 		drums: { 0: {} },
 		keys: { 0: {} },
 	};
-};
+}

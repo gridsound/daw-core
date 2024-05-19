@@ -12,7 +12,7 @@ function DAWCoreActions__addDrums( type, status, patternId, rowId, arr, daw ) {
 	const patRowId = daw.$getDrumrow( rowId ).pattern;
 	const patRow = daw.$getPattern( patRowId );
 	const nextDrumId = +DAWCoreActionsCommon_getNextIdOf( drums );
-	const jsonType = DAWCoreJSON[ type ];
+	const jsonType = type === "drum" ? DAWCoreJSON_drum : DAWCoreJSON_drumcut;
 	const newDrums = {};
 	const obj = { drums: { [ pat.drums ]: newDrums } };
 	let nbDrums = 0;

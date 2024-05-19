@@ -4,7 +4,7 @@ function DAWCoreActions_addBlock( daw, patType, patId, when, track ) {
 	return DAWCoreActionsCommon_addPatternBuffer( daw, patType, patId )
 		.then( ( [ patId, patName, patObj ] ) => {
 			const nId = DAWCoreActionsCommon_getNextIdOf( daw.$getBlocks() );
-			const objBlc = DAWCoreJSON.block( {
+			const objBlc = DAWCoreJSON_block( {
 				pattern: patId,
 				when,
 				track,
