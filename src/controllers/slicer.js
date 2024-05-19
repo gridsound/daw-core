@@ -42,7 +42,7 @@ class DAWCoreControllerSlicer {
 			const id = obj.patternSlicesOpened;
 
 			if ( !id ) {
-				this.clear();
+				this.$clear();
 			} else {
 				const pat = daw.$getPattern( id );
 
