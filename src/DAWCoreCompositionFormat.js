@@ -62,6 +62,7 @@ class DAWCoreCompositionFormat {
 		// ***Opened
 		// ..........................................
 		cmp.synthOpened = cmp.synthOpened ? `${ cmp.synthOpened }` : null;
+		cmp.channelOpened = cmp.channelOpened ? `${ cmp.channelOpened }` : 'main';
 		cmp.patternKeysOpened = cmp.patternKeysOpened ? `${ cmp.patternKeysOpened }` : null;
 		cmp.patternDrumsOpened = cmp.patternDrumsOpened ? `${ cmp.patternDrumsOpened }` : null;
 		cmp.patternBufferOpened = cmp.patternBufferOpened ? `${ cmp.patternBufferOpened }` : null;
