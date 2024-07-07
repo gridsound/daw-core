@@ -425,6 +425,7 @@ class DAWCore {
 
 	// .........................................................................
 	$setContext( ctx ) {
+		this.ctx?.close();
 		this.ctx = ctx;
 		gswaNoise.$initBuffer( ctx );
 		this.#drums.$waDrums.$setContext( ctx );
