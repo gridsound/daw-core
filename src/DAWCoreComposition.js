@@ -67,6 +67,8 @@ class DAWCoreComposition {
 		const mix = daw.$getAudioMixer();
 		const fn = daw.$callCallback.bind( daw, "channelAnalyserFilled" );
 
+		mix.$fillAudioDataVu( daw.$getOpened( "channel" ) );
+		daw.$callCallback( "channelVuFilled", mix.$vuDataL, mix.$vuDataR );
 		Object.keys( daw.$getChannels() ).forEach( chanId => {
 			mix.$fillAudioData( chanId );
 			fn( chanId, mix.$audioDataL, mix.$audioDataR );
