@@ -172,6 +172,7 @@ class DAWCoreCompositionFormat {
 			syn.lfo ||= DAWCoreJSON_lfo();
 			delete syn.env.substain;
 			Object.values( syn.oscillators ).forEach( osc => {
+				osc.phaze ||= 0;
 				osc.detune = Math.min( Math.max( -24, Math.round( osc.detune ) ), 24 );
 				osc.detunefine = Math.min( Math.max( -1, osc.detunefine || 0 ), 1 );
 				osc.unisonvoices = Math.min( Math.max( 1, Math.round( osc.unisonvoices ?? 1 ) ), 9 );

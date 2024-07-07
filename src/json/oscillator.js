@@ -5,6 +5,7 @@ function DAWCoreJSON_oscillator( obj ) {
 		order: 0,
 		wave: "sine",
 		source: null,
+		phaze: 0,
 		pan: 0,
 		gain: 1,
 		detune: 0,
