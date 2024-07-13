@@ -311,6 +311,11 @@ class DAWCore {
 	}
 
 	// .........................................................................
+	$mixerChangeAnalyser( type ) {
+		this.#waMixer.$changeAnalyser( type );
+	}
+
+	// .........................................................................
 	$liveChangeChannel( id, prop, val ) {
 		this.#waMixer.$change( { channels: { [ id ]: { [ prop ]: val } } } );
 	}
@@ -425,7 +430,6 @@ class DAWCore {
 
 	// .........................................................................
 	$setContext( ctx ) {
-		this.ctx?.close();
 		this.ctx = ctx;
 		gswaNoise.$initBuffer( ctx );
 		this.#drums.$waDrums.$setContext( ctx );
@@ -445,6 +449,7 @@ class DAWCore {
 	}
 	$resetAudioContext() {
 		this.$stop();
+		// this.ctx?.close();
 		this.$setContext( new AudioContext( { sampleRate: this.$env.$sampleRate } ) );
 	}
 
