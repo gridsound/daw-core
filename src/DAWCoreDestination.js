@@ -24,7 +24,7 @@ class DAWCoreDestination {
 	}
 	static $analyserFillData( store ) {
 		if ( store.$analyserNode ) {
-			store.$analyserNode.getByteFrequencyData( store.$analyserData );
+			store.$analyserNode.getFloatFrequencyData( store.$analyserData );
 			return store.$analyserData;
 		}
 	}
@@ -48,7 +48,7 @@ class DAWCoreDestination {
 			const fftSize = analyserFFTsize;
 
 			store.$analyserNode = an;
-			store.$analyserData = new Uint8Array( fftSize / 2 );
+			store.$analyserData = new Float32Array( fftSize / 2 );
 			an.fftSize = fftSize;
 			an.smoothingTimeConstant = 0;
 			store.$inputNode
