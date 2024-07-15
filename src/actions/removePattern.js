@@ -14,24 +14,24 @@ function DAWCoreActions_removePattern( daw, patId ) {
 	if ( type !== "buffer" ) {
 		obj[ type ] = { [ pat[ type ] ]: undefined };
 	} else {
-		GSUforEach( daw.$getDrumrows(), ( rowId, row ) => {
+		GSUforEach( daw.$getDrumrows(), ( row, rowId ) => {
 			if ( row.pattern === patId ) {
 				GSUdeepAssign( obj, DAWCoreActions__removeDrumrow( obj, rowId, daw ) );
 			}
 		} );
-		GSUforEach( daw.$getPatterns(), ( patSliId, patSli ) => {
+		GSUforEach( daw.$getPatterns(), ( patSli, patSliId ) => {
 			if ( patSli.type === "slices" && patSli.source === patId ) {
 				obj.patterns[ patSliId ] = { source: null };
 			}
 		} );
-		GSUaddIfNotEmpty( obj, "synths", GSUreduce( daw.$getSynths(), ( syns, synId, syn ) => {
-			GSUforEach( syn.oscillators, ( oscId, osc ) => {
+		GSUaddIfNotEmpty( obj, "synths", GSUreduce( daw.$getSynths(), ( obj, syn, synId ) => {
+			GSUforEach( syn.oscillators, ( osc, oscId ) => {
 				if ( osc.source === patId ) {
-					syns[ synId ] ||= { oscillators: {} };
-					syns[ synId ].oscillators[ oscId ] = undefined;
+					obj[ synId ] ||= { oscillators: {} };
+					obj[ synId ].oscillators[ oscId ] = undefined;
 				}
 			} );
-			return syns;
+			return obj;
 		}, {} ) );
 		obj.buffers = { [ pat.buffer ]: undefined };
 	}

@@ -62,7 +62,7 @@ class DAWCoreControllerSynth {
 		GSUforEach( obj, DAWCoreControllerSynth.#setProp.bind( null, this.$data.oscillators[ id ], this.$on.$changeOscProp.bind( null, id ) ) );
 		this.$on.$changeOsc?.( id, obj );
 	}
-	static #setProp( data, cb, prop, val ) {
+	static #setProp( data, cb, val, prop ) {
 		if ( val !== undefined ) {
 			data[ prop ] = val;
 			cb( prop, val );
