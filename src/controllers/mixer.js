@@ -1,8 +1,8 @@
 "use strict";
 
 class DAWCoreControllerMixer {
-	$on = null;
 	$data = Object.freeze( { channels: {}, effects: {} } );
+	#on = null;
 	#chansCrud = GSUcreateUpdateDelete.bind( null, this.$data.channels,
 		this.#addChannel.bind( this ),
 		this.#updateChannel.bind( this ),
@@ -13,7 +13,7 @@ class DAWCoreControllerMixer {
 		this.#deleteEffect.bind( this ) );
 
 	constructor( fns ) {
-		this.$on = { ...fns };
+		this.#on = { ...fns };
 		Object.freeze( this );
 	}
 
@@ -39,33 +39,31 @@ class DAWCoreControllerMixer {
 
 	// .........................................................................
 	#addChannel( id, obj ) {
-		this.$data.channels[ id ] = {};
-		this.$on.$addChannel?.( id, obj );
-		this.#updateChannel( id, obj );
+		const obj2 = Object.seal( { ...obj } );
+
+		this.$data.channels[ id ] = obj2;
+		this.#on.$addChannel?.( id, obj2 );
+		this.#updateChannel( id, obj2 );
 	}
 	#deleteChannel( id ) {
 		delete this.$data.channels[ id ];
-		this.$on.$removeChannel?.( id );
+		this.#on.$removeChannel?.( id );
 	}
 	#updateChannel( id, obj ) {
-		Object.assign( this.$data.channels[ id ], obj );
-		this.#updateChannel2( id, obj.name, this.$on.$renameChannel );
-		this.#updateChannel2( id, obj.order, this.$on.$reorderChannel );
-		this.#updateChannel2( id, obj.toggle, this.$on.$toggleChannel );
-		this.#updateChannel2( id, obj.dest, this.$on.$redirectChannel );
-		this.#updateChannel2( id, obj.pan, this.$on.$changePanChannel );
-		this.#updateChannel2( id, obj.gain, this.$on.$changeGainChannel );
-	}
-	#updateChannel2( id, val, fn ) {
-		if ( val !== undefined ) {
-			fn?.( id, val );
+		const chan = this.$data.channels[ id ];
+		const prevCpy = { ...chan };
+
+		Object.assign( chan, obj );
+		if ( this.#on.$changeChannelProp ) {
+			GSUforEach( obj, ( val, p ) => this.#on.$changeChannelProp( id, p, val, prevCpy[ p ] ) );
 		}
+		this.#on.$changeChannel?.( id, chan );
 	}
 
 	// .........................................................................
 	#addEffect( id, obj ) {
 		this.$data.effects[ id ] = {};
-		this.$on.$addEffect?.( obj.dest, id, obj );
+		this.#on.$addEffect?.( obj.dest, id, obj );
 		this.#updateEffect( id, obj );
 	}
 	#deleteEffect( id ) {
@@ -73,12 +71,12 @@ class DAWCoreControllerMixer {
 
 		delete this.$data.effects[ id ];
 		if ( dest in this.$data.channels ) {
-			this.$on.$removeEffect?.( dest, id );
+			this.#on.$removeEffect?.( dest, id );
 		}
 	}
 	#updateEffect( id, obj ) {
 		GSUdeepAssign( this.$data.effects[ id ], obj );
-		this.$on.$updateEffect?.( this.$data.effects[ id ].dest, id, obj );
+		this.#on.$updateEffect?.( this.$data.effects[ id ].dest, id, obj );
 	}
 }
 
